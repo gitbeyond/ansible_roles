@@ -1,0 +1,13 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.111.32.125   kvm1.test.com   kvm1
+10.111.32.126   kvm2.test.com   kvm2
+10.111.32.127   kvm3.test.com   kvm3
+10.111.32.209   kvm4.test.com   kvm4
+10.111.32.237   kvm5.test.com   kvm5
+
+10.111.32.230   cent7-1.test.com cent7-1
+10.111.32.231   cent7-2.test.com cent7-2
+10.111.32.232   cent7-3.test.com cent7-3
+10.111.32.234   cent7-4.test.com cent7-4
+
