@@ -1,0 +1,4 @@
+zabbix_dir: /usr/local/zabbix
+zabbix_conf.d_dir: /usr/local/zabbix/etc/zabbix_agentd.conf.d
+zabbix_script_dir: /usr/local/zabbix/script
+zabbix_service_name: zabbix_agent

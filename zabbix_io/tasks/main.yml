@@ -1,0 +1,23 @@
+- name: install depended package
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: sysstat, state: latest}
+    - { name: bc, state: latest}
+- name: add a iostat cron task
+  cron: name='iostat message output' minute='*/1' job='/usr/bin/iostat -dtkx 1 4 > /tmp/iostat_output_1 && /bin/mv /tmp/iostat_output_1 /tmp/iostat_output'
+- name: copy iostat script
+  template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
+  with_items:
+    - {src: 'iostat.sh', dest: '{{ zabbix_script_dir }}/iostat.sh', mode: '0744' }
+    - {src: 'disk_part_discovery.conf', dest: '{{ zabbix_conf.d_dir }}/', mode: '0644'}
+- name: copy iostat discovery script
+  copy: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
+  with_items:
+    - {src: 'iostat_dev_discovery.sh', dest: '{{ zabbix_script_dir }}/iostat_dev_discovery.sh', mode: '0744'}
+  notify:
+    - restart {{ zabbix_service_name }}
+#- name: modify zabbix_agentd config file
+#  lineinfile: dest='{{ zabbix_dir }}/etc/zabbix_agentd.conf' regexp='Include={{ zabbix_dir }}/etc/userparams/.*\.conf' line='Include={{ zabbix_dir }}/etc/userparams/*.conf' backrefs=yes
+#  notify:
+#    - restart zabbix_agentd
+
