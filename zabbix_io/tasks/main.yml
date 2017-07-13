@@ -9,7 +9,7 @@
   template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
   with_items:
     - {src: 'iostat.sh', dest: '{{ zabbix_script_dir }}/iostat.sh', mode: '0744' }
-    - {src: 'disk_part_discovery.conf', dest: '{{ zabbix_conf.d_dir }}/', mode: '0644'}
+    - {src: 'disk_part_discovery.conf', dest: '{{ zabbix_conf_dir }}/', mode: '0644'}
 - name: copy iostat discovery script
   copy: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
   with_items:
