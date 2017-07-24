@@ -1,0 +1,10 @@
+---
+packet_dir: /root/fangzhou/packet
+
+dbuser: root
+upassword: "fzSQL09*"
+zabbix_pass: "zabbix_Monitor123"
+mysync_pass: "fzSYNC#9"
+mysql_version: "5.7.17"
+
+slave_mysql: "{{ groups.fz_mysql_slave[0]}}"
