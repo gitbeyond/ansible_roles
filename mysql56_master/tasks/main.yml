@@ -1,0 +1,9 @@
+- include: install_mysql.yml 
+  tags:
+    - install_mysql
+- include: create_sync_user.yml  
+  tags:
+    - create_sync_user
+- include: delete_default_user.yml
+  tags:
+    - delete_default_user

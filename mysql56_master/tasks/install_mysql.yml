@@ -1,0 +1,41 @@
+- name: copy Mysql-{{mysql_version}} packet
+  unarchive: src={{packet_dir}}/MySQL-{{mysql_version}}-1.el6.x86_64.rpm-bundle.tar dest=/root/  creates=/root/MySQL-server-{{mysql_version}}-1.el6.x86_64.rpm
+- name: create mysql user
+  user: name=mysql system=yes
+- name: create log,data dir
+  file: path={{ item }} owner=mysql group=mysql mode=0755 state=directory
+  with_items:
+    - /var/lib/mysql
+    - /data2/mydata
+    - /var/log/mysqld
+    - /data4/mysql56_log
+  tags: 
+    - create_dir
+- name: copy my.cnf to remote host
+  template: src=my.cnf dest=/etc/ owner=root group=root
+- name: install Mysql-{{mysql_version}}
+  yum: name={{ item }} state=present
+  with_items:
+    - /root/MySQL-server-{{mysql_version}}-1.el6.x86_64.rpm
+    - /root/MySQL-client-{{mysql_version}}-1.el6.x86_64.rpm
+    - /root/MySQL-devel-{{mysql_version}}-1.el6.x86_64.rpm
+    - /root/MySQL-embedded-{{mysql_version}}-1.el6.x86_64.rpm
+    - /root/MySQL-shared-{{mysql_version}}-1.el6.x86_64.rpm
+    - /root/MySQL-shared-compat-{{mysql_version}}-1.el6.x86_64.rpm
+    - /root/MySQL-test-{{mysql_version}}-1.el6.x86_64.rpm
+    - epel-release
+    - MySQL-python
+- name: enable mysql and start mysql
+  service: name=mysql state=started enabled=yes
+- name: get mysql default password
+  shell: test -e /root/.mysql_secret && awk '{print $NF}' /root/.mysql_secret |grep "[a-z]" |tail -n 1
+  register: default_pass
+  ignore_errors: True
+- name: update mysql default password
+  shell: mysqladmin -uroot -p{{ default_pass.stdout }} password {{ upassword }}
+  when: default_pass|success
+- name: delete default password file
+  file: path=/root/.mysql_secret state=absent
+#  when: modifypass.rc == 0
+  when: default_pass|success
+
