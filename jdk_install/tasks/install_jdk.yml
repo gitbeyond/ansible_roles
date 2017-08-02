@@ -1,0 +1,5 @@
+---
+- name: install jdk
+  unarchive: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} creates={{ item.creates }}
+  with_items:
+    - {src: '{{ jdk_packet }}', dest: '/usr/local/', owner: root, group: root, creates: '/usr/local/{{jdk_dir_name}}'}

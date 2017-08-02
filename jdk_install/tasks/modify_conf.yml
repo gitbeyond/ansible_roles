@@ -1,0 +1,5 @@
+---
+- name: copy profile to remote
+  template: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode='0644'
+  with_items:
+    - { src: 'java.sh', dest: '/etc/profile.d/' }

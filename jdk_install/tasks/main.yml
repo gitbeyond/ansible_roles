@@ -1,0 +1,7 @@
+---
+- include: install_jdk.yml
+  tags:
+    - install_jdk
+- include: modify_conf.yml
+  tags:
+    - modify_java_conf
