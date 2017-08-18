@@ -1,0 +1,4 @@
+- hosts: 10.111.32.187
+  remote_user: root
+  roles:
+    - { role: install_tomcat, tomcat_pack: /root/fangzhou/packet/apache-tomcat-7.0.70.tar.gz }

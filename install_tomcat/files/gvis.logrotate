@@ -1,0 +1,20 @@
+/usr/local/gvis/logs/catalina.out {
+  copytruncate
+  daily
+  dateext
+  size 100M
+  dateformat .%Y-%m-%d
+  nocompress
+  missingok
+  rotate 10
+  postrotate
+      log_dir=/data4/logs/gvis
+      today=$(date +%d)
+      for((i=0;i<${today};i++));do
+          dt=$(date -d "$i day ago" +%Y-%m-%d)
+          this_month=$(date +%Y-%m)
+          test -e ${log_dir}/${this_month} || mkdir -p ${log_dir}/${this_month}
+          mv /usr/local/gvis/logs/*${dt}* ${log_dir}/${this_month}/
+      done
+  endscript
+}

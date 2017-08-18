@@ -1,0 +1,7 @@
+---
+install_dir: /usr/local
+tomcat_pack: "{{pack_dir}}/apache-tomcat-7.0.70.tar.gz"
+pack_dir: /root/fangzhou/packet
+tomcat_dir: "{{install_dir}}/{{ tomcat_pack.split('/')[-1][0:-7] }}"
+
+
