@@ -30,7 +30,7 @@
 - name: enable mysql and start mysql
   service: name=mysqld state=started enabled=yes
 - name: get mysql default password
-  shell: test -e /root/.mysql_secret && awk '{print $NF}' /root/.mysql_secret |grep "[a-z]" |tail -n 1
+  shell: grep "temporary password" /var/log/mysqld/mysql_57.log | awk '{print $NF}'
   register: default_pass
   ignore_errors: True
 - name: update mysql default password
