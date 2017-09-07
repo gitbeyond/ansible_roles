@@ -1,0 +1,21 @@
+- name: install depended package
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: epel-release, state: latest}
+- name: install fping package
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: fping, state: latest}
+- name: copy iostat discovery script
+  copy: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
+  with_items:
+    - {src: 'fping.sh', dest: '{{ zabbix_dir }}/script/fping.sh', mode: '0744'}
+    - {src: 'fping_addr_discovery.py', dest: '{{ zabbix_dir }}/script/fping_addr_discovery.py', mode: '0744'}
+    - {src: 'fping.conf', dest: '{{ zabbix_dir }}/etc/userparams/', mode: '0644'}
+  notify:
+    - restart zabbix_agentd
+- name: modify zabbix_agentd config file
+  lineinfile: dest='{{ zabbix_dir }}/etc/zabbix_agentd.conf' regexp='Include={{ zabbix_dir }}/etc/userparams/.*\.conf' line='Include={{ zabbix_dir }}/etc/userparams/*.conf' backrefs=yes
+  notify:
+    - restart zabbix_agentd
+
