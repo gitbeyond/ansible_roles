@@ -34,7 +34,7 @@
   register: default_pass
   ignore_errors: True
 - name: update mysql default password
-  shell: mysqladmin -uroot -p{{ default_pass.stdout }} password {{ upassword }}
+  shell: mysqladmin -uroot -p"{{ default_pass.stdout }}" password "{{ upassword }}"
   when: default_pass|success
 - name: delete default password file
   file: path=/root/.mysql_secret state=absent
