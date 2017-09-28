@@ -1,3 +1,6 @@
-date: 2017/3/7
-这个 ROLE 是安装并启动 mysql_slave server,在使用过程中，注意以下几点：
-1.需要将 mysql_master 所在分组命名为：fz_mysql_master,
+#date: 2017/9/28
+- hosts: 172.16.9.254
+  remote_user: root
+  roles:
+    - { role: mysql57_slave, packet_dir: /root/wanghaifeng/, master_mysql: 172.16.9.253, mysql_version: "5.7.18"}
+

@@ -4,6 +4,7 @@ packet_dir: /root/fangzhou/packet
 dbuser: root
 upassword: "fzSQL09*"
 zabbix_pass: "zabbix_pass"
+bakuser_pass: "mBk(@07C"
 dbsock: /var/lib/mysql/mysql.sock
 
 sync_user: mysync
