@@ -1,0 +1,6 @@
+---
+webapp_dir: /data1/apps/nginx/html
+pack_dir: /root/fangzhou/packet
+nginx_user: nginx
+nginx_log_dir: /var/log/nginx
+archive_log_dir: /var/log/nginx

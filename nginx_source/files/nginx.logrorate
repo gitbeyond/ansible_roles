@@ -1,0 +1,14 @@
+/var/log/nginx/*log {
+    daily
+    rotate 10
+    missingok
+    notifempty
+    size 100M
+    sharedscripts
+    postrotate
+        /bin/kill -USR1 $(cat /var/run/nginx/nginx.pid 2>/dev/null) 2>/dev/null || :
+        test -e /data4/tmp/nginx || mkdir -p /data4/tmp/nginx
+        dt=`date -d "8 day ago" +%Y%m%d`
+        mv /var/log/nginx/*.log-${dt} /data4/tmp/nginx/
+    endscript
+}

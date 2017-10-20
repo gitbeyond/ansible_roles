@@ -1,0 +1,41 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- name: create user
+  user: name={{ item.name }} state=present system={{ item.system }}
+  with_items:
+    - { name: '{{ nginx_user }}', system: no ,shell: '/sbin/nologin'}
+- name: cp and unarchive tomcat to remote host
+  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ nginx_user }}' group={{ nginx_user }} creates={{ item.creates }}
+  with_items:
+    - { src: 'nginx_1.10.2_bin.tgz', dest: '{{ install_dir}}/', creates: '{{ install_dir }}/nginx' }
+- name: create dir
+  file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
+  with_items:
+    - { path: /var/log/nginx/, owner: '{{ nginx_user }}', group: '{{ nginx_user }}', mode: '0755', state: directory }
+    - { path: /var/run/nginx/, owner: '{{ nginx_user }}', group: root, mode: '0755', state: directory }
+- name: copy conf file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items:
+    - { src: 'nginx.conf', dest: '{{ install_dir }}/nginx/conf/', owner: root, group: root, mode: '0644'}
+   # - { src: 'nginx.init', dest: '/etc/rc.d/init.d/', owner: root, group: root, mode: '0755' }
+    - { src: 'nginx.sh', dest: '/etc/profile.d/', owner: root, group: root, mode: '0644' }
+    - { src: 'nginx.logrotate', dest: '/etc/logrotate.d/nginx', owner: root, group: root, mode: '0644' }
+    - { src: 'htpasswd', dest: '{{ install_dir }}/nginx/conf/' , owner: 'root', group: 'root', mode: '0644'}
+  tags:
+   - modify_nginx_conf
+  notify:
+   - restart nginx service
+
+- include: cent6_service.yml
+  when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 6
+
+- include: cent7_service.yml
+  when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7
+
+- name: set nginx boot and starting up
+  service: name={{ item.name }} state={{ item.state }} enabled=yes
+  with_items:
+    - { name: nginx, state: started }
+
+- include: core_argument.yml

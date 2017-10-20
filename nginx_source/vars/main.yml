@@ -1,0 +1,10 @@
+---
+# nginx install destination dir, Must be consistent with the directory specified at compile time,default is /usr/local
+install_dir: /usr/local
+
+nginx_user: nginx
+webapp_dir: /server/www/geo/
+nginx_packet: nginx_1.10.2_bin.tgz
+
+nginx_log_dir: /var/log/nginx
+archive_log_dir: /var/log/nginx
