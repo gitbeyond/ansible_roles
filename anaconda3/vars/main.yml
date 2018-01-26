@@ -1,0 +1,5 @@
+---
+pack_dir: /root/fangzhou/packet
+tar_file: anaconda3-4.4.0-python3.6.1.tgz
+install_dir: /usr/local
+packet_name: anaconda3

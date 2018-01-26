@@ -1,0 +1,9 @@
+---
+#pack_dir: /root/fangzhou/packet
+#tar_file: anaconda2-4.3.1-python2.7.13.tgz
+#install_dir: /usr/local
+#packet_name: anaconda2
+- hosts: dn73.100.cloud
+  remote_user: root
+  roles:
+    - { role: anaconda2, pack_dir: /root/wanghaifeng, tar_file: anaconda2-4.3.1-python2.7.13.tgz, install_dir: /usr/local, packet_name: anaconda2 }

@@ -1,0 +1,22 @@
+- name: install {{packet_name}} depended package
+  yum: name={{ item }} state=present
+  with_items:
+    - zlib-devel
+    - bzip2-devel
+    - openssl-devel
+    - ncurses-devel
+    - sqlite-devel
+    - readline-devel
+    - ncurses-libs
+    - pcre-devel
+    - curl-devel
+    - libcurl-devel
+- name: copy {{packet_name}}
+  unarchive: src={{ item.src }} dest={{ item.dest }} owner=root group=root creates={{ item.creates }}
+  with_items:
+    - { src: "{{pack_dir}}/{{tar_file}}", dest: '{{install_dir}}/', creates: "{{install_dir}}/{{packet_name}}" }
+- name: copy {{packet_name}} path file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items:
+    - { src: "anaconda3.sh", dest: /etc/profile.d/, owner: root, group: root, mode: 0644}
+    - { src: "anaconda3.conf", dest: /etc/ld.so.conf.d/, owner: root, group: root, mode: 0644}

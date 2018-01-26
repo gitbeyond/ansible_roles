@@ -1,0 +1,9 @@
+---
+#pack_dir: /root/fangzhou/packet
+#tar_file: anaconda3-4.4.0-python3.6.1.tgz
+#install_dir: /usr/local
+#packet_name: anaconda3
+- hosts: dn73.100.cloud
+  remote_user: root
+  roles:
+    - { role: anaconda3, pack_dir: /root/wanghaifeng, tar_file: anaconda3-4.4.0-python3.6.1.tgz, install_dir: /usr/local, packet_name: anaconda3 }
