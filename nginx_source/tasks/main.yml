@@ -5,15 +5,25 @@
   user: name={{ item.name }} state=present system={{ item.system }}
   with_items:
     - { name: '{{ nginx_user }}', system: no ,shell: '/sbin/nologin'}
+- name: install epel-release
+  yum: name=epel-release state=latest
+- name: install dependeies packet
+  yum: name={{ item }} state=latest
+  with_items:
+    - libxml2-devel
+    - libxslt-devel
+    - GeoIP-devel
+    - pcre-devel
+    - gd-devel
 - name: cp and unarchive tomcat to remote host
   unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ nginx_user }}' group={{ nginx_user }} creates={{ item.creates }}
   with_items:
-    - { src: 'nginx_1.10.2_bin.tgz', dest: '{{ install_dir}}/', creates: '{{ install_dir }}/nginx' }
+    - { src: '{{ nginx_packet }}', dest: '{{ install_dir}}/', creates: '{{ install_dir }}/nginx' }
 - name: create dir
   file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
   with_items:
-    - { path: /var/log/nginx/, owner: '{{ nginx_user }}', group: '{{ nginx_user }}', mode: '0755', state: directory }
-    - { path: /var/run/nginx/, owner: '{{ nginx_user }}', group: root, mode: '0755', state: directory }
+    - { path: '{{ log_dir }}', owner: '{{ nginx_user }}', group: '{{ nginx_user }}', mode: '0755', state: directory }
+    - { path: '{{ var_dir }}', owner: '{{ nginx_user }}', group: root, mode: '0755', state: directory }
 - name: copy conf file
   template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
   with_items:

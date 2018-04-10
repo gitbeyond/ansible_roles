@@ -7,9 +7,9 @@
   with_items:
     - { name: 'vm.swappiness', value: 0}
     - { name: 'net.ipv4.ip_local_port_range', value: '10240 65000' }
-    - { name: 'net.ipv4.tcp_timestamps', value: '0'}
-    - { name: 'net.ipv4.tcp_tw_recycle', value: '1'}
-    - { name: 'net.ipv4.tcp_tw_reuse', value: '1'}
+    - { name: 'net.ipv4.tcp_timestamps', value: '1'}
+    - { name: 'net.ipv4.tcp_tw_recycle', value: '0'}
+    - { name: 'net.ipv4.tcp_tw_reuse', value: '0'}
     - { name: 'net.ipv4.tcp_syncookies', value: '1'}
     - { name: 'net.core.somaxconn', value: '262144' }
     - { name: 'net.core.netdev_max_backlog', value: '262144' }

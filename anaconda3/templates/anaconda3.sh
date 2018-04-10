@@ -1,1 +1,1 @@
-export PATH="{{install_dir}}/{{packet_name}}/bin:$PATH"
+export PATH="$PATH:{{install_dir}}/{{packet_name}}/bin"
