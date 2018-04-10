@@ -15,15 +15,16 @@
     - GeoIP-devel
     - pcre-devel
     - gd-devel
+- name: create dir
+  file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
+  with_items:
+    - { path: '{{ install_dir }}', owner: '{{ nginx_user }}', group: '{{ nginx_user }}', mode: '0755', state: directory }
+    - { path: '{{ log_dir }}', owner: '{{ nginx_user }}', group: '{{ nginx_user }}', mode: '0755', state: directory }
+    - { path: '{{ var_dir }}', owner: '{{ nginx_user }}', group: root, mode: '0755', state: directory }
 - name: cp and unarchive tomcat to remote host
   unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ nginx_user }}' group={{ nginx_user }} creates={{ item.creates }}
   with_items:
     - { src: '{{ nginx_packet }}', dest: '{{ install_dir}}/', creates: '{{ install_dir }}/nginx' }
-- name: create dir
-  file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
-  with_items:
-    - { path: '{{ log_dir }}', owner: '{{ nginx_user }}', group: '{{ nginx_user }}', mode: '0755', state: directory }
-    - { path: '{{ var_dir }}', owner: '{{ nginx_user }}', group: root, mode: '0755', state: directory }
 - name: copy conf file
   template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
   with_items:
