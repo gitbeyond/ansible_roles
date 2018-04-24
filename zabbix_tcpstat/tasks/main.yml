@@ -1,6 +1,6 @@
 - name: add ss cron task
   cron: name='tcp connects message output' minute='*/1' job="/usr/sbin/ss -ant |awk '{s[$1]++} END {for (a in s){print a,s[a]}}' > /tmp/tcp_stats_1 && /bin/mv /tmp/tcp_stats_1 /tmp/tcp_stats"
 - name: copy tcpstat config file
-  copy: src=tcpstat.conf dest={{ zabbix_conf.d_dir }}/ owner=zabbix group=zabbix
+  copy: src=tcpstat.conf dest={{ zabbix_conf_dir }}/ owner=zabbix group=zabbix
   notify:
     - restart {{ zabbix_service_name }}

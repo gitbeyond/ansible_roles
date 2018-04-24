@@ -1,4 +1,4 @@
-{{nginx_log_dir}}/*log {
+{{log_dir}}/*log {
     daily
     rotate 10
     missingok
@@ -6,11 +6,11 @@
     size 100M
     sharedscripts
     postrotate
-        /bin/kill -USR1 $(cat /var/run/nginx/nginx.pid 2>/dev/null) 2>/dev/null || :
+        /bin/kill -USR1 $(cat {{var_dir}}/nginx.pid 2>/dev/null) 2>/dev/null || :
         log_dir={{archive_log_dir}}/$(date +%Y%m)
         test -e ${log_dir} || mkdir -p ${log_dir}
         dt=`date +%Y%m%d`
-        mv {{nginx_log_dir}}/*.log-${dt} ${log_dir}
+        mv {{log_dir}}/*.log-${dt} ${log_dir}
     endscript
 }
 

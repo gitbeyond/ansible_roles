@@ -2,7 +2,7 @@
 # 2017/01/12
 
 - name: create user
-  user: name={{ item.name }} state=present system={{ item.system }}
+  user: name={{ item.name }} state=present system={{ item.system }} shell={{ item.shell }}
   with_items:
     - { name: '{{ nginx_user }}', system: no ,shell: '/sbin/nologin'}
 - name: install epel-release
@@ -15,16 +15,23 @@
     - GeoIP-devel
     - pcre-devel
     - gd-devel
+    - libevent-devel
+    - libevent
+    - libevent-headers
+    - openssl-devel
+    - perl-ExtUtils-Embed
 - name: create dir
   file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
   with_items:
     - { path: '{{ install_dir }}', owner: '{{ nginx_user }}', group: '{{ nginx_user }}', mode: '0755', state: directory }
     - { path: '{{ log_dir }}', owner: '{{ nginx_user }}', group: '{{ nginx_user }}', mode: '0755', state: directory }
     - { path: '{{ var_dir }}', owner: '{{ nginx_user }}', group: root, mode: '0755', state: directory }
-- name: cp and unarchive tomcat to remote host
+- name: cp and unarchive nginx_binary_tarball to remote host
   unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ nginx_user }}' group={{ nginx_user }} creates={{ item.creates }}
   with_items:
     - { src: '{{ nginx_packet }}', dest: '{{ install_dir}}/', creates: '{{ install_dir }}/nginx' }
+- name: create link file
+  file: src='{{ install_dir }}/nginx/conf' dest=/etc/nginx state=link
 - name: copy conf file
   template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
   with_items:

@@ -1,0 +1,9 @@
+- name: add get nginx stat task
+  cron: name='nginx monitor' minute='*/1' job='/usr/bin/curl -u webadmin:123456 http://127.0.0.1/NginxStatus -o {{zabbix_script_dir}}/nginx_status.txt'
+- name: copy iostat discovery script
+  template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
+  with_items:
+   - {src: 'nginx_stat.sh', dest: '{{ zabbix_script_dir}}/nginx_stat.sh', mode: '0744'}
+   - {src: 'nginx_stat.conf', dest: '{{ zabbix_conf_dir }}/', mode: '0644'}
+  notify:
+   - restart zabbix_agentd

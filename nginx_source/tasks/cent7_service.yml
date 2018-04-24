@@ -1,15 +1,3 @@
-- name: install dependece packet
-  yum: name={{ item }} state=latest
-  with_items:
-    - libevent-devel
-    - libevent
-    - pcre-devel
-    - openssl-devel
-    - libxslt-devel
-    - libxml2-devel
-    - gd-devel
-    - perl-ExtUtils-Embed
-    - GeoIP-devel
 - name: copy boot file
   template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
   with_items:
