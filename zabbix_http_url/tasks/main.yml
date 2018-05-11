@@ -1,0 +1,19 @@
+- name: create dir
+  file: dest={{item.dest}} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
+  with_items:
+    - { dest: '{{curl_out_dir}}', owner: root, group: root, mode: '0755', state: directory}
+- name: copy http_url.txt
+  copy: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}} backup=yes
+  with_items:
+    - {src: 'http_url.txt', dest: '{{ zabbix_script_dir }}/http_url.txt', mode: '0644' }
+- name: copy check_http_url.sh script
+  template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}} backup=yes
+  with_items:
+    - {src: 'check_http_url.sh', dest: '{{ zabbix_script_dir }}/check_http_url.sh', mode: '0744' }
+    - {src: 'curl_log.py', dest: '{{ zabbix_script_dir }}/curl_log.py', mode: '0744' }
+    - {src: 'web_log.conf', dest: '{{ zabbix_conf_dir }}/', mode: '0644'}
+    - {src: 'http_url_log_discovery.py', dest: '{{ zabbix_script_dir }}/http_url_log_discovery.py', mode: '0744' }
+  notify:
+    - restart {{ zabbix_service_name }}
+- name: add check_http_url cront task
+  cron: name='http url monitor log' minute='*/1' job='/bin/bash {{zabbix_script_dir}}/check_http_url.sh'
