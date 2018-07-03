@@ -1,0 +1,43 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- name: install epel-release
+  yum: name=epel-release state=latest
+- name: install dependeies packet
+  yum: name={{ item }} state=latest
+  with_items:
+    - python-pip
+- name: create dir
+  file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
+  with_items:
+  #  - { path: '{{ install_dir }}', owner: '{{ prog_user }}', group: '{{ prog_user }}', mode: '0755', state: directory }
+    - { path: '{{ log_dir }}', owner: '{{ prog_user }}', group: '{{ prog_user }}', mode: '0755', state: directory }
+    - { path: '{{ var_dir }}', owner: '{{ prog_user }}', group: root, mode: '0755', state: directory }
+    - { path: '{{ conf_dir }}', owner: '{{ prog_user }}', group: root, mode: '0755', state: directory }
+- name: install {{prog_name}}
+  pip: name={{item.name}} version={{item.version}}
+  with_items:
+    - {name: supervisor, version: "{{super_version}}"}
+    - {name: meld3, version: "0.6.8"}
+- name: copy conf file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items:
+    - { src: 'supervisord.conf', dest: '{{ conf_dir }}/', owner: root, group: root, mode: '0644'}
+  tags:
+   - modify_supervisord_conf
+  notify:
+   - restart supervisord service
+- name: create link file
+  file: src='{{ conf_dir }}/supervisord.conf' dest=/etc/supervisord.conf state=link
+
+- include: cent6_service.yml
+  when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 6
+
+- include: cent7_service.yml
+  when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7
+
+- name: set supervisord boot and starting up
+  service: name={{ item.name }} state={{ item.state }} enabled=yes
+  with_items:
+    - { name: "{{prog_name}}", state: started }
+

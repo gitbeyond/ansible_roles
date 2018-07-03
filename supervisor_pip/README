@@ -1,0 +1,9 @@
+---
+- hosts: 10.111.32.61
+  remote_user: root
+  roles:
+    - { role: supervisor_pip, 
+        log_dir: /data/apps/log/supervisord, 
+        var_dir: /data/apps/var/supervisord,
+        conf_dir: /data/apps/config/supervisord,
+        super_version: 3.3.4  }

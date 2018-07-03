@@ -1,0 +1,2 @@
+- name: restart {{prog_name}} service
+  service: name={{prog_name}} state=restarted
