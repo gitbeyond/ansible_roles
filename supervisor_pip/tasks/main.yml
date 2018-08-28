@@ -15,7 +15,7 @@
     - { path: '{{ var_dir }}', owner: '{{ prog_user }}', group: root, mode: '0755', state: directory }
     - { path: '{{ conf_dir }}', owner: '{{ prog_user }}', group: root, mode: '0755', state: directory }
 - name: install {{prog_name}}
-  pip: name={{item.name}} version={{item.version}}
+  pip: name={{item.name}} version={{item.version}} extra_args="-i http://pypi.douban.com/simple --trusted-host pypi.douban.com"
   with_items:
     - {name: supervisor, version: "{{super_version}}"}
     - {name: meld3, version: "0.6.8"}
@@ -32,6 +32,8 @@
 
 - include: cent6_service.yml
   when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 6
+  # ansible-2.3.0.0
+  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
 
 - include: cent7_service.yml
   when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7

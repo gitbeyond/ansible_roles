@@ -20,7 +20,7 @@ RETVAL=0
 
 start() {
 	echo -n $"Starting supervisord: "
-	daemon supervisord
+	daemon supervisord -c /etc/supervisord.conf
 	RETVAL=$?
 	echo
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/supervisord

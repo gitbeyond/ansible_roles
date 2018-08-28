@@ -3,4 +3,4 @@
   with_items:
     - { src: '{{prog_name}}.service', dest: '/usr/lib/systemd/system/{{prog_name}}.service', owner: root, group: root, mode: '0644' }
 - name: systemd daemon reload
-  systemd: daemon_reload=yes
+  systemd: daemon_reload=yes name={{prog_name}}

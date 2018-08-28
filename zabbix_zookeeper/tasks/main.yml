@@ -1,0 +1,6 @@
+- name: add check zookeeper cron task
+  cron: name='zookeeper monitor' minute='*/1' job='/usr/bin/python /usr/local/zabbix/script/check_zookeeper.py all'
+- name: copy check_zookeeper.py script
+  template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
+  with_items:
+   - {src: 'check_zookeeper.py', dest: '{{ zabbix_script_dir}}/check_zookeeper.py', mode: '0744'}

@@ -37,12 +37,13 @@
 #+---------+-----+
 #1 row in set (0.00 sec)
  
-export PATH={{ ansible_env["PATH"] }}
+#export PATH=/usr/local/mysql/bin/:/usr/lib64/qt-3.3/bin:/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/root/bin
+export PATH={{ansible_env.PATH}}
  
-conf_file={{ zabbix_conf_dir }}/.my.cnf
-CMD="mysql --defaults-file=${conf_file} -N"
+conf_file={{zabbix_dir}}/etc/.my.cnf
+CMD="{{mysql_basedir}}/bin/mysql --defaults-file=${conf_file} -N"
 
-dataDir={{ mysql_datadir }}
+dataDir={{mysql_datadir}}
 pid=$(ps aux |grep "${dataDir}" |awk '/^mysql/{print $2}')
 innodb_stat_file="${dataDir}/innodb_status.${pid}"
 #echo ${innodb_stat_file}

@@ -4,6 +4,6 @@ zabbix_script_dir: /usr/local/zabbix/script
 zabbix_service_name: zabbix-agent
 monitor_user: zabbix
 monitor_pass: zabbix_Monitor123
-mysql_sock: /var/lib/mysql/mysql.sock
+mysql_sockPath: /var/lib/mysql/mysql.sock
 mysql_datadir: /data2/mydata
-mysql_prefix: /usr/bin
+mysql_basedir: /usr/bin
