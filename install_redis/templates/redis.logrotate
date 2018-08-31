@@ -1,4 +1,4 @@
-/var/log/redis/redis_6379.log {
+{{log_dir}}/*.log {
     weekly
     rotate 10
     copytruncate
@@ -7,9 +7,9 @@
     notifempty
     missingok
     postrotate
-        log_dir=/data4/logs/redis
+        log_dir={{archive_log_dir}}
         test -e ${log_dir} || mkdir -p ${log_dir}
-        dt=` date -d "8 day ago" +%Y%m%d`
-        mv /var/log/redis/*.log-${dt} ${log_dir}
+        dt=$(date -d "8 day ago" +%Y%m%d)
+        mv {{log_dir}}/*.log-${dt} ${log_dir}
     endscript
 }

@@ -10,14 +10,13 @@
 
 name="redis-server"
 #exec="/usr/sbin/$name"
-exec="{{install_dir}}/{{redis_dir}}/bin/$name"
-pidfile="/var/run/redis/redis.pid"
-#REDIS_CONFIG="/etc/redis.conf"
-REDIS_CONFIG="{{install_dir}}/{{redis_dir}}/conf/redis.conf"
+exec="{{install_dir}}/{{app_name}}/bin/$name"
+pidfile="{{var_dir}}/redis.pid"
+REDIS_CONFIG="{{config_dir}}/redis.conf"
 
 [ -e /etc/sysconfig/redis ] && . /etc/sysconfig/redis
 
-lockfile=/var/lock/subsys/redis
+lockfile={{var_dir}}/redis.lock
 
 start() {
     [ -f $REDIS_CONFIG ] || exit 6
@@ -44,7 +43,7 @@ restart() {
     stop
     state=true
     while $state;do
-        if netstat -tunlp |grep 6379; then
+        if netstat -tunlp |grep {{app_port}}; then
             sleep 5
         else
             state=false

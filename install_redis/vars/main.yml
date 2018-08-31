@@ -1,6 +1,16 @@
 ---
-pack_dir: /root/fangzhou/packet
-pack_name: "{{pack_dir}}/redis-3.0.5.tgz"
-redis_dir: {{ pack_name.split('/')[-1][0:-4]}}
-install_dir: /usr/local
-data_dir: /data4/{{ redis_dir }}
+app_name: redis
+app_port: 3306
+run_user: redis
+install_dir: /data/apps/opt
+config_dir: "/data/apps/config/{{app_name}}"
+log_dir: "/data/apps/log/{{app_name}}"
+var_dir: "/data/apps/var/{{app_name}}"
+data_dir: /data/apps/data
+app_packet: /usr/src/mysql-5.7.23-linux-glibc2.12-x86_64.tgz
+
+archive_log_dir: "/data/apps/log/{{app_name}}"
+#pack_dir: /root/fangzhou/packet
+#pack_name: "{{pack_dir}}/redis-3.0.5.tgz"
+#redis_dir: "{{ pack_name.split('/')[-1][0:-4]}}"
+#data_dir: /data4/{{ redis_dir }}

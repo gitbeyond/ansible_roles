@@ -1,13 +1,13 @@
 - name: create redis user
   user: name={{ item.name }} state=present system={{ item.system }}
   with_items:
-    - { name: redis, system: yes}
+    - { name: {{run_user}}, system: yes}
 - name: modify about redis core args
   sysctl: name={{ item.name }} value={{ item.value }} reload=no state=present ignoreerrors=yes
   with_items:
     - { name: 'net.ipv4.tcp_timestamps', value: 1}
-    - { name: 'net.ipv4.tcp_tw_recycle', value: 1}
-    - { name: 'net.core.somaxconn', value: 1024}
+    - { name: 'net.ipv4.tcp_tw_recycle', value: 0}
+    - { name: 'net.core.somaxconn', value: 65535}
     - { name: 'vm.swappiness', value: 0}
     - { name: 'vm.overcommit_memory', value: 1}
 - name: close transparent_hugepage
@@ -16,35 +16,35 @@
   lineinfile: dest={{item.dest}} regexp={{ item.regexp }} line={{ item.line }} backrefs=no
   with_items:
     - { dest: /etc/rc.d/rc.local, regexp: "echo never > /sys/kernel/mm/transparent_hugepage/enabled", line: "echo never > /sys/kernel/mm/transparent_hugepage/enabled" }
-- name: install redis-3.0.5
+- name: install redis
   unarchive: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} creates={{ item.creates }}
   with_items:
     #- {src: '{{ pack_dir }}/redis-3.0.5.tgz', dest: '/usr/local/', owner: root, group: root, creates: '/usr/local/redis-3.0.5'}
-    - {src: '{{ pack_name }}', dest: '{{ install_dir }}/', owner: root, group: root, creates: '{{ install_dir }}/{{redis_dir}}'}
+    - {src: '{{ app_packet }}', dest: '{{ install_dir }}/', owner: root, group: root, creates: '{{ install_dir }}/{{app_name}}'}
 - name: create redis dir
   file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
   with_items:
-    - {path: '{{ install_dir }}/{{redis_dir}}/conf', owner: redis, group: redis, mode: '0755', state: directory}
-    - {path: '/var/run/redis', owner: redis, group: redis, mode: '0755', state: directory}
-    - {path: '/var/log/redis', owner: redis, group: redis, mode: '0755', state: directory}
-    - {path: '{{ data_dir }}/', owner: redis, group: redis, mode: '0755', state: directory}
+    - {path: '{{ config_dir }}', owner: '{{run_user}}', group: '{{run_user}}', mode: '0755', state: directory}
+    - {path: '{{var_dir}}', owner: '{{run_user}}', group: '{{run_user}}', mode: '0755', state: directory}
+    - {path: '{{log_dir}}', owner: '{{run_user}}', group: '{{run_user}}', mode: '0755', state: directory}
+    - {path: '{{ data_dir }}', owner: '{{run_user}}', group: '{{run_user}}', mode: '0755', state: directory}
+#- name: copy {{run_user}} conf file
+#  copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+#  with_items:
 - name: copy redis conf file
-  copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
   with_items:
-    - { src: "redis.logrotate", dest: '/etc/logrotate.d/redis',owner: root, group: root, mode: '0644'}
-- name: copy redis conf file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
-  with_items:
-    - { src: "redis.init", dest: '/etc/rc.d/init.d/redis', owner: root, group: root, mode: '0755'}
-    - { src: "redis.conf", dest: '{{ install_dir}}/{{redis_dir}}/conf/redis.conf',owner: root, group: root, mode: '0644'}
+    - { src: "redis.init", dest: '/etc/rc.d/init.d/{{app_name}}', owner: root, group: root, mode: '0755'}
+    - { src: "redis.conf", dest: '{{ config_dir}}/redis.conf',owner: root, group: root, mode: '0644'}
     - { src: "redis.sh", dest: '/etc/profile.d/redis.sh',owner: root, group: root, mode: '0644'}
+    - { src: "redis.logrotate", dest: '/etc/logrotate.d/redis',owner: root, group: root, mode: '0644'}
   tags:
    - modify_redis_conf
   notify:
    - restart redis service
 - name: add redis to service list
-  shell: chkconfig --list | grep redis || chkconfig --add redis
+  shell: chkconfig --list | grep '\b{{app_name}}\b' || chkconfig --add {{app_name}}
 - name: enable redis and start redis
   service: name={{ item.name }} state={{ item.state }} enabled={{ item.enabled }}
   with_items:
-    - { name: redis, state: started, enabled: yes }
+    - { name: {{app_name}}, state: started, enabled: yes }
