@@ -1,0 +1,26 @@
+---
+# nginx install destination dir, Must be consistent with the directory specified at compile time,default is /usr/local
+#install_dir: /usr/local
+app_name: mysql
+app_port: 3306
+install_dir: /data/apps/opt
+config_dir: "/data/apps/config/{{app_name}}"
+log_dir: "/data/apps/log/{{app_name}}"
+var_dir: "/data/apps/var/{{app_name}}"
+data_dir: /data/apps/data
+binlog_dir: "{{log_dir}}/mysql_binlog"
+
+run_user: mysql
+app_packet: /usr/src/mysql-5.7.23-linux-glibc2.12-x86_64.tgz
+app_data_packet: /usr/src/mysql-5.7.23-datadir-initialize.tgz
+
+archive_log_dir: "/data/apps/log/{{app_name}}"
+
+# slave
+slave_mysql:
+mysync_pass: 'mySYNC-pass'
+
+# master
+master_mysql:
+sync_user: mysync
+sync_pass: 'mySYNC-pass'

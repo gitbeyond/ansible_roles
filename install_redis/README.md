@@ -11,8 +11,10 @@ role 会创建相关目录，并启动 redis-server，修改 redis 所需要的�
         app_packet: /root/wanghaifeng/redis-3.0.5.tgz, 
         install_dir: /data/apps/opt, 
         app_name: redis,
-        app_port: 6379}
+        app_port: 6379,
+        supervisor_conf_dir: /data/apps/config/supervisord}
 ```
 
 ## 注意事项
 - app_packet 解压后的目录名必须与 app_name 一致
+- supervisor_conf_dir, 这个参数是指定 supervisor 的配置目录的，如果指定这个变量，那么将使用supervisor管理 redis

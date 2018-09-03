@@ -1,0 +1,10 @@
+#- name: copy mysql password file and sql
+#  copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+#  with_items:
+#  - { src: 'my_client.cnf', dest: /root/.my.cnf, owner: root, group: root, mode: '0600'}
+- name: begin replication thread
+  mysql_replication: login_user={{mysql_User}} login_unix_socket={{mysql_sockPath}} login_password={{mysql_Pass}} master_host={{master_mysql}} master_user={{sync_user}} master_password={{sync_pass}} master_auto_position=1 mode={{ item }}
+  with_items:
+    - stopslave
+    - changemaster
+    - startslave

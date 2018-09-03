@@ -1,0 +1,42 @@
+# edirtor: haifeng
+# 2017/01/10
+# 2017/08/02 modified to sysctl
+
+- name: modify core arguments
+  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes
+  with_items:
+    - { name: 'vm.swappiness', value: 0}
+    - { name: 'net.ipv4.ip_local_port_range', value: '10240 65000' }
+    - { name: 'net.ipv4.tcp_timestamps', value: '1'}
+    - { name: 'net.ipv4.tcp_tw_recycle', value: '0'}
+    - { name: 'net.ipv4.tcp_tw_reuse', value: '0'}
+    - { name: 'net.ipv4.tcp_syncookies', value: '1'}
+    - { name: 'net.core.somaxconn', value: '262144' }
+    - { name: 'net.core.netdev_max_backlog', value: '262144' }
+    - { name: 'net.ipv4.tcp_max_orphans', value: '262144' }
+    - { name: 'net.ipv4.tcp_max_syn_backlog', value: '262144' }
+    - { name: 'net.ipv4.tcp_synack_retries', value: '1' }
+    - { name: 'net.ipv4.tcp_syn_retries', value: '1' }
+    - { name: 'net.ipv4.tcp_fin_timeout', value: '5' }
+    - { name: 'net.ipv4.tcp_keepalive_time', value: '70' }
+    - { name: 'fs.file-max', value: '6553500' }
+
+#  lineinfile: dest=/etc/sysctl.conf line="{{ item }}"
+#  with_items:
+#    - "vm.swappiness = 0"
+#    - "net.ipv4.tcp_max_tw_buckets = 6000" # 
+#    - "net.ipv4.ip_local_port_range = 10240 65000" # defaults is 32768 61000 
+#    - "net.ipv4.tcp_timestamps = 0" # defautls is 1
+#    - "net.ipv4.tcp_tw_recycle = 1" # defaults is 0
+#    - "net.ipv4.tcp_tw_reuse = 1"   # defaults is 0
+#    - "net.ipv4.tcp_syncookies = 1" # defaults is 1
+#    - "net.core.somaxconn = 30720" # defaults is 128
+#    - "net.core.netdev_max_backlog = 262144" # defaults is 1000
+#    - "net.ipv4.tcp_max_orphans = 262144" # defaults is 262144
+#    - "net.ipv4.tcp_max_syn_backlog = 262144" # defaults is 2048
+#    - "net.ipv4.tcp_synack_retries = 1" # defaults is 5
+#    - "net.ipv4.tcp_syn_retries = 1" # defaults is 5
+#    - "net.ipv4.tcp_fin_timeout = 5" # defaults is 60
+#    - "net.ipv4.tcp_keepalive_time = 30" # defaults is 7200
+#  notify:
+#    - reload sysctl.conf

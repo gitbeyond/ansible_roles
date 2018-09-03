@@ -1,0 +1,11 @@
+- name: copy redis service file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
+  with_items:
+    - { src: "redis.init", dest: '/etc/rc.d/init.d/{{app_name}}', owner: root, group: root, mode: '0755'}
+    - { src: "redis.conf", dest: '{{ config_dir}}/redis.conf',owner: root, group: root, mode: '0644'}
+- name: add redis to service list
+  shell: chkconfig --list | grep '\b{{app_name}}\b' || chkconfig --add {{app_name}}
+- name: enable redis and start redis
+  service: name={{ item.name }} state={{ item.state }} enabled={{ item.enabled }}
+  with_items:
+    - { name: '{{app_name}}', state: started, enabled: yes }

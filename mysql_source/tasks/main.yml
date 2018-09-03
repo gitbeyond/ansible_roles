@@ -1,0 +1,58 @@
+# edirtor: haifeng
+# 2018/08/30
+
+- name: create parent dir
+  file: src={{ item.src }} dest={{item.dest}} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
+  with_items:
+    - { src: /data1, dest: /data, owner: root, group: root, mode: '0777', state: link}
+- name: create user
+  user: name={{ item.name }} state=present system={{ item.system }}
+  with_items:
+    - { name: '{{ run_user }}', system: yes}
+- name: install epel-release
+  yum: name=epel-release state=latest
+- name: create dir
+  file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
+  with_items:
+    - { path: '{{ install_dir }}', owner: root, group: root, mode: '0755', state: directory }
+    - { path: '{{ log_dir }}', owner: '{{ run_user }}', group: '{{ run_user }}', mode: '0755', state: directory }
+    - { path: '{{ binlog_dir }}', owner: '{{ run_user }}', group: '{{ run_user }}', mode: '0755', state: directory }
+    - { path: '{{ config_dir }}', owner: '{{ run_user }}', group: '{{ run_user }}', mode: '0755', state: directory }
+    - { path: '{{ data_dir }}', owner: root, group: root, mode: '0755', state: directory }
+    - { path: '{{ var_dir }}', owner: '{{ run_user }}', group: root, mode: '0755', state: directory }
+- name: cp and unarchive mysql_binary_tarball to remote host
+  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ run_user }}' group={{ run_user }} creates={{ item.creates }}
+  with_items:
+    - { src: '{{ app_packet }}', dest: '{{ install_dir}}/', creates: '{{ install_dir }}/{{app_name}}' }
+- name: cp and unarchive mysql_datadir_tarball to remote host
+  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ run_user }}' group={{ run_user }} creates={{ item.creates }}
+  with_items:
+    - { src: '{{ app_data_packet }}', dest: '{{ data_dir}}/', creates: '{{ data_dir }}/{{app_name}}' }
+  #ignore_errors: True
+#- name: create link file
+#  file: src='{{ install_dir }}/nginx/conf' dest=/etc/nginx state=link
+- name: copy conf file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
+  with_items:
+    - { src: 'my.cnf', dest: '{{ config_dir }}/', owner: '{{run_user}}', group: '{{run_user}}', mode: '0644'}
+   # - { src: 'nginx.init', dest: '/etc/rc.d/init.d/', owner: root, group: root, mode: '0755' }
+    - { src: 'mysql.sh', dest: '/etc/profile.d/', owner: '{{run_user}}', group: '{{run_user}}', mode: '0644' }
+#    - { src: 'mysql.init', dest: '/etc/rc.d/init.d/{{app_name}}', owner: root, group: root, mode: '0755' }
+#    - { src: 'htpasswd', dest: '{{ install_dir }}/nginx/conf/' , owner: 'root', group: 'root', mode: '0644'}
+  tags:
+   - modify_mysql_conf
+#  notify:
+#   - restart nginx service
+
+- include: cent6_service.yml
+
+- name: set mysql boot and starting up
+  service: name={{ item.name }} state={{ item.state }} enabled=yes
+  with_items:
+    - { name: mysql, state: started }
+
+- include: create_syncuser.yml
+  when: slave_mysql is defined
+#- include: core_argument.yml
+- include: sync_to_master.yml
+  when: master_mysql is defined

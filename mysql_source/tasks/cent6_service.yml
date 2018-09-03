@@ -1,0 +1,9 @@
+- name: copy boot file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items:
+    - { src: 'mysql.init', dest: '/etc/rc.d/init.d/mysql', owner: root, group: root, mode: '0755' }
+- name: add to service list
+  shell: '{{ item }}'
+  with_items:
+    - chkconfig --list | grep -q '\b{{app_name}}\b' || chkconfig --add {{app_name}}
+
