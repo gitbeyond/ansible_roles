@@ -19,14 +19,14 @@
 # Check that networking is up.
 [ "$NETWORKING" = "no" ] && exit 0
 
-nginx="{{install_dir}}/nginx/sbin/nginx"
+nginx="/usr/local/nginx/sbin/nginx"
 prog=$(basename $nginx)
 
 sysconfig="/etc/sysconfig/$prog"
-lockfile="{{var_dir}}/nginx.lock"
-pidfile="{{var_dir}}/${prog}.pid"
+lockfile="/var/lock/subsys/nginx"
+pidfile="/var/run/nginx/${prog}.pid"
 
-NGINX_CONF_FILE="{{install_dir}}/nginx/conf/nginx.conf"
+NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
 
 [ -f $sysconfig ] && . $sysconfig
 

@@ -2,7 +2,7 @@
 export PATH={{ ansible_env["PATH"] }}
 
 keep_conf=/etc/keepalived/keepalived.conf
-keep_log=$(ls /var/log/keepalived/*.log)
+keep_log=$(ls /var/log/keepalived/keep*.log)
 
 show_ip() {
     net_info=($(ip rou sh |grep default |awk '{l1=length($3);print substr($3,0,l1-1),$NF}'))

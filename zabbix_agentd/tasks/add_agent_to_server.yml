@@ -1,0 +1,37 @@
+- name: add group
+  local_action:
+    module: zabbix_group
+    server_url: http://10.111.32.181:8080/zabbix/
+    login_user: admin
+    login_password: zabbix
+    state: present
+    host_groups:
+      - "{{zabbix_group}}"
+- name: add host
+  local_action:
+    module: zabbix_host 
+    host_name: "{{ansible_default_ipv4.address}}"
+    host_groups: "{{zabbix_group}}"
+    #http_login_password: 'zabbix' 
+    #http_login_user: 'admin' 
+    interfaces:
+      - type: 1
+        main: 1
+        useip: 1
+        ip: "{{ansible_default_ipv4.address}}"
+        dns: ""
+        port: 10050 
+    inventory_mode: automatic 
+    link_templates:
+      - 'Template OS Linux'
+      - 'ss connect status'
+      - 'iostat_monitor'
+    login_password: 'zabbix' 
+    login_user: 'admin' 
+    server_url: http://10.111.32.181:8080/zabbix/ 
+    state: present 
+    status: enabled
+#  with_items:
+#    - 'Template OS Linux'
+#    - 'ss connect status'
+#    - 'iostat_monitor'

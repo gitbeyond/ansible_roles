@@ -1,2 +1,2 @@
 - name: restart redis service
-  service: name={{app_name}} state=restarted
+  service: name=redis state=restarted

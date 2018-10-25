@@ -1,14 +1,6 @@
 ---
-app_name: redis
-app_port: 6379
-run_user: redis
-install_dir: /data/apps/opt
-config_dir: "/data/apps/config/{{app_name}}"
-log_dir: "/data/apps/log/{{app_name}}"
-var_dir: "/data/apps/var/{{app_name}}"
-data_dir: /data/apps/data
-app_packet: /usr/src/redis-3.0.5.tgz
-
-archive_log_dir: "/data/apps/log/{{app_name}}"
-#supervisor_conf_dir: /data/apps/config/supervisord
-supervisor_conf_dir:
+pack_dir: /root/fangzhou/packet
+pack_name: "{{pack_dir}}/redis-3.0.5.tgz"
+redis_dir: {{ pack_name.split('/')[-1][0:-4]}}
+install_dir: /usr/local
+data_dir: /data4/{{ redis_dir }}

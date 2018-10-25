@@ -1,0 +1,11 @@
+- name: copy boot file
+  #template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  #copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items:
+    - { src: 'zabbix-agent.init', dest: '/etc/rc.d/init.d/zabbix-agent', owner: root, group: root, mode: '0755' }
+- name: add to service list
+  shell: '{{ item }}'
+  with_items:
+    - chkconfig --list  {{zabbix_service_name}} || chkconfig --add {{zabbix_service_name}}
+

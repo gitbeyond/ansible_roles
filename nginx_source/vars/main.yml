@@ -1,16 +1,13 @@
 ---
 # nginx install destination dir, Must be consistent with the directory specified at compile time,default is /usr/local
+#install_dir: /usr/local
 install_dir: /data/apps/opt
-# 关于 config dir 可以有两种方式，一是编译时单独指定 nginx 的 --conf-path
-# 二是不指定，然后将  {{install_dir}}/nginx/conf 链接为 {{config_dir}}/nginx
-config_dir: /data/apps/config
 log_dir: /data/apps/log/nginx
 var_dir: /data/apps/var/nginx
-data_dir: /data/apps/data/nginx
 
 nginx_user: nginx
-webapp_dir: /data/apps/data/nginx
+webapp_dir: /server/www/geo/
 nginx_packet: nginx_1.10.2_bin.tgz
-conf_packet: nginx-1.10.3_conf.tgz
 
+#nginx_log_dir: /var/log/nginx
 archive_log_dir: /data/apps/log/nginx

@@ -1,7 +1,7 @@
 - name: copy check_keep.sh script
-  template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
+  template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}} backup=yes
   with_items:
     - {src: 'check_keep.sh', dest: '{{ zabbix_script_dir }}/check_keep.sh', mode: '0744' }
     - {src: 'keepalived_state.conf', dest: '{{ zabbix_conf_dir }}/', mode: '0644'}
   notify:
-    - restart {{ zabbix_service_name }}
+    - restart zabbix_agent

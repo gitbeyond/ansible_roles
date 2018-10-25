@@ -1,0 +1,42 @@
+- name: install depended package
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: sysstat, state: latest}
+    - { name: bc, state: latest}
+- name: create zabbix user
+  user: name=zabbix 
+- name: install zabbix-agent
+  unarchive: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
+  with_items:
+    - {src: 'zabbix_2.4.tgz', dest: '{{install_dir}}/', mode: '0744', creates: '{{install_dir}}/zabbix/sbin/zabbix_agentd' }
+#- name: copy iostat discovery script
+#  copy: src={{item.src}} dest={{item.dest}} owner=root group=root mode={{item.mode}}
+#  with_items:
+#    - {src: 'zabbix-agent.init', dest: '/etc/init.d/zabbix-agent', mode: '0744'}
+#- name: add zabbix-agent service
+#  shell: chkconfig --add {{zabbix_service_name}}
+#
+
+- include: cent6_service.yml
+  #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 6
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  # ansible-2.3.0.0
+  #   #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  #
+- include: cent7_service.yml
+  #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+
+
+- name: copy conf file
+  template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
+  with_items:
+    - {src: 'zabbix_agentd.conf', dest: '{{install_dir}}/zabbix/etc/zabbix_agentd.conf', mode: '0644' }
+  notify:
+    - restart {{ zabbix_service_name }}
+
+- name: set zabbix boot and starting up
+  service: name={{ item.name }} state={{ item.state }} enabled=yes
+  with_items:
+    - { name: "{{zabbix_service_name}}", state: started }
+- include: add_agent_to_server.yml

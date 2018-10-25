@@ -19,5 +19,5 @@
     - {src: 'mysql_innodb_status.sh', dest: '{{ zabbix_dir }}/script/mysql_innodb_status.sh', owner: zabbix, group: zabbix, mode: '0744'}
     - {src: 'mysql_client.conf', dest: '{{ zabbix_dir }}/etc/.my.cnf', owner: zabbix, group: zabbix, mode: '0444'}
   notify:
-    - restart zabbix_agentd
+    - restart zabbix_agent
 - include: create_user.yml
