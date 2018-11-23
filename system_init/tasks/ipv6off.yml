@@ -1,0 +1,13 @@
+# 2018/05/07
+# 2018/05/07 modified to sysctl
+#- name: backup sysctl.conf
+#  shell: "dt=$(date +%Y%m%d%H);[ -e /etc/sysctl.conf_${dt} ] || cp /etc/sysctl.conf /etc/sysctl.conf_${dt}"
+- name: set ipv6 off
+  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes sysctl_file=/etc/sysctl.d/system_init.conf
+  with_items:
+    - { name: 'net.ipv6.conf.all.disable_ipv6', value: 1}
+- name: close ipv6 module
+  copy: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode='0644' backup=yes
+  with_items:
+    - { src: 'ipv6off.conf', dest: '/etc/modprobe.d/' }
+

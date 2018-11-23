@@ -1,0 +1,9 @@
+---
+- name: set /etc/rc.d/rc.local to 0744
+  file: 
+    path: /etc/rc.d/rc.local
+    mode: 'u+x'
+- name: enable rc-local service
+  systemd: 
+    name: rc-local
+    enabled: yes

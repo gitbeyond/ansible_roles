@@ -1,4 +1,29 @@
 ---
+- include: install_packet.yml
+  tags:
+    - install_base_packet
 - include: core_argument.yml
   tags:
-   - modify_core_argument
+    - modify_core_argument
+- include: ipv6off.yml
+  tags:
+    - off_ipv6
+- include: limit_conf.yml
+  tags:
+    - set_ulimit
+- include: set_profile.yml
+  tags:
+    - set_profile
+- include: off_selinux.yml
+  tags:
+    - off_selinux
+- include: ntpdate_sync_time.yml
+  tags:
+    - ntpdate_sync_time
+- include: open_rc-local.yml
+  tags:
+    - set_rc-local_enable
+- include: close_THP.yml
+  when: "'hadoop' in group_names or hadoop_yes is defined"
+  tags:
+    - close_THP

@@ -1,15 +1,20 @@
 # 2018/05/07
 # 2018/05/07 modified to sysctl
-- name: backup sysctl.conf
-  shell: "dt=$(date +%Y%m%d%H);[ -e /etc/sysctl.conf_${dt} ] || cp /etc/sysctl.conf /etc/sysctl.conf_${dt}"
+#- name: backup sysctl.conf
+#  shell: "dt=$(date +%Y%m%d%H);[ -e /etc/sysctl.conf_${dt} ] || cp /etc/sysctl.conf /etc/sysctl.conf_${dt}"
 - name: modify core arguments
-  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes
+  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes sysctl_file=/etc/sysctl.d/system_init.conf
   with_items:
     - { name: 'vm.swappiness', value: 0}
     - { name: 'net.ipv4.tcp_timestamps', value: '1'}
     - { name: 'net.ipv4.tcp_tw_recycle', value: '0'}
     - { name: 'net.ipv4.tcp_tw_reuse', value: '0'}
-    - { name: 'net.core.somaxconn', value: '262144' }
+    - { name: 'net.core.somaxconn', value: '65535' }
     - { name: 'net.core.netdev_max_backlog', value: '262144' }
     - { name: 'net.ipv4.tcp_max_syn_backlog', value: '262144' }
     - { name: 'fs.file-max', value: '65535000' }
+    - { name: 'net.ipv4.tcp_syncookies', value: '1' }
+    - { name: 'net.ipv4.tcp_fin_timeout', value: '30' }
+    - { name: 'net.core.rmem_max', value: '16777216' }
+    - { name: 'net.core.wmem_max', value: '16777216' }
+

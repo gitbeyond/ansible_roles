@@ -1,14 +1,23 @@
 
-#这个 files/nginx_1.10.2_bin.tgz 的包是在 2017/01/12 号用源码编译好的，gcc 版本是 gcc-4.4.7
-# centos6 上编译的包在 centos7 上是不能用的，因为有些依赖库的版本或库的名字不同
+此 role 的用途如下:
+* 安装基础包,如 epel-release, htop, sysstat 等等
+* 修改基础的内核参数
+* 关闭ipv6
+* 修改 limit 参数
+* 添加 profile 
+* 关闭 selinux
+* 添加同步时间的计划任务
+* 打开 rc-local service
+* 关闭透明大页
 
+- ntp_serve 指定 ntp 的地址
+- 是否关闭透明大页，取决于 host 是否存在于 hadoop 的组中，或者定义 hadoop_yes: true, 否则会跳过关闭透明大页的操作
+
+example:
+```
 ---
-- hosts: 10.111.32.61
+- hosts: 10.111.32.254
   remote_user: root
   roles:
-    - { role: nginx_source, 
-        install_dir: /usr/local, 
-        nginx_packet: nginx_1.10.2_bin.tgz, 
-        nginx_user: nginx, 
-        nginx_log_dir: /var/log/nginx, 
-        archive_log_dir: /var/log/nginx }
+   - { role: system_init, ntp_server: "cn.pool.ntp.org", hadoop_yes: true}
+```

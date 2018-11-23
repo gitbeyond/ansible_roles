@@ -1,0 +1,11 @@
+---
+- name: install ntpdate packet
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: ntpdate, state: latest}
+- name: add sync time cron job
+  cron: 
+    name: "ntpdate sync time" 
+    backup: yes
+    job: "/usr/sbin/ntpdate {{ntp_server}} &> /dev/null"
+    minute: "*/10"

@@ -1,0 +1,18 @@
+---
+- name: install epel
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: epel-release, state: latest}
+- name: install base packet
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: libselinux-python, state: latest}
+    - { name: libselinux, state: latest}
+    - { name: libselinux-utils, state: latest}
+    - { name: htop, state: latest}
+    - { name: dstat, state: latest}
+    - { name: glances, state: latest}
+    - { name: lrzsz, state: latest}
+    - { name: sysstat, state: latest}
+    - { name: jq, state: latest}
+
