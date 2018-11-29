@@ -1,5 +1,10 @@
-zabbix_dir: /usr/local/zabbix
-zabbix_conf_dir: /usr/local/zabbix/etc/zabbix_agentd.conf.d
-zabbix_script_dir: /usr/local/zabbix/script
-zabbix_service_name: zabbix-agent
-zabbix_group: "Discovered hosts"
+# 这些变量都定义在 group_var 下面
+#zabbix_dir: /usr/local/zabbix
+#zabbix_conf_dir: /usr/local/zabbix/etc/zabbix_agentd.conf.d
+#zabbix_script_dir: /usr/local/zabbix/script
+#zabbix_service_name: zabbix-agent
+#zabbix_group: "Discovered hosts"
+#
+#zabbix_server_url: 
+#zabbix_login_user: 
+#zabbix_login_password: 

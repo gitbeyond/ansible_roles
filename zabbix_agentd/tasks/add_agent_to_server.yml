@@ -1,12 +1,11 @@
 - name: add group
   local_action:
     module: zabbix_group
-    server_url: http://10.111.32.181:8080/zabbix/
-    login_user: admin
-    login_password: zabbix
+    server_url: "{{zabbix_server_url}}"
+    login_user: "{{zabbix_login_user}}"
+    login_password: "{{zabbix_login_password}}"
     state: present
-    host_groups:
-      - "{{zabbix_group}}"
+    host_groups: "{{zabbix_group}}"
 - name: add host
   local_action:
     module: zabbix_host 
@@ -22,13 +21,10 @@
         dns: ""
         port: 10050 
     inventory_mode: automatic 
-    link_templates:
-      - 'Template OS Linux'
-      - 'ss connect status'
-      - 'iostat_monitor'
-    login_password: 'zabbix' 
-    login_user: 'admin' 
-    server_url: http://10.111.32.181:8080/zabbix/ 
+    link_templates: "{{host_templates}}"
+    login_password: "{{zabbix_login_password}}"
+    login_user: "{{zabbix_login_user}}"
+    server_url: "{{zabbix_server_url}}"
     state: present 
     status: enabled
 #  with_items:
