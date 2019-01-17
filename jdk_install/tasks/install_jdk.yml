@@ -1,5 +1,7 @@
 ---
+- name: ensure install dir present
+  file: path={{jdk_install_dir}} state=directory owner=root group=root mode=0755
 - name: install jdk
   unarchive: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} creates={{ item.creates }}
   with_items:
-    - {src: '{{ jdk_packet }}', dest: '{{install_dir}}/', owner: root, group: root, creates: '{{install_dir}}/{{jdk_dir_name}}'}
+    - {src: '{{ jdk_packet }}', dest: '{{jdk_install_dir}}/', owner: root, group: root, creates: '{{jdk_install_dir}}/{{jdk_dir_name}}'}

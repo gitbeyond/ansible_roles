@@ -1,5 +1,6 @@
 ---
-remote_dir: /root/
-jdk_packet: "{{ pack_dir }}/jdk-8u91-linux-x64.gz"
-jdk_dir_name: jdk1.8.0_91
-install_dir: /usr/local
+#pack_dir: /root/soft
+#remote_dir: /root/
+#jdk_packet: "{{ pack_dir }}/jdk-8u91-linux-x64.gz"
+#jdk_dir_name: jdk1.8.0_91
+#install_dir: /usr/local
