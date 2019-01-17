@@ -2,6 +2,9 @@
 - include: install_packet.yml
   tags:
     - install_base_packet
+- include: DNS_conf.yml
+  tags:
+    - install_base_DNS
 - include: core_argument.yml
   tags:
     - modify_core_argument
@@ -17,13 +20,29 @@
 - include: off_selinux.yml
   tags:
     - off_selinux
-- include: ntpdate_sync_time.yml
-  tags:
-    - ntpdate_sync_time
+#- include: ntpdate_sync_time.yml
+#  tags:
+#    - ntpdate_sync_time
 - include: open_rc-local.yml
+  #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
   tags:
     - set_rc-local_enable
-- include: close_THP.yml
-  when: "'hadoop' in group_names or hadoop_yes is defined"
+#- include: close_THP.yml
+#  when: "'hadoop' in group_names or hadoop_yes == true"
+#  tags:
+#    - close_THP
+- include: close_pre-install_service.yml
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
   tags:
-    - close_THP
+    - close_7_default_service
+- include: close_pre-install_service_6.yml
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  tags:
+    - close_6_default_service
+- include: shell_audit.yml
+  tags:
+    - shell_audit
+- include: create_data_to_data1_link.yml
+  tags:
+    - create_data_to_data1_link

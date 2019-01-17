@@ -1,0 +1,9 @@
+---
+- name: close default service
+  systemd: 
+    name: "{{item}}"
+    enabled: false
+    state: stopped
+  with_items:
+    - firewalld
+    - chronyd

@@ -1,0 +1,8 @@
+---
+- name: close default service
+  service: 
+    name: "{{item}}"
+    enabled: false
+    state: stopped
+  with_items:
+    - iptables

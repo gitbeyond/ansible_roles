@@ -1,0 +1,5 @@
+- name: create /data link to /data1
+  file:
+    src: /data1
+    dest: /data
+    state: link

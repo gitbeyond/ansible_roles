@@ -5,7 +5,7 @@
     - { name: ntpdate, state: latest}
 - name: add sync time cron job
   cron: 
-    name: "ntpdate sync time" 
+    name: "custom job" 
     backup: yes
     job: "/usr/sbin/ntpdate {{ntp_server}} &> /dev/null"
     minute: "*/10"

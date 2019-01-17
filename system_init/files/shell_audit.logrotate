@@ -1,0 +1,17 @@
+/var/log/shell_audit/audit.log { 
+    weekly  
+    missingok 
+    dateext 
+    rotate 100
+    sharedscripts 
+    prerotate 
+      /usr/bin/chattr -a /var/log/shell_audit/audit.log 
+    endscript 
+    sharedscripts 
+    postrotate 
+      /bin/touch /var/log/shell_audit/audit.log
+      /bin/chmod 002 /var/log/shell_audit/audit.log
+      /bin/chown nobody:nobody /var/log/shell_audit/audit.log
+      /usr/bin/chattr +a /var/log/shell_audit/audit.log
+    endscript 
+}

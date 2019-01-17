@@ -1,0 +1,5 @@
+- name: set limit conf
+  copy: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode='0644' backup=yes
+  with_items:
+    - { src: 'resolv.conf', dest: '/etc/' }
+

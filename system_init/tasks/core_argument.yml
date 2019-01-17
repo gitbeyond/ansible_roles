@@ -1,9 +1,9 @@
 # 2018/05/07
 # 2018/05/07 modified to sysctl
 #- name: backup sysctl.conf
-#  shell: "dt=$(date +%Y%m%d%H);[ -e /etc/sysctl.conf_${dt} ] || cp /etc/sysctl.conf /etc/sysctl.conf_${dt}"
 - name: modify core arguments
-  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes sysctl_file=/etc/sysctl.d/system_init.conf
+  #sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes sysctl_file=/etc/sysctl.d/system_init.conf
+  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes sysctl_file=/etc/sysctl.conf
   with_items:
     - { name: 'vm.swappiness', value: 0}
     - { name: 'net.ipv4.tcp_timestamps', value: '1'}
@@ -17,4 +17,5 @@
     - { name: 'net.ipv4.tcp_fin_timeout', value: '30' }
     - { name: 'net.core.rmem_max', value: '16777216' }
     - { name: 'net.core.wmem_max', value: '16777216' }
+    - { name: 'vm.max_map_count', value: '6553360' }
 
