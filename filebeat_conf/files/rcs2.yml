@@ -1,0 +1,51 @@
+# rcs system
+- type: log
+  enabled: true
+  paths:
+    - /data/apps/log/rcs-v2_server/rcs2-server-info.log
+  fields:
+    log_topics: rcs2-server-info 
+  multiline.pattern: '^[[:space:]]+(at|\.{3})\b|^Caused by:'
+  multiline.negate: false
+  multiline.match: after
+
+- type: log
+  enabled: true
+  paths:
+    - /data/apps/log/rcs-v2_server/rcs2_scheduler-info.log
+  fields:
+    log_topics: rcs2-scheduler-info
+  multiline.pattern: '^[[:space:]]+(at|\.{3})\b|^Caused by:'
+  multiline.negate: false
+  multiline.match: after
+
+- type: log
+  enabled: true
+  paths:
+    - /data/apps/log/rcs-v2_server/rcs2_jobcli-info.log
+  fields:
+    log_topics: rcs2-jobcli-info
+  multiline.pattern: '^[[:space:]]+(at|\.{3})\b|^Caused by:'
+  multiline.negate: false
+  multiline.match: after
+
+- type: log
+  enabled: true
+  paths:
+    - /data/apps/log/rcs-v2_server/rcs2_api_worker-info.log
+  fields:
+    log_topics: rcs2-api-worker-info
+  multiline.pattern: '^[[:space:]]+(at|\.{3})\b|^Caused by:'
+  multiline.negate: false
+  multiline.match: after
+
+- type: log
+  enabled: true
+  paths:
+    - /data/apps/log/rcs-v2_server/rcs2_abevent_worker-info.log
+  fields:
+    log_topics: rcs2-abevent-worker-info
+
+  multiline.pattern: '^[[:space:]]+(at|\.{3})\b|^Caused by:'
+  multiline.negate: false
+  multiline.match: after

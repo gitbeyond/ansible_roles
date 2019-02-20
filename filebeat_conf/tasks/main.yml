@@ -1,0 +1,13 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: sync_filebeat_conf.yml
+  tags:
+    - sync_filebeat_conf
+
+#- include: sync_logstash_conf.yml
+#  tags:
+#    - sync_logstash_conf
+  #delegate_to: rcs-logstash
+  #run_once: true
+  #delegate_to: 'rcs-logstash'
