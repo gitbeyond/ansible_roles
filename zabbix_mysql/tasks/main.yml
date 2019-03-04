@@ -1,23 +1,15 @@
-- name: install depended package
-  yum: name={{ item.name }} state={{ item.state }}
-  with_items:
-    - { name: sysstat, state: latest}
-    - { name: bc, state: latest}
-    - { name: gcc, state: latest}
-    - { name: python-pip, state: latest}
-    - { name: python-setuptools, state: latest}
-    - { name: python-devel, state: latest}
-    - { name: MySQL-python, state: latest}
-#- name: install MySQL-python
-#  pip: name=MySQL-python version=1.2.5 state=present
-- name: modify zabbix groups
-  user: name=zabbix groups=mysql
-- name: copy chk_mysql.conf
-  template: src={{item.src}} dest={{ item.dest }} owner={{item.owner}} group={{item.group}} mode={{item.mode}} backup=yes
-  with_items:
-    - {src: chk_mysql.conf, dest: "{{ zabbix_dir }}/etc/userparams/", owner: zabbix, group: zabbix, mode: '0644' }
-    - {src: 'mysql_innodb_status.sh', dest: '{{ zabbix_dir }}/script/mysql_innodb_status.sh', owner: zabbix, group: zabbix, mode: '0744'}
-    - {src: 'mysql_client.conf', dest: '{{ zabbix_dir }}/etc/.my.cnf', owner: zabbix, group: zabbix, mode: '0444'}
-  notify:
-    - restart zabbix_agent
-- include: create_user.yml
+- include: create_monitor_user.yml
+  tags:
+    - create_monitor_user
+- include: register_mysql_var.yml
+  tags:
+    - register_mysql_var
+
+- include: copy_mysql_conf_file.yml
+  tags:
+    - copy_mysql_conf_file
+  when: mysql_src_conf is defined
+
+- include: copy_monitor_file.yml
+  tags:
+    - copy_monitor_file

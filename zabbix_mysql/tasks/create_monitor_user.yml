@@ -1,0 +1,2 @@
+- name: create mysql monitor user
+  mysql_user: login_user={{mysql_user}} login_unix_socket={{mysql_sock}} login_password={{mysql_pass}} name={{mysql_monitor_user}} password={{ mysql_monitor_pass }} host=localhost priv="*.*:REPLICATION CLIENT,PROCESS/mysql.*:SELECT/performance_schema.*:SELECT" state=present

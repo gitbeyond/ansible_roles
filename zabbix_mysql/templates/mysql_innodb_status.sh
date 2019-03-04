@@ -37,15 +37,27 @@
 #+---------+-----+
 #1 row in set (0.00 sec)
  
-#export PATH=/usr/local/mysql/bin/:/usr/lib64/qt-3.3/bin:/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/root/bin
-export PATH={{ansible_env.PATH}}
+export PATH={{ ansible_env["PATH"] }}
  
-conf_file={{zabbix_dir}}/etc/.my.cnf
-CMD="{{mysql_basedir}}/bin/mysql --defaults-file=${conf_file} -N"
+conf_file={{ zabbix_conf_dir }}/.my.cnf
+CMD="mysql --defaults-file=${conf_file} -N"
 
-dataDir={{mysql_datadir}}
-pid=$(ps aux |grep "${dataDir}" |awk '/^mysql/{print $2}')
-innodb_stat_file="${dataDir}/innodb_status.${pid}"
+dataDir={{ mysql_datadir.msg }}
+#pid=$(ps aux |grep "${dataDir}" |awk '/^mysql/{print $2}')
+#pid_file=$(ps aux |grep "${dataDir}" |awk '/^mysql/{print $2}')
+
+status_file_num=$(ls ${dataDir}innodb_status.* |wc -l)
+if [ ${status_file_num} -gt 1 ];then
+    dt=$(date +%s)
+    for f in $(ls ${dataDir}innodb_status.*);do
+        file_time=$(stat -c '%Y' ${f})
+        diff_time=$[dt-file_time]
+        if [ ${diff_time} -gt 100 ];then
+            rm -rf ${f}
+        fi 
+    done
+fi
+innodb_stat_file="${dataDir}innodb_status.*"
 #echo ${innodb_stat_file}
 
 innodb_metric=$1

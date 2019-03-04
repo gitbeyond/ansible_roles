@@ -1,0 +1,15 @@
+- name: install depended package
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: bc, state: latest}
+    - { name: MySQL-python, state: latest}
+- name: modify zabbix groups
+  user: name=zabbix groups=mysql
+- name: copy mysql_innodb_status script
+  template: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}} backup=yes
+  with_items:
+    - { src: chk_mysql.conf, dest: '{{ zabbix_conf_dir }}/', mode: '0644' }
+    - { src: mysql_innodb_status.sh, dest: '{{ zabbix_script_dir }}/mysql_innodb_status.sh', mode: '0744' }
+    - {src: 'mysql_client.conf', dest: '{{ zabbix_conf_dir }}/.my.cnf', mode: '0444'}
+  notify:
+    - restart {{ zabbix_service_name }}
