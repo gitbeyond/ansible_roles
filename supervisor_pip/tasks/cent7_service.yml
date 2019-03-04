@@ -1,6 +1,6 @@
-- name: copy boot file
+- name: copy {{supervisor_prog_name}} boot file
   template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
   with_items:
-    - { src: '{{prog_name}}.service', dest: '/usr/lib/systemd/system/{{prog_name}}.service', owner: root, group: root, mode: '0644' }
-- name: systemd daemon reload
+    - { src: '{{supervisor_prog_name}}.service', dest: '/usr/lib/systemd/system/{{supervisor_prog_name}}.service', owner: root, group: root, mode: '0644' }
+- name: systemd daemon reload for {{supervisor_prog_name}}
   systemd: daemon_reload=yes name={{prog_name}}

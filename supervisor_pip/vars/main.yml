@@ -1,13 +1,11 @@
 ---
-# nginx install destination dir, Must be consistent with the directory specified at compile time,default is /usr/local
-#install_dir: /usr/local
-prog_name: supervisord
-prog_user: root
-install_dir: /data/apps/opt
-log_dir: "/data/apps/log/{{prog_name}}"
-var_dir: "/data/apps/var/{{prog_name}}"
-conf_dir: "/data/apps/config/{{prog_name}}"
-super_version: 3.3.4
-
-#nginx_log_dir: /var/log/nginx
-archive_log_dir: /data/apps/log/nginx
+# 这些变量最好定义在 group_vars/all.yml 文件中，保持一致
+#supervisor_prog_name: supervisord
+#supervisor_prog_user: root
+#supervisor_install_dir: /data/apps/opt
+#supervisor_log_dir: "/data/apps/log/{{prog_name}}"
+#supervisor_var_dir: "/data/apps/var/{{prog_name}}"
+#supervisor_conf_dir: "/data/apps/config/{{prog_name}}"
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+#supervisor_exe_file: /usr/bin/supervisorctl
+#supervisor_version: 3.3.5
