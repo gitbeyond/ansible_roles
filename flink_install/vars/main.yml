@@ -1,18 +1,10 @@
 ---
-#kylin_packet: '{{packet_base_dir}}/apache-kylin-2.6.1-bin-hbase1x.tar.gz'
-#kylin_install_dir: '{{app_base_dir}}'
-#kylin_conf_dir: /data/apps/config/kylin
-#kylin_data_dir: /data/apps/data/kylin
-#kylin_base_dir: /data/apps/opt/kylin
-#kylin_log_dir: /data/apps/log/kylin
-#kylin_run_user: kylin
-#kylin_confs:
-#  - setenv.sh
-#  - kylin.properties
-#  - kylin_hive_conf.xml
-#  - kylin_job_conf_inmem.xml
-#  - kylin_job_conf.xml
-#  - kylin-kafka-consumer.xml
-#  - kylin-server-log4j.properties
-#  - kylin-spark-log4j.properties
-#  - kylin-tools-log4j.properties
+#flink_packet: '{{packet_base_dir}}/flink-1.6.4-bin-hadoop27-scala_2.11.tgz'
+#flink_install_dir: '{{app_base_dir}}'
+#flink_conf_dir: /data/apps/config/flink
+#flink_data_dir: /data/apps/data/flink
+#flink_base_dir: /data/apps/opt/flink
+#flink_log_dir: /data/apps/log/flink
+#flink_run_user: flink
+#flink_confs:
+#  - '{{packet_base_dir}}/{{flink_dir_name.stdout}}/conf/flink-conf.yaml

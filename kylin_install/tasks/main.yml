@@ -9,7 +9,7 @@
     - install_kylin
 - include: create_hdfs_dir.yml
   tags:
-    - create_hdfs_dir
+    - create_kylin_hdfs_dir
 - include: copy_kylin_conf.yml
   tags:
     - copy_kylin_conf

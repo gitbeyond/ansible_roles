@@ -1,15 +1,15 @@
 # edirtor: haifeng
 # 2017/02/13
 
-- include: create_kylin_dir.yml 
+- include: create_flink_dir.yml 
   tags:
-    - create_kylin_dir
-- include: install_kylin.yml
+    - create_flink_dir
+- include: install_flink.yml
   tags:
-    - install_kylin
+    - install_flink
 - include: create_hdfs_dir.yml
   tags:
-    - create_hdfs_dir
-- include: copy_kylin_conf.yml
+    - create_flink_hdfs_dir
+- include: copy_flink_conf.yml
   tags:
-    - copy_kylin_conf
+    - copy_flink_conf

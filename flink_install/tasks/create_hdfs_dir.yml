@@ -1,5 +1,5 @@
 - name: create hdfs flink dir
-  shell: hdfs dfs -mkdir {{item}} && hdfs dfs -chown -R {{flink_run_user}}.{{flink_run_user}} {{item}}
+  shell: hdfs dfs -test -e {{item}} || (hdfs dfs -mkdir -p {{item}} && hdfs dfs -chown -R {{flink_run_user}}:{{flink_run_user}} {{item}})
   become: yes
   become_method: su
   become_user: hdfs
