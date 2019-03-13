@@ -1,0 +1,15 @@
+# edirtor: haifeng
+# 2019/2/13
+
+- name: create flink user
+  user: name={{ item.name }} state=present system={{ item.system }} groups=hadoop
+  with_items:
+    - { name: '{{ flink_run_user }}',system: no}
+
+- name: create flink dir
+  file: path={{ item.path }} owner={{ flink_run_user }} group={{ flink_run_user }} mode={{ item.mode }} state={{ item.state }}
+  with_items:
+    - { path: "{{flink_conf_dir}}", mode: '0755', state: directory }
+    - { path: "{{flink_data_dir}}", mode: '0755', state: directory }
+    - { path: "{{flink_log_dir}}", mode: '0755', state: directory }
+

@@ -1,0 +1,7 @@
+- name: restart filebeat 
+  supervisorctl: name={{ item }} state=restarted
+  with_items:
+    - filebeat
+
+- name: supervisor update
+  shell: supervisorctl update
