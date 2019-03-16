@@ -1,3 +1,7 @@
+- name: get hdp-version
+  shell: hdp-select status hadoop-hdfs-namenode |awk '{print $NF}'
+  register: hdp_version
+
 - name: create hdfs flink dir
   shell: hdfs dfs -test -e {{item}} || (hdfs dfs -mkdir -p {{item}} && hdfs dfs -chown -R {{flink_run_user}}:{{flink_run_user}} {{item}})
   become: yes
