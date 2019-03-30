@@ -10,6 +10,10 @@
 - include: create_hdfs_dir.yml
   tags:
     - create_kylin_hdfs_dir
+  delegate_to: "{{kylin_backup_host}}"
+  delegate_facts: True  
+  run_once: true
+
 - include: copy_kylin_conf.yml
   tags:
     - copy_kylin_conf

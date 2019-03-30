@@ -9,7 +9,9 @@
 - name: create flink dir
   file: path={{ item.path }} owner={{ flink_run_user }} group={{ flink_run_user }} mode={{ item.mode }} state={{ item.state }}
   with_items:
-    - { path: "{{flink_conf_dir}}", mode: '0755', state: directory }
-    - { path: "{{flink_data_dir}}", mode: '0755', state: directory }
-    - { path: "{{flink_log_dir}}", mode: '0755', state: directory }
+    - { path: "{{flink_conf_dir}}", mode: "0755", state: directory }
+    - { path: "{{flink_data_dir}}", mode: "0755", state: directory }
+    - { path: "{{flink_data_dir}}/web", mode: "0755", state: directory }
+    - { path: "{{flink_data_dir}}/history_server", mode: "0755", state: directory }
+    - { path: "{{flink_log_dir}}", mode: "0755", state: directory }
 

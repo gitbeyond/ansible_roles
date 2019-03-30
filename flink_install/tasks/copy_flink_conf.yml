@@ -3,8 +3,10 @@
 - name: copy flink conf file
   template: src={{ item }} dest={{ flink_base_dir }}/conf/ owner={{ flink_run_user }} group={{ flink_run_user }} mode=0644 backup=yes
   with_items: "{{flink_confs}}"
+  #notify:
+  #  - restart_HistoryServer
 
 - name: copy flink env file
   template: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode={{ item.mode }}
   with_items:
-    - { src: 'flink.sh', dest: '/etc/profile.d/', mode: '0644'}
+    - { src: 'flink.sh', dest: '/etc/profile.d/', mode: "0644"}

@@ -1,0 +1,17 @@
+---
+
+- name: register nginx child dir variables
+  script: get_conf_dir.sh
+  args:
+    chdir: "{{nginx_conf_dir}}"
+  register: nginx_child_conf_dir
+
+#- name: test vars
+#  shell: echo "{{nginx_child_conf_dir}}" > /tmp/test_register
+
+- name: copy nginx child conf file
+  template: src={{ item }} dest={{nginx_child_conf_dir.stdout}}/ owner=root group=root mode='0644' backup=yes
+  with_items: "{{nginx_confs}}"
+  notify:
+    - reloaded nginx
+

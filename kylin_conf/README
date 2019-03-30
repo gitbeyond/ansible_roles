@@ -1,0 +1,15 @@
+# 使用 kylin_install 的变量
+- name: conf kylin
+  hosts: hdp7_kylin
+  remote_user: root
+  roles:
+    - { role: jmx_exporter }
+    - { role: kylin_conf}
+
+- name: copy kylin nginx conf
+  hosts: rcs-nginx
+  remote_user: root
+  roles:
+    - { role: nginx_conf, nginx_confs: "{{kylin_nginx_confs}}"}
+
+

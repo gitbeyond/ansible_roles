@@ -6,5 +6,9 @@
 #flink_base_dir: /data/apps/opt/flink
 #flink_log_dir: /data/apps/log/flink
 #flink_run_user: flink
+
+#flink_local_conf_dir: '{{file_base_dir}}/hdp7/flink'
 #flink_confs:
-#  - '{{packet_base_dir}}/{{flink_dir_name.stdout}}/conf/flink-conf.yaml
+#  - '{{flink_local_conf_dir}}/flink-conf.yaml'
+#
+#flink_history_server: 172.16.7.8

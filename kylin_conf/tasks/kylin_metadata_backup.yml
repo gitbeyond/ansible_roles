@@ -1,0 +1,18 @@
+---
+- name: create script base dir
+  file: path={{script_deploy_dir}} owner=root group=root mode=0755 state=directory
+
+- name: copy kylin conf file
+  template: src={{ item }} dest={{ script_deploy_dir }}/ owner={{ kylin_run_user }} group={{ kylin_run_user }} mode=0644 backup=yes
+  with_items:
+    - kylin_metadata_backup.sh
+    - send_mail.py
+
+- name: add kylin metadata backup cron job
+  cron:
+    name: "kylin metadata backup" 
+    minute: 0
+    weekday: 5
+    hour: 5
+    user: '{{kylin_run_user}}'
+    job: "/bin/bash {{script_deploy_dir}}/kylin_metadata_backup.sh &>> /tmp/kylin_metadata_backup.out"

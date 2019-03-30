@@ -1,4 +1,6 @@
-- name: restart filebeat 
+#- name: supervisor_update
+#  shell:
+- name: restart_HistoryServer
   supervisorctl: name={{ item }} state=restarted
   with_items:
-    - filebeat
+    - flink_HistoryServer

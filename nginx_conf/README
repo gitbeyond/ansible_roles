@@ -1,0 +1,7 @@
+# 使用 nginx_install 的变量
+# 作用是更新各业务的 nginx 配置文件
+- name: copy kylin nginx conf
+  hosts: rcs-nginx
+  remote_user: root
+  roles:
+    - { role: nginx_conf, nginx_confs: "{{kylin_nginx_confs}}"}

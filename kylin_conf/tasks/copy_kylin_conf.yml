@@ -1,0 +1,15 @@
+---
+- name: copy kylin conf file
+  template: src={{ item }} dest={{ kylin_base_dir }}/conf/ owner={{ kylin_run_user }} group={{ kylin_run_user }} mode=0644 backup=yes
+  with_items: "{{kylin_confs}}"
+
+- name: copy kylin tomcat server.xml
+  template: src={{ item.src }} dest={{ item.dest }} owner={{kylin_run_user}} group={{kylin_run_user}} mode={{ item.mode }} backup=yes
+  with_items:
+    - { src: '{{kylin_local_conf_dir}}/server.xml', dest: '{{kylin_base_dir}}/tomcat/conf/', mode: "0644"}
+    - { src: '{{kylin_local_conf_dir}}/logging.properties', dest: '{{kylin_base_dir}}/tomcat/conf/', mode: "0644"}
+
+- name: copy kylin env file
+  template: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode={{ item.mode }} backup=yes
+  with_items:
+    - { src: '{{kylin_local_conf_dir}}/kylin.sh', dest: '/etc/profile.d/', mode: "0644"}

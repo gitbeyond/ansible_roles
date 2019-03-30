@@ -1,0 +1,7 @@
+# edirtor: haifeng
+# 2019/03/08
+
+- include: sync_nginx_conf.yml
+  tags:
+    - sync_nginx_conf
+

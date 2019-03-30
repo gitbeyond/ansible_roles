@@ -1,5 +1,5 @@
 - name: create hdfs kylin dir
-  shell: hdfs dfs -mkdir /kylin && hdfs dfs -chown -R kylin.kylin /kylin
+  shell: hdfs dfs -mkdir -p {{kylin.env.hdfs_working_dir}} /user/{{kylin_run_user}} && hdfs dfs -chown -R kylin:kylin {{kylin.env.hdfs_working_dir}} /user/{{kylin_run_user}}
   become: yes
   become_method: su
   become_user: hdfs

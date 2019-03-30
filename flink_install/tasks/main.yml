@@ -10,6 +10,14 @@
 - include: create_hdfs_dir.yml
   tags:
     - create_flink_hdfs_dir
+  delegate_to: "{{flink_history_server}}"
+  delegate_facts: True
+  run_once: true
+
 - include: copy_flink_conf.yml
   tags:
     - copy_flink_conf
+- include: start_history_server.yml
+  tags:
+    - start_history_server
+  when: ansible_default_ipv4.address == flink_history_server

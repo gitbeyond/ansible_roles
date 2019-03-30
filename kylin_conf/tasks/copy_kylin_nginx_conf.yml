@@ -1,0 +1,6 @@
+---
+
+- name: copy kylin nginx conf file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{nginx_run_user}} group={{nginx_run_user}} mode={{ item.mode }}
+  with_items:
+    - { src: '{{kylin_local_conf_dir}}/kylin.conf', dest: '{{nginx_conf_dir}}/', mode: "0644"}

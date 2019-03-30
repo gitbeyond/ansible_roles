@@ -1,0 +1,17 @@
+---
+- name: add source command to config.sh
+  lineinfile: 
+    line: "source /etc/profile.d/flink.sh" 
+    path: "{{flink_base_dir}}/bin/config.sh" 
+    state: present 
+    insertafter: "#!/usr/bin/env bash" 
+    regexp: "source /etc/profile.d/flink.sh"
+    backup: yes
+    #backrefs: yes
+
+- name: copy flink history boot file
+  template: src={{ item }} dest={{supervisor_conf_dir }}/ owner={{ flink_run_user }} group={{ flink_run_user }} mode=0644 backup=yes
+  with_items:
+    - flink_HistoryServer.ini
+  notify:
+    - restart_HistoryServer

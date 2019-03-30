@@ -1,14 +1,6 @@
 
-#这个 files/nginx_1.10.2_bin.tgz 的包是在 2017/01/12 号用源码编译好的，gcc 版本是 gcc-4.4.7
-# centos6 上编译的包在 centos7 上是不能用的，因为有些依赖库的版本或库的名字不同
-
----
-- hosts: 10.111.32.61
+- name: install flink
+  hosts: 172.16.7.9
   remote_user: root
   roles:
-    - { role: nginx_source, 
-        install_dir: /usr/local, 
-        nginx_packet: nginx_1.10.2_bin.tgz, 
-        nginx_user: nginx, 
-        nginx_log_dir: /var/log/nginx, 
-        archive_log_dir: /var/log/nginx }
+    - { role: flink_install}

@@ -1,0 +1,10 @@
+---
+# jmx_exporter
+# jmx_exporter_packet: '{{packet_base_dir}}/exporter/jmx_prometheus_javaagent-0.11.0.jar'
+# jmx_exporter_install_dir: '{{app_base_dir}}/jmx_exporter'
+# jmx_exporter_conf_dir: /data/apps/config/jmx_exporter
+# jmx_exporter_data_dir: /data/apps/data/jmx_exporter
+# jmx_exporter_base_dir: /data/apps/opt/jmx_exporter
+# jmx_exporter_log_dir: /data/apps/log/jmx_exporter
+# jmx_exporter_confs:
+#   - '{{file_base_dir}}/jmx_exporter/logging.properties'
