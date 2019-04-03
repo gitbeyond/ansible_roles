@@ -2,7 +2,7 @@
 # 2017/01/10
 # 2017/08/02 modified to sysctl
 
-- name: modify core arguments
+- name: modify core arguments for nginx
   sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes
   with_items:
     - { name: 'vm.swappiness', value: 0}

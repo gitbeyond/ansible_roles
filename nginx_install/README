@@ -6,9 +6,6 @@
 - hosts: 10.111.32.61
   remote_user: root
   roles:
-    - { role: nginx_source, 
-        install_dir: /usr/local, 
-        nginx_packet: nginx_1.10.2_bin.tgz, 
-        nginx_user: nginx, 
-        nginx_log_dir: /var/log/nginx, 
-        archive_log_dir: /var/log/nginx }
+    - { role: nginx_install }
+
+

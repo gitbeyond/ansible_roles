@@ -19,14 +19,14 @@
 # Check that networking is up.
 [ "$NETWORKING" = "no" ] && exit 0
 
-nginx="/usr/local/nginx/sbin/nginx"
+nginx="{{nginx_base_dir}}/sbin/nginx"
 prog=$(basename $nginx)
 
 sysconfig="/etc/sysconfig/$prog"
-lockfile="/var/lock/subsys/nginx"
-pidfile="/var/run/nginx/${prog}.pid"
+lockfile="{{nginx_var_dir}}/nginx_lock"
+pidfile="{{nginx_var_dir}}/${prog}.pid"
 
-NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
+NGINX_CONF_FILE="{{nginx_conf_dir}}/nginx.conf"
 
 [ -f $sysconfig ] && . $sysconfig
 
@@ -142,3 +142,4 @@ case "$1" in
         echo $"Usage: $0 {start|stop|reload|configtest|status|force-reload|upgrade|restart|reopen_logs}"
         exit 2
 esac
+
