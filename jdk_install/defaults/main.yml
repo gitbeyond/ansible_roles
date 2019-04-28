@@ -1,0 +1,5 @@
+# jdk_packet 须是 tar.gz 的格式
+jdk_packet: '{{packet_base_dir}}/jdk-8u151-linux-x64.tar.gz'
+# 这个变量一般取自全局变量 {{app_base_dir}}
+jdk_install_dir: '{{app_base_dir}}'
+jdk_base_dir: '{{app_base_dir}}/java'

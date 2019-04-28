@@ -1,0 +1,14 @@
+# edirtor: haifeng
+# 2019/04/28
+
+- name: install epel-release
+  yum: name=epel-release state=latest
+- name: install dependeies packet
+  yum: name={{ item }} state=latest
+  with_items:
+    - python-pip
+- name: install {{prog_name}}
+  pip: name={{item.name}} version={{item.version}} extra_args="-i http://pypi.douban.com/simple --trusted-host pypi.douban.com"
+  with_items:
+    - {name: supervisor, version: "{{supervisor_version}}"}
+    - {name: meld3, version: "1.0.2"}
