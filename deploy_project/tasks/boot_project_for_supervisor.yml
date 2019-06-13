@@ -1,0 +1,6 @@
+
+- name: copy project boot file
+  #template: src="/data/apps/data/ansible/{{project_name}}/{{prog_name}}.ini" dest="{{super_conf_dir}}" owner="{{user}}" group="{{user}}" mode=0644
+  template: src="{{project_boot_file}}" dest="{{supervisor_conf_dir}}" owner="{{project_run_user}}" group="{{project_run_group}}" mode=0644
+- name: restart project prog
+  supervisorctl: config="{{supervisor_prim_conf}}" name={{project_prog_name}} state=restarted supervisorctl_path=/usr/bin/supervisorctl

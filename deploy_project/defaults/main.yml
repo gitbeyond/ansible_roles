@@ -1,0 +1,30 @@
+jenkins_home_dir: /data/apps/data/jenkins
+project_run_user: 
+project_run_group: '{{project_run_user}}'
+project_host:
+# 如果程序是一个 jar 包，使用 supervisor 启动时的进程名称
+project_prog_name: 
+# 项目打包后的包名,如果带有版本号那么须使用 myproject*.jar 这样
+project_packet_name:
+# 为项目包名创建的软链的名字，如果包名发生了版本的变化，那么就需要在 supervisor的配置文件中更新包名，而使用软链接，只需要更新软链接即可
+project_packet_link_name:
+# 项目名称，就是 jenkins 的项目名
+project_name:
+
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+project_boot_type: supervisor
+project_boot_file:
+
+project_source_dir:
+
+#project_install_dir:
+#project_data_dir:
+#project_log_dir:
+
+project_archive_dir: /data3/apps/data/jenkins_data/{{project_name}}
+project_deploy_version: "0"
+
+#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+#nginx_conf_dir: /data/apps/config/nginx
+#nginx_run_user: nginx

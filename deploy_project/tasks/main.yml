@@ -1,0 +1,20 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: create_project_dir.yml
+  tags:
+    - create_project_dir
+
+- include: install_project_packet.yml
+  tags:
+    - install_project_packet
+#- include: boot_project_for_supervisor.yml
+- include: boot_project_for_{{project_boot_type}}.yml
+  tags:
+    - boot_project
+  #when: project_boot_type == "supervisor"
+
+- include: archive_packet.yml
+  tags:
+    - archive_packet
+

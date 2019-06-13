@@ -1,0 +1,12 @@
+#- name: create script dir
+#  file:
+#    path: /data/apps/opt/script
+#    state: directory
+#- name: copy script to tmp dir
+#  template: 
+#    src: archive_packet.sh
+#    dest: /data/apps/opt/script
+
+- name: archive project packet
+  local_action: script archive_packet.sh {{project_prog_name}} {{PACKET_NAME.stdout}} {{project_archive_dir}}
+  when: project_deploy_version|int == 0
