@@ -1,0 +1,12 @@
+
+nginx_run_user: nginx
+app_base_dir: /data/apps/opt
+nginx_base_dir: "{{app_base_dir}}/nginx"
+nginx_data_dir: /data/apps/data/nginx
+nginx_conf_dir: /data/apps/config/nginx
+nginx_log_dir: /data/apps/log/nginx
+nginx_var_dir: /data/apps/var/nginx
+nginx_install_method: net
+nginx_confs:
+  - nginx.conf
+  - htpasswd

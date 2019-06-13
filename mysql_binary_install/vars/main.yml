@@ -1,0 +1,15 @@
+---
+# nginx install destination dir, Must be consistent with the directory specified at compile time,default is /usr/local
+#install_dir: /usr/local
+
+
+archive_log_dir: "/data/apps/log/{{app_name}}"
+
+# slave
+slave_mysql:
+mysync_pass: 'mySYNC-pass'
+
+# master
+master_mysql:
+sync_user: mysync
+sync_pass: 'mySYNC-pass'

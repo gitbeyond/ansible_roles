@@ -8,7 +8,7 @@ supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
 supervisor_log_dir: /data/apps/log/supervisord
 supervisor_var_dir: /data/apps/var/{{supervisor_prog_name}}
 supervisor_exe_file: /usr/bin/supervisorctl
-ervisor_install_method: net
+supervisor_install_method: net
 supervisor_packets:
   - '{{packet_base_dir}}/meld3-1.0.2.tar.gz'
   - '{{packet_base_dir}}/supervisor-3.3.5.tar.gz'

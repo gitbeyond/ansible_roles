@@ -25,6 +25,7 @@
    - restart supervisord service
 - name: create link file
   file: src='{{ supervisor_conf_dir }}/supervisord.conf' dest=/etc/supervisord.conf state=link
+  when: '"/etc/supervisord.conf" is not exists'
 
 - include: cent6_service.yml
   #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 6

@@ -1,0 +1,20 @@
+#mysql_packet:
+#mysql_data_packet:
+mysql_app_name: mysql
+mysql_run_user: mysql
+app_base_dir: /data/apps/opt
+mysql_base_dir: "{{app_base_dir}}/mysql"
+mysql_data_dir: /data/apps/data/mysql
+mysql_conf_dir: /data/apps/config/mysql
+mysql_log_dir: /data/apps/log/mysql
+mysql_binlog_dir: "{{mysql_log_dir}}/binlog"
+mysql_var_dir: /data/apps/var/mysql
+mysql_sock: "{{mysql_var_dir}}/mysql.sock"
+mysql_port: 3306
+####
+#mysql_slave_server
+#mysql_master_server
+#mysql_login_user
+#mysql_login_pass
+#mysql_sync_user
+#mysql_sync_pass

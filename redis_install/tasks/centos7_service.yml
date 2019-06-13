@@ -1,0 +1,13 @@
+
+- name: copy redis boot file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
+  with_items:
+    - { src: 'redis.systemd', dest: '/usr/lib/systemd/system/{{redis_service_name}}.service', owner: root, group: root, mode: "0644" }
+    - { src: 'redis-shutdown', dest: '{{redis_base_dir}}/redis-shutdown', owner: '{{redis_run_user}}', group: '{{redis_run_user}}', mode: "0755" }
+  notify:
+    - add to system service list
+- name: set mysql boot and starting up
+  systemd: 
+    name: '{{redis_service_name}}'
+    enabled: yes 
+    state: started

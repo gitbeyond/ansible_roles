@@ -16,21 +16,22 @@
 # source function library
 . /etc/rc.d/init.d/functions
 
+lock_file=/data/apps/var/supervisord/supervisord.lock
 RETVAL=0
 
 start() {
 	echo -n $"Starting supervisord: "
-	daemon {{supervisor_exe_file}} -c /etc/supervisord.conf
+	daemon /usr/bin/supervisord -c {{supervisor_prim_conf}}
 	RETVAL=$?
 	echo
-	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/supervisord
+	[ $RETVAL -eq 0 ] && touch ${lock_file}
 }
 
 stop() {
 	echo -n $"Stopping supervisord: "
 	killproc supervisord
 	echo
-	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/supervisord
+	[ $RETVAL -eq 0 ] && rm -f ${lock_file}
 }
 
 restart() {
@@ -49,7 +50,8 @@ case "$1" in
 	restart
 	;;
   condrestart)
-	[ -f /var/lock/subsys/supervisord ] && restart
+	#[ -f /var/lock/subsys/supervisord ] && restart
+	[ -f ${lock_file} ] && restart
 	;;
   status)
 	status supervisord

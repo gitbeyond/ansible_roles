@@ -1,0 +1,11 @@
+- name: copy boot file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
+  with_items:
+    - { src: 'mysql.systemd', dest: '/usr/lib/systemd/system/mysql.service', owner: root, group: root, mode: "0644" }
+  notify:
+    - add to system service list
+- name: set mysql boot and starting up
+  systemd: 
+    name: mysql 
+    enabled: yes 
+    state: started

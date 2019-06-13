@@ -1,5 +1,5 @@
 - name: copy nginx env file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
   with_items:
     #- { src: 'nginx.conf', dest: '{{ config_dir }}/nginx/', owner: root, group: root, mode: '0644'}
     - { src: 'nginx.sh', dest: '/etc/profile.d/', owner: root, group: root, mode: "0644" }
@@ -7,7 +7,7 @@
     #- { src: 'htpasswd', dest: '{{ config_dir }}/nginx/' , owner: 'root', group: 'root', mode: '0644'}
 
 - name: copy nginx conf file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  template: src={{ item }} dest={{ nginx_conf_dir }} owner={{nginx_run_user}} group={{nginx_run_user }} mode="0644" backup=yes
   with_items: '{{nginx_confs}}'
   tags:
    - modify_nginx_conf

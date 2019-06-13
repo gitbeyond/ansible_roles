@@ -1,9 +1,0 @@
-- name: install mysql packet
-  yum: name={{item.name}} state={{item.state}}
-  with_items:
-    - { name: MySQL-python, state: latest}
-- name: create sync user
-  mysql_user: login_user={{mysql_User}} login_unix_socket={{mysql_sockPath}} login_password={{mysql_Pass}} name=mysync password={{ mysync_pass }} host={{ slave_mysql }} priv="*.*:REPLICATION SLAVE" state=present
-#- name: create backup user
-#  mysql_user: login_user={{mysql_User}} login_unix_socket={{mysql_sockPath}} login_password={{mysql_Pass}} name=bakuser password={{ bakuser_pass }} host=localhost priv="*.*:REPLICATION CLIENT,PROCESS,RELOAD,LOCK TABLES" state=present
-

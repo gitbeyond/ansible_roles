@@ -1,0 +1,13 @@
+- name: install nginx dependence packet
+  yum: 
+    name:
+      - libevent-devel
+      - libevent
+      - pcre-devel
+      - openssl-devel
+      - libxslt-devel
+      - libxml2-devel
+      - gd-devel
+      - perl-ExtUtils-Embed
+      - GeoIP-devel
+    state: latest

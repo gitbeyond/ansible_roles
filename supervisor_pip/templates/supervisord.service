@@ -4,7 +4,7 @@ After=rc-local.service nss-user-lookup.target
 
 [Service]
 Type=forking
-ExecStart={{supervisor_exe_file}} -c {{supervisor_prim_conf}}
+ExecStart=/usr/bin/supervisord -c {{supervisor_prim_conf}}
 
 [Install]
 WantedBy=multi-user.target

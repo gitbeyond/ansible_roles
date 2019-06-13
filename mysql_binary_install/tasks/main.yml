@@ -1,12 +1,9 @@
 # edirtor: haifeng
-# 2017/01/12
+# 2019/05/11
 
-- include: install_nginx.yml
+- include: install_mysql.yml
   tags:
-    - install_nginx
-- include: copy_nginx_conf.yml
-  tags:
-    - copy_nginx_conf
+    - install_mysql
 
 - include: cent6_service.yml
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
@@ -14,8 +11,9 @@
 - include: cent7_service.yml
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
 
-- include: install_dependence_packet.yml
-  when: nginx_install_method == "net" 
 
-
-- include: core_argument.yml
+- include: create_syncuser.yml
+  when: mysql_slave_server is defined
+#- include: core_argument.yml
+- include: sync_to_master.yml
+  when: mysql_master_server is defined

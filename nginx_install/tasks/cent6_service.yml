@@ -1,19 +1,5 @@
----
-- name: install nginx dependece packet
-  yum: name={{ item }} state=latest
-  with_items:
-    - libevent-devel
-    - libevent
-    - libevent-headers
-    - pcre-devel
-    - openssl-devel
-    - libxslt-devel
-    - libxml2-devel
-    - gd-devel
-    - perl-ExtUtils-Embed
-    - GeoIP-devel
 - name: copy nginx boot file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
   with_items:
     - { src: 'nginx.init', dest: '/etc/rc.d/init.d/nginx', owner: root, group: root, mode: "0755" }
 - name: add nginx to service list
@@ -21,3 +7,7 @@
   with_items:
     - chkconfig --list nginx || chkconfig --add nginx
 
+- name: set nginx boot and starting up
+  service: name={{ item.name }} state={{ item.state }} enabled=yes
+  with_items:
+    - { name: nginx, state: started }

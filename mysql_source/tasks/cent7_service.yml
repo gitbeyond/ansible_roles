@@ -1,6 +1,0 @@
-- name: copy boot file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
-  with_items:
-    - { src: 'nginx.systemd', dest: '/usr/lib/systemd/system/nginx.service', owner: root, group: root, mode: '0644' }
-  notify:
-    - add to system service list

@@ -1,0 +1,19 @@
+#redis_packet:
+#redis_master_server:
+#redis_master_port:
+#redis_master_pass:
+
+redis_run_user: redis
+redis_base_dir: "{{app_base_dir}}/redis"
+redis_conf_dir: /data/apps/config/redis
+redis_var_dir: /data/apps/var/redis
+redis_data_dir: /data/apps/data/redis
+redis_log_dir: /data/apps/log/redis
+redis_port: 6379
+redis_service_name: "redis_{{redis_port}}"
+# system or supervisor
+redis_run_method: supervisor
+# global variables
+app_base_dir: /data/apps/opt
+supervisor_prim_conf: /data/apps/config/supervisord/supervisord.conf
+

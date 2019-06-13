@@ -1,6 +1,0 @@
----
-pack_dir: /root/fangzhou/packet
-pack_name: "{{pack_dir}}/redis-3.0.5.tgz"
-redis_dir: {{ pack_name.split('/')[-1][0:-4]}}
-install_dir: /usr/local
-data_dir: /data4/{{ redis_dir }}
