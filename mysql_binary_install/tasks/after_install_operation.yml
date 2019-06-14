@@ -1,0 +1,17 @@
+- name: get mysql error log path
+  shell: grep -E "log-error|log_error" {{mysql_conf_dir}}/my.cnf |awk '{print $NF}'
+  register: mysql_error_log
+
+- name: create mysql_error_log
+  file: path={{mysql_error_log.stdout}} state=touch owner={{mysql_run_user}} group={{mysql_run_user}} mode=0644
+
+
+- name: create auto.cnf_ansible_not_exist file when auto.cnf is not exists
+  file: path={{mysql_data_dir}}/auto.cnf_ansible_not_exist state=touch owner={{mysql_run_user}} group={{mysql_run_user}} mode=0644
+  when: '(mysql_data_dir+"/auto.cnf") is not exists'
+
+- name: rename auto.cnf to auto.cnf_ansible_not_exist
+  shell: mv auto.cnf auto.cnf_ansible_not_exist
+  args:
+    chdir: '{{mysql_data_dir}}'
+    creates: '{{mysql_data_dir}}/auto.cnf_ansible_not_exist'

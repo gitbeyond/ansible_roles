@@ -35,10 +35,15 @@ mysql> set password=PASSWORD('mysql_password');
 Query OK, 0 rows affected, 1 warning (0.00 sec)
 ```
 ## 其他参数说明
-mysql_slave_server: 指定一个IP,那么会创建一个以 mysync@ 命名的用户，用以复制
+mysql_slave_server: 指定一个IP,那么会创建一个以 mysync@ 命名的用户，用以复制，不指定会跳过
 mysql_sync_pass: 指定复制用户的密码
 mysql_sync_user: 
 
-mysql_master_server: 指定 master 的IP，开始复制线程,这里的方式是使用GTID, auto_position=1
+mysql_master_server: 指定 master 的IP，开始复制线程,这里的方式是使用GTID, auto_position=1, 不指定会跳过
 mysql_sync_user: mysync
 mysql_sync_pass: 'mySYNC-pass'
+
+
+## 注意
+1. 打包数据目录时，不要打包父目录，如 /data/apps/data/mysql 这个数据目录，要使用 `tar zcf -C /data/apps/data/mysql *` 来打包
+2. 打包数据目录时，不要打包其中的 auto.cnf 文件,这个文件中包含了 mysql 的 UUID,每个server在启动时会自己生成。

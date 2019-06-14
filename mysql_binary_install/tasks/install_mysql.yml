@@ -27,7 +27,7 @@
   run_once: true
 
 - name: cp and unarchive mysql_binary_tarball to remote host
-  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ mysql_run_user }}' group={{ mysql_run_user }} creates={{ item.creates }}
+  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ mysql_run_user }}' group={{ mysql_run_user }} creates={{ item.creates }} mode=0755
   with_items:
     - { src: '{{ mysql_packet }}', dest: '{{ app_base_dir}}/', creates: '{{ app_base_dir }}/{{mysql_dir_name.stdout}}' }
 

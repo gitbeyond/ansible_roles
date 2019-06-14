@@ -16,5 +16,7 @@ mysql_port: 3306
 #mysql_master_server
 #mysql_login_user
 #mysql_login_pass
-#mysql_sync_user
-#mysql_sync_pass
+#mysql_master_sync_user
+#mysql_master_sync_pass
+#mysql_slave_sync_user
+#mysql_slave_sync_pass

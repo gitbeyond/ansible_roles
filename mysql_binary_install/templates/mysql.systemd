@@ -44,7 +44,7 @@ PermissionsStartOnly=true
 ExecStartPre={{mysql_base_dir}}/bin/mysqld_pre_systemd
 
 # Start main service
-ExecStart={{mysql_base_dir}}/bin/mysqld --defaults-file={{mysql_conf_dir}}/my.cnf --daemonize --pid-file={{mysql_var_dir}}/mysqld.pid $MYSQLD_OPTS
+ExecStart={{mysql_base_dir}}/bin/mysqld --defaults-file={{mysql_conf_dir}}/my.cnf --daemonize --pid-file={{mysql_var_dir}}/mysql.pid $MYSQLD_OPTS
 
 # Use this to switch malloc implementation
 EnvironmentFile=-/etc/sysconfig/mysql
