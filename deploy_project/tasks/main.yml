@@ -5,9 +5,16 @@
   tags:
     - create_project_dir
 
+- include: install_project_packet_for_tgz.yml
+  tags:
+    - install_project_packet
+  when: project_packet_type == "tgz"
+
 - include: install_project_packet.yml
   tags:
     - install_project_packet
+  when: project_packet_type == "jar"
+
 #- include: boot_project_for_supervisor.yml
 - include: boot_project_for_{{project_boot_type}}.yml
   tags:

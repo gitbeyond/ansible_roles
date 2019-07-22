@@ -6,8 +6,10 @@ project_host:
 project_prog_name: 
 # 项目打包后的包名,如果带有版本号那么须使用 myproject*.jar 这样
 project_packet_name:
+# tgz or jar
+project_packet_type:
 # 为项目包名创建的软链的名字，如果包名发生了版本的变化，那么就需要在 supervisor的配置文件中更新包名，而使用软链接，只需要更新软链接即可
-project_packet_link_name:
+#project_packet_link_name:
 # 项目名称，就是 jenkins 的项目名
 project_name:
 
