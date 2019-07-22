@@ -5,6 +5,10 @@
   tags:
     - create_project_dir
 
+- include: get_project_name.yml
+  tags:
+    - get_project_name
+
 - include: install_project_packet_for_tgz.yml
   tags:
     - install_project_packet

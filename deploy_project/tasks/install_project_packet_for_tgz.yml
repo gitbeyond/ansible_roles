@@ -1,8 +1,8 @@
 
-- name: get project packet name
-  local_action: shell if [ {{project_deploy_version}} == "0" ];then ls {{project_source_dir}}/{{project_packet_name}}; else ls {{project_archive_dir}}/{{project_packet_name}}_{{project_deploy_version}};fi
-  register: PACKET_NAME
-  ignore_errors: True
+#- name: get project packet name
+#  local_action: shell if [ {{project_deploy_version}} == "0" ];then ls {{project_source_dir}}/{{project_packet_name}}; else ls {{project_archive_dir}}/{{project_packet_name}}_{{project_deploy_version}};fi
+#  register: PACKET_NAME
+#  ignore_errors: True
 
 - name: get project packet dir name
   local_action: shell tar tvf {{PACKET_NAME.stdout}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
