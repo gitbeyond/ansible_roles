@@ -22,6 +22,7 @@ project_source_dir:
 #project_install_dir:
 #project_data_dir:
 #project_log_dir:
+#project_dir: []
 
 project_archive_dir: /data3/apps/data/jenkins_data/{{project_name}}
 project_deploy_version: "0"

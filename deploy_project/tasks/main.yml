@@ -23,6 +23,7 @@
 - include: boot_project_for_{{project_boot_type}}.yml
   tags:
     - boot_project
+  when: project_boo_type != "other"
   #when: project_boot_type == "supervisor"
 
 - include: archive_packet.yml

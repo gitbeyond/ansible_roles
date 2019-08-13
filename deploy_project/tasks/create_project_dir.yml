@@ -1,10 +1,10 @@
 
 - name: mkdir project dir
   file: path={{item}} state=directory owner={{project_run_user}} group={{project_run_group}} mode=0755
-  with_items:
-    - "{{project_install_dir}}"
-    - "{{project_log_dir}}"
-    - "{{project_data_dir}}"
+  with_items: "{{project_dir}}"
+  #  - "{{project_install_dir}}"
+  #  - "{{project_log_dir}}"
+  #  - "{{project_data_dir}}"
   #when: item is defined
-  ignore_errors: true
+  #ignore_errors: true
 

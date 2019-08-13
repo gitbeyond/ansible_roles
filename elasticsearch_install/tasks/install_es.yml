@@ -1,0 +1,16 @@
+
+- name: get es packet dir name
+  local_action: shell tar tvf {{es_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  register: es_dir_name
+  run_once: true
+
+- name: cp and unarchive es to remote host
+  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ es_run_user }}' group={{ es_run_user }} creates={{ item.creates }} mode={{item.mode}}
+  with_items:
+    - { src: '{{es_packet}}', dest: '{{ app_base_dir}}/', creates: '{{ app_base_dir }}/{{es_dir_name.stdout}}', mode: "0755" }
+
+- name: create es link dir
+  file: src={{ item.src }} dest={{item.dest}} state={{ item.state }}
+  with_items:
+    - { src: "{{app_base_dir}}/{{es_dir_name.stdout}}", dest: "{{es_base_dir}}", state: link}
+

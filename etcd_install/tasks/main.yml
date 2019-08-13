@@ -1,0 +1,17 @@
+
+- include: generate_certs.yml
+  tags:
+    - generate_certs
+- include: install_etcd_for_binary.yml
+  tags:
+    - install_etcd_for_binary
+- include: copy_ssl_certs.yml
+  tags:
+    - copy_ssl_certs
+- include: start_etcd.yml
+  tags:
+    - start_etcd
+
+- include: set_etcdctl_env.yml
+  tags:
+    - set_etcdctl_env

@@ -1,0 +1,14 @@
+# 
+# es_packet:
+# es_
+es_conf_dir: /data/apps/config/elasticsearch
+es_log_dir: /data/apps/log/elasticsearch
+es_var_dir: /data/apps/var/elasticsearch
+es_data_dir: /data/apps/data/elasticsearch
+es_base_dir: /data/apps/opt/elasticsearch
+es_run_user: elk
+es_boot_method: supervisor
+es_confs:
+  - jvm.options
+  - elasticsearch.yml
+

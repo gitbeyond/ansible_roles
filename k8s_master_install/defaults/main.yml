@@ -1,0 +1,57 @@
+
+k8s_work_dir: /root/ningbo_bank/k8s
+k8s_cert_json_dir: certs_json
+k8s_cert_dir: ansible_k8s_certs
+
+k8s_run_user: kube
+
+k8s_master_confs:
+  - kube-apiserver
+  - kube-config
+  - kube-controller-manager
+  - kube-scheduler
+  - kube-controller-manager.kubeconfig
+  - kube-scheduler.kubeconfig
+  - audit-policy.yaml
+
+k8s_master_certs:
+  - src: k8s-root-ca.pem
+    mode: "0644"
+  - src: k8s-root-ca-key.pem
+    mode: "0600"
+  - src: k8s-kube-apiserver.pem
+    mode: "0644"
+  - src: k8s-kube-apiserver-key.pem
+    mode: "0600"
+  - src: k8s-kube-apiserver-kubelet-client.pem
+    mode: "0644"
+  - src: k8s-kube-apiserver-kubelet-client-key.pem
+    mode: "0600"
+  - src: k8s-front-proxy-ca.pem
+    mode: "0644"
+  - src: k8s-front-proxy-ca-key.pem
+    mode: "0600"
+  - src: k8s-front-proxy-client.pem
+    mode: "0644"
+  - src: k8s-front-proxy-client-key.pem
+    mode: "0600"
+  - src: k8s-kube-controller-manager.pem
+    mode: "0644"
+  - src: k8s-kube-controller-manager-key.pem
+    mode: "0600"
+  - src: k8s-kube-scheduler.pem
+    mode: "0644"
+  - src: k8s-kube-scheduler-key.pem
+    mode: "0600"
+  - src: k8s-sa.pub
+    mode: "0644"
+  - src: k8s-sa.key
+    mode: "0600"
+  - src: admin.kubeconfig
+    mode: "0600"
+  
+
+k8s_master_service_confs:
+  - kube-apiserver.service
+  - kube-controller-manager.service
+  - kube-scheduler.service

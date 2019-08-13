@@ -1,0 +1,76 @@
+- name: create ansible_k8s_certs dir
+  #local_action: file path="{{etcd_work_dir}}/ansible_etcd_certs" state=directory
+  local_action: file path="{{k8s_work_dir}}/{{k8s_cert_dir}}" state=directory
+  run_once: true
+
+- name: generate k8s-root-ca
+  local_action: shell /usr/bin/cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca
+  args:
+    chdir: "{{k8s_work_dir}}"
+    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-root-ca.pem"
+  run_once: true
+
+- name: generate kube-apiserver-ca kubernetes-admin kube-apiserver-kubelet-client
+  local_action: shell /usr/bin/cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes {{k8s_cert_json_dir}}/{{item}}-csr.json | cfssljson --bare {{k8s_cert_dir}}/{{item}}
+  args:
+    chdir: "{{k8s_work_dir}}"
+    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/{{item}}.pem"
+  with_items:
+    - k8s-kube-apiserver
+    - k8s-kubernetes-admin
+    - k8s-kube-apiserver-kubelet-client
+    - k8s-kube-controller-manager
+    - k8s-kube-scheduler
+    - k8s-kube-proxy
+  run_once: true
+
+- name: generate k8s-front-proxy-ca
+  local_action: shell /usr/bin/cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-front-proxy-ca-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-front-proxy-ca
+  args:
+    chdir: "{{k8s_work_dir}}"
+    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-front-proxy-ca.pem"
+  run_once: true
+
+- name: generate k8s-front-proxy-client
+  local_action: shell /usr/bin/cfssl gencert -ca={{k8s_cert_dir}}/k8s-front-proxy-ca.pem -ca-key={{k8s_cert_dir}}/k8s-front-proxy-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes {{k8s_cert_json_dir}}/{{item}}-csr.json | cfssljson --bare {{k8s_cert_dir}}/{{item}}
+  args:
+    chdir: "{{k8s_work_dir}}"
+    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/{{item}}.pem"
+  with_items:
+    - k8s-front-proxy-client
+  run_once: true
+
+# serviceAccount private key
+- name: generate sa private.key
+  local_action: shell openssl genrsa -out {{k8s_cert_dir}}/k8s-sa.key 2048
+  args:
+    chdir: "{{k8s_work_dir}}"
+    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-sa.key"
+  run_once: true
+
+- name: generate sa public key
+  local_action: shell openssl rsa -in {{k8s_cert_dir}}/k8s-sa.key -pubout -out {{k8s_cert_dir}}/k8s-sa.pub 
+  args:
+    chdir: "{{k8s_work_dir}}"
+    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-sa.pub"
+  run_once: true
+
+
+#- name: generate kube-apiserver-ca
+#  local_action: shell /usr/bin/cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config=k8s-gencert.json -profile=kubernetes k8s-kube-apiserver-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-kube-apiserver
+#  args:
+#    chdir: "{{k8s_work_dir}}"
+#    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-kube-apiserver.pem"
+#  
+#- name: generate k8s-kubernetes-admin
+#  local_action: shell /usr/bin/cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config=k8s-gencert.json -profile=kubernetes k8s-kubernetes-admin-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-kubernetes-admin
+#  args:
+#    chdir: "{{k8s_work_dir}}"
+#    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-kubernetes-admin.pem"
+#
+#- name: generate k8s-kube-apiserver-kubelet-client
+#  local_action: shell /usr/bin/cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config=k8s-gencert.json -profile=kubernetes k8s-kube-apiserver-kubelet-client-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-kube-apiserver-kubelet-client
+#  args:
+#    chdir: "{{k8s_work_dir}}"
+#    creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-kube-apiserver-kubelet-client.pem"
+

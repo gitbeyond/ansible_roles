@@ -1,0 +1,16 @@
+# global 
+app_base_dir: /data/apps/opt
+
+# etcd
+etcd_work_dir: /root/ningbo_bank/etcd
+etcd_local_conf_dir: "{{etcd_work_dir}}/ansible_etcd_confs"
+etcd_cert_dir: ansible_etcd_certs
+
+etcd_run_user: etcd
+etcd_packet: "{{etcd_work_dir}}/etcd-v3.2.26-linux-amd64.tar.gz"
+# etcd dir
+etcd_base_dir: /data/apps/opt/etcd
+etcd_data_dir: /data/apps/data/etcd
+etcd_conf_dir: /data/apps/config/etcd
+etcd_var_dir: /data/apps/var/etcd
+etcd_log_dir: /data/apps/log/etcd

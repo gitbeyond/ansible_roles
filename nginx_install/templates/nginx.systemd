@@ -9,7 +9,7 @@ PIDFile={{nginx_var_dir}}/nginx.pid
 # SELinux context. This might happen when running `nginx -t` from the cmdline.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1268621
 ExecStartPre=/usr/bin/rm -f {{nginx_var_dir}}/nginx.pid
-ExecStartPre={{nginx_base_dir}}/sbin/nginx -t
+ExecStartPre={{nginx_base_dir}}/sbin/nginx -t -c {{nginx_conf_dir}}/nginx.conf
 ExecStart={{nginx_base_dir}}/sbin/nginx -c {{nginx_conf_dir}}/nginx.conf
 ExecReload=/bin/kill -s HUP $MAINPID
 KillSignal=SIGQUIT

@@ -1,0 +1,44 @@
+
+
+
+
+- name: copy etcd rpm packet
+  copy: src=/root/kubernetes/k8s/etcd-3.2.7-1.el7.x86_64.rpm dest=/root/
+- name: install etcd
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: /root/etcd-3.2.7-1.el7.x86_64.rpm, state: latest}
+
+
+- name: create docker graph dir
+  file: path={{item.path}} state={{item.state}} owner={{item.owner}} group={{item.group}} mode={{item.mode}}
+  with_items:
+    - {path: /etc/etcd/ssl, state: directory, owner: etcd, group: etcd, mode: '0755'}
+    - {path: /data/apps/data/etcd, state: directory, owner: etcd, group: etcd, mode: '0755'}
+
+- name: copy etcd certificate
+  #copy: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} mode={{item.mode}} backup=yes
+  copy: src={{item}} dest=/etc/etcd/ssl owner=etcd group=etcd mode=0644 backup=yes
+  with_items: "{{etcd_certs}}"
+    #- {src: /root/kubernetes/etcd/etcd-key.pem, dest: /etc/etcd/ssl/, owner: etcd, group: etcd, mode: '0644'}
+    #- {src: /root/kubernetes/etcd/etcd.pem, dest: /etc/etcd/ssl/, owner: etcd, group: etcd, mode: '0644'}
+    #- {src: /root/kubernetes/etcd/etcd-root-ca-key.pem, dest: /etc/etcd/ssl/, owner: etcd, group: etcd, mode: '0644'}
+    #- {src: /root/kubernetes/etcd/etcd-root-ca.pem, dest: /etc/etcd/ssl/, owner: etcd, group: etcd, mode: '0644'}
+- name: copy etcd certificate
+  copy: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} mode={{item.mode}} backup=yes
+  with_items:
+    - {src: etcd.sh, dest: /etc/profile.d/etcd.sh, owner: root, group: root, mode: '0644'}
+- name: copy etcd conf file
+  template: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} mode={{item.mode}} backup=yes
+  with_items:
+    - {src: /root/kubernetes/etcd/conf/etcd.conf, dest: /etc/etcd/, owner: root, group: root, mode: "0644"}
+- name: add etcdctl alias to bashrc
+  lineinfile: line={{item.line}} path={{item.path}} backup=yes
+  with_items:
+    #- {line: "alias etcdctl='etcdctl --cacert=/etc/etcd/ssl/etcd-root-ca.pem --cert=/etc/etcd/ssl/etcd.pem --key=/etc/etcd/ssl/etcd-key.pem --endpoints=https://10.111.33.29:2379,https://10.111.33.17:2379,https://10.111.33.20:2379'", path: /root/.bashrc }
+    - {line: "alias etcdctl='etcdctl --cacert=/etc/etcd/ssl/etcd-root-ca.pem --cert=/etc/etcd/ssl/etcd.pem --key=/etc/etcd/ssl/etcd-key.pem --endpoints={{etcd_endpoint}}'", path: /root/.bashrc }
+#- name: modify docker conf file
+#  lineinfile: line='ExecStart=/usr/bin/dockerd --insecure-registry 10.111.32.82:5000 --graph /data/apps/data/docker' regexp='ExecStart=/usr/bin/dockerd' path=/usr/lib/systemd/system/docker.service
+#- name: reload systemd  
+#  shell: systemctl daemon-reload
+  

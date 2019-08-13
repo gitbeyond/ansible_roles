@@ -1,0 +1,7 @@
+- name: copy k8s_master conf file
+  template: src={{ item }} dest=/etc/kubernetes/ owner={{k8s_run_user}} group={{k8s_run_user}} mode=0644 backup=yes
+  with_items: '{{k8s_master_confs}}'
+
+- name: copy k8s_master cert file
+  template: src={{k8s_work_dir}}/{{k8s_cert_dir}}/{{ item.src }} dest=/etc/kubernetes/ssl owner={{k8s_run_user}} group={{k8s_run_user}} mode={{item.mode}} backup=yes
+  with_items: '{{k8s_master_certs}}'

@@ -1,0 +1,10 @@
+---
+- include: create_es_dir.yml
+  tags:
+    - create_es_dir
+- include: install_es.yml
+  tags:
+    - install_es
+- include: copy_es_conf.yml
+  tags:
+    - copy_es_conf

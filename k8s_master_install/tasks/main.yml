@@ -1,0 +1,23 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: generate_k8s_certs.yml
+  tags:
+    - generate_k8s_certs
+
+- include: generate_k8s_kubeconfig.yml
+  tags:
+    - generate_k8s_kubeconfig
+
+- include: install_k8s_master.yml
+  tags:
+    - install_k8s_master
+
+- include: copy_k8s_master_conf.yml
+  tags:
+    - copy_k8s_master_conf
+
+
+- include: copy_k8s_master_service_conf.yml
+  tags:
+    - copy_k8s_master_service_conf
