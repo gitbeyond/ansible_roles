@@ -19,12 +19,23 @@
     - install_project_packet
   when: project_packet_type == "jar"
 
-#- include: boot_project_for_supervisor.yml
-- include: boot_project_for_{{project_boot_type}}.yml
+#- include: boot_project_for_{{project_boot_type}}.yml
+#  tags:
+#    - boot_project
+#  when: project_boo_type != "other"
+
+- include: boot_project_for_nginx.yml
+  when: project_boot_type == "nginx"
   tags:
     - boot_project
-  when: project_boo_type != "other"
-  #when: project_boot_type == "supervisor"
+- include: boot_project_for_supervisor.yml
+  when: project_boot_type == "supervisor"
+  tags:
+    - boot_project
+- include: boot_project_for_systemd.yml
+  when: project_boot_type == "systemd"
+  tags:
+    - boot_project
 
 - include: archive_packet.yml
   tags:
