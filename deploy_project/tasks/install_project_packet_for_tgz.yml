@@ -12,6 +12,7 @@
 
 - name: cp project packet to remote
   unarchive: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} mode={{item.mode}}
+  when: PACKET_NAME is defined and PACKET_NAME is not skipped
   with_items:
     - {src: '{{ PACKET_NAME.stdout }}', dest: '{{project_install_dir}}/', owner: '{{project_run_user}}', 
        group: '{{project_run_group}}', mode: "0755" }

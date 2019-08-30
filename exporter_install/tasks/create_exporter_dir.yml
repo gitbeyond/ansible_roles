@@ -1,0 +1,13 @@
+
+- name: mkdir exporter dir
+  file: path={{item}} state=directory owner={{exporter_run_user}} group={{exporter_run_group}} mode=0755
+  with_items:
+    - "{{exporter_conf_dir}}"
+    - "{{exporter_log_dir}}"
+  when: item is not none
+  #  - "{{project_install_dir}}"
+  #  - "{{project_log_dir}}"
+  #  - "{{project_data_dir}}"
+  #when: item is defined
+  #ignore_errors: true
+

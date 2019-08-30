@@ -1,0 +1,41 @@
+
+#- name: get exporter packet name
+#  local_action: shell if [ {{exporter_deploy_version}} == "0" ];then ls {{exporter_source_dir}}/{{exporter_packet_name}}; else ls {{exporter_archive_dir}}/{{exporter_packet_name}}_{{exporter_deploy_version}};fi
+#  register: EXPORTER_PACKET_NAME
+#  ignore_errors: True
+
+- name: get exporter packet dir name
+  local_action: shell tar tvf {{exporter_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  register: packet_dir_name
+  run_once: true
+
+
+- name: cp exporter packet to remote
+  unarchive: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} mode={{item.mode}}
+  when: exporter_packet is not none
+  with_items:
+    - src: '{{ exporter_packet }}'
+      dest: '{{app_base_dir}}/'
+      owner: '{{exporter_run_user}}' 
+      group: '{{exporter_run_group}}'
+      mode: "0755" 
+  register: cp_result
+
+#- name: chmod exporter dir
+#  shell: "{{item}}"
+#  with_items:
+#    - 'find {{exporter_install_dir}}/{{packet_dir_name.stdout}} -type d -exec chmod 0755 {} \;'
+#    - 'find {{exporter_install_dir}}/{{packet_dir_name.stdout}} -type f -exec chmod 0644 {} \;'
+
+- name: update exporter packet link file
+  file: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} state={{item.state}}
+  with_items:
+    - src: '{{app_base_dir}}/{{packet_dir_name.stdout}}'
+      dest: '{{exporter_base_dir}}'
+      owner: '{{exporter_run_user}}'
+      group: '{{exporter_run_group}}'
+      state: link 
+  when: exporter_base_dir is not none and packet_dir_name.stdout.split("/")[-1] != exporter_base_name
+  #when: exporter_packet_link_name is none
+    #- {src: '{{exporter_install_dir}}/{{EXPORTER_PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{exporter_install_dir}}/{{exporter_packet_link_name}}', owner: '{{exporter_run_user}}', group: '{{exporter_run_group}}', state: link }
+

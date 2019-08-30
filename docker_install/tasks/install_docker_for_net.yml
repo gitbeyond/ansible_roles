@@ -1,0 +1,31 @@
+#- name: modify root passwd
+#  user: name=root password="$6$KH5sapA5yDQcjSLs$WxVk43eGzMQvYn/H6IiGiwCKKahgRepZzyN65vwysu9/KZCsLg7KcQ/uzNNENEoK8elSyMKzNc/7euJaK82BQ."
+- name: install depended package
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: epel-release, state: latest}
+    - { name: yum-utils, state: latest}
+- name: add docker repo
+  shell: yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+- name: copy docker-ce-selinux
+  copy: src=docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm dest=/tmp/
+- name: install docker
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: /tmp/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm, state: latest}
+    - { name: docker-ce-17.03.2.ce-1.el7.centos, state: latest}
+#- name: modify docker conf file
+#  lineinfile: line='ExecStart=/usr/bin/dockerd --insecure-registry 10.111.32.82:5000 --graph /data/apps/data/docker --exec-opt native.cgroupdriver=systemd' regexp='ExecStart=/usr/bin/dockerd' path=/usr/lib/systemd/system/docker.service
+- include: modify_docker_service.yml
+  tags:
+    - modify_docker_service
+- include: copy_docker_conf_file.yml
+  tags:
+    - copy_docker_conf_file
+
+- name: reload systemd  
+  shell: systemctl daemon-reload
+- name: start docker service 
+  service: name=docker state=started enabled=yes

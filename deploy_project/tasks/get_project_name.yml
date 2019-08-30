@@ -1,5 +1,6 @@
 - name: get project packet name
   local_action: shell if [ {{project_deploy_version}} == "0" ];then ls {{project_source_dir}}/{{project_packet_name}}; else ls {{project_archive_dir}}/{{project_packet_name}}_{{project_deploy_version}};fi
+  when: project_source_dir is not none and project_packet_name is not none
   register: PACKET_NAME
   run_once: true
   #ignore_errors: True

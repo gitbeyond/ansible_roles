@@ -1,0 +1,9 @@
+
+docker_insecure_registry: 10.111.32.82:5000
+docker_data_dir: /data/apps/data/docker
+docker_install_method: net
+
+# docker local install
+docker_conf_dir: /data/apps/config/docker
+docker_base_dir: /data/apps/opt/docker
+docker_run_group: docker

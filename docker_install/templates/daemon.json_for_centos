@@ -1,0 +1,13 @@
+{
+  "insecure-registries": [
+    "http://{{docker_insecure_registry}}"
+  ],
+  "hosts": [
+    "unix:///var/run/docker.sock"
+  ],
+  "data-root": "{{docker_data_dir}}",
+  "storage-driver": "overlay2",
+  "exec-opts": [
+     "native.cgroupdriver=cgroupfs"
+  ]
+}

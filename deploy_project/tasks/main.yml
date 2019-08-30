@@ -12,7 +12,7 @@
 - include: install_project_packet_for_tgz.yml
   tags:
     - install_project_packet
-  when: project_packet_type == "tgz"
+  when: project_packet_type == "tgz" and PACKET_NAME is defined and PACKET_NAME is not skipped
 
 - include: install_project_packet.yml
   tags:

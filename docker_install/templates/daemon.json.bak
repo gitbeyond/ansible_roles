@@ -1,0 +1,7 @@
+{
+  "insecure-registry": ["10.111.32.82:5000"],
+  "hosts": ["unix:///var/run/docker.sock","tcp://0.0.0.0:2375"],
+  "graph": "/data/apps/data/docker",
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "storage-driver": "overlay"
+}

@@ -1,0 +1,24 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: create_exporter_user.yml
+  tags:
+    - create_exporter_user
+
+- include: create_exporter_dir.yml
+  tags:
+    - create_exporter_dir
+
+- include: install_exporter.yml
+  tags:
+    - install_exporter
+
+- include: copy_exporter_conf.yml
+  tags:
+    - copy_exporter_conf
+
+
+#- include: boot_project_for_supervisor.yml
+#  when: project_boot_type == "supervisor"
+#  tags:
+#    - boot_project

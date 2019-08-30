@@ -1,0 +1,21 @@
+app_base_dir: /data/apps/opt
+exporter_run_user: root
+exporter_run_group: '{{exporter_run_user}}'
+exporter_base_name:
+
+exporter_packet:
+exporter_base_dir: /data/apps/opt/{{exporter_base_name}}
+exporter_log_dir: /data/apps/log/{{exporter_base_name}}
+exporter_conf_dir: /data/apps/config/{{exporter_base_name}}
+
+exporter_conf_file:
+exporter_port:  
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+exporter_boot_type: supervisor
+exporter_boot_file:
+
+
+#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+#nginx_conf_dir: /data/apps/config/nginx
+#nginx_run_user: nginx

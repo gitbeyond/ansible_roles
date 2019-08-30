@@ -1,0 +1,12 @@
+{
+  "insecure-registry": [
+    "{{docker_insecure_registry}}"
+  ],
+  "hosts": [
+    "unix:///var/run/docker.sock"
+  ],
+  "graph": "{{docker_data_dir}}",
+  "exec-opts": [
+     "native.cgroupdriver=systemd"
+  ]
+}

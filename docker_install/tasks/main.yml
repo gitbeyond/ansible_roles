@@ -1,0 +1,15 @@
+
+- include: create_docker_dir.yml
+  tags:
+    - create_docker_dir
+  when: ansible_os_family == "RedHat" and docker_install_method == 'net'
+
+- include: install_docker_for_net.yml
+  tags:
+    - install_docker_for_net
+  when: ansible_os_family == "RedHat" and docker_install_method == 'net'
+
+- include: install_docker_for_local_suse.yml
+  tags:
+    - install_docker_for_local_suse
+  when: docker_install_method == 'local'

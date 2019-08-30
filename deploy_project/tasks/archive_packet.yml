@@ -9,4 +9,4 @@
 
 - name: archive project packet
   local_action: script archive_packet.sh {{project_prog_name}} {{PACKET_NAME.stdout}} {{project_archive_dir}}
-  when: project_deploy_version|int == 0
+  when: project_deploy_version|int == 0 and PACKET_NAME is defined and PACKET_NAME is not skipped
