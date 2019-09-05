@@ -1,0 +1,6 @@
+- name: create exporter user
+  user: name={{ item.name }} state=present system={{ item.system }}
+  with_items:
+    - name: '{{ exporter_run_user }}'
+      system: no
+  when: exporter_run_user is not none and exporter_run_user != 'root'

@@ -1,0 +1,29 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: create_pmm_user.yml
+  tags:
+    - create_pmm_user
+
+- include: create_pmm_dir.yml
+  tags:
+    - create_pmm_dir
+
+- include: install_pmm_client_for_tgz.yml
+  tags:
+    - install_pmm_client_for_tgz
+  when: pmm_client_packet_type == "tgz"
+
+##- include: install_pmm_client_for_jar.yml
+#  tags:
+#    - install_pmm_client_for_jar
+#  when: pmm_client_packet_type == "jar"
+#
+#- include: copy_pmm_client_conf.yml
+#  tags:
+#    - copy_pmm_client_conf
+#
+#- include: boot_pmm_client_for_tgz.yml
+#  tags:
+#    - boot_pmm_client_for_tgz
+#  when: pmm_client_packet_type == "tgz"

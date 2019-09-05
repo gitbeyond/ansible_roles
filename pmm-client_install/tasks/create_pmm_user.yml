@@ -1,0 +1,6 @@
+- name: create pmm_client user
+  user: name={{ item.name }} state=present system={{ item.system }}
+  with_items:
+    - name: '{{ pmm_client_run_user }}'
+      system: no
+  when: pmm_client_run_user is not none and pmm_client_run_user != 'root'

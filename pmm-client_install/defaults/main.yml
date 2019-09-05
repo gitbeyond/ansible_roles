@@ -1,0 +1,23 @@
+app_base_dir: /data/apps/opt
+pmm_client_run_user: root
+pmm_client_run_group: '{{pmm_client_run_user}}'
+pmm_client_base_name: 'pmm-client'
+
+pmm_client_packet:
+# tgz or jar
+pmm_client_packet_type: tgz
+pmm_client_base_dir: /data/apps/opt/{{pmm_client_base_name}}
+pmm_client_log_dir: /data/apps/log/{{pmm_client_base_name}}
+pmm_client_conf_dir: /data/apps/config/{{pmm_client_base_name}}
+
+pmm_client_conf_file:
+pmm_client_port:  
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+pmm_client_boot_type: supervisor
+pmm_client_boot_file:
+
+
+#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+#nginx_conf_dir: /data/apps/config/nginx
+#nginx_run_user: nginx

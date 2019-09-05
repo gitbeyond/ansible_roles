@@ -4,11 +4,11 @@
   with_items:
     - "{{app_base_dir}}"
 
-- name: mkdir exporter dir
-  file: path={{item}} state=directory owner={{exporter_run_user}} group={{exporter_run_group}} mode=0755
+- name: mkdir pmm_client dir
+  file: path={{item}} state=directory owner={{pmm_client_run_user}} group={{pmm_client_run_group}} mode=0755
   with_items:
-    - "{{exporter_conf_dir}}"
-    - "{{exporter_log_dir}}"
+    - "{{pmm_client_conf_dir}}"
+    - "{{pmm_client_log_dir}}"
   when: item is not none
   #  - "{{project_install_dir}}"
   #  - "{{project_log_dir}}"

@@ -9,14 +9,24 @@
   tags:
     - create_exporter_dir
 
-- include: install_exporter.yml
+- include: install_exporter_for_tgz.yml
   tags:
-    - install_exporter
+    - install_exporter_for_tgz
+  when: exporter_packet_type == "tgz"
+
+- include: install_exporter_for_jar.yml
+  tags:
+    - install_exporter_for_jar
+  when: exporter_packet_type == "jar"
 
 - include: copy_exporter_conf.yml
   tags:
     - copy_exporter_conf
 
+- include: boot_exporter_for_tgz.yml
+  tags:
+    - boot_exporter_for_tgz
+  when: exporter_packet_type == "tgz"
 
 #- include: boot_project_for_supervisor.yml
 #  when: project_boot_type == "supervisor"
