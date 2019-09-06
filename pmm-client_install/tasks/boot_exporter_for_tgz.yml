@@ -1,6 +1,0 @@
-- name: restart exporter prog
-  supervisorctl: 
-    config: "{{supervisor_prim_conf}}" 
-    name: "{{exporter_base_name}}" 
-    state: restarted 
-    supervisorctl_path: "/usr/bin/supervisorctl"
