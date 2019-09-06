@@ -1,0 +1,83 @@
+groups:
+- name: node_status
+  rules:
+  - alert: node down
+    expr: up == 0
+    for: 1m
+    labels:
+      serverity: Disaster
+    annotations:
+      summary: "{{$labels.instance}} down "
+      description: "{{$labels.instance}} of job {{ $labels.job }} has been down for more than 5 minutes."
+    
+  - alert: node cpu usage rate over 60%
+    expr: 100-(avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) by(instance)* 100) > 60
+    for: 1m
+    labels:
+      serverity: High
+    annotations:
+      summary: "{{$labels.instance}} CPU usage rate over 60%"
+      description: "{{$labels.instance }} CPU usage rate over 60%, (current_value:{{$value}}%)"
+  
+  - alert: node memory usage over 80%
+    expr: 100 -(node_memory_MemTotal_bytes -node_memory_MemFree_bytes+node_memory_Buffers_bytes+node_memory_Cached_bytes ) / node_memory_MemTotal_bytes * 100> 80
+    for: 1m
+    labels:
+      serverity: High
+    annotations:
+      summary: "{{$labels.instance}} memory usage over 80% "
+      description: "{{$labels.mountpoint }}  memory usage over 80%, (current_value:{{$value}}%)"
+
+  - alert: node io use time over 60%
+    expr: 100-(avg(irate(node_disk_io_time_seconds_total[1m])) by(instance)* 100) < 60
+    for: 1m
+    labels:
+      serverity: High
+    annotations:
+      summary: "{{$labels.instance}} io use time over 60%"
+      description: "{{$labels.instance }} io use time over 60%,(current_value:{{$value}})"
+ 
+  - alert: node network received bytes over 100M
+    expr: ((sum(rate (node_network_receive_bytes_total{device!~'tap.*|veth.*|br.*|docker.*|virbr*|lo*'}[5m])) by (instance)) / 100) > 102400
+    for: 1m
+    labels:
+      serverity: High
+    annotations:
+      summary: "{{$labels.instance}} network recived bytes over 100M."
+      description: "{{$labels.instance }} network recived bytes over 100M. current_value:{{$value}}"
+ 
+  - alert: node network outgoing bytes over 100M
+    expr: ((sum(rate (node_network_transmit_bytes_total{device!~'tap.*|veth.*|br.*|docker.*|virbr*|lo*'}[5m])) by (instance)) / 100) > 102400
+    for: 1m
+    labels:
+      serverity: High
+    annotations:
+      summary: "{{$labels.instance}} network outgoing bytes over 100M."
+      description: "{{$labels.instance }} network outgoing bytes over 100M. current_value:{{$value}}"
+  
+  - alert: node TCP established over 1000
+    expr: node_netstat_Tcp_CurrEstab > 1000
+    for: 1m
+    labels:
+      serverity: High
+    annotations:
+      summary: "{{$labels.instance}} TCP_ESTABLISHED over 1000."
+      description: "{{$labels.instance }} TCP_ESTABLISHED over 1000. current_value :{{$value}}"
+ 
+  - alert: node filesystem free space is less than 90%
+    expr: 100-(node_filesystem_free_bytes{fstype=~"ext4|xfs"}/node_filesystem_size_bytes {fstype=~"ext4|xfs"}*100) > 90
+    for: 1m
+    labels:
+      serverity: High
+    annotations:
+      summary: "{{$labels.instance}} {{$labels.device}} disk free space is less than 90%"
+      description: "{{$labels.instance }} {{$labels.device}} disk free space is less than 90%, current_value:{{$value}}%"
+
+  - alert: node filesystem readonly
+    expr: node_filesystem_readonly == 1 or node_filesystem_device_error == 1
+    for: 1m
+    labels:
+      serverity: High
+    annotations:
+      summary: "{{$labels.instance}} {{$labels.device}} node_filesystem_readonly"
+      description: "{{$labels.instance }} {{$labels.device}} node_filesystem_readonly"
