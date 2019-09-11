@@ -1,0 +1,6 @@
+- name: restart keepalived service
+  service: name=keepalived state=reloaded
+- name: add to service list
+  shell: '{{ item }}'
+  with_items:
+    - systemctl daemon-reload

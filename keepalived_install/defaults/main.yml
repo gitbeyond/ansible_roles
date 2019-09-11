@@ -1,0 +1,11 @@
+
+keepalived_run_user: root
+app_base_dir: /data/apps/opt
+keepalived_base_dir: "{{app_base_dir}}/keepalived"
+keepalived_data_dir: /data/apps/data/keepalived
+keepalived_conf_dir: /data/apps/config/keepalived
+keepalived_log_dir: /data/apps/log/keepalived
+keepalived_var_dir: /data/apps/var/keepalived
+keepalived_install_method: local
+keepalived_confs:
+  - keepalived.conf

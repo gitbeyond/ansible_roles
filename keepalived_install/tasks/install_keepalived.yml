@@ -1,0 +1,26 @@
+
+
+- name: get keepalived packet dir name
+  local_action: shell tar tvf {{keepalived_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  register: keepalived_dir_name
+  run_once: true
+
+- name: cp and unarchive keepalived to remote host
+  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ keepalived_run_user }}' group={{ keepalived_run_user }} creates={{ item.creates }}
+  with_items:
+    - { src: '{{keepalived_packet}}', dest: '{{ app_base_dir}}/', creates: '{{ app_base_dir }}/{{keepalived_dir_name.stdout}}', mode: "0755" }
+
+- name: create keepalived link dir
+  file: src={{ item.src }} dest={{item.dest}} state={{ item.state }}
+  with_items:
+    - { src: "{{app_base_dir}}/{{keepalived_dir_name.stdout}}", dest: "{{keepalived_base_dir}}", state: link}
+  when: keepalived_dir_name.stdout != "keepalived"
+
+- name: create keepalived link dir
+  file: src={{ item.src }} dest={{item.dest}} state={{ item.state }}
+  with_items:
+    - { src: "{{keepalived_conf_dir}}", dest: /etc/keepalived, state: link}
+    #- { src: "{{keepalived_base_dir}}", dest: /opt/keepalived, state: link}
+  ignore_errors: true
+  #when: item.dest is not exists
+
