@@ -1,0 +1,8 @@
+
+civp_run_user: tomcat
+civp_run_group: "{{civp_run_user}}"
+
+#
+# global 
+app_base_dir: /data/apps/opt
+

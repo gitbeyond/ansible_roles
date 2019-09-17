@@ -1,0 +1,40 @@
+
+#- name: get zookeeper packet name
+#  local_action: shell if [ {{zookeeper_deploy_version}} == "0" ];then ls {{zookeeper_source_dir}}/{{zookeeper_packet_name}}; else ls {{zookeeper_archive_dir}}/{{zookeeper_packet_name}}_{{zookeeper_deploy_version}};fi
+#  register: EXPORTER_PACKET_NAME
+#  ignore_errors: True
+
+
+- name: get zookeeper packet dir name
+  local_action: shell tar tvf {{zookeeper_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  register: packet_dir_name
+  run_once: true
+
+
+- name: cp zookeeper packet to remote
+  unarchive: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} mode={{item.mode}}
+  when: zookeeper_packet is not none
+  with_items:
+    - src: '{{ zookeeper_packet }}'
+      dest: '{{app_base_dir}}/'
+      owner: '{{zookeeper_run_user}}' 
+      group: '{{zookeeper_run_group}}'
+      mode: "0755" 
+      creates: "{{zookeeper_base_dir}}/bin/zkServer.sh"
+  register: cp_result
+
+#- name: chmod zookeeper dir
+#  shell: "{{item}}"
+#  with_items:
+#    - 'find {{zookeeper_install_dir}}/{{packet_dir_name.stdout}} -type d -exec chmod 0755 {} \;'
+#    - 'find {{zookeeper_install_dir}}/{{packet_dir_name.stdout}} -type f -exec chmod 0644 {} \;'
+
+- name: update zookeeper packet link file for tgz
+  file: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} state={{item.state}}
+  with_items:
+    - src: '{{app_base_dir}}/{{packet_dir_name.stdout}}'
+      dest: '{{zookeeper_base_dir}}'
+      owner: '{{zookeeper_run_user}}'
+      group: '{{zookeeper_run_group}}'
+      state: link 
+  when: zookeeper_base_dir is not none and packet_dir_name.stdout.split("/")[-1] != zookeeper_base_name

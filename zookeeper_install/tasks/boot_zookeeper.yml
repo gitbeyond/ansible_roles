@@ -1,0 +1,10 @@
+- name: restart zookeeper prog
+  supervisorctl: 
+    config: "{{supervisor_prim_conf}}" 
+    name: "{{zookeeper_base_name}}" 
+    state: "{{item}}"
+    supervisorctl_path: "/usr/bin/supervisorctl"
+  with_items:
+    - present
+    - started
+  when: zookeeper_boot_file is not none

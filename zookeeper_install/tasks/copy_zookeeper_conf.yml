@@ -1,0 +1,46 @@
+
+- name: copy zookeeper conf file
+  template: 
+    src: "{{item}}" 
+    dest: "{{zookeeper_conf_dir}}" 
+    owner: "{{zookeeper_run_user}}" 
+    group: "{{zookeeper_run_group}}" 
+    mode: "0644"
+    backup: yes
+  with_items: '{{zookeeper_conf_file}}'
+  when: item is not none
+  #register: copy_conf_file
+ 
+- name: create myid file
+  lineinfile:
+    path: "{{zookeeper_data_dir}}/myid"
+    line: "{{zookeeper_id|int}}"
+    backup: yes
+    mode: "0644"
+    owner: "{{zookeeper_run_user}}"
+    group: "{{zookeeper_run_group}}"
+    create: yes
+    state: present
+
+#- name: copy zookeeper jmx conf
+#  template: 
+#    src: "{{item}}" 
+#    dest: "{{zookeeper_conf_dir}}" 
+#    owner: "{{zookeeper_run_user}}" 
+#    group: "{{zookeeper_run_group}}" 
+#    mode: "0644"
+#    backup: yes
+#  with_items: '{{zookeeper_jmx_conf_file}}'
+  
+
+- name: copy zookeeper boot file
+  template: 
+    src: "{{zookeeper_boot_file}}" 
+    dest: "{{supervisor_conf_dir}}" 
+    owner: "{{zookeeper_run_user}}" 
+    group: "{{zookeeper_run_group}}" 
+    backup: yes
+    mode: "0644"
+  when: zookeeper_boot_file is not none
+
+

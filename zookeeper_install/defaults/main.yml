@@ -1,0 +1,21 @@
+app_base_dir: /data/apps/opt
+zookeeper_run_user: root
+zookeeper_run_group: '{{zookeeper_run_user}}'
+zookeeper_base_name: zookeeper
+
+zookeeper_packet:
+# tgz or jar
+zookeeper_packet_type: tgz
+zookeeper_base_dir: /data/apps/opt/{{zookeeper_base_name}}
+zookeeper_log_dir: /data/apps/log/{{zookeeper_base_name}}
+zookeeper_conf_dir: /data/apps/opt/{{zookeeper_base_name}}/conf
+
+zookeeper_conf_file:
+zookeeper_port:  
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+zookeeper_boot_type: supervisor
+zookeeper_boot_file:
+
+
+#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
