@@ -26,11 +26,17 @@
       state: link 
   when: pmm_client_base_dir is not none and packet_dir_name.stdout != 'pmm-client'
 
+- name: get pmm_client old version
+  shell: '/usr/sbin/pmm-admin --version'
+  register: pmm_client_old_ver
+  ignore_errors: true
+
 - name: install pmm-client
   shell: '{{pmm_client_base_dir}}/install'
   args:
     chdir: '{{pmm_client_base_dir}}'
     creates: /usr/local/percona/pmm-client/textfile_collector/example.prom
+  #when: pmm_client_old_var.stdout is not none 
 
 # update
 - name: get pmm_client current version
@@ -38,13 +44,9 @@
   register: pmm_client_current_ver
   ignore_errors: true
 
-- name: get pmm_client old version
-  shell: '/usr/sbin/pmm-admin --version'
-  register: pmm_client_old_ver
-  ignore_errors: true
 
 - name: update pmm-client
-  shell: '{{pmm_client_base_dir}}/install'
+  shell: 'pmm-admin stop --all && {{pmm_client_base_dir}}/install'
   args:
     chdir: '{{pmm_client_base_dir}}'
   when: pmm_client_current_ver.stdout != pmm_client_old_ver.stdout

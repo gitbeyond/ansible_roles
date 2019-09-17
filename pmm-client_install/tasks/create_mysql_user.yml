@@ -7,4 +7,5 @@
     password: "{{ mysql_pmm_pass }}" 
     host: localhost 
     priv: "{{mysql_pmm_priv}}" 
+    sql_log_bin: false
     state: present
