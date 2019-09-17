@@ -1,0 +1,34 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: create_tomcat_user.yml
+  tags:
+    - create_tomcat_user
+
+- include: create_tomcat_dir.yml
+  tags:
+    - create_tomcat_dir
+
+- include: install_tomcat.yml
+  tags:
+    - install_tomcat
+#  when: tomcat_packet_type == "tgz"
+
+#- include: install_tomcat_for_jar.yml
+#  tags:
+#    - install_tomcat_for_jar
+#  when: tomcat_packet_type == "jar"
+
+- include: copy_tomcat_conf.yml
+  tags:
+    - copy_tomcat_conf
+
+- include: boot_tomcat.yml
+  tags:
+    - boot_tomcat
+#  when: tomcat_packet_type == "tgz"
+
+#- include: boot_project_for_supervisor.yml
+#  when: project_boot_type == "supervisor"
+#  tags:
+#    - boot_project

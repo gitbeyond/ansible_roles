@@ -1,0 +1,24 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: create_keepalived_dir.yml
+  tags:
+    - create_keepalived_dir
+- include: install_keepalived.yml
+  tags:
+    - install_keepalived
+- include: copy_keepalived_conf.yml
+  tags:
+    - copy_keepalived_conf
+
+#- include: cent6_service.yml
+#  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+
+- include: cent7_service.yml
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+
+#- include: install_dependence_packet.yml
+#  when: keepalived_install_method == "net" 
+
+
+#- include: core_argument.yml

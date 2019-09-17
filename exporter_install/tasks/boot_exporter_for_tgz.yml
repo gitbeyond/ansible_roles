@@ -4,3 +4,4 @@
     name: "{{exporter_base_name}}" 
     state: restarted 
     supervisorctl_path: "/usr/bin/supervisorctl"
+  when: exporter_boot_file is not none

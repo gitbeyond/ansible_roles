@@ -1,0 +1,22 @@
+
+- name: create java link
+  file: src="{{jdk_base_dir}}/bin/java" dest="{{jdk_base_dir}}/bin/{{item}}" state=hard owner=root group=root mode="0755"
+  with_items:
+    - taskManagement
+    - runTask
+    - partitionF
+    - jarLoader
+    - taskmeta
+    - yznewcivp
+    - yznewservice1
+
+- name: create jre link
+  file: src="{{jdk_base_dir}}/bin/java" dest="{{jdk_base_dir}}/jre/bin/{{item}}" state=hard owner=root group=root mode="0755"
+  with_items:
+    - taskManagement
+    - runTask
+    - partitionF
+    - jarLoader
+    - taskmeta
+    - yznewcivp
+    - yznewservice1

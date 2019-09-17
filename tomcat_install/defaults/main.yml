@@ -1,0 +1,21 @@
+app_base_dir: /data/apps/opt
+tomcat_run_user: root
+tomcat_run_group: '{{tomcat_run_user}}'
+tomcat_base_name: tomcat
+
+tomcat_packet:
+# tgz or jar
+tomcat_packet_type: tgz
+tomcat_base_dir: /data/apps/opt/{{tomcat_base_name}}
+tomcat_log_dir: /data/apps/log/{{tomcat_base_name}}
+tomcat_conf_dir: /data/apps/opt/{{tomcat_base_name}}/conf
+
+tomcat_conf_file:
+tomcat_script_file:
+tomcat_port:  
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+tomcat_boot_type: supervisor
+tomcat_boot_file:
+
+#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

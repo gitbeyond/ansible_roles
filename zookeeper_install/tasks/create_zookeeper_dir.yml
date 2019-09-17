@@ -1,0 +1,19 @@
+
+- name: mkdir base dir
+  file: path={{item}} state=directory owner=root group=root mode=0755
+  with_items:
+    - "{{app_base_dir}}"
+
+- name: mkdir zookeeper dir
+  file: path={{item}} state=directory owner={{zookeeper_run_user}} group={{zookeeper_run_group}} mode=0755
+  with_items:
+    #- "{{zookeeper_conf_dir}}"
+    - "{{zookeeper_log_dir}}"
+    - "{{zookeeper_data_dir}}"
+  when: item is not none
+  #  - "{{project_install_dir}}"
+  #  - "{{project_log_dir}}"
+  #  - "{{project_data_dir}}"
+  #when: item is defined
+  #ignore_errors: true
+

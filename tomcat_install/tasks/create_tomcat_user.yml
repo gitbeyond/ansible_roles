@@ -1,0 +1,6 @@
+- name: create tomcat user
+  user: name={{ item.name }} state=present system={{ item.system }}
+  with_items:
+    - name: '{{ tomcat_run_user }}'
+      system: no
+  when: tomcat_run_user is not none and tomcat_run_user != 'root'

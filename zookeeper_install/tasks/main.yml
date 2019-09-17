@@ -1,0 +1,25 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: create_zookeeper_user.yml
+  tags:
+    - create_zookeeper_user
+
+- include: create_zookeeper_dir.yml
+  tags:
+    - create_zookeeper_dir
+
+- include: install_zookeeper.yml
+  tags:
+    - install_zookeeper
+#  when: zookeeper_packet_type == "tgz"
+
+- include: copy_zookeeper_conf.yml
+  tags:
+    - copy_zookeeper_conf
+
+- include: boot_zookeeper.yml
+  tags:
+    - boot_zookeeper
+#  when: zookeeper_packet_type == "tgz"
+
