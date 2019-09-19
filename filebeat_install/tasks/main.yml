@@ -4,9 +4,21 @@
 - include: create_filebeat_dir.yml 
   tags:
     - create_filebeat_dir
+
 - include: install_filebeat.yml
   tags:
     - install_filebeat
+
 - include: copy_filebeat_conf.yml
-  tags:
+  ags:
     - copy_filebeat_conf
+
+- include: boot_filebeat_for_supervisor.yml
+  when: filebeat_boot_type == 'supervisor'
+  tags:
+    - boot_filebeat
+
+- include: boot_filebeat_for_systemd.yml
+  when: filebeat_boot_type == 'systemd'
+  tags:
+    - boot_filebeat

@@ -1,13 +1,12 @@
 ---
-- name: copy rcs2.yml file
-  copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
-  with_items:
-    - { src: 'rcs2.yml', dest: '{{filebeat_conf_dir}}/inputs.d/rcs2.yml', owner: root, group: root, mode: '0644' }
-
-- name: copy filebeat.ini file
-  copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
-  with_items:
-    - { src: 'filebeat.ini', dest: '{{supervisor_conf_dir}}/filebeat.ini', owner: root, group: root, mode: '0644' }
-  notify:
-    - supervisor update
+- name: copy filebeat conf file
+  template: 
+    src: '{{ item }}'
+    dest: '{{filebeat_conf_dir}}/inputs.d/' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  with_items: "{{filebeat_confs}}"
+  when: filebeat_confs is not none
 

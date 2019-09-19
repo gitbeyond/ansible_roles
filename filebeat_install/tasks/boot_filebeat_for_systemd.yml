@@ -1,0 +1,23 @@
+---
+- name: copy filebeat.service file
+  copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
+  with_items:
+    - { src: '{{filebeat_src_boot_conf}}', dest: '/usr/lib/systemd/system/{{filebeat_app_name}}.service', owner: root, group: root, mode: "0644"}
+  register: ini_result
+  notify:
+    - restart_filebeat_for_systemd
+
+#- name: test result
+#  shell: echo "{{ini_result}}" > /tmp/test_result
+- name: systemctl daemon-reload
+  shell: systemctl daemon-reload
+  when: ini_result.results[0].failed == False and ini_result.changed == True
+  ignore_errors: true
+
+
+- name: start filebeat
+  systemd: 
+    name: '{{ item }}' 
+    state: started
+  with_items:
+    - '{{filebeat_app_name}}'

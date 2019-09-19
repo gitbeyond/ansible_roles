@@ -11,10 +11,10 @@
 # configuration file.
 
 #=========================== Filebeat inputs =============================
-path.home: /data/apps/opt/filebeat
-path.config: /data/apps/config/filebeat
-path.data: /data/apps/data/filebeat
-path.logs: /data/apps/log/filebeat  
+path.home: {{filebeat_base_dir}}
+path.config: {{filebeat_conf_dir}}
+path.data: {{filebeat_data_dir}}
+path.logs: {{filebeat_log_dir}}
 filebeat.config.inputs:
   enabled: true
   path: ${path.config}/inputs.d/*.yml

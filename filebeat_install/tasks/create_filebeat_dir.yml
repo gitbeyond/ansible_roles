@@ -1,12 +1,10 @@
-# edirtor: haifeng
-# 2019/2/13
 
 - name: create filebeat dir
   file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
   with_items:
-    - { path: "{{filebeat_conf_dir}}", owner: root, group: root, mode: '0755', state: directory }
-    - { path: "{{filebeat_data_dir}}", owner: root, group: root, mode: '0755', state: directory }
-    - { path: "{{filebeat_log_dir}}", owner: root, group: root, mode: '0755', state: directory }
-    - { path: "{{filebeat_conf_dir}}/inputs.d", owner: root, group: root, mode: '0755', state: directory }
-    - { path: "{{filebeat_conf_dir}}/modules.d", owner: root, group: root, mode: '0755', state: directory }
+    - { path: "{{filebeat_conf_dir}}", owner: root, group: root, mode: "0755", state: directory }
+    - { path: "{{filebeat_data_dir}}", owner: root, group: root, mode: "0755", state: directory }
+    - { path: "{{filebeat_log_dir}}", owner: root, group: root, mode: "0755", state: directory }
+    - { path: "{{filebeat_conf_dir}}/inputs.d", owner: root, group: root, mode: "0755", state: directory }
+    - { path: "{{filebeat_conf_dir}}/modules.d", owner: root, group: root, mode: "0755", state: directory }
 

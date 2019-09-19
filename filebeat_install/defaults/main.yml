@@ -1,0 +1,12 @@
+
+filebeat_packet:
+filebeat_install_dir: '{{app_base_dir}}'
+filebeat_app_name: filebeat
+filebeat_conf_dir: /data/apps/config/{{filebeat_app_name}}
+filebeat_base_dir: /data/apps/opt/{{filebeat_app_name}}
+filebeat_data_dir: /data/apps/data/{{filebeat_app_name}}
+filebeat_log_dir: /data/apps/log/{{filebeat_app_name}}
+filebeat_src_conf: filebeat.yml
+# systemd or supervisor
+filebeat_boot_type: systemd
+filebeat_src_boot_conf: "{%if filebeat_boot_type=='systemd'%}filebeat.systemd{%else%}filebeat.ini{%endif%}" 
