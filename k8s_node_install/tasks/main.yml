@@ -1,0 +1,19 @@
+# edirtor: haifeng
+# 2017/01/12
+
+# 这个须在集群启动成功后才可执行
+- include: generate_k8s_tls_bootstrap.yml
+  tags:
+    - generate_k8s_tls_bootstrap
+
+- include: install_k8s_node.yml
+  tags:
+    - install_k8s_node
+
+- include: copy_k8s_node_conf.yml
+
+- include: copy_k8s_node_service_conf.yml
+  tags:
+    - copy_k8s_node_service_conf
+
+

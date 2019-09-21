@@ -1,0 +1,8 @@
+- name: copy k8s_node env file
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+  with_items:
+    - { src: 'k8s_node.sh', dest: '/etc/profile.d/', owner: root, group: root, mode: "0644" }
+
+- name: copy k8s_node service file
+  template: src={{ item }} dest=/usr/lib/systemd/system/ owner=root group=root mode=0644 backup=yes
+  with_items: '{{k8s_node_service_confs}}'
