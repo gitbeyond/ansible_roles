@@ -13,3 +13,4 @@ supervisor_packets:
   - '{{packet_base_dir}}/meld3-1.0.2.tar.gz'
   - '{{packet_base_dir}}/supervisor-3.3.5.tar.gz'
 
+supervisor_src_conf: "supervisord.conf"

@@ -8,6 +8,7 @@
   with_items:
     - {src: '{{ PACKET_NAME.stdout }}', dest: '{{project_install_dir}}/', owner: '{{project_run_user}}', group: '{{project_run_group}}', mode: "0644" }
   register: cp_result
+
 - name: update project packet link file
   file: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} state={{item.state}}
   with_items:

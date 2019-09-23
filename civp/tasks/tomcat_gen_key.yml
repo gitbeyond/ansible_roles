@@ -1,0 +1,71 @@
+
+- name: create tomcat ssh key
+  user:
+    generate_ssh_key: yes
+    name: '{{civp_run_user}}'
+    group: '{{civp_run_user}}'
+    state: present
+    ssh_key_bits: 2048
+  delegate_to: '{{civp_ssh_host}}'
+  run_once: true
+
+- name: get ssh public key
+  shell: cat /home/tomcat/.ssh/id_rsa.pub
+  delegate_to: '{{civp_ssh_host}}'
+  register: civp_tomcat_ssh_key
+  when: civp_ssh_host is not none
+  run_once: true
+
+#- name: debug ssh key
+#  debug:
+#    msg: "{{civp_tomcat_ssh_key}}"
+
+- name: add putlic to /home/tomcat/.ssh/authorized_keys
+  lineinfile:
+    line: '{{civp_tomcat_ssh_key.stdout}}'
+    path: '/home/tomcat/.ssh/authorized_keys' 
+    owner: 'tomcat'
+    group: 'tomcat'
+
+- name: get per host public key file
+  shell: grep "^HostKey" sshd_config |grep ecdsa |head -n 1 |awk '{print $NF}'
+  args:
+    chdir: /etc/ssh
+  register: civp_ssh_server_pub_key_file
+
+- name: get per host public key
+  shell: cat {{civp_ssh_server_pub_key_file.stdout}}.pub
+  register: civp_ssh_server_pub_key
+
+- name: debug civp_ssh_server_pub_key
+  debug:
+    msg: "civp_ssh_server_pub_key {{civp_ssh_server_pub_key}}"
+
+- name: debug ssh key
+  debug:
+    #msg: "{{civp_ssh_server_pub_key_file.stdout}} == {{civp_ssh_server_pub_key.stdout}}"
+    msg: "{%for host in civp_ssh_server_host%}{%if host in ansible_play_hosts %}{{hostvars[host].civp_ssh_server_pub_key.stdout}}\n{%endif%}{%endfor%}"
+  #with_items: "{{civp_ssh_server_host}}"
+  delegate_to: "{{civp_ssh_host}}"
+  run_once: true
+
+#- name: add host public key to {{civp_ssh_host}}
+#  blockinfile:
+#    block: "{%for host in civp_ssh_server_host%}{{hostvars[host].civp_ssh_server_pub_key.stdout}}\n{%endfor%}"
+#    path: '/tmp/known_hosts'
+#    create: yes
+#  delegate_to: "{{civp_ssh_host}}"
+#  run_once: true
+
+- name: add host public key to {{civp_ssh_host}}
+  lineinfile:
+    path: '/home/{{civp_run_user}}/.ssh/known_hosts'
+    line: '{{item}} {{hostvars[item].civp_ssh_server_pub_key.stdout}}'
+    backup: '{%if item == civp_ssh_server_host[-1]-%}yes{%else-%}no{%-endif%}'
+    create: yes
+    owner: '{{civp_run_user}}'
+    group: '{{civp_run_group}}'
+  with_items: '{{civp_ssh_server_host}}'
+  when: item in ansible_play_hosts
+  delegate_to: '{{civp_ssh_host}}'
+  run_once: true

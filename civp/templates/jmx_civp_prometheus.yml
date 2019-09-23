@@ -1,0 +1,46 @@
+---
+- targets:
+  - 172.16.9.119:{{civp_jmx_exporter_port}}
+  - 172.16.9.120:{{civp_jmx_exporter_port}}
+  - 172.16.9.121:{{civp_jmx_exporter_port}}
+  - 172.16.9.122:{{civp_jmx_exporter_port}}
+  labels:
+    app_name: oldcivp_civp_jmx
+
+- targets:
+  - 172.16.9.119:{{service_jmx_exporter_port}}
+  - 172.16.9.120:{{service_jmx_exporter_port}}
+  - 172.16.9.121:{{service_jmx_exporter_port}}
+  - 172.16.9.122:{{service_jmx_exporter_port}}
+  labels:
+    app_name: oldcivp_service_jmx
+
+- targets:
+  - 172.16.9.119:{{zk_jmx_exporter_port}}
+  - 172.16.9.120:{{zk_jmx_exporter_port}}
+  - 172.16.9.121:{{zk_jmx_exporter_port}}
+  labels:
+    app_name: oldcivp_zk_jmx
+
+- targets:
+  - 172.16.9.125:{{civp_jmx_exporter_port}}
+  - 172.16.9.120:{{civp_jmx_exporter_port}}
+  - 172.16.9.121:{{civp_jmx_exporter_port}}
+  - 172.16.9.122:{{civp_jmx_exporter_port}}
+  labels:
+    app_name: newcivp_civp_jmx
+
+- targets:
+  - 172.16.9.125:{{service_jmx_exporter_port}}
+  - 172.16.9.120:{{service_jmx_exporter_port}}
+  - 172.16.9.121:{{service_jmx_exporter_port}}
+  - 172.16.9.122:{{service_jmx_exporter_port}}
+  labels:
+    app_name: newcivp_service_jmx
+
+- targets:
+  - 172.16.9.125:{{zk_jmx_exporter_port}}
+  - 172.16.9.126:{{zk_jmx_exporter_port}}
+  - 172.16.9.127:{{zk_jmx_exporter_port}}
+  labels:
+    app_name: newcivp_zk_jmx

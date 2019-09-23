@@ -16,7 +16,11 @@
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
 
 - include: create_syncuser.yml
-  when: mysql_slave_server is defined
+  tags:
+    - create_syncuser
+  when: mysql_slave_server is defined and mysql_slave_server is not none
 #- include: core_argument.yml
 - include: sync_to_master.yml
-  when: mysql_master_server is defined
+  tags:
+    - sync_to_master
+  when: mysql_master_server is defined and mysql_master_server is not none

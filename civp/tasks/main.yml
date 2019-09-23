@@ -10,3 +10,19 @@
 - include: boot_civp.yml
   tags:
     - boot_civp
+
+- include: mv_civp_log.yml
+  tags:
+    - mv_civp_log
+
+- include: tomcat_gen_key.yml
+  tags:
+    - tomcat_gen_key
+
+- include: copy_nginx_conf.yml
+  tags:
+    - copy_nginx_conf
+
+- include: copy_prom_conf.yml
+  tags:
+    - copy_prom_conf

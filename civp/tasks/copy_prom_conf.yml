@@ -1,0 +1,21 @@
+
+- name: copy prom conf file
+  template: 
+    src: '{{ item }}' 
+    dest: "{{ prometheus_conf_dir }}/file_sd" 
+    owner: '{{ prometheus_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  with_items:
+    - '{{civp_prom_conf}}'
+  delegate_to: '{{prometheus_run_host}}'
+  run_once: true
+
+- name: reload prometheus
+  #local_action: shell curl -X POST http://{{prometheus_run_host}}:{{prometheus_run_port}}/-/reload
+  local_action: 
+    module: uri 
+    url: http://{{prometheus_run_host}}:{{prometheus_run_port}}/-/reload 
+    method: POST
+  run_once: true
+  #with_fileglob: '{{etcd_work_dir}}/{{etcd_cert_dir}}/*.pem'

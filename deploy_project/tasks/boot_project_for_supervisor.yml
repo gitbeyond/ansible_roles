@@ -1,12 +1,27 @@
 
-- name: copy project boot file
-  #template: src="/data/apps/data/ansible/{{project_name}}/{{prog_name}}.ini" dest="{{super_conf_dir}}" owner="{{user}}" group="{{user}}" mode=0644
-  template: src="{{project_boot_file}}" dest="{{supervisor_conf_dir}}" owner="{{project_run_user}}" group="{{project_run_group}}" mode=0644
+- name: copy project boot file for supervisor
+  template: 
+    src: "{{project_boot_file}}" 
+    dest: "{{supervisor_conf_dir}}" 
+    owner: "{{project_run_user}}" 
+    group: "{{project_run_group}}" 
+    mode: "0644"
+    backup: yes
   register: copy_supervisor_file
 
 - name: restart project prog
-  supervisorctl: config="{{supervisor_prim_conf}}" name={{project_prog_name}} state=restarted supervisorctl_path=/usr/bin/supervisorctl
-  when: project_prog_group_name is not defined and copy_supervisor_file.changed == true
+  supervisorctl: 
+    config: "{{supervisor_prim_conf}}" 
+    name: "{{project_prog_name}}" 
+    state: restarted 
+    supervisorctl_path: /usr/bin/supervisorctl
+  #when: project_prog_group_name is not defined and copy_supervisor_file.changed == true
+  when: project_prog_group_name is not defined 
+
 - name: restart project prog group
-  supervisorctl: config="{{supervisor_prim_conf}}" name={{project_prog_group_name}} state=restarted supervisorctl_path=/usr/bin/supervisorctl
+  supervisorctl: 
+    config: "{{supervisor_prim_conf}}" 
+    name: "{{project_prog_group_name}}" 
+    state: restarted 
+    supervisorctl_path: /usr/bin/supervisorctl
   when: project_prog_group_name is defined and copy_supervisor_file.changed == true

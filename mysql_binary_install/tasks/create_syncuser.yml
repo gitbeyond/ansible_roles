@@ -6,6 +6,7 @@
   shell: mv ~/.my.cnf ~/.my.cnf_ansible_tmp
   args:
     creates: ~/.my.cnf_ansible_tmp
+    removes: ~/.my.cnf
   ignore_errors: true
 
 - name: create sync user
@@ -17,4 +18,5 @@
   shell: mv ~/.my.cnf_ansible_tmp ~/.my.cnf
   args:
     creates: ~/.my.cnf
+    removes: ~/.my.cnf_ansible_tmp
   ignore_errors: true

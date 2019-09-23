@@ -7,8 +7,12 @@
 
 
 - name: create auto.cnf_ansible_not_exist file when auto.cnf is not exists
-  file: path={{mysql_data_dir}}/auto.cnf_ansible_not_exist state=touch owner={{mysql_run_user}} group={{mysql_run_user}} mode=0644
-  when: '(mysql_data_dir+"/auto.cnf") is not exists'
+  #file: path={{mysql_data_dir}}/auto.cnf_ansible_not_exist state=touch owner={{mysql_run_user}} group={{mysql_run_user}} mode=0644
+  #when: '(mysql_data_dir+"/auto.cnf") is not exists'
+  shell: touch auto.cnf_ansible_not_exist
+  args:
+    chdir: '{{mysql_data_dir}}'   
+    removes: '{{mysql_data_dir}}/auto.cnf'
 
 - name: rename auto.cnf to auto.cnf_ansible_not_exist
   shell: mv auto.cnf auto.cnf_ansible_not_exist

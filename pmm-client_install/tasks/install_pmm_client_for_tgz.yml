@@ -31,6 +31,10 @@
   register: pmm_client_old_ver
   ignore_errors: true
 
+#- name: debug pmm_ver
+#  debug:
+#    msg: "{{pmm_client_old_ver}}"
+
 - name: install pmm-client
   shell: '{{pmm_client_base_dir}}/install'
   args:
@@ -49,4 +53,4 @@
   shell: 'pmm-admin stop --all && {{pmm_client_base_dir}}/install'
   args:
     chdir: '{{pmm_client_base_dir}}'
-  when: pmm_client_current_ver.stdout != pmm_client_old_ver.stdout
+  when: pmm_client_old_ver is success and pmm_client_current_ver.stdout != pmm_client_old_ver.stdout

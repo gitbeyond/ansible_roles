@@ -1,0 +1,5 @@
+
+- name: copy civp nginx file
+  template: src={{ item }} dest="{{ nginx_conf_dir }}/conf.d" owner={{ civp_run_user }} group={{ civp_run_user }} mode="0644" backup=yes
+  with_items: "{{civp_nginx_confs}}"
+  #with_fileglob: '{{etcd_work_dir}}/{{etcd_cert_dir}}/*.pem'
