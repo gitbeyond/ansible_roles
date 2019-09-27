@@ -1,0 +1,28 @@
+- name: get mha_client user ssh pub key
+  shell: cat /{{mha_client_user_home.stdout}}/.ssh/id_rsa.pub
+  register: mha_client_user_ssh_pub_key
+
+- name: add mha_client user pub_key to mha_client host
+  lineinfile:
+    #line: "{{mha_client_user_ssh_pub_key.stdout}}"
+    line: "{{hostvars[item].mha_client_user_ssh_pub_key.stdout}}"
+    path: "{{mha_client_user_home.stdout}}/.ssh/authorized_keys"
+    create: yes
+    mode: "0644"
+    backup: '{%if item == mha_client_hosts[-1]-%}yes{%else-%}no{%-endif%}'
+  with_items: '{{mha_client_hosts}}'
+  when: item in ansible_play_hosts
+
+- name: add mha_client host public key to mha_client
+  lineinfile:
+    path: '{{mha_client_user_home.stdout}}/.ssh/known_hosts'
+    line: '{{item}} {{hostvars[item].mha_client_pub_key.stdout}}'
+    backup: '{%if item == mha_client_hosts[-1]-%}yes{%else-%}no{%-endif%}'
+    create: yes
+    owner: '{{mha_manager_run_user}}'
+    group: '{{mha_manager_run_user}}'
+  with_items: '{{mha_client_hosts}}'
+  when: item in ansible_play_hosts
+  #delegate_to: '{{mha_manager_host}}'
+  #run_once: true
+

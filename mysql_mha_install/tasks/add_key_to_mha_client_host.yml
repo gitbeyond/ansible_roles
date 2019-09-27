@@ -1,0 +1,59 @@
+- include: get_mha_manager_public_key.yml
+  tags:
+    - get_mha_manager_public_key
+  delegate_to: "{{mha_manager_host}}"
+  run_once: true
+
+- name: generate mha_manager user ssh key
+  user:
+    name: '{{mha_client_run_user}}'
+    generate_ssh_key: true
+
+- name: get mha_client_run_user home
+  shell: awk -F':' '/^{{mha_client_run_user}}/{print $6}' /etc/passwd 
+  register: mha_client_user_home
+
+#- name: ensure mha_client_user_home/.ssh dir exist
+#  file:
+#    path: '{{mha_client_user_home.stdout}}/.ssh'
+#    state: directory
+#    owner: '{{mha_client_run_user}}'
+#    group: '{{mha_client_run_user}}'
+#    mode: "0700"
+#  when: mha_client_user_home is success and mha_client_user_home.stdout is not none
+
+- name: add mha_manager user pub_key to mha_client host
+  lineinfile:
+    line: "{{ssh_pub_key.stdout}}"
+    path: "{{mha_client_user_home.stdout}}/.ssh/authorized_keys"
+    create: yes
+    mode: "0644"
+    backup: yes
+  when: mha_client_user_home is success and mha_client_user_home.stdout is not none
+
+- name: get per mha_client public key file
+  shell: grep "^HostKey" sshd_config |grep ecdsa |head -n 1 |awk '{print $NF}'
+  args:
+    chdir: /etc/ssh
+  register: mha_client_pub_key_file
+
+- name: get per mha_client public key
+  shell: cat {{mha_client_pub_key_file.stdout}}.pub
+  register: mha_client_pub_key
+
+- name: add mha_client host public key to mha_manager
+  lineinfile:
+    path: '{{mha_manager_user_home.stdout}}/.ssh/known_hosts'
+    line: '{{item}} {{hostvars[item].mha_client_pub_key.stdout}}'
+    backup: '{%if item == mha_client_hosts[-1]-%}yes{%else-%}no{%-endif%}'
+    create: yes
+    owner: '{{mha_manager_run_user}}'
+    group: '{{mha_manager_run_user}}'
+  with_items: '{{mha_client_hosts}}'
+  when: item in ansible_play_hosts
+  delegate_to: '{{mha_manager_host}}'
+  run_once: true
+
+- include: mysql_ssh_conn.yml
+  tags:
+    - mysql_ssh_conn

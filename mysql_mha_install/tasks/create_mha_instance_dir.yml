@@ -1,0 +1,12 @@
+- name: create mha instance dir
+  file: 
+    path: "{{item}}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{mha_base_dir}}/{{mha_instance_name}}"
+    - "{{mha_manager_log_dir}}/{{mha_instance_name}}"
+  when: mha_instance_name is not none
+

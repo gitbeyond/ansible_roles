@@ -1,0 +1,45 @@
+- name: copy mha_client_packet
+  copy: 
+    src: '{{mha_client_packet}}' 
+    dest: '/tmp/' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+
+- name: install mha_client_packet
+  yum: 
+    name:
+      - /tmp/{{mha_client_packet | basename}}
+      - net-tools
+    state: present
+  register: install_result
+  ignore_errors: True
+
+- name: delete old mha_client_packet
+  yum:
+    name:
+      - mha4mysql-node
+    state: absent
+  when: install_result is failed
+
+- name: retry install mha_client_packet
+  yum: 
+    name: 
+      - /tmp/{{mha_client_packet | basename}}
+    state: present
+  when: install_result is failed
+
+- name: delete mha_client_packet
+  file:
+    path: /tmp/{{mha_client_packet | basename}}
+    state: absent
+  when: install_result is success
+   
+- name: create {{mha_manager_log_dir}}
+  file:
+    path: "{{mha_manager_log_dir}}"
+    state: directory
+    owner: "{{mha_client_run_user}}"
+    group: "{{mha_client_run_user}}"
+    mode: "0755"

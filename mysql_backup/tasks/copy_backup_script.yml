@@ -1,0 +1,26 @@
+- name: ensure mysql_script_dir exist
+  file: 
+    path: "{{mysql_script_dir}}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+- name: install mysql_backup depended package
+  yum: name={{ item.name }} state={{ item.state }}
+  with_items:
+    - { name: bc, state: latest}
+
+- name: copy mysql_innodb_status script
+  template: src={{item.src}} dest={{item.dest}} owner=root group=root mode={{item.mode}} backup=yes
+  with_items:
+    - { src: mysql_backup.sh, dest: '{{ mysql_script_dir }}/', mode: "0600" }
+    - { src: send_mail.py, dest: '{{ mysql_script_dir }}/', mode: "0600" }
+
+- name: set mysql backup cron job
+  cron:
+    name: "mysql backup"
+    job: "/bin/bash {{mysql_script_dir}}/mysql_backup.sh &>> /tmp/.mysql_backup.out"
+    weekday: "{{mysql_backup_weekday}}"
+    hour: "{{mysql_backup_hour}}"
+    minute: 00
+    backup: yes

@@ -1,0 +1,30 @@
+mha_client_packet: 
+mha_manager_packet:
+mha_manager_host:
+mha_manager_run_user: root
+mha_client_run_user: root
+mha_manager_conf_dir: /data/apps/config/mha
+mha_manager_log_dir: /data/apps/log/mha
+mha_base_dir: /data/apps/opt/mha
+mha_instance_name:
+#mha_instance_vip:
+mha_instance_src_conf:
+mha_instance_src_boot_conf: mha_boot.ini
+mha_instance_ip_failover_script: master_ip_failover
+mha_instance_ip_online_change_script: master_ip_online_change
+mha_instance_report_script: send_report
+
+mha_client_hosts: "{{ansible_play_hosts}}"
+
+# supervisor
+supervisor_conf_dir:
+
+mysql_pass:
+mysql_user:
+mysql_sock:
+mysql_vip:
+mysql_mha_user:
+mysql_mha_pass:
+mysql_mha_priv: '*.*:all'
+
+

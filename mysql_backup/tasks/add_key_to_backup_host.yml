@@ -1,0 +1,58 @@
+- name: generate user ssh key
+  user:
+    name: '{{mysql_backup_host_user}}'
+    generate_ssh_key: true
+
+- name: get mysql_backup_remote_user home
+  shell: awk -F':' '/^{{mysql_backup_remote_user}}/{print $6}' /etc/passwd 
+  register: mysql_host_user_home
+
+- name: get ssh pub key
+  shell: cat /{{mysql_host_user_home.stdout}}/.ssh/id_rsa.pub
+  register: ssh_pub_key
+  when: mysql_host_user_home is success and mysql_host_user_home.stdout is not none
+
+- name: get mysql_backup_remote_user home
+  shell: awk -F':' '/^{{mysql_backup_remote_user}}/{print $6}' /etc/passwd 
+  register: remote_user_home
+  delegate_to: '{{mysql_backup_remote_host}}'
+
+- name: ensure remote_user dir exist
+  file:
+    path: '{{remote_user_home.stdout}}/.ssh'
+    state: directory
+    owner: '{{mysql_backup_remote_user}}'
+    group: '{{mysql_backup_remote_user}}'
+    mode: "0700"
+  when: remote_user_home is success and remote_user_home.stdout is not none
+  delegate_to: '{{mysql_backup_remote_host}}'
+
+- name: add pub_key to backup host
+  lineinfile:
+    line: "{{ssh_pub_key.stdout}}"
+    path: "{{remote_user_home.stdout}}/.ssh/authorized_keys"
+    create: yes
+    mode: "0644"
+  delegate_to: '{{mysql_backup_remote_host}}'
+  when: remote_user_home is success and remote_user_home.stdout is not none
+#- name: copy known_hosts file
+#  copy:
+#    src: "/{{ansible_user_id}}/.ssh/known_hosts"
+#    dest: "/{{ansible_user_id}}/.ssh/known_hosts"
+#    mode: 0644
+#    backup: yes
+- name: get backup host key
+  local_action: shell grep "^{{mysql_backup_remote_host}}" /root/.ssh/known_hosts 
+  register: backup_server_pub_key
+
+#- name: ensure known_hosts file exist
+#  file:
+#    path: "/root/.ssh/known_hosts"
+#    state: file
+#    mode: 0644
+- name: add backup_server pub key 
+  lineinfile:
+    line: "{{backup_server_pub_key.stdout}}"
+    path: "{{mysql_host_user_home}}/.ssh/known_hosts"
+    create: yes
+    mode: "0644"

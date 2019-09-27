@@ -1,0 +1,7 @@
+- name: supervisor start mha_instance
+  supervisorctl: 
+    name: '{{ mha_instance_name }}' 
+    state: "{{item}}"
+  with_items:
+    - present
+    - started

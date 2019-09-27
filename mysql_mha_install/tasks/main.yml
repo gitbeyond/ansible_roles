@@ -1,0 +1,25 @@
+- include: install_mha_manager.yml
+  tags:
+    - install_mha_manager
+  when: mha_manager_host is not none
+  delegate_to: "{{mha_manager_host}}"
+
+- include: install_mha_client.yml
+  tags:
+    - install_mha_client
+
+- include: create_mha_user.yml
+  tags:
+    - create_mha_user
+
+- include: add_key_to_mha_client_host.yml
+  tags:
+    - add_key_to_mha_client_host
+
+- include: copy_mha_instance_conf.yml
+  tags:
+    - copy_mha_instance_conf
+  delegate_to: "{{mha_manager_host}}"
+  run_once: true
+
+

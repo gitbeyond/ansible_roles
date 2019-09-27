@@ -1,0 +1,5 @@
+- name: supervisor restart mha_instance
+  supervisorctl: 
+    name: '{{ mha_instance_name }}' 
+    state: restarted
+  delegate_to: '{{mha_manager_host}}'

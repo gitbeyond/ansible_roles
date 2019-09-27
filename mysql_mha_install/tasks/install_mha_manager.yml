@@ -1,0 +1,40 @@
+- include: create_mha_manager_dir.yml
+  tags:
+    - create_mha_manager_dir
+- name: copy mha_manager_packet
+  copy: 
+    src: '{{mha_manager_packet}}' 
+    dest: '/tmp/' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+
+- name: install mha_manager_packet
+  yum: 
+    name:
+      - /tmp/{{mha_manager_packet | basename}}
+    state: present
+  register: install_result
+  ignore_errors: True
+
+- name: delete old mha_manager_packet
+  yum:
+    name:
+      - mha4mysql-manager
+    state: absent
+  when: install_result is failed
+
+- name: retry install mha_manager_packet
+  yum: 
+    name: 
+      - /tmp/{{mha_manager_packet | basename}}
+    state: present
+  when: install_result is failed
+
+- name: delete mha_manager_packet
+  file:
+    path: /tmp/{{mha_manager_packet | basename}}
+    state: absent
+  when: install_result is success
+

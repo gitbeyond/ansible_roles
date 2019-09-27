@@ -1,0 +1,12 @@
+- name: create mha_manager dir
+  file: 
+    path: "{{item}}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  with_items:
+    - "{{mha_manager_conf_dir}}"
+    - "{{mha_manager_log_dir}}"
+  when: item is not none
+

@@ -1,0 +1,36 @@
+- include: create_mha_instance_dir.yml
+  tags:
+    - create_mha_instance_dir
+
+- name: copy mha_manager instance conf file
+  template: 
+    src: "{{item.src}}" 
+    dest: "{{item.dest}}"
+    owner: root 
+    group: root 
+    mode: "{{item.mode}}" 
+    backup: yes
+  with_items:
+    - src: "{{mha_instance_src_conf}}"
+      dest: '{{ mha_manager_conf_dir }}/{{mha_instance_name}}.conf'
+      mode: "0644"
+    - src: "{{mha_instance_src_boot_conf}}"
+      dest: '{{ supervisor_conf_dir }}/{{mha_instance_name}}.ini'
+      mode: "0644"
+    - src: "{{mha_instance_ip_failover_script}}"
+      dest: '{{mha_base_dir}}/{{mha_instance_name}}'
+      mode: "0755"
+    - src: "{{mha_instance_ip_online_change_script}}"
+      dest: '{{mha_base_dir}}/{{mha_instance_name}}'
+      mode: "0755"
+    - src: "{{mha_instance_report_script}}"
+      dest: '{{mha_base_dir}}/{{mha_instance_name}}'
+      mode: "0755"
+  notify: supervisor restart mha_instance
+  tags:
+    - copy_mha_instance_conf
+
+
+- include: mha_instance_start.yml
+  tags:
+    - mha_instance_start

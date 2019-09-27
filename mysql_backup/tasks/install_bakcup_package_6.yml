@@ -1,0 +1,28 @@
+- name: copy mysql backup package
+  copy: src={{item.src}} dest={{item.dest}} owner=root group=root mode={{item.mode}} backup=yes
+  with_items:
+    - { src: percona-toolkit-2.2.16-1.noarch.rpm, dest: '/tmp/', mode: "0644" }
+    - { src: percona-xtrabackup-24-2.4.8-1.el6.x86_64.rpm, dest: '/tmp/', mode: "0644" }
+
+- name: install mysql backup package
+  yum: 
+    name: 
+      - /tmp/percona-toolkit-2.2.16-1.noarch.rpm
+      - /tmp/percona-xtrabackup-24-2.4.8-1.el6.x86_64.rpm
+    state: present
+  register: install_result
+  ignore_errors: True
+- name: delete old mysql backup package
+  yum:
+    name:
+      - percona-toolkit
+      - percona-xtrabackup
+    state: absent
+  when: install_result is failed
+- name: retry install mysql backup package
+  yum:
+    name:
+      - /tmp/percona-toolkit-2.2.16-1.noarch.rpm
+      - /tmp/percona-xtrabackup-24-2.4.8-1.el6.x86_64.rpm
+    state: present
+  when: install_result is failed

@@ -1,0 +1,10 @@
+- name: create mysql backup user
+  mysql_user: 
+    login_user: "{{mysql_user}}"
+    login_unix_socket: "{{mysql_sock}}" 
+    login_password: "{{mysql_pass}}" 
+    name: "{{mysql_backup_user}}" 
+    password: "{{ mysql_backup_pass }}" 
+    host: "localhost" 
+    priv: "*.*:REPLICATION CLIENT,PROCESS,LOCK TABLES,RELOAD" 
+    state: present

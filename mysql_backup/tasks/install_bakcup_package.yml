@@ -1,0 +1,47 @@
+- name: copy mysql backup package
+  copy: 
+    src: '{{item}}' 
+    dest: '/tmp/' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  with_items: '{{mysql_backup_packet}}'
+
+
+#- name: debug var
+#  debug:
+#    #msg: "{{mysql_backup_packet | map('regex_replace','(.*)','/tmp/\\1') | list}}"
+#    msg: "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ] + ['MySQL-python']"
+#    #msg:  "{% for pac in mysql_backup_packet %}{% set a='/tmp/'+pac.split('/')[-1] %} {%endfor%}"
+#    #msg:  "{{ '/tmp/'+pac.split('/')[-1]  for pac in mysql_backup_packet }}"
+
+- name: install mysql backup package
+  yum: 
+    name: "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ] + ['MySQL-python']"
+      #- /tmp/percona-toolkit-3.0.10-1.el7.x86_64.rpm
+      #- /tmp/percona-xtrabackup-24-2.4.12-1.el7.x86_64.rpm
+      #- "{{mysql_backup_packet | map('regex_replace','(.*)','/tmp/\\1') | list}}"
+      #- "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ]"
+      #- MySQL-python
+    state: present
+  register: install_result
+  ignore_errors: True
+
+- name: delete old mysql backup package
+  yum:
+    name:
+      - percona-toolkit
+      - percona-xtrabackup
+    state: absent
+  when: install_result is failed
+
+- name: retry install mysql backup package
+  yum: 
+    name: "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ] + ['MySQL-python']"
+      #- "{{mysql_backup_packet | map('regex_replace','(.*)','/tmp/\\1') | list}}"
+      #- MySQL-python
+    state: present
+  when: install_result is failed
+
+    

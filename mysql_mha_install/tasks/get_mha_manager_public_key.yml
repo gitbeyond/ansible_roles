@@ -1,0 +1,13 @@
+- name: generate mha_manager user ssh key
+  user:
+    name: '{{mha_manager_run_user}}'
+    generate_ssh_key: true
+
+- name: get mha_manager_run_user home
+  shell: awk -F':' '/^{{mha_manager_run_user}}/{print $6}' /etc/passwd 
+  register: mha_manager_user_home
+
+- name: get mha_manager ssh pub key
+  shell: cat /{{mha_manager_user_home.stdout}}/.ssh/id_rsa.pub
+  register: ssh_pub_key
+  #when: mha_manager_user_home is success and mha_manager_user_home.stdout is not none
