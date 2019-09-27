@@ -10,7 +10,8 @@ WorkingDirectory={{etcd_data_dir}}
 EnvironmentFile=-{{etcd_conf_dir}}/etcd.conf
 User=etcd
 # set GOMAXPROCS to number of processors
-ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) {{etcd_base_dir}}/etcd --name=\"${ETCD_NAME}\" --data-dir=\"${ETCD_DATA_DIR}\" --listen-client-urls=\"${ETCD_LISTEN_CLIENT_URLS}\""
+#ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) {{etcd_base_dir}}/etcd --name=\"${ETCD_NAME}\" --data-dir=\"${ETCD_DATA_DIR}\" --listen-client-urls=\"${ETCD_LISTEN_CLIENT_URLS}\""
+ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) {{etcd_base_dir}}/etcd"
 Restart=on-failure
 LimitNOFILE=65536
 

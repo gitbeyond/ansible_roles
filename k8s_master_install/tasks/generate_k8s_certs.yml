@@ -22,6 +22,7 @@
     - k8s-kube-controller-manager
     - k8s-kube-scheduler
     - k8s-kube-proxy
+    - k8s-dashboard
   run_once: true
 
 - name: generate k8s-front-proxy-ca

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-child_dirs=($(grep include nginx.conf |grep -v "share" | grep "\*\.conf" |awk '{print $NF}' |xargs dirname))
+#child_dirs=($(grep include nginx.conf |grep -v "share" | grep "\*\.conf" |awk '{print $NF}' |xargs dirname))
+child_dirs=($(grep include nginx.conf |grep -v "share" | grep ".*\.conf" |awk '{print $NF}' |xargs dirname))
 dirs_len=${#child_dirs[@]}
 
 if [[ ${dirs_len} > 1 ]];then
