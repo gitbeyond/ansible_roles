@@ -32,6 +32,7 @@ else
     vip_text="VIP isn't on the host." 
 fi
 
+[ -d ${BackPath} ] || mkdir -p ${BackPath}
 # 判断备份目录所在的磁盘空间是否充裕
 datadir_size=$(du -s ${mysql_datadir} |awk '{print $1}')
 # datadir 的大小再加上 100G
@@ -72,7 +73,6 @@ else
 fi
 # 开始备份
 echo -e "--------------------------------\n`date` start mysql backup!" >> $OUT_FILE
-[ -d ${BackPath} ] || mkdir -p ${BackPath}
 
 innobackupex --defaults-file=${mysql_conf} --user=${BK_USER} --password="${BK_PASS}" --socket=${mysql_sock} ${BackPath} 
 backup_stat=$?
@@ -111,7 +111,7 @@ remote_old_file=$(ssh ${REMOT_HOST} "cd ${Remote_BackPath}; ls -c1 |tail -n +$[b
 echo ${remote_old_file}
 ssh -T ${REMOT_HOST} << EOF
    cd ${Remote_BackPath}
-   #rm -rf ${remote_old_file} 
+   rm -rf ${remote_old_file} 
 EOF
 
 mail_text="
