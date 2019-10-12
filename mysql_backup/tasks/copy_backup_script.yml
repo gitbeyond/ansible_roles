@@ -6,15 +6,17 @@
     group: root
     mode: "0755"
 - name: install mysql_backup depended package
-  yum: name={{ item.name }} state={{ item.state }}
-  with_items:
-    - { name: bc, state: latest}
+  yum: 
+    name: bc
+    state: present
+    enablerepo: 'base,epel'
 
 - name: copy mysql_innodb_status script
   template: src={{item.src}} dest={{item.dest}} owner=root group=root mode={{item.mode}} backup=yes
   with_items:
     - { src: mysql_backup.sh, dest: '{{ mysql_script_dir }}/', mode: "0600" }
     - { src: send_mail.py, dest: '{{ mysql_script_dir }}/', mode: "0600" }
+    - { src: mysql_binlog_backup.sh, dest: '{{ mysql_script_dir }}/', mode: "0600" }
 
 - name: set mysql backup cron job
   cron:
@@ -22,5 +24,13 @@
     job: "/bin/bash {{mysql_script_dir}}/mysql_backup.sh &>> /tmp/.mysql_backup.out"
     weekday: "{{mysql_backup_weekday}}"
     hour: "{{mysql_backup_hour}}"
+    minute: 00
+    backup: yes
+- name: set mysql binlog backup cron job
+  cron:
+    name: "mysql binlog backup"
+    job: "/bin/bash {{mysql_script_dir}}/mysql_binlog_backup.sh &>> /tmp/.mysql_binlog_backup.out"
+    weekday: "{{mysql_binlog_backup_weekday}}"
+    hour: "{{mysql_binlog_backup_hour}}"
     minute: 00
     backup: yes

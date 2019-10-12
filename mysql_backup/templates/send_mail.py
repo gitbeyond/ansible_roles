@@ -8,7 +8,8 @@ from email.utils import parseaddr, formataddr
 import smtplib
 import sys
 
-project_name = '{{group_names[-1]}} {{ansible_default_ipv4.address}}'
+#project_name = '{{group_names[-1]}} {{ansible_default_ipv4.address}}'
+project_name = sys.argv[1]
 {%raw%}
 def _format_addr(s):
     name, addr = parseaddr(s)
@@ -18,13 +19,13 @@ def _format_addr(s):
 
 from_addr = 'zabbix@geotmt.com'
 password = '7805020sch'
-to_addr = 'wanghaifeng@geotmt.com'
+to_addr = ['wanghaifeng@geotmt.com', 'yuyongxin@geotmt.com']
 smtp_server = 'smtpcom.263xmail.com'
 #msg_text="""
 #%s civp log put to hdfs already succeed.
 #log size is %s.
 #"""
-msg_text=sys.argv[1]
+msg_text=sys.argv[2]
 
 #msg = MIMEText('hello, send by Python...', 'plain', 'utf-8')
 msg = MIMEText(msg_text, 'plain', 'utf-8')
@@ -35,6 +36,6 @@ msg['subject'] = Header(u'%s mysql backup status ' % project_name,'utf-8').encod
 server = smtplib.SMTP(smtp_server, 25)
 #server.set_debuglevel(1)
 server.login(from_addr, password)
-server.sendmail(from_addr, [to_addr], msg.as_string())
+server.sendmail(from_addr, to_addr, msg.as_string())
 server.quit()
 {%endraw%}

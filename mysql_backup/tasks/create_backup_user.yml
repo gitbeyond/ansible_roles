@@ -6,5 +6,5 @@
     name: "{{mysql_backup_user}}" 
     password: "{{ mysql_backup_pass }}" 
     host: "localhost" 
-    priv: "*.*:REPLICATION CLIENT,PROCESS,LOCK TABLES,RELOAD" 
+    priv: "{{mysql_backup_priv}}" 
     state: present

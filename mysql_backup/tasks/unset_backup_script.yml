@@ -11,3 +11,11 @@
     hour: "{{mysql_backup_hour}}"
     minute: 00
     state: absent
+- name: set mysql binlog backup cron job absent
+  cron:
+    name: "mysql binlog backup"
+    job: "/bin/bash {{mysql_script_dir}}/mysql_binlog_backup.sh &>> /tmp/.mysql_binlog_backup.out"
+    weekday: "{{mysql_binlog_backup_weekday}}"
+    hour: "{{mysql_binlog_backup_hour}}"
+    minute: 00
+    state: absent

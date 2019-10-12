@@ -20,6 +20,7 @@
       group: '{{exporter_run_group}}'
       mode: "0755" 
   register: cp_result
+  when: packet_dir_name.stdout != ""
 
 #- name: chmod exporter dir
 #  shell: "{{item}}"
@@ -35,7 +36,7 @@
       owner: '{{exporter_run_user}}'
       group: '{{exporter_run_group}}'
       state: link 
-  when: exporter_base_dir is not none and packet_dir_name.stdout.split("/")[-1] != exporter_base_name
+  when: exporter_base_dir is not none and packet_dir_name.stdout != "" and packet_dir_name.stdout.split("/")[-1] != exporter_base_name
   #when: exporter_packet_link_name is none
     #- {src: '{{exporter_install_dir}}/{{EXPORTER_PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{exporter_install_dir}}/{{exporter_packet_link_name}}', owner: '{{exporter_run_user}}', group: '{{exporter_run_group}}', state: link }
 

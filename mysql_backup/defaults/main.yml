@@ -9,6 +9,7 @@ mysql_vip:
 mysql_script_dir:
 mysql_backup_weekday:
 mysql_backup_hour:
+mysql_backup_priv: "*.*:REPLICATION CLIENT,PROCESS,LOCK TABLES,RELOAD,REPLICATION SLAVE"
 
 mysql_backup_host_user: root
 mysql_backup_remote_host: 172.16.8.120

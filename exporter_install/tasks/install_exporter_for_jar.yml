@@ -29,12 +29,12 @@
 
 - name: debug val
   debug:
-    msg: "{{app_base_dir}}/{{exporter_packet}}     ==== {{exporter_base_dir}}/{{exporter_base_name}}"
+    msg: "{{app_base_dir}}/{{exporter_packet|basename}}     ==== {{exporter_base_dir}}/{{exporter_base_name}}"
 
 - name: update exporter packet link file for jar
   file: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} state={{item.state}}
   with_items:
-    - src: '{{app_base_dir}}/{{exporter_packet.split("/")[-1]}}'
+    - src: '{{app_base_dir}}/{{exporter_packet | basename}}'
       dest: '{{exporter_base_dir}}/{{exporter_base_name}}.jar'
       owner: '{{exporter_run_user}}'
       group: '{{exporter_run_group}}'

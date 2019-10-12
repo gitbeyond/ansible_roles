@@ -7,6 +7,7 @@ mail_script=$(cd $(dirname $0) && pwd)/send_mail.py
 project_name="{{group_names[-1]}} ${IP}"
 mysql_sock={{mysql_sock}}
 mysql_vip={{mysql_vip}}
+mysql_backup_host={{mysql_backup_host}}
 mysql_basedir={{mysql_basedir.msg}}
 mysql_datadir={{mysql_datadir.msg}}
 backup_num={{mysql_backup_num}}
@@ -19,18 +20,39 @@ OUT_FILE=/tmp/`basename $0`.out
 Remote_BackPath=/data2/mysqlbackup/$IP
 # 如果 vip 是空的，那么就往下继续执行
 # 如果不为空，则判断本机是否有 vip
-if [ -n "${mysql_vip}" ];then
-    # vip 不为空, 判断 vip 是否存在于本机
-    if ip a |grep "${mysql_vip}" &> /dev/null;then
-        echo "the host isn't backup host."
-        exit 5
+check_vip(){
+    if [ -n "${mysql_vip}" ];then
+        # vip 不为空, 判断 vip 是否存在于本机
+        if ip a |grep "${mysql_vip}" &> /dev/null;then
+            echo "the host isn't backup host."
+            exit 5
+        else
+            echo "continue"
+        fi 
     else
-        echo "continue"
-    fi 
-else
-    # vip 为空的，
-    vip_text="VIP isn't on the host." 
-fi
+        # vip 为空的，
+        vip_text="VIP is none." 
+        echo "${vip_text}"
+    fi
+}
+check_backup_host(){
+    if [ -n "${mysql_backup_host}" ];then
+        # ${mysql_backup_host} 不为空, 判断 ip 是否是本机
+        if ip a |grep "${mysql_backup_host}" &> /dev/null;then
+            echo "continue"
+        else
+            echo "the host isn't backup host."
+            exit 5
+        fi 
+    else
+        # vip 为空的，
+        vip_text="mysql_backup_host is none." 
+        echo "${vip_text}"
+    fi
+}
+
+check_vip
+check_backup_host
 
 [ -d ${BackPath} ] || mkdir -p ${BackPath}
 # 判断备份目录所在的磁盘空间是否充裕
@@ -55,13 +77,18 @@ else
     echo "the ${mount_dev} free space is unavailable."
     mail_text="`date` ${project_name} mysql backup failed. the ${mount_dev} free space is unavailable."
     echo "backup failed." >> $OUT_FILE
-    python ${mail_script} "${mail_text}"
+    python ${mail_script} "${project_name}" "${mail_text}"
     exit 6
 fi
 
 # 确定配置文件
 if [[ ${mysql_basedir} == /data/apps/opt/mysql* ]] || [[ ${mysql_basedir} == /data1/apps/opt/mysql* ]];then
     mysql_conf=/data1/apps/config/mysql/my.cnf
+    if [ -e ${mysql_conf} ];then
+        :
+    else
+        mysql_conf=/etc/my.cnf
+    fi
 elif [[ ${mysql_basedir} == /usr* ]];then
     mysql_conf=/etc/my.cnf
 else
@@ -83,7 +110,7 @@ if [ ${backup_stat} == 0 ];then
 else
     mail_text="`date` ${project_name} mysql backup failed."
     echo "backup failed." >> $OUT_FILE
-    python ${mail_script} "${mail_text}"
+    python ${mail_script} "${project_name}" "${mail_text}"
     exit 5
 fi
 cd ${BackPath}
@@ -103,11 +130,12 @@ fi
 # delete old file
 cd ${BackPath}
 echo "rm -rf ${old_file}"
-old_file=$(ls -c1 |tail -n +2)
+#old_file=$(ls -c1 |tail -n +2)
+old_file=$(find ${BackPath} -maxdepth 1 -type d -mtime +10)
 rm -rf ${old_file}
 # 删除远程备份目录的旧的备份
 
-remote_old_file=$(ssh ${REMOT_HOST} "cd ${Remote_BackPath}; ls -c1 |tail -n +$[backup_num+1]")
+remote_old_file=$(ssh ${REMOT_HOST} "cd ${Remote_BackPath}; ls -c1 |tail -n +$[backup_num+10]")
 echo ${remote_old_file}
 ssh -T ${REMOT_HOST} << EOF
    cd ${Remote_BackPath}
@@ -125,5 +153,5 @@ the VIP is: ${mysql_vip}. ${vip_text}.
 deleted ${old_file}.
 deleted ${REMOT_HOST}:${remote_old_file}
 "
-python ${mail_script} "${mail_text}"
+python ${mail_script} "${project_name}" "${mail_text}"
 {%endraw%}

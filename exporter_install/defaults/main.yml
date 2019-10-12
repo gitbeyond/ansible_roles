@@ -9,6 +9,7 @@ exporter_packet_type: tgz
 exporter_base_dir: /data/apps/opt/{{exporter_base_name}}
 exporter_log_dir: /data/apps/log/{{exporter_base_name}}
 exporter_conf_dir: /data/apps/config/{{exporter_base_name}}
+exporter_instance_name:
 
 exporter_conf_file:
 exporter_port:  

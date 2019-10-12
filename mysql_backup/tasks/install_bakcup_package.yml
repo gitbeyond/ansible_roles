@@ -25,6 +25,7 @@
       #- "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ]"
       #- MySQL-python
     state: present
+    enablerepo: "base,epel"
   register: install_result
   ignore_errors: True
 
