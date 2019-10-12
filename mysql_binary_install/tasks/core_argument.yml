@@ -3,7 +3,7 @@
 # 2017/08/02 modified to sysctl
 
 - name: modify core arguments
-  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes
+  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes sysctl_file=/etc/sysctl.d/my.conf
   with_items:
     - { name: 'vm.swappiness', value: 0}
     - { name: 'net.ipv4.ip_local_port_range', value: '10240 65000' }
@@ -19,6 +19,7 @@
     - { name: 'net.ipv4.tcp_syn_retries', value: '1' }
     - { name: 'net.ipv4.tcp_fin_timeout', value: '5' }
     - { name: 'net.ipv4.tcp_keepalive_time', value: '70' }
+    - { name: 'fs.nr_open', value: '6553500' }
     - { name: 'fs.file-max', value: '6553500' }
 
 #  lineinfile: dest=/etc/sysctl.conf line="{{ item }}"

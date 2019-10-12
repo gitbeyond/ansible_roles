@@ -12,7 +12,12 @@
 
 
 - name: cp tomcat packet to remote
-  unarchive: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} mode={{item.mode}}
+  unarchive: 
+    src: '{{item.src}}' 
+    dest: '{{item.dest}}' 
+    owner: '{{item.owner}}' 
+    group: '{{item.group}}' 
+    mode: '{{item.mode}}'
   when: tomcat_packet is not none
   with_items:
     - src: '{{ tomcat_packet }}'
@@ -20,7 +25,8 @@
       owner: '{{tomcat_run_user}}' 
       group: '{{tomcat_run_group}}'
       mode: "0755" 
-      creates: "{{tomcat_base_dir}}/bin/catalina.sh"
+      #creates: "{{tomcat_base_dir}}/bin/catalina.sh"
+      creates: "{{app_base_dir}}/{{packet_dir_name.stdout}}/bin/catalina.sh"
   register: cp_result
 
 

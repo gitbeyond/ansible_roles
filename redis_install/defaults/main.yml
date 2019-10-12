@@ -11,9 +11,13 @@ redis_data_dir: /data/apps/data/redis
 redis_log_dir: /data/apps/log/redis
 redis_port: 6379
 redis_service_name: "redis_{{redis_port}}"
+redis_src_conf: redis.conf
+redis_src_boot_conf: redis.ini
+
 # system or supervisor
 redis_run_method: supervisor
 # global variables
 app_base_dir: /data/apps/opt
 supervisor_prim_conf: /data/apps/config/supervisord/supervisord.conf
+
 

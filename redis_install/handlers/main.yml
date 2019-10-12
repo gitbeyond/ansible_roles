@@ -1,5 +1,9 @@
-- name: restart redis service
+- name: restart redis service for systmd
   service: name={{redis_service_name}} state=restarted
+
+- name: restart redis service for supervisor
+  supervisorctl: name={{redis_service_name}} state=restarted
+
 - name: add to system service list
   shell: '{{ item }}'
   with_items:

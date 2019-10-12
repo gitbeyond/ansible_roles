@@ -1,6 +1,7 @@
 {
   "insecure-registries": [
-    "http://{{docker_insecure_registry}}"
+    "http://{{docker_insecure_registry}}",
+    "http://172.16.27.4:5000"
   ],
   "hosts": [
     "unix:///var/run/docker.sock"

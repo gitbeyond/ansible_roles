@@ -2,7 +2,7 @@
 - name: copy project boot file for supervisor
   template: 
     src: "{{project_boot_file}}" 
-    dest: "{{supervisor_conf_dir}}" 
+    dest: "{{supervisor_conf_dir}}/{{project_prog_name}}.ini" 
     owner: "{{project_run_user}}" 
     group: "{{project_run_group}}" 
     mode: "0644"
