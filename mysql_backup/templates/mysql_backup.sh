@@ -6,6 +6,7 @@ IP="{{ansible_default_ipv4.address}}"
 mail_script=$(cd $(dirname $0) && pwd)/send_mail.py
 project_name="{{group_names[-1]}} ${IP}"
 mysql_sock={{mysql_sock}}
+mysql_host=localhost
 mysql_vip={{mysql_vip}}
 mysql_backup_host={{mysql_backup_host}}
 mysql_basedir={{mysql_basedir.msg}}
@@ -101,7 +102,7 @@ fi
 # 开始备份
 echo -e "--------------------------------\n`date` start mysql backup!" >> $OUT_FILE
 
-innobackupex --defaults-file=${mysql_conf} --user=${BK_USER} --password="${BK_PASS}" --socket=${mysql_sock} ${BackPath} 
+innobackupex --defaults-file=${mysql_conf} --user=${BK_USER} --password="${BK_PASS}" --socket=${mysql_sock} --host=${mysql_host} ${BackPath} 
 backup_stat=$?
 #backup_stat=0
 
