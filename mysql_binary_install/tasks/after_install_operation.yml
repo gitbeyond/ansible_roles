@@ -12,7 +12,8 @@
   shell: touch auto.cnf_ansible_not_exist
   args:
     chdir: '{{mysql_data_dir}}'   
-    removes: '{{mysql_data_dir}}/auto.cnf'
+    creates: '{{mysql_data_dir}}/auto.cnf'
+    #removes: '{{mysql_data_dir}}/auto.cnf'
 
 - name: rename auto.cnf to auto.cnf_ansible_not_exist
   shell: mv auto.cnf auto.cnf_ansible_not_exist

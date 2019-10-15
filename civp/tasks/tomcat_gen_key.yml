@@ -26,6 +26,7 @@
     path: '/home/tomcat/.ssh/authorized_keys' 
     owner: 'tomcat'
     group: 'tomcat'
+    create: yes
 
 - name: get per host public key file
   shell: grep "^HostKey" sshd_config |grep ecdsa |head -n 1 |awk '{print $NF}'

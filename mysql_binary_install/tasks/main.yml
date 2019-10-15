@@ -19,6 +19,7 @@
   tags:
     - create_syncuser
   when: mysql_slave_server is defined and mysql_slave_server is not none
+
 #- include: core_argument.yml
 - include: sync_to_master.yml
   tags:

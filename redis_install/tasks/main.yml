@@ -21,3 +21,7 @@
     - supervisor_service
 
 - include: redis_core_args.yml
+
+- include: generate_sentinel_conf.yml
+  tags:
+    - generate_sentinel_conf

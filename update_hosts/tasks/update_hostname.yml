@@ -13,4 +13,5 @@
 - name: delete tmp hosts file
   file:
     path: '{{hosts_dest_dir}}/{{hosts_dest_name}}'
+    state: absent
 

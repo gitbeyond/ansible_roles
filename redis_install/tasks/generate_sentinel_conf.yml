@@ -1,0 +1,29 @@
+#- name: modify redis-sentinel conf
+#  blockinfile:
+#    block: |
+#      sentinel monitor {{inst_name}} {{inst_master_redis}} {{inst_port}} 2
+#      sentinel auth-pass {{inst_name}} {{inst_pass}}
+#      sentinel down-after-milliseconds {{inst_name}} 5000
+#      sentinel failover-timeout {{inst_name}} 60000
+#    #path: "{{redis_conf_dir}}/redis_sentinel_26379.conf" 
+#    path: "{{redis_sentinel_conf}}"
+#    backup: yes
+#    #insertafter: "^logfile"
+#    marker: "# {mark} {{inst_name}}"
+#    state: present
+#    #marker: "#{mark} {{inst_name}}"
+#  with_items: "{{redis_groups}}"
+#  when: item.inst_name == sentinel_name
+ 
+- name: modify redis-sentinel conf
+  lineinfile:
+    line: "{{item}}"
+    path: "{{redis_sentinel_conf}}"
+    #path: "/tmp/test.hh"
+    backup: '{%if item == redis_sentinel_stat[-1]-%}yes{%else-%}no{%-endif%}'
+    create: yes
+  with_items: "{{redis_sentinel_stat}}"
+    #- sentinel monitor redis-civp-session 172.16.25.49 6389 2
+    #- sentinel auth-pass redis-civp-session 123456
+    #- sentinel down-after-milliseconds redis-civp-session 5000
+    #- sentinel failover-timeout redis-civp-session 60000 
