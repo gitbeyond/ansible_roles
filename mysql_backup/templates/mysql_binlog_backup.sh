@@ -7,6 +7,7 @@ IP="{{ansible_default_ipv4.address}}"
 mail_script=$(cd $(dirname $0) && pwd)/send_mail.py
 project_name="${IP} binlog backup"
 mysql_sock={{mysql_sock}}
+mysql_host=localhost
 mysql_vip={{mysql_vip}}
 mysql_backup_host={{mysql_backup_host}}
 mysql_basedir={{mysql_basedir.msg}}
@@ -79,7 +80,7 @@ fi
 
 #day_dt=$(date +%F)
 Remote_BackPath=/data2/mysqlbackup/$IP
-mysql_opt="--user=${BK_USER} --password=${BK_PASS} --socket=${mysql_sock}"
+mysql_opt="--user=${BK_USER} --password=${BK_PASS} --socket=${mysql_sock} --host=${mysql_host}"
 
 mysql_cmd=${mysql_basedir}/bin/mysql
 mysqlbinlog_cmd=${mysql_basedir}/bin/mysqlbinlog
