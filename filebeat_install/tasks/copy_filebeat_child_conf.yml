@@ -1,0 +1,10 @@
+
+- name: copy filebeat child conf file
+  template:
+    src: "{{ item }}" 
+    dest: "{{ filebeat_child_conf_dir }}" 
+    owner: "{{ filebeat_run_user }}" 
+    group: "{{ filebeat_run_user }}" 
+    mode: "0644" 
+    backup: yes
+  with_items: '{{filebeat_child_confs}}'

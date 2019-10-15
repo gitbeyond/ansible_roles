@@ -1,0 +1,26 @@
+---
+
+- name: copy logstash settings file
+  template:
+    src: '{{ item }}' 
+    dest: '{{logstash_base_dir}}/config/' 
+    owner: '{{ logstash_run_user }}' 
+    group: '{{ logstash_run_user }}' 
+    mode: '0644'
+  with_items: '{{logstash_src_confs}}'
+    #- { src: 'jvm.options', dest: '{{logstash_base_dir}}/config/', mode: '0644'}
+    #- { src: 'logstash.yml', dest: '{{logstash_base_dir}}/config/', mode: '0644'}
+    #- { src: 'log4j2.properties', dest: '{{logstash_base_dir}}/config/', mode: '0644'}
+    #- { src: 'pipelines.yml', dest: '{{logstash_base_dir}}/config/', mode: '0644'}
+  notify:
+    - restart_logstash
+
+- name: copy logstash env file
+  template:
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
+    owner: root 
+    group: root 
+    mode: '{{ item.mode }}'
+  with_items:
+    - { src: '{{logstash_env_file}}', dest: '/etc/profile.d/', mode: "0644"}

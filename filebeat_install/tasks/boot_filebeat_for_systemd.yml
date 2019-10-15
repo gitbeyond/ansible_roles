@@ -11,8 +11,6 @@
   notify:
     - restart_filebeat_for_systemd
 
-#- name: test result
-#  shell: echo "{{ini_result}}" > /tmp/test_result
 - name: systemctl daemon-reload
   shell: systemctl daemon-reload
   when: ini_result.results[0].failed == False and ini_result.changed == True
@@ -25,3 +23,5 @@
     state: started
   with_items:
     - '{{filebeat_app_name}}'
+  #when: filebeat_install_result.failed == False and filebeat_install_result.changed != True
+  when: filebeat_install_result.changed != True

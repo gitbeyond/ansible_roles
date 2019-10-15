@@ -1,0 +1,25 @@
+---
+
+- name: copy logstash multiple pipeline conf file
+  template:
+    src: '{{ item }}' 
+    dest: '{{logstash_conf_dir}}/' 
+    owner: '{{ logstash_run_user }}' 
+    group: '{{ logstash_run_user }}' 
+    mode: '0644'
+  with_items: '{{logstash_src_pipeline_confs}}'
+  when: logstash_src_pipeline_confs is not none
+  notify:
+    - restart_logstash
+
+- name: copy logstash single pipeline conf file
+  template:
+    src: '{{ item.logstash_pipeline_conf }}' 
+    dest: '{{logstash_conf_dir}}/' 
+    owner: '{{ logstash_run_user }}' 
+    group: '{{ logstash_run_user }}' 
+    mode: '0644'
+  with_items: '{{logstash_pipeline_instances}}'
+  when: item.logstash_pipeline_conf is not none
+  notify:
+    - restart_logstash_{{item.logstash_pipeline_name}}

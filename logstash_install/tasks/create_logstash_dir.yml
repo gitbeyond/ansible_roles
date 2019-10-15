@@ -1,15 +1,16 @@
 # edirtor: haifeng
 # 2019/2/13
 
-- name: create logstash user
-  user: name={{ item.name }} state=present system={{ item.system }}
-  with_items:
-    - { name: '{{ logstash_run_user }}',system: no}
-
 - name: create logstash dir
-  file: path={{ item.path }} owner={{ logstash_run_user }} group={{ logstash_run_user }} mode={{ item.mode }} state={{ item.state }}
+  file: 
+    path: "{{ item.path }}" 
+    owner: "{{ logstash_run_user }}" 
+    group: "{{ logstash_run_user }}" 
+    mode: "{{ item.mode }}" 
+    state: "{{ item.state }}"
   with_items:
-    - { path: "{{logstash_conf_dir}}", mode: '0755', state: directory }
-    - { path: "{{logstash_data_dir}}", mode: '0755', state: directory }
-    - { path: "{{logstash_log_dir}}", mode: '0755', state: directory }
+    #- { path: "{{app_base_dir}}", mode: "0755", owner: root, group: root, state: directory }
+    - { path: "{{logstash_conf_dir}}", mode: "0755", state: directory }
+    - { path: "{{logstash_data_dir}}", mode: "0755", state: directory }
+    - { path: "{{logstash_log_dir}}", mode: "0755", state: directory }
 

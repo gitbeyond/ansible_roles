@@ -1,7 +1,12 @@
-- name: restart filebeat 
+- name: restart_logstash 
   supervisorctl: name={{ item }} state=restarted
   with_items:
-    - filebeat
+    - '{{logstash_app_name}}'
 
-- name: supervisor update
+- name: restart_logstash_{{item}}
+  supervisorctl:
+    name: '{{item}}'
+    state: restarted
+
+- name: supervisor_update
   shell: supervisorctl update

@@ -10,3 +10,9 @@ filebeat_src_conf: filebeat.yml
 # systemd or supervisor
 filebeat_boot_type: systemd
 filebeat_src_boot_conf: "{%if filebeat_boot_type=='systemd'%}filebeat.systemd{%else%}filebeat.ini{%endif%}" 
+filebeat_env_file: filebeat.sh
+filebeat_run_user: root
+
+# type: list
+filebeat_child_confs:
+filebeat_child_conf_dir: '{{filebeat_conf_dir}}/inputs.d'

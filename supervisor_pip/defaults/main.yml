@@ -14,3 +14,4 @@ supervisor_packets:
   - '{{packet_base_dir}}/supervisor-3.3.5.tar.gz'
 
 supervisor_src_conf: "supervisord.conf"
+supervisor_version: '4.0.4'

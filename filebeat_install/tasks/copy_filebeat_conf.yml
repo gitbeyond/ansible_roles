@@ -2,7 +2,7 @@
 - name: copy filebeat conf file
   template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
   with_items:
-    - { src: '{{filebeat_src_conf}}', dest: '{{ filebeat_conf_dir }}/', owner: root, group: root, mode: "0644"}
+    - { src: '{{filebeat_src_conf}}', dest: '{{ filebeat_conf_dir }}/{{filebeat_app_name}}.yml', owner: root, group: root, mode: "0644"}
   notify:
     - restart_filebeat_for_{{filebeat_boot_type}}
 
@@ -14,5 +14,5 @@
     group: root 
     mode: "{{ item.mode }}"
   with_items:
-    - { src: 'filebeat.sh', dest: '/etc/profile.d/{{filebeat_app_name}}.sh', mode: "0644"}
+    - { src: '{{filebeat_env_file}}', dest: '/etc/profile.d/{{filebeat_app_name}}.sh', mode: "0644"}
 

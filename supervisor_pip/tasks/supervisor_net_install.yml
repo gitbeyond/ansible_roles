@@ -11,4 +11,4 @@
   pip: name={{item.name}} version={{item.version}} extra_args="-i http://pypi.douban.com/simple --trusted-host pypi.douban.com"
   with_items:
     - {name: supervisor, version: "{{supervisor_version}}"}
-    - {name: meld3, version: "1.0.2"}
+    #- {name: meld3, version: "1.0.2"}

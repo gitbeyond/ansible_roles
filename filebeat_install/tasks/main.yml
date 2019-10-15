@@ -1,5 +1,9 @@
 # edirtor: haifeng
-# 2017/02/13
+# 2019/10/12
+
+- include: create_filebeat_user.yml
+  tags:
+    - create_filebeat_user
 
 - include: create_filebeat_dir.yml 
   tags:
@@ -10,8 +14,13 @@
     - install_filebeat
 
 - include: copy_filebeat_conf.yml
-  ags:
+  tags:
     - copy_filebeat_conf
+
+- include: copy_filebeat_child_conf.yml
+  when: filebeat_child_confs is not none
+  tags:
+    - copy_filebeat_child_conf
 
 - include: boot_filebeat_for_supervisor.yml
   when: filebeat_boot_type == 'supervisor'

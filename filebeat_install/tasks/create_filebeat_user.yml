@@ -1,0 +1,5 @@
+- name: create filebeat user
+  user:
+    name: '{{filebeat_run_user}}'
+    state: present
+  when: filebeat_run_user != 'root'
