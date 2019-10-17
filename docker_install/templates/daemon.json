@@ -1,5 +1,5 @@
 {
-  "insecure-registry": [
+  "insecure-registries": [
     "{{docker_insecure_registry}}"
   ],
   "hosts": [
@@ -8,5 +8,10 @@
   "graph": "{{docker_data_dir}}",
   "exec-opts": [
      "native.cgroupdriver=systemd"
-  ]
+  ],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m",
+    "max-file": "10"
+  }
 }

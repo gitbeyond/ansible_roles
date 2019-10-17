@@ -20,4 +20,5 @@
     - { name: 'net.ipv4.tcp_fin_timeout', value: '5' }
     - { name: 'net.ipv4.tcp_keepalive_time', value: '70' }
     - { name: 'fs.file-max', value: '6553500' }
+  ignore_errors: true
 

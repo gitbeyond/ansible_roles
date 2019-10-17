@@ -11,11 +11,14 @@
   tags:
     - copy_keepalived_conf
 
+- include: install_keepalived_dependence_packet.yml
+  tags:
+    - install_keepalived_dependence_packet
 #- include: cent6_service.yml
 #  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
 
 - include: cent7_service.yml
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
 
 #- include: install_dependence_packet.yml
 #  when: keepalived_install_method == "net" 

@@ -1,6 +1,0 @@
-- name: copy docker conf file for centos
-  template: src={{item.src}} dest={{item.dest}} owner=root group=root mode=0644 backup=yes
-  with_items:
-    - {src: "daemon.json_for_centos", dest: '{{docker_conf_dir}}/daemon.json'}
-    - {src: "docker.service_for_centos", dest: '/usr/lib/systemd/system/docker.service'}
-    - {src: "docker.sh", dest: '/etc/profile.d/'}

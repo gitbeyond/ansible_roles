@@ -11,3 +11,4 @@
       - perl-ExtUtils-Embed
       - GeoIP-devel
     state: latest
+  ignore_errors: true

@@ -1,0 +1,19 @@
+
+- name: copy docker service conf file
+  template: 
+    src: '{{item.src}}'
+    dest: '{{item.dest}}' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  with_items:
+    - {src: "{{docker_src_service_conf}}", dest: '/usr/lib/systemd/system/'}
+  notify:
+    - systemctl_reload
+
+- name: start docker
+  systemd:
+    name: docker
+    state: started
+  when: docker_install_result.changed != True

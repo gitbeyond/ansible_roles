@@ -1,4 +1,14 @@
-- name: copy docker-ce-selinux
-  template: src={{item.src}} dest={{item.dest}} owner=root group=root mode=0644 backup=yes
+- name: copy docker conf file
+  template: 
+    src: '{{item.src}}'
+    dest: '{{item.dest}}' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
   with_items:
-    - {src: "daemon.json", dest: '/etc/docker'}
+    - {src: "{{docker_src_conf}}", dest: '{{docker_conf_dir}}'}
+    - {src: "{{docker_env_file}}", dest: '/etc/profile.d/'}
+  notify:
+    - restart_docker
+

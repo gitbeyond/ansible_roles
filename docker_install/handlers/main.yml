@@ -1,4 +1,13 @@
-#- name: restart docker
-#  systemctl: 
-#    name: docker 
-#    state: restarted
+- name: restart_docker
+  systemd: 
+    name: docker 
+    state: restarted
+
+- name: systemctl_reload
+  shell: systemctl daemon-reload
+
+- name: start_docker
+  systemd: 
+    name: docker
+    state: started
+    enabled: yes
