@@ -27,6 +27,7 @@ logstash_src_pipeline_confs:
 # 新版本的 logstash 支持多 pipeline, 这个变量为 true, 代表只会启动一个 logstash 进程，其中配置多个 pipeline
 logstash_is_multiple_pipeline: true 
 
+# 下面这种数据的定义是不成立的，原因同 redis_install 中的一样,如果想在同一台机器上启动多个 logstash 进程，只能写多个 role ,每个role定义不同的变量来实现
 logstash_pipeline_instances:
   - logstash_pipeline_conf:
     logstash_pipeline_boot_conf:

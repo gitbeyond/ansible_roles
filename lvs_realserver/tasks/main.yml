@@ -1,0 +1,12 @@
+---
+- include: install_realserver_packet.yml
+  tags:
+    - install_realserver_packet
+
+- include: copy_realserver_script.yml
+  tags:
+    - copy_realserver_script
+
+- include: boot_realserver.yml
+  tags:
+    - boot_realserver

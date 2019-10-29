@@ -2,34 +2,23 @@
 - name: copy exporter conf file
   template: 
     src: "{{item}}" 
-    dest: "{{exporter_conf_dir}}/{{exporter_instance_name| default(exporter_conf_file.split('.')[0])}}.{{exporter_conf_file.split('.')[-1]}}" 
+    dest: "{{exporter_conf_dir}}/{{exporter_instance_name | default(item.split('.')[0])}}.{{item.split('.')[-1]}}" 
     owner: "{{exporter_run_user}}" 
     group: "{{exporter_run_group}}" 
     mode: "0644"
     backup: yes
-  with_items: '{{exporter_conf_file}}'
+  with_items: '{{exporter_conf_files}}'
   when: item is not none
   notify:
-    - supervisor restarted
+    - supervisor_restarted
   #register: copy_conf_file
 
-- name: copy exporter boot file
+- name: copy exporter env file
   template: 
-    src: "{{exporter_boot_file}}" 
-    dest: "{{supervisor_conf_dir}}/{{exporter_instance_name}}.ini" 
-    owner: "{{exporter_run_user}}" 
-    group: "{{exporter_run_group}}" 
-    backup: yes
+    src: '{{ exporter_env_file }}'
+    dest: '/etc/profile.d/{{exporter_base_name}}.sh'
+    owner: root
+    group: root 
     mode: "0644"
-  when: exporter_boot_file is not none
-  notify:
-    - supervisor restarted
+  when: exporter_env_file is not none
 
-- name: start exporter
-  supervisorctl:
-    name: "{{exporter_instance_name}}"
-    state: "{{item}}"
-  with_items:
-    - present
-    - started
-  when: exporter_instance_name is not none

@@ -1,0 +1,10 @@
+# edirtor: haifeng
+# 2019/10/23
+
+- name: create nginx user
+  user:
+    name: '{{ item.name }}' 
+    state: present 
+    system: '{{ item.system }}'
+  with_items:
+    - { name: '{{ nginx_run_user }}', system: no ,shell: '/sbin/nologin'}

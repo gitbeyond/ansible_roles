@@ -1,18 +1,77 @@
 #- name: generate redis pass
 #  shell: echo "{{ansible_default_ipv4.macaddress}}{{redis_port}}" | base64 | tr -dc A-Za-z0-9 | tail -c 15
 #  register: redis_pass
-- name: copy redis conf file
-  copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+- name: copy redis log rotate file
+  template: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}'
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644"
   with_items:
-    - { src: "redis.logrotate", dest: '/etc/logrotate.d/redis_for_ansible',owner: root, group: root, mode: "0644"}
+    - { src: "redis.logrotate", dest: '/etc/logrotate.d/redis_for_ansible'}
   when: redis_run_method == "system"
 
-- name: copy redis conf file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
-  with_items:
-    - { src: "{{redis_src_conf}}", dest: '{{ redis_conf_dir}}/{{redis_service_name}}.conf',owner: '{{redis_run_user}}', group: '{{redis_run_user}}', mode: "0644"}
-    - { src: "redis.sh", dest: '/etc/profile.d/redis.sh',owner: root, group: root, mode: "0644"}
-  tags:
-   - modify_redis_conf
-  notify:
-   - restart redis service for supervisor
+- name: copy redis env file
+  template:
+    src: '{{redis_env_file}}'
+    dest: '/etc/profile.d/redis.sh'
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+
+#- name: debug var1
+#  debug:
+#    msg: "redis_is_multi_instance {{redis_is_multi_instance}}"
+
+#- name: copy redis conf file
+#  template:
+#    src: '{{ item.src }}' 
+#    dest: '{{ item.dest }}' 
+#    owner: '{{ redis_run_user }}' 
+#    group: '{{ redis_run_user }}' 
+#    mode: "0644" 
+#    backup: yes
+#  with_items:
+#    - { src: "{{redis_src_conf}}", dest: '{{ redis_conf_dir}}/{{redis_service_name}}.conf'}
+#  when: redis_is_multi_instance == false
+#  notify:
+#   - restart redis service for supervisor
+
+
+#- name: debug var
+#  debug:
+#    msg: "{{item.redis_src_conf}}"
+#  with_items: '{{redis_instances}}'
+
+#- name: set fact
+#  set_fact:
+#    redis_service_name: "{{item.redis_service_name}}"
+#    #redis_src_conf: "{{item.redis_src_conf}}"
+#    redis_port: "{{item.redis_port}}"
+#    #redis_src_boot_conf: "{{item.redis_src_boot_conf}}"
+#    redis_master_pass: "{{item.redis_master_pass}}"
+#    redis_requirepass: "{{item.redis_requirepass}}"
+#    redis_master_server: "{{item.redis_master_server}}"
+#    redis_master_port: "{{item.redis_master_port}}"
+#    redis_sentinel_name: "{{item.redis_sentinel_name}}"
+#  with_items: '{{redis_instances}}'
+
+- name: copy redis_instances conf file
+  template:
+    src: '{{ item.redis_src_conf }}' 
+    dest: '{{redis_conf_dir }}/{{item.redis_service_name}}.conf' 
+    owner: '{{ redis_run_user }}' 
+    group: '{{ redis_run_user }}' 
+    mode: "0644" 
+    backup: yes
+    #redis_service_name: "{{item.redis_service_name}}"
+    #redis_requirepass: "{{item.redis_requirepass}}"
+  loop: '{{redis_instances}}'
+  when: redis_is_multi_instance == true 
+  register: copy_redis_instances_conf
+  loop_control:
+    index_var: idx
+    #extended: yes
+

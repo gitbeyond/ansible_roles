@@ -1,23 +1,48 @@
-#redis_packet:
-#redis_master_server:
-#redis_master_port:
-#redis_master_pass:
-
-redis_run_user: redis
-redis_base_dir: "{{app_base_dir}}/redis"
-redis_conf_dir: /data/apps/config/redis
-redis_var_dir: /data/apps/var/redis
-redis_data_dir: /data/apps/data/redis
-redis_log_dir: /data/apps/log/redis
-redis_port: 6379
-redis_service_name: "redis_{{redis_port}}"
-redis_src_conf: redis.conf
-redis_src_boot_conf: redis.ini
-
-# system or supervisor
-redis_run_method: supervisor
 # global variables
 app_base_dir: /data/apps/opt
 supervisor_prim_conf: /data/apps/config/supervisord/supervisord.conf
 
 
+redis_packet:
+#redis_master_server:
+#redis_master_port:
+#redis_master_pass:
+
+redis_app_name: redis
+redis_install_dir: '{{app_base_dir}}'
+redis_run_user: redis
+redis_base_dir: "{{app_base_dir}}/{{redis_app_name}}"
+redis_conf_dir: '/data/apps/config/{{redis_app_name}}'
+redis_var_dir: '/data/apps/var/{{redis_app_name}}'
+redis_data_dir: '/data/apps/data/{{redis_app_name}}'
+redis_log_dir: '/data/apps/log/{{redis_app_name}}'
+redis_port: 6379
+redis_service_name: "redis_{{redis_port}}"
+redis_src_conf: redis.conf
+redis_src_boot_conf: redis.ini
+redis_env_file: redis.sh
+
+# system or supervisor
+redis_run_method: supervisor
+
+redis_is_multi_instance: false
+# a host has multiple redis instance
+redis_instances:
+  - redis_port: 6379
+    redis_service_name: 'redis_{{redis_port}}'
+    redis_src_conf:
+    redis_src_boot_conf:
+    redis_requirepass:
+    redis_master_pass:
+    redis_master_server:
+    redis_master_port:
+    redis_sentinel_name:
+
+redis_sentinel_statments: "[{% for item in redis_instances%}'sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}} 2', 'sentinel auth-pass {{item.redis_sentinel_name}} {{item.redis_master_pass}}', 'sentinel down-after-milliseconds {{item.redis_sentinel_name}} 5000', 'sentinel failover-timeout {{item.redis_sentinel_name}} 60000', {%endfor%}]"
+#redis_service_name: "{{item.redis_service_name}}"
+#redis_port: "{{item.redis_port}}"
+#redis_master_pass: "{{item.redis_master_pass}}"
+#redis_requirepass: "{{item.redis_requirepass}}"
+#redis_master_server: "{{item.redis_master_server}}"
+#redis_master_port: "{{item.redis_master_port}}"
+#redis_sentinel_name: "{{item.redis_sentinel_name}}"

@@ -10,6 +10,7 @@
     - { path: "{{filebeat_conf_dir}}", mode: "0755", state: directory }
     - { path: "{{filebeat_data_dir}}",  mode: "0755", state: directory }
     - { path: "{{filebeat_log_dir}}", mode: "0755", state: directory }
+    - { path: "{{filebeat_child_conf_dir}}", mode: "0755", state: directory }
     - { path: "{{filebeat_conf_dir}}/inputs.d", mode: "0755", state: directory }
     - { path: "{{filebeat_conf_dir}}/modules.d", mode: "0755", state: directory }
 

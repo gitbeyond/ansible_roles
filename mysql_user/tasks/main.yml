@@ -1,0 +1,6 @@
+# edirtor: haifeng
+# 2019/05/11
+
+- include: create_mysql_app_users.yml
+  tags:
+    - create_mysql_app_users

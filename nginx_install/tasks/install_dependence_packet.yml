@@ -10,5 +10,6 @@
       - gd-devel
       - perl-ExtUtils-Embed
       - GeoIP-devel
+      - gperftools-libs
     state: latest
   ignore_errors: true

@@ -1,22 +1,33 @@
 app_base_dir: /data/apps/opt
+exporter_install_dir: '{{app_base_dir}}'
 exporter_run_user: root
 exporter_run_group: '{{exporter_run_user}}'
 exporter_base_name:
 
 exporter_packet:
+exporter_packet_creates:
 # tgz or jar
 exporter_packet_type: tgz
 exporter_base_dir: /data/apps/opt/{{exporter_base_name}}
 exporter_log_dir: /data/apps/log/{{exporter_base_name}}
 exporter_conf_dir: /data/apps/config/{{exporter_base_name}}
-exporter_instance_name:
+exporter_var_dir: /data/apps/var/{{exporter_base_name}}
+exporter_child_conf_dir:
+exporter_bin_dir: '{{exporter_base_dir}}/bin'
+exporter_instance_name: '{{exporter_base_name}}'
 
-exporter_conf_file:
+
+# type: list
+exporter_conf_files:
+exporter_child_confs:
 exporter_port:  
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd
 exporter_boot_type: supervisor
-exporter_boot_file:
+exporter_src_boot_file:
 
+# 
+exporter_env_file:
+exporter_bin_scripts:
 
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

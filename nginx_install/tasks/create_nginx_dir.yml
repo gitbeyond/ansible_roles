@@ -1,0 +1,24 @@
+
+- name: link /data1 to /data dir
+  file: src={{ item.src }} dest={{item.dest}} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
+  with_items:
+    - { src: /data1, dest: /data, owner: root, group: root, mode: "0777", state: link}
+  tags:
+    - create_data_soft_link
+
+- name: create nginx dir
+  file: 
+    path: '{{ item.path }}' 
+    owner: '{{ item.owner }}' 
+    group: '{{ item.group }}' 
+    mode: '{{ item.mode }}' 
+    state: '{{ item.state }}'
+  with_items:
+    - { path: "{{nginx_install_dir}}", owner: root, group: root, mode: "0755", state: directory }
+    - { path: "{{nginx_conf_dir}}", owner: root, group: root, mode: "0755", state: directory }
+    - { path: "{{nginx_child_conf_dir}}", owner: '{{nginx_run_user}}', group: '{{nginx_run_user}}', mode: "0755", state: directory }
+    - { path: "{{nginx_conf_dir}}/conf.d", owner: '{{nginx_run_user}}', group: '{{nginx_run_user}}', mode: "0755", state: directory }
+    - { path: "{{nginx_log_dir}}", owner: '{{ nginx_run_user }}', group: '{{ nginx_run_user }}', mode: "0755", state: directory }
+    - { path: "{{nginx_var_dir}}", owner: '{{ nginx_run_user }}', group: root, mode: "0755", state: directory }
+   # - { path: "{{nginx_data_dir}}", owner: '{{ nginx_data_user }}', group: root, mode: "0755", state: directory }
+

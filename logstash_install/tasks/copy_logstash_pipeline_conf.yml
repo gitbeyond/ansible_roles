@@ -8,7 +8,7 @@
     group: '{{ logstash_run_user }}' 
     mode: '0644'
   with_items: '{{logstash_src_pipeline_confs}}'
-  when: logstash_src_pipeline_confs is not none
+  when: logstash_src_pipeline_confs is not none and logstash_is_multiple_pipeline == true
   notify:
     - restart_logstash
 
@@ -20,6 +20,6 @@
     group: '{{ logstash_run_user }}' 
     mode: '0644'
   with_items: '{{logstash_pipeline_instances}}'
-  when: item.logstash_pipeline_conf is not none
+  when: item.logstash_pipeline_conf is not none and logstash_is_multiple_pipeline == false
   notify:
     - restart_logstash_{{item.logstash_pipeline_name}}

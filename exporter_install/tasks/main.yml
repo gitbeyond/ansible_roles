@@ -23,10 +23,21 @@
   tags:
     - copy_exporter_conf
 
-- include: boot_exporter_for_tgz.yml
+- include: copy_exporter_child_conf.yml
   tags:
-    - boot_exporter_for_tgz
-  when: exporter_packet_type == "tgz"
+    - copy_exporter_child_conf
+  when: exporter_child_confs is not none
+
+- include: copy_exporter_bin_scripts.yml
+  tags:
+    - copy_exporter_bin_scripts
+  when: exporter_bin_scripts is not none
+
+- include: boot_exporter_for_supervisor.yml
+  tags:
+    - boot_exporter_for_supervisor
+  when: exporter_boot_type == 'supervisor'
+
 
 #- include: boot_project_for_supervisor.yml
 #  when: project_boot_type == "supervisor"

@@ -1,0 +1,28 @@
+- name: copy exporter boot file
+  template: 
+    src: "{{exporter_src_boot_file}}" 
+    dest: "{{supervisor_conf_dir}}/{{exporter_instance_name}}.ini" 
+    owner: "{{exporter_run_user}}" 
+    group: "{{exporter_run_group}}" 
+    backup: yes
+    mode: "0644"
+  when: exporter_src_boot_file is not none
+  notify:
+    - supervisor_restarted
+
+- name: start exporter
+  supervisorctl:
+    name: "{{exporter_instance_name}}"
+    state: "{{item}}"
+  with_items:
+    - present
+    - started
+  when: exporter_instance_name is not none
+
+#- name: restart exporter prog
+#  supervisorctl: 
+#    config: "{{supervisor_prim_conf}}" 
+#    name: "{{exporter_base_name}}" 
+#    state: restarted 
+#    supervisorctl_path: "/usr/bin/supervisorctl"
+#  when: exporter_boot_file is not none

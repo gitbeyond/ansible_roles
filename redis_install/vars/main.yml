@@ -1,5 +1,5 @@
 
-redis_sentinel_stat:
+redis_sentinel_statments:
   - sentinel monitor redis-civp-session 172.16.25.49 6389 2
   - sentinel auth-pass redis-civp-session 123456
   - sentinel down-after-milliseconds redis-civp-session 5000
@@ -24,3 +24,21 @@ redis_sentinel_stat:
   - sentinel auth-pass redis-zhongxiaowei 123456
   - sentinel down-after-milliseconds redis-zhongxiaowei 5000
   - sentinel failover-timeout redis-zhongxiaowei 60000
+  # 
+  - sentinel monitor redis-try 172.16.25.49 6395 2
+  - sentinel auth-pass redis-try 123456
+  - sentinel down-after-milliseconds redis-try 5000
+  - sentinel failover-timeout redis-try 60000
+  #
+  - sentinel monitor redis-vq 172.16.25.49 6396 2
+  - sentinel auth-pass redis-vq 123456
+  - sentinel down-after-milliseconds redis-vq 5000
+  - sentinel failover-timeout redis-vq 60000
+
+#redis_service_name: "{{item.redis_service_name}}"
+#redis_port: "{{item.redis_port}}"
+#redis_master_pass: "{{item.redis_master_pass}}"
+#redis_requirepass: "{{item.redis_requirepass}}"
+#redis_master_server: "{{item.redis_master_server}}"
+#redis_master_port: "{{item.redis_master_port}}"
+#redis_sentinel_name: "{{item.redis_sentinel_name}}"

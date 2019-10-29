@@ -15,7 +15,8 @@ my $ssh_start_vip = "bond0:$key $vip";
 my $ssh_stop_vip = "bond0:$key down";  
 my $exit_code = 0;
 my $ifctrl = "/sbin/ifconfig";
-  
+my $ssh_user = "{{mha_client_run_user}}";  
+
 GetOptions(  
 'command=s'          => \$command,  
 'ssh_user=s'         => \$ssh_user,  
@@ -74,7 +75,7 @@ my $exit_code = 10;
 }  
 elsif ( $command eq "status" ) {  
         print "Checking the Status of the script.. OK \n";  
-        `ssh $ssh_user\@$orig_master_host \" $ifctrl $ssh_start_vip \"`;  
+        `ssh $ssh_user\@$orig_master_host \"sudo $ifctrl $ssh_start_vip \"`;  
         exit 0;  
 }  
 else {  
@@ -85,11 +86,11 @@ else {
   
 # A simple system call that enable the VIP on the new master  
 sub start_vip() {  
-`ssh $ssh_user\@$new_master_host \"  $ifctrl $ssh_start_vip \"`;  
+`ssh $ssh_user\@$new_master_host \"sudo  $ifctrl $ssh_start_vip \"`;  
 }  
 # A simple system call that disable the VIP on the old_master  
 sub stop_vip() {  
-`ssh $ssh_user\@$orig_master_host \" $ifctrl $ssh_stop_vip \"`;  
+`ssh $ssh_user\@$orig_master_host \"sudo $ifctrl $ssh_stop_vip \"`;  
 }  
   
 sub usage {  

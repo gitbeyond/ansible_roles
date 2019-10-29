@@ -1,7 +1,15 @@
+- include: create_redis_user.yml
+  tags:
+    - create_redis_user
+
+- include: create_redis_dir.yml
+  tags:
+    - create_redis_dir
 
 - include: install_redis.yml
   tags:
     - install_redis
+  when: redis_packet is not none
 
 - include: copy_redis_conf.yml
   tags:
@@ -12,9 +20,10 @@
   tags:
     - centos6_service
 - include: centos7_service.yml
-  when: redis_run_method == "system" and ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+  when: redis_run_method == "system" and ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
   tags:
     - centos7_service
+
 - include: supervisor_service.yml
   when: redis_run_method == "supervisor"
   tags:

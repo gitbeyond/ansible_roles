@@ -1,0 +1,45 @@
+- name: install MySQL-python packet
+  yum: name={{item.name}} state={{item.state}}
+  with_items:
+    - { name: MySQL-python, state: latest}
+
+- name: rename ~/.my.cnf if exists
+  shell: mv ~/.my.cnf ~/.my.cnf_ansible_tmp
+  args:
+    creates: ~/.my.cnf_ansible_tmp
+    removes: ~/.my.cnf
+  ignore_errors: true
+
+- name: create mysql app user
+  mysql_user: 
+    login_user: '{{mysql_login_user}}' 
+    login_unix_socket: '{{mysql_sock}}' 
+    login_password: '{{mysql_login_pass}}' 
+    name: '{{item.name}}'
+    password: '{{ item.password }}' 
+    host: '{{ item.host }}' 
+    priv: "{{item.priv}}" 
+    state: present
+  with_items: '{{mysql_app_users}}'  
+  when: mysql_app_users is defined and item.name is not none
+
+
+- name: delete mysql app old user
+  mysql_user: 
+    login_user: '{{mysql_login_user}}' 
+    login_unix_socket: '{{mysql_sock}}' 
+    login_password: '{{mysql_login_pass}}' 
+    name: '{{item.name}}'
+    host: '{{ item.host }}' 
+    #password: '{{ item.password }}' 
+    #priv: "{{item.priv}}" 
+    state: absent
+  with_items: '{{mysql_app_old_users}}'  
+  when: mysql_app_old_users is defined and item.name is not none
+
+- name: rename ~/.my.cnf_ansible_tmp if exists
+  shell: mv ~/.my.cnf_ansible_tmp ~/.my.cnf
+  args:
+    creates: ~/.my.cnf
+    removes: ~/.my.cnf_ansible_tmp
+  ignore_errors: true

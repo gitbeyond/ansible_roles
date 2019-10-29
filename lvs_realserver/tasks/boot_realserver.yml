@@ -1,0 +1,6 @@
+---
+- name: boot realserver
+  systemd:
+    name: realserver  
+    state: started
+    enabled: yes

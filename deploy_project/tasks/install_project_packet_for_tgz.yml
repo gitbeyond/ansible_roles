@@ -18,7 +18,7 @@
     - {src: '{{ PACKET_NAME.stdout }}', dest: '{{project_install_dir}}/', owner: '{{project_run_user}}', 
        group: '{{project_run_group}}', mode: "0755" }
        #group: '{{project_run_group}}', mode: "0755", creates: '{{project_install_dir}}/{{packet_dir_name.stdout}}' }
-  register: cp_result
+  register: unarchive_result
 
 - name: chmod project dir
   shell: "{{item}}"
@@ -26,12 +26,16 @@
     - 'find {{project_install_dir}}/{{packet_dir_name.stdout}} -type d -exec chmod 0755 {} \;'
     - 'find {{project_install_dir}}/{{packet_dir_name.stdout}} -type f -exec chmod 0644 {} \;'
 
+#- name: deub
+#  debug:
+#    msg: "cp_result: {{cp_result}}"
+
 - name: update project packet link file
   file: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} state={{item.state}}
   with_items:
     - {src: '{{project_install_dir}}/{{packet_dir_name.stdout}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', 
        owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
-  when: project_packet_link_name is defined and PACKET_NAME.stdout.split("/")[-1] != project_packet_link_name
+  when: project_packet_link_name is defined and packet_dir_name.stdout.split("/")[-1] != project_packet_link_name
   #when: project_packet_link_name is none
     #- {src: '{{project_install_dir}}/{{PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
 

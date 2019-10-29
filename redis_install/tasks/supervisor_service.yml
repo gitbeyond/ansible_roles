@@ -1,7 +1,40 @@
 - name: copy supervisor redis conf file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
+  template: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
   with_items:
-    - { src: "{{redis_src_boot_conf}}", dest: '{{supervisor_conf_dir}}/{{redis_service_name}}.ini', owner: root, group: root, mode: "0644"}
-    #- { src: "redis.conf_for_supervisor", dest: '{{config_dir}}/redis.conf', owner: root, group: root, mode: '0644'}
+    - { src: "{{redis_src_boot_conf}}", dest: '{{supervisor_conf_dir}}/{{redis_service_name}}.ini'}
+  when: redis_is_multi_instance == false
+
 - name: update supervisor
-  supervisorctl: name={{redis_service_name}} state=present config={{supervisor_prim_conf}}
+  supervisorctl: 
+    name: '{{redis_service_name}}' 
+    state: 'present' 
+    config: '{{supervisor_prim_conf}}'
+  when: redis_is_multi_instance == false
+
+- name: copy supervisor redis conf file
+  template: 
+    src: '{{ item.redis_src_boot_conf }}' 
+    dest: '{{ supervisor_conf_dir }}/{{item.redis_service_name}}.ini' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
+  with_items: '{{redis_instances}}'
+  when: redis_is_multi_instance == true
+  #notify:
+  #  - supervisorctl_reboot_{{item.redis_service_name}}
+  register: copy_redis_instances_supervisor_boot_file
+
+- name: restart redis_service when redis_conf is changed
+  supervisorctl:
+    name: '{{item.item}}'
+    state: restarted
+    config: '{{supervisor_prim_conf}}'
+  with_items: '{{copy_redis_instances_supervisor_boot_file.results + copy_redis_instances_conf.results}}'
+  when: item.changed == true

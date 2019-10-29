@@ -12,4 +12,4 @@
   tags:
    - modify_nginx_conf
   notify:
-   - restart nginx service
+   - reload_nginx_service

@@ -3,7 +3,7 @@
     name: '{{ item }}' 
     state: restarted
   with_items:
-    - filebeat
+    - '{{filebeat_app_name}}'
   when: filebeat_boot_type == 'supervisor'
 
 - name: restart_filebeat_for_systemd

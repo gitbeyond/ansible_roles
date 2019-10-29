@@ -1,0 +1,10 @@
+
+- name: copy exporter child conf file
+  template:
+    src: "{{ item }}" 
+    dest: "{{ exporter_child_conf_dir }}" 
+    owner: "{{ exporter_run_user }}" 
+    group: "{{ exporter_run_user }}" 
+    mode: "0644" 
+    backup: yes
+  with_items: '{{exporter_child_confs}}'

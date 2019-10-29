@@ -1,0 +1,19 @@
+
+- name: copy project k8s resource file
+  template: 
+    src: "{{item}}" 
+    dest: "{{project_install_dir}}" 
+    owner: "{{project_run_user}}" 
+    group: "{{project_run_group}}" 
+    mode: "0644"
+    backup: yes
+  with_items: '{{project_k8s_res_files}}'
+  when: item is not none
+  register: copy_k8s_res_file
+
+- name: submit res file to k8s cluster
+  k8s:
+    kubeconfig: '{{project_k8s_kubeconfig}}'
+    src: '{{project_install_dir}}/{{item | basename}}'
+  with_items: '{{project_k8s_res_files}}'
+  when: item is not none

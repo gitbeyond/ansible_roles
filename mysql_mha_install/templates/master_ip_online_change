@@ -83,7 +83,7 @@ my $exit_code = 10;
 }  
 elsif ( $command eq "status" ) {  
         print "Checking the Status of the script.. OK \n";  
-        `ssh $orig_master_ssh_user\@$orig_master_host \" $ifctrl $ssh_start_vip \"`;  
+        `ssh $orig_master_ssh_user\@$orig_master_host \"sudo $ifctrl $ssh_start_vip \"`;  
         exit 0;  
 }  
 else {  
@@ -94,11 +94,11 @@ else {
   
 # A simple system call that enable the VIP on the new master  
 sub start_vip() {  
-`ssh $new_master_ssh_user\@$new_master_host \" $ifctrl $ssh_start_vip \"`;  
+`ssh $new_master_ssh_user\@$new_master_host \" sudo $ifctrl $ssh_start_vip \"`;  
 }  
 # A simple system call that disable the VIP on the old_master  
 sub stop_vip() {  
-`ssh $orig_master_ssh_user\@$orig_master_host \" $ifctrl $ssh_stop_vip \"`;  
+`ssh $orig_master_ssh_user\@$orig_master_host \" sudo $ifctrl $ssh_stop_vip \"`;  
 }  
   
 sub usage {  

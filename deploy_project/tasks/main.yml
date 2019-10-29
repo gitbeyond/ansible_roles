@@ -1,4 +1,4 @@
-# edirtor: haifeng
+# edirtor: haifengsss@163.com
 # 2017/01/12
 
 - include: create_project_dir.yml
@@ -23,6 +23,21 @@
 #  tags:
 #    - boot_project
 #  when: project_boo_type != "other"
+
+- name: debug var
+  debug:
+    msg: "project_boot_type: {{project_boot_type}}"
+
+- include: project_packet_build_docker_image.yml
+  when: project_boot_type == "k8s" or project_boot_type == "docker"
+  tags:
+    - project_packet_build_docker_image
+
+- include: boot_project_for_k8s.yml
+  tags:
+    - boot_project_for_k8s
+  when: project_boot_type == "k8s"
+
 
 - include: boot_project_for_nginx.yml
   when: project_boot_type == "nginx"

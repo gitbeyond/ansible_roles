@@ -1,0 +1,6 @@
+---
+- name: install realserver needed packet
+  yum:
+    name:
+      - net-tools
+    state: present

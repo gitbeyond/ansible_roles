@@ -1,0 +1,13 @@
+---
+- name: copy realserver to remote
+  template: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
+    owner: root 
+    group: root 
+    mode: "0755"
+  with_items:
+    - src: realserver
+      dest: '/etc/rc.d/init.d/'
+  notify:
+    - systemctl_daemon_reload
