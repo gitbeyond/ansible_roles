@@ -3,10 +3,10 @@
   with_items:
     - '{{logstash_app_name}}'
 
-- name: restart_logstash_{{item}}
-  supervisorctl:
-    name: '{{item}}'
-    state: restarted
+#- name: restart_logstash
+#  supervisorctl:
+#    name: '{{item}}'
+#    state: restarted
 
 - name: supervisor_update
   shell: supervisorctl update

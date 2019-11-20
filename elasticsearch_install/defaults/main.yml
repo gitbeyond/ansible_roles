@@ -13,3 +13,5 @@ es_confs:
   - jvm.options
   - elasticsearch.yml
 
+es_src_boot_file: 'elasticsearch.ini'
+es_env_file: 'es.sh'

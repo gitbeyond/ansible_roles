@@ -15,6 +15,7 @@ exporter_var_dir: /data/apps/var/{{exporter_base_name}}
 exporter_child_conf_dir:
 exporter_bin_dir: '{{exporter_base_dir}}/bin'
 exporter_instance_name: '{{exporter_base_name}}'
+#exporter_other_dirs: []
 
 
 # type: list

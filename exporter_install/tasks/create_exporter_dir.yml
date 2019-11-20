@@ -17,4 +17,9 @@
     - "{{exporter_log_dir}}"
     - "{{exporter_var_dir}}"
     - "{{exporter_child_conf_dir}}"
-  when: item is not none
+  when: item is not none and item | basename != exporter_base_dir
+
+- name: mkdir exporter other dir
+  file: path={{item}} state=directory owner={{exporter_run_user}} group={{exporter_run_group}} mode=0755
+  with_items: '{{exporter_other_dirs}}'
+  when: item is not none and item | basename != exporter_base_dir

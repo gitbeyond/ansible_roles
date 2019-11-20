@@ -13,7 +13,7 @@
     group: "{{ logstash_run_user }}" 
     creates: "{{ item.creates }}"
   with_items:
-    - { src: '{{logstash_packet}}', dest: '{{logstash_install_dir}}/', creates: '{{ logstash_install_dir }}/{{logstash_dir_name}}', mode: '0755' }
+    - { src: '{{logstash_packet}}', dest: '{{logstash_install_dir}}/', creates: '{{ logstash_install_dir }}/{{logstash_dir_name.stdout}}/bin/logstash', mode: '0755' }
   register: logstash_install_result
 
 - name: create logstash link file

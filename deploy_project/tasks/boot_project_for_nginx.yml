@@ -11,6 +11,8 @@
   register: copy_nginx_file
   tags:
     - copy_project_nginx_file
+  notify:
+    - nginx_reload
 
 - name: reload nginx for centos7
   systemd: 

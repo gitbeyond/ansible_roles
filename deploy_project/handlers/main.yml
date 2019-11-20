@@ -1,5 +1,9 @@
-- name: restart nginx service
+- name: nginx_reload
   service: name=nginx state=reloaded
+
+
+
+
 - name: add to service list
   shell: '{{ item }}'
   with_items:

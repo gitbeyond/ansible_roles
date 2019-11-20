@@ -7,10 +7,11 @@
     owner: '{{ logstash_run_user }}' 
     group: '{{ logstash_run_user }}' 
     mode: '0644'
+    backup: yes
   with_items: '{{logstash_src_pipeline_confs}}'
   when: logstash_src_pipeline_confs is not none and logstash_is_multiple_pipeline == true
-  notify:
-    - restart_logstash
+  #notify:
+  #  - restart_logstash
 
 - name: copy logstash single pipeline conf file
   template:
@@ -19,6 +20,7 @@
     owner: '{{ logstash_run_user }}' 
     group: '{{ logstash_run_user }}' 
     mode: '0644'
+    backup: yes
   with_items: '{{logstash_pipeline_instances}}'
   when: item.logstash_pipeline_conf is not none and logstash_is_multiple_pipeline == false
   notify:

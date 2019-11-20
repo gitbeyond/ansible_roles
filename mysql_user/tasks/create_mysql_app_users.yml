@@ -10,6 +10,10 @@
     removes: ~/.my.cnf
   ignore_errors: true
 
+- name: debug var
+  debug:
+    msg: 'mysql_app_users: {{mysql_app_users}}'
+
 - name: create mysql app user
   mysql_user: 
     login_user: '{{mysql_login_user}}' 
@@ -21,7 +25,7 @@
     priv: "{{item.priv}}" 
     state: present
   with_items: '{{mysql_app_users}}'  
-  when: mysql_app_users is defined and item.name is not none
+  when: mysql_app_users is defined and item is not none
 
 
 - name: delete mysql app old user
@@ -35,7 +39,7 @@
     #priv: "{{item.priv}}" 
     state: absent
   with_items: '{{mysql_app_old_users}}'  
-  when: mysql_app_old_users is defined and item.name is not none
+  when: mysql_app_old_users is defined and item is not none
 
 - name: rename ~/.my.cnf_ansible_tmp if exists
   shell: mv ~/.my.cnf_ansible_tmp ~/.my.cnf

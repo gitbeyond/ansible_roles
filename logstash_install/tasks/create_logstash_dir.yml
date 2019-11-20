@@ -13,4 +13,5 @@
     - { path: "{{logstash_conf_dir}}", mode: "0755", state: directory }
     - { path: "{{logstash_data_dir}}", mode: "0755", state: directory }
     - { path: "{{logstash_log_dir}}", mode: "0755", state: directory }
+    - { path: "{{logstash_var_dir}}", mode: "0755", state: directory }
 

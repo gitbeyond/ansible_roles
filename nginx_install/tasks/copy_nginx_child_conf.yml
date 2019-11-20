@@ -7,6 +7,9 @@
     group: '{{nginx_run_user }}' 
     mode: "0644" 
     backup: yes
-  loop: '{{nginx_child_confs}}'
+  #loop: '{{nginx_child_confs}}'
+  with_items: '{{nginx_child_confs}}'
+  when: nginx_child_confs is defined and item is not none
+  #when: nginx_child_confs is not none
   notify:
    - reload_nginx_service
