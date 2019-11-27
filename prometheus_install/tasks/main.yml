@@ -1,0 +1,34 @@
+# edirtor: haifeng
+# 2019/11/22
+
+#- import_role:
+#    name: common_create_dir
+#  vars:
+#    common_base_name: '{{prom_base_name}}'
+#    common_base_dir: '{{prom_base_dir}}'
+#    common_log_dir: '{{prom_log_dir}}'
+#    common_conf_dir: '{{prom_conf_dir}}'
+#    common_var_dir:  '{{prom_var_dir}}'
+#    common_data_dir: '{{prom_data_dir}}'
+#    common_child_conf_dir: '{{prom_conf_dir}}/file_sd'
+#  name: create prom dir
+
+#- include: create_prom_dir.yml
+- import_tasks: create_prom_dir.yml
+  name: create_prom_dir_ww
+  tags:
+    - create_prom_dir
+
+- import_tasks: copy_prom_ssl_conf.yml
+  tags:
+    - copy_prom_ssl_conf
+
+- import_tasks: copy_prom_rule_conf.yml
+  tags:
+    - copy_prom_rule_conf
+
+- import_role:
+    name: common_boot_app
+  tags:
+    - prom_boot
+

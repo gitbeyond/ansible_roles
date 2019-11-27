@@ -1,0 +1,20 @@
+
+common_run_user: '{{prom_run_user}}'
+common_base_name: '{{prom_base_name}}'
+common_base_dir: '{{prom_base_dir}}'
+common_log_dir: '{{prom_log_dir}}'
+common_conf_dir: '{{prom_conf_dir}}'
+common_var_dir:  '{{prom_var_dir}}'
+common_data_dir: '{{prom_data_dir}}'
+common_child_conf_dir: '{{prom_child_conf_dir}}'
+common_packet: '{{prom_packet}}'
+common_packet_creates: '{{prom_packet_creates}}'
+common_packet_type: '{{prom_packet_type}}'
+
+common_bin_scripts: '{{prom_bin_scripts}}'
+common_child_confs: '{{prom_child_confs}}'
+common_conf_files: '{{prom_conf_files}}'
+common_env_file: '{{prom_env_file}}'
+
+common_src_boot_file: '{{prom_src_boot_file}}'
+common_boot_type: '{{prom_boot_type}}'

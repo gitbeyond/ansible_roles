@@ -1,0 +1,27 @@
+- name: copy common boot file
+  template: 
+    src: "{{common_src_boot_file}}" 
+    dest: "{{supervisor_conf_dir}}/{{common_instance_name}}.ini" 
+    owner: "{{common_run_user}}" 
+    group: "{{common_run_group}}" 
+    backup: yes
+    mode: "0644"
+  when: common_src_boot_file is not none
+  notify: common_supervisor_restarted
+
+- name: start common
+  supervisorctl:
+    name: "{{common_instance_name}}"
+    state: "{{item}}"
+  with_items:
+    - present
+    - started
+  when: common_instance_name is not none
+
+#- name: restart common prog
+#  supervisorctl: 
+#    config: "{{supervisor_prim_conf}}" 
+#    name: "{{common_base_name}}" 
+#    state: restarted 
+#    supervisorctl_path: "/usr/bin/supervisorctl"
+#  when: common_boot_file is not none

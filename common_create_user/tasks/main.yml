@@ -1,0 +1,7 @@
+# edirtor: haifeng
+# 2019/11/22
+
+- include: create_common_user.yml
+  #tags:
+  #  - create_{{commo}}_user
+

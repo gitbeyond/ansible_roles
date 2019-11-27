@@ -1,0 +1,12 @@
+- name: systemctl_daemon_reload
+  systemd:
+    daemon_reload: yes
+
+#- name: test_handler
+#  shell: "echo 'common_test_handler'"
+
+#- name: supervisor_restarted
+#  shell: "echo 'common_copy_conf test_handler'"
+  #supervisorctl:
+  #  name: "{{exporter_instance_name}}"
+  #  state: restarted

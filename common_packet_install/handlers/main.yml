@@ -1,0 +1,9 @@
+- name: systemctl_daemon_reload
+  shell: '{{ item }}'
+  with_items:
+    - systemctl daemon-reload
+
+- name: supervisor_restarted
+  supervisorctl:
+    name: "{{exporter_instance_name}}"
+    state: restarted

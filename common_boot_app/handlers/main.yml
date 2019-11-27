@@ -1,0 +1,13 @@
+- name: systemctl_daemon_reload
+  systemd:
+    daemon_reload: yes
+
+#- name: systemctl_restarted
+
+#- name: supervisor_restarted
+#  shell: "echo 'common_boot_app test_handler'"
+
+#- name: supervisor_restarted
+#  supervisorctl:
+#    name: "{{common_instance_name}}"
+#    state: restarted

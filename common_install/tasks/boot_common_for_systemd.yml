@@ -1,0 +1,38 @@
+
+- name: copy common systemd boot file
+  template: 
+    src: "{{common_boot_file}}" 
+    dest: "/usr/lib/systemd/system/" 
+    owner: "root" 
+    group: "root" 
+    mode: "0644"
+  register: copy_systemd_file
+  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
+  when: ansible_service_mgr == 'systemd'
+
+- name: boot common for systemd
+  systemd: 
+    name: "{{common_instance_name}}" 
+    state: restarted  
+    daemon_reload: yes 
+    enabled: yes
+  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7 and copy_systemd_file.changed == true
+  when: ansible_service_mgr == 'systemd'
+
+- name: copy common sysv boot file
+  template: 
+    src: "{{common_boot_file}}" 
+    dest: "/etc/rc.d/init.d/" 
+    owner: "root" 
+    group: "root" 
+    mode: "0644"
+  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  when: ansible_service_mgr == 'upstart'
+
+- name: boot common for centos6
+  service: 
+    name: "{{common_instance_name}}" 
+    state: restarted 
+    enabled: yes
+  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  when: ansible_service_mgr == 'upstart'

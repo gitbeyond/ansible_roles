@@ -5,7 +5,17 @@
   register: cp_result
 
 - name: update project packet link file
-  file: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} state={{item.state}}
+  file: 
+    src: '{{item.src}}' 
+    dest: '{{item.dest}}' 
+    owner: '{{item.owner}}' 
+    group: '{{item.group}}' 
+    state: '{{item.state}}'
   with_items:
-    - {src: '{{project_install_dir}}/{{PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
+    #- src: '{{project_install_dir}}/{{PACKET_NAME.stdout.split("/")[-1]}}'
+    - src: '{{PACKET_NAME.stdout | basename}}'
+      dest: '{{project_install_dir}}/{{project_packet_link_name}}' 
+      owner: '{{project_run_user}}' 
+      group: '{{project_run_group}}' 
+      state: link
   when: project_packet_link_name is defined and PACKET_NAME.stdout.split("/")[-1] != project_packet_link_name

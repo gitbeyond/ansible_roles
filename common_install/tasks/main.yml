@@ -1,0 +1,45 @@
+# edirtor: haifeng
+# 2017/01/12
+
+- include: create_common_user.yml
+  tags:
+    - create_common_user
+
+- include: create_common_dir.yml
+  tags:
+    - create_common_dir
+
+- include: install_common_for_tgz.yml
+  tags:
+    - install_common_for_tgz
+  when: common_packet_type == "tgz" and common_packet is not none
+
+- include: install_common_for_jar.yml
+  tags:
+    - install_common_for_jar
+  when: common_packet_type == "jar"
+
+- include: copy_common_conf.yml
+  tags:
+    - copy_common_conf
+
+- include: copy_common_child_conf.yml
+  tags:
+    - copy_common_child_conf
+  when: common_child_confs is not none
+
+- include: copy_common_bin_scripts.yml
+  tags:
+    - copy_common_bin_scripts
+  when: common_bin_scripts is not none
+
+- include: boot_common_for_supervisor.yml
+  tags:
+    - boot_common_for_supervisor
+  when: common_boot_type == 'supervisor'
+
+
+#- include: boot_project_for_supervisor.yml
+#  when: project_boot_type == "supervisor"
+#  tags:
+#    - boot_project

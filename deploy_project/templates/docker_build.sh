@@ -19,7 +19,8 @@ else
     exit 6
 fi
 
-/bin/cp ${project_src_packet} ${project_work_dir}
+#/bin/cp ${project_src_packet} ${project_work_dir}
+/bin/cp ${project_packet_packet} ${project_work_dir}
 
 dt=$(date +%Y%m%d)
 image_base_name=$1

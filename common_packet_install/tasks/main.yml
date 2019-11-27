@@ -1,0 +1,14 @@
+# editor: haifeng
+# 2019/11/25
+#- import_tasks: install_common_for_tgz.yml
+- include_tasks: install_common_for_tgz.yml
+  when: common_packet_type == "tgz" and common_packet is not none
+  #tags:
+  #  - install_common_for_tgz
+
+#- import_tasks: install_common_for_jar.yml
+- include_tasks: install_common_for_jar.yml
+  when: common_packet_type == "jar" and common_packet is not none
+  #tags:
+  #  - install_common_for_jar
+

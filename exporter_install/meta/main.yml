@@ -1,0 +1,20 @@
+---
+allow_duplicates: true
+
+dependencies:
+  - role: common_create_user
+    name: create_exporter_user
+    tags:
+      - exporter_create_user
+  - role: common_create_dir
+    tags:
+      - exporter_create_dir   
+  - role: common_packet_install
+    tags:
+      - exporter_packet_install
+  - role: common_copy_conf_file
+    tags:
+      - exporter_copy_conf_file
+  - role: common_boot_app
+    tags:
+      - exporter_boot_app

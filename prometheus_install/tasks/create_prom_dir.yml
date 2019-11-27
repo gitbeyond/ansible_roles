@@ -1,0 +1,24 @@
+
+- name: mkdir prom dir
+  file: 
+    path: '{{item}}' 
+    state: 'directory' 
+    owner: '{{prom_run_user}}' 
+    group: '{{prom_run_group}}' 
+    mode: "0755"
+  with_items:
+    - "{{prom_conf_ssl_dir}}"
+    - "{{prom_conf_rule_dir}}"
+  when: item is not none and item | basename != common_base_dir
+
+# 创建其他目录的操作，由其他引用的 role 自行创建
+#- name: mkdir common other dir
+#  file: 
+#    path: '{{item}}' 
+#    state: directory 
+#    owner: '{{common_run_user}}' 
+#    group: '{{common_run_group}}' 
+#    mode: "0755"
+#  with_items: '{{common_other_dirs}}'
+#  when: item is not none and item | basename != common_base_dir
+  #when: common_other_dirs is defined and item | basename != common_base_dir

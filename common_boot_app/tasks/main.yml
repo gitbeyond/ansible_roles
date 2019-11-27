@@ -1,0 +1,15 @@
+# editor: haifeng
+# 2019/11/25
+
+- include_tasks: boot_common_for_supervisor.yml
+  #tags:
+  #  - boot_common_for_supervisor
+  when: common_boot_type == 'supervisor'
+
+- include_tasks: boot_common_for_systemd.yml
+  when: common_boot_type == 'systemd'
+
+#- include: boot_project_for_supervisor.yml
+#  when: project_boot_type == "supervisor"
+#  tags:
+#    - boot_project

@@ -1,0 +1,12 @@
+
+- name: copy common bin script file
+  template:
+    src: "{{ item }}" 
+    dest: "{{ common_bin_dir }}" 
+    owner: "{{ common_run_user }}" 
+    group: "{{ common_run_user }}" 
+    mode: "0644" 
+    backup: yes
+  with_items: '{{common_bin_scripts}}'
+  when: item is not none
+  notify: common_reload_app_conf

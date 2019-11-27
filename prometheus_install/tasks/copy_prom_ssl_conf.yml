@@ -1,0 +1,12 @@
+
+- name: copy prom ssl conf file
+  template:
+    src: "{{ item }}" 
+    dest: "{{ prom_conf_ssl_dir }}" 
+    owner: "{{ common_run_user }}" 
+    group: "{{ common_run_user }}" 
+    mode: "0644" 
+    backup: yes
+  loop: '{{prom_conf_ssl_files}}'
+  notify: common_reload_app_conf
+  when: item is not none

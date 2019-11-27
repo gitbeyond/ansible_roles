@@ -1,20 +1,20 @@
-# edirtor: haifengsss@163.com
-# 2017/01/12
+# editor: haifengsss@163.com
+# 2019/11/27
 
-- include: create_project_dir.yml
-  tags:
-    - create_project_dir
-
-- include: get_project_name.yml
+- import_tasks: get_project_name.yml
   tags:
     - get_project_name
 
-- include: install_project_packet_for_tgz.yml
+- import_tasks: create_project_dir.yml
+  tags:
+    - create_project_dir
+
+- include_tasks: install_project_packet_for_tgz.yml
   tags:
     - install_project_packet
   when: project_packet_type == "tgz" and PACKET_NAME is defined and PACKET_NAME is not skipped
 
-- include: install_project_packet.yml
+- include_tasks: install_project_packet.yml
   tags:
     - install_project_packet
   when: project_packet_type == "jar"
@@ -28,31 +28,33 @@
   debug:
     msg: "project_boot_type: {{project_boot_type}}"
 
-- include: project_packet_build_docker_image.yml
+- include_tasks: project_packet_build_docker_image.yml
   when: project_boot_type == "k8s" or project_boot_type == "docker"
   tags:
     - project_packet_build_docker_image
 
-- include: boot_project_for_k8s.yml
+- include_tasks: boot_project_for_k8s.yml
   tags:
     - boot_project_for_k8s
   when: project_boot_type == "k8s"
 
 
-- include: boot_project_for_nginx.yml
+- include_tasks: boot_project_for_nginx.yml
   when: project_boot_type == "nginx"
   tags:
     - boot_project
-- include: boot_project_for_supervisor.yml
+
+- include_tasks: boot_project_for_supervisor.yml
   when: project_boot_type == "supervisor"
   tags:
     - boot_project
-- include: boot_project_for_systemd.yml
+
+- include_tasks: boot_project_for_systemd.yml
   when: project_boot_type == "systemd"
   tags:
     - boot_project
 
-- include: archive_packet.yml
+- import_tasks: archive_packet.yml
   tags:
     - archive_packet
 

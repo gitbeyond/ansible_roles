@@ -12,6 +12,7 @@ exporter_base_dir: /data/apps/opt/{{exporter_base_name}}
 exporter_log_dir: /data/apps/log/{{exporter_base_name}}
 exporter_conf_dir: /data/apps/config/{{exporter_base_name}}
 exporter_var_dir: /data/apps/var/{{exporter_base_name}}
+exporter_data_dir: /data/apps/data/{{exporter_base_name}}
 exporter_child_conf_dir:
 exporter_bin_dir: '{{exporter_base_dir}}/bin'
 exporter_instance_name: '{{exporter_base_name}}'
@@ -30,7 +31,3 @@ exporter_src_boot_file:
 exporter_env_file:
 exporter_bin_scripts:
 
-#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
-#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
-#nginx_conf_dir: /data/apps/config/nginx
-#nginx_run_user: nginx

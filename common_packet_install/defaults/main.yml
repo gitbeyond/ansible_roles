@@ -1,0 +1,40 @@
+app_base_dir: /data/apps/opt
+common_install_dir: '{{app_base_dir}}'
+common_run_user: root
+common_run_group: '{{common_run_user}}'
+common_run_user_system: yes
+common_base_name:
+
+common_packet:
+common_packet_creates:
+# tgz or jar
+common_packet_type: tgz
+common_base_dir: /data/apps/opt/{{common_base_name}}
+common_log_dir: /data/apps/log/{{common_base_name}}
+common_conf_dir: /data/apps/config/{{common_base_name}}
+common_var_dir: /data/apps/var/{{common_base_name}}
+common_data_dir: /data/apps/var/{{common_base_name}}
+common_child_conf_dir:
+common_bin_dir: '{{common_base_dir}}/bin'
+# 这个的作用是同一个服务启动多个时指定的名字，比如 common_base_name 为 redis是指软件名称，而 common_instance_name 可以叫做 redis_6379
+common_instance_name: '{{common_base_name}}'
+
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+common_boot_type: supervisor
+common_src_boot_file:
+common_port:  
+
+# copy to /etc/profile.d/ of env file 
+common_env_file:
+
+# type: list
+#common_other_dirs:
+common_conf_files:
+common_child_confs:
+common_bin_scripts:
+
+
+#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+#nginx_conf_dir: /data/apps/config/nginx
+#nginx_run_user: nginx

@@ -1,0 +1,24 @@
+
+common_run_user: '{{exporter_run_user}}'
+
+common_base_name: '{{exporter_base_name}}'
+common_instance_name: '{{exporter_instance_name}}'
+
+common_base_dir: '{{exporter_base_dir}}'
+common_log_dir: '{{exporter_log_dir}}'
+common_conf_dir: '{{exporter_conf_dir}}'
+common_var_dir:  '{{exporter_var_dir}}'
+common_data_dir: '{{exporter_data_dir}}'
+common_child_conf_dir: '{{exporter_child_conf_dir}}'
+
+common_packet: '{{exporter_packet}}'
+common_packet_creates: '{{exporter_packet_creates}}'
+common_packet_type: '{{exporter_packet_type}}'
+
+common_bin_scripts: '{{exporter_bin_scripts}}'
+common_child_confs: '{{exporter_child_confs}}'
+common_conf_files: '{{exporter_conf_files}}'
+common_env_file: '{{exporter_env_file}}'
+
+common_src_boot_file: '{{exporter_src_boot_file}}'
+common_boot_type: '{{exporter_boot_type}}'

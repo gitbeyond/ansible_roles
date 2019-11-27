@@ -1,0 +1,19 @@
+# editor: haifeng
+# 2019/11/25
+
+
+#- include: copy_common_conf.yml
+- import_tasks: copy_common_conf.yml
+  #tags:
+  #  - copy_common_conf
+
+- include_tasks: copy_common_child_conf.yml
+  #tags:
+  #  - copy_common_child_conf
+  when: common_child_confs is not none
+
+- include_tasks: copy_common_bin_scripts.yml
+  #tags:
+  #  - copy_common_bin_scripts
+  when: common_bin_scripts is not none
+

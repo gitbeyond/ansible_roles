@@ -1,0 +1,25 @@
+
+- name: copy common conf file
+  template: 
+    src: "{{item}}" 
+    dest: "{{common_conf_dir}}/"
+    #dest: "{{common_conf_dir}}/{{common_instance_name | default(item.split('.')[0])}}.{{item.split('.')[-1]}}" 
+    owner: "{{common_run_user}}" 
+    group: "{{common_run_group}}" 
+    mode: "0644"
+    backup: yes
+  with_items: '{{common_conf_files}}'
+  when: item is not none
+  #notify:
+  #  - supervisor_restarted
+  register: copy_conf_file_ret
+
+- name: copy common env file
+  template: 
+    src: '{{ common_env_file }}'
+    dest: '/etc/profile.d/{{common_base_name}}.sh'
+    owner: root
+    group: root 
+    mode: "0644"
+  when: common_env_file is not none
+
