@@ -1,0 +1,15 @@
+
+- name: install epel-release package
+  yum:
+    name: 
+      - epel-release
+    state: present
+    enablerepo: "base"
+
+- name: install lsyncd package
+  yum:
+    name: 
+      - lsyncd
+    state: present
+    enablerepo: "epel"
+

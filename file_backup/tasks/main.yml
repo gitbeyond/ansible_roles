@@ -1,0 +1,11 @@
+- import_tasks: copy_backup_script.yml
+  tags:
+    - copy_backup_script
+
+- import_tasks: add_backup_cron_job.yml
+  tags:
+    - add_backup_cron_job
+
+- import_tasks: add_key_to_backup_host.yml
+  tags:
+    - add_key_to_backup_host

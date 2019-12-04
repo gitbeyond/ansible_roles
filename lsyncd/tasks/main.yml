@@ -1,0 +1,22 @@
+- import_tasks: lsyncd_core_args.yml
+  tags:
+    - lsyncd_core_args
+
+- import_tasks: install_lsyncd.yml
+  tags:
+    - install_lsyncd
+
+- import_tasks: add_key_to_backup_host.yml
+  tags:
+    - add_key_to_backup_host
+
+- import_role:
+    name: common_copy_conf_file
+  tags:
+    - copy_lsyncd_conf
+
+- import_role:
+    name: common_boot_app
+  tags:
+    - lsyncd_boot
+

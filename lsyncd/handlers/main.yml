@@ -1,0 +1,29 @@
+- name: reload lsyncd
+  service: 
+    name: '{{ lsyncd_instance_name }}' 
+    state: reloaded
+  listen: common_reload_app_conf
+  when: ansible_service_mgr == 'upstart'
+
+- name: restart lsyncd
+  service: 
+    name: '{{ lsyncd_instance_name }}' 
+    state: restarted
+  listen: common_app_restarted
+  when: ansible_service_mgr == 'upstart'
+
+
+- name: reload lsyncd for systemd
+  systemd:
+    name: '{{ lsyncd_instance_name }}' 
+    state: reloaded
+  listen: common_reload_app_conf
+  when: ansible_service_mgr == 'systemd'
+   
+- name: restrt lsyncd for systemd
+  systemd:
+    name: '{{ lsyncd_instance_name }}' 
+    state: restarted
+  listen: common_app_restarted
+  when: ansible_service_mgr == 'systemd'
+

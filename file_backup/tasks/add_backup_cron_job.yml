@@ -1,0 +1,9 @@
+
+- name: set backup cron job
+  cron:
+    name: "file backup"
+    job: "/bin/bash {{backup_script_dir}}/backup_dir.sh &>> /tmp/.backup_dir.out"
+    day: "*"
+    hour: "{{backup_cron_hour}}"
+    minute: 00
+    backup: yes

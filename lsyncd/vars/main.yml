@@ -1,0 +1,6 @@
+common_conf_files: '{{lsyncd_conf_files}}'
+common_boot_type: '{{lsyncd_boot_type}}'
+
+common_conf_dir: '{{lsyncd_conf_dir}}'
+common_log_dir: '{{lsyncd_log_dir}}'
+common_instance_name: '{{lsyncd_instance_name}}'

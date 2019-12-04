@@ -1,0 +1,39 @@
+- name: create backup_script_dir
+  file: 
+    path: "{{backup_script_dir}}"
+    state: directory
+    owner: '{{backup_local_user}}'
+    group: '{{backup_local_user}}'
+    mode: "0755"
+
+- name: install backup depended package
+  yum: 
+    name:
+      - pigz
+    state: present
+    enablerepo: 'base,epel'
+
+- name: copy backup script
+  template: 
+    src: '{{item.src}}' 
+    dest: '{{item.dest}}' 
+    owner: '{{backup_local_user}}' 
+    group: '{{backup_local_user}}' 
+    mode: "{{item.mode}}" 
+    backup: yes
+  loop:
+    - src: backup_dir.sh 
+      dest: '{{ backup_script_dir }}/'
+      mode: "0600"
+    - src: send_mail.py
+      dest: '{{ backup_script_dir }}/'
+      mode: "0600"
+
+#- name: set mysql backup cron job
+#  cron:
+#    name: "mysql backup"
+#    job: "/bin/bash {{mysql_script_dir}}/mysql_backup.sh &>> /tmp/.mysql_backup.out"
+#    weekday: "{{mysql_backup_weekday}}"
+#    hour: "{{mysql_backup_hour}}"
+#    minute: 00
+#    backup: yes

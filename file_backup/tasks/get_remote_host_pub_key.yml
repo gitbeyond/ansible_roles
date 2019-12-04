@@ -1,0 +1,31 @@
+
+- name: generate backup_remote_user ssh key
+  user:
+    name: '{{backup_remote_user}}'
+    generate_ssh_key: true
+
+- name: get backup_remote_user home
+  shell: awk -F':' '/^{{backup_remote_user}}/{print $6}' /etc/passwd 
+  register: backup_remote_user_home
+
+- name: get remote ssh user pub key
+  shell: cat {{backup_remote_user_home.stdout}}/.ssh/id_rsa.pub
+  register: backup_remote_user_pub_key
+  when: backup_remote_user_home is success and backup_remote_user_home.stdout is not none
+
+- name: get backup_remote_host pub key file
+  shell: grep "^HostKey" sshd_config |grep ecdsa |head -n 1 |awk '{print $NF}'
+  args:
+    chdir: /etc/ssh
+  register: backup_host_pub_key_file
+
+- name: get backup_remote_host pub key
+  local_action: shell grep "^{{backup_remote_host}}" /root/.ssh/known_hosts 
+  register: backup_remote_host_pub_key
+#- name: get mysql_backup_remote_host public key
+#  shell: cat {{mysql_backup_host_pub_key_file.stdout |default('ssh_host_ecdsa_key.pub', true)}}.pub
+#  args:
+#    chdir: /etc/ssh
+#  register: mysql_backup_remote_host_pub_key
+
+
