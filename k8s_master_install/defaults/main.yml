@@ -1,9 +1,43 @@
+k8s_base_dir: /data/apps/opt/kubernetes
+k8s_conf_dir: /etc/kubernetes
+
+# cmd
+k8s_kubectl_cmd: '{{k8s_work_dir}}/kubectl'
+k8s_cfssl_cmd_path: '/usr/bin'
+# 这个变量是 k8s 加上 k8s 的版本指定的 如:/data/apps/opt/k8s_1.11.10, 暂时手动指定这个变量
+k8s_install_dir:
+
+
+k8s_master_packet:
 
 k8s_work_dir: /root/ningbo_bank/k8s
 k8s_cert_json_dir: certs_json
 k8s_cert_dir: ansible_k8s_certs
 
 k8s_run_user: kube
+
+# k8s cert conf vars
+k8s_cert_root_ca_cn: kubernetes
+k8s_cert_dashboard_ca_cn: dashboard
+k8s_cert_front_proxy_ca_cn: '{{k8s_cert_root_ca_cn}}'
+k8s_cert_front_proxy_client_ca_cn: 'front-proxy-client'
+k8s_cert_kube_apiserver_ca_cn: 'kube-apiserver'
+k8s_cert_kube_apiserver_kubelet_client_ca_cn: 'kube-apiserver-kubelet-client'
+k8s_cert_kube_controller_manager_ca_cn: 'system:kube-controller-manager'
+k8s_cert_kube_proxy_ca_cn: 'system:kube-proxy'
+k8s_cert_kubernetes_admin_ca_cn: 'kubernetes-admin'
+k8s_cert_kube_scheduler_ca_cn: 'system:kube-scheduler'
+k8s_cert_prometheus_adapter_ca_cn: 'serving'
+k8s_cert_c: "CN"
+k8s_cert_st: "BeiJing"
+k8s_cert_l: "Beijing"
+# geotmt.com or tmtgeo.com
+k8s_cert_o: "k8s"
+# tech. sa, dev
+k8s_cert_ou: "System"
+k8s_cert_conf_files: '{{q("fileglob", "templates/*.json")}}'
+k8s_cert_hosts:
+
 
 k8s_master_confs:
   - kube-apiserver

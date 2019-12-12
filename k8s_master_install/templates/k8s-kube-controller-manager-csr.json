@@ -1,0 +1,17 @@
+{
+  "CN": "{{k8s_cert_kube_controller_manager_ca_cn}}",
+  "hosts": [],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "{{k8s_cert_c}}",
+      "ST": "{{k8s_cert_st}}",
+      "L": "{{k8s_cert_l}}",
+      "O": "{{k8s_cert_o}}",
+      "OU": "{{k8s_cert_ou}}"
+    }
+  ]
+}

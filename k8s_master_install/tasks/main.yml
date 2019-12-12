@@ -1,23 +1,38 @@
 # edirtor: haifeng
 # 2017/01/12
 
-- include: generate_k8s_certs.yml
+- import_tasks: create_k8s_work_dir.yml
+  tags:
+    - create_k8s_work_dir
+
+- import_tasks: generate_k8s_cert_confs.yml
+  tags:
+    - generate_k8s_cert_confs
+
+- import_tasks: generate_k8s_certs.yml
   tags:
     - generate_k8s_certs
 
-- include: generate_k8s_kubeconfig.yml
+- import_tasks: generate_k8s_kubeconfig.yml
   tags:
     - generate_k8s_kubeconfig
 
-- include: install_k8s_master.yml
+- import_tasks: create_k8s_dir.yml
+  tags:
+    - create_k8s_dir
+
+- import_tasks: install_k8s_master.yml
   tags:
     - install_k8s_master
 
-- include: copy_k8s_master_conf.yml
+- import_tasks: copy_k8s_master_conf.yml
   tags:
     - copy_k8s_master_conf
 
-
-- include: copy_k8s_master_service_conf.yml
+- import_tasks: copy_k8s_master_service_conf.yml
   tags:
     - copy_k8s_master_service_conf
+
+- import_tasks: boot_k8s_master.yml
+  tags:
+    - boot_k8s_master

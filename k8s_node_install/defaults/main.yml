@@ -1,3 +1,19 @@
+k8s_base_dir: /data/apps/opt/kubernetes
+k8s_conf_dir: /etc/kubernetes
+
+# cmd
+k8s_kubectl_cmd: '{{k8s_work_dir}}/kubectl'
+k8s_cfssl_cmd_path: '/usr/bin'
+# # 这个变量是 k8s 加上 k8s 的版本指定的 如:/data/apps/opt/k8s_1.11.10, 暂时手动指定这个变量
+k8s_install_dir:
+
+# kubelet
+k8s_kubelet_root_dir: /data1/apps/data/kubelet
+
+
+k8s_node_packet:
+
+
 k8s_work_dir: /root/ningbo_bank/k8s
 k8s_cert_json_dir: certs_json
 k8s_cert_dir: ansible_k8s_certs
@@ -8,6 +24,9 @@ k8s_bootstrap_token: k8s-bootstrap-token
 k8s_run_user: kube
 
 
+# type: list
+k8s_node_confs:
+k8s_node_service_confs:
 k8s_node_certs:
   - src: k8s-root-ca.pem
     mode: "0644"

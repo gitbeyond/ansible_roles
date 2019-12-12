@@ -1,33 +1,25 @@
 # edirtor: haifeng
 # 2017/01/12
 
-- name: create k8s user
-  user: name={{k8s_run_user}} state=present
-
-- name: create k8s dir
-  file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
-  with_items:
-    - { path: "{{app_base_dir}}", owner: root, group: root, mode: "0755", state: directory }
-    - { path: "{{k8s_install_dir}}", owner: root, group: root, mode: "0755", state: directory }
-    - { path: "/data/apps/log/kube-audit", owner: '{{k8s_run_user}}', group: '{{k8s_run_user}}', mode: "0755", state: directory }
-    - { path: "/data/apps/log/kube-apiserver", owner: '{{k8s_run_user}}', group: '{{k8s_run_user}}', mode: "0755", state: directory }
-    - { path: "/data/apps/log/kube-controller-manager", owner: '{{k8s_run_user}}', group: '{{k8s_run_user}}', mode: "0755", state: directory }
-    - { path: "/data/apps/log/kube-scheduler", owner: '{{k8s_run_user}}', group: '{{k8s_run_user}}', mode: "0755", state: directory }
-    - { path: "/etc/kubernetes/ssl", owner: '{{k8s_run_user}}', group: '{{k8s_run_user}}', mode: "0755", state: directory }
-    - { path: "/usr/libexec/kubernetes", owner: '{{k8s_run_user}}', group: '{{k8s_run_user}}', mode: "0755", state: directory }
-
 - name: get k8s_master packet dir name
   local_action: shell tar tvf {{k8s_master_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
   register: k8s_master_dir_name
   run_once: true
 
 - name: cp and unarchive k8s_master to remote host
-  unarchive: src={{ item.src }} dest={{ item.dest }} owner={{ k8s_run_user }} group={{ k8s_run_user }} creates={{ item.creates }}
-  with_items:
+  unarchive: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
+    owner: '{{ k8s_run_user }}' 
+    group: '{{ k8s_run_user }}' 
+    creates: '{{ item.creates }}'
+  loop:
     - { src: '{{k8s_master_packet}}', dest: '{{ k8s_install_dir}}/', creates: '{{ k8s_install_dir }}/{{k8s_master_dir_name.stdout}}', mode: "0755" }
 
 - name: create k8s link dir
-  file: src={{ item.src }} dest={{item.dest}} state={{ item.state }}
+  file: 
+    src: '{{ item.src }}' 
+    dest: '{{item.dest}}' 
+    state: '{{ item.state }}'
   with_items:
     - { src: "{{k8s_install_dir}}/{{k8s_master_dir_name.stdout}}", dest: '{{k8s_base_dir}}', state: link}
-

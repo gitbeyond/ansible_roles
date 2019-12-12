@@ -2,18 +2,29 @@
 # 2017/01/12
 
 # 这个须在集群启动成功后才可执行
-- include: generate_k8s_tls_bootstrap.yml
+
+- import_tasks: generate_k8s_tls_bootstrap.yml
   tags:
     - generate_k8s_tls_bootstrap
 
-- include: install_k8s_node.yml
+- import_tasks: create_k8s_dir.yml
+  tags:
+    - create_k8s_dir
+
+- import_tasks: install_k8s_node.yml
   tags:
     - install_k8s_node
 
-- include: copy_k8s_node_conf.yml
+- import_tasks: copy_k8s_node_conf.yml
 
-- include: copy_k8s_node_service_conf.yml
+- import_tasks: copy_k8s_node_service_conf.yml
   tags:
     - copy_k8s_node_service_conf
 
+- import_tasks: create_bootstrap_token_on_k8s.yml
+  tags:
+    - create_bootstrap_token_on_k8s
 
+- import_tasks: boot_k8s_node.yml
+  tags:
+    - boot_k8s_node.yml

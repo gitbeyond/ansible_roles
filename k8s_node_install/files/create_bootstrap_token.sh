@@ -12,6 +12,11 @@ ${kube_cmd} --kubeconfig ${kube_config} -n kube-system create secret generic boo
         --from-literal usage-bootstrap-signing=true
 
 ${kube_cmd} --kubeconfig ${kube_config} \
-    create clusterrolebinding kubeadm:kubelet-bootstrap \
+    create clusterrolebinding kubelet-bootstrap \
     --clusterrole system:node-bootstrapper \
+    --user kubelet-bootstrap \
     --group system:bootstrappers
+#${kube_cmd} --kubeconfig ${kube_config} \
+#    create clusterrolebinding kubeadm:kubelet-bootstrap \
+#    --clusterrole system:node-bootstrapper \
+#    --group system:bootstrappers

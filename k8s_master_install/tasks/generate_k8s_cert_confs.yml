@@ -1,0 +1,9 @@
+
+- name: generate k8s cert confs
+  local_action:
+    module: template
+    src: '{{item}}'
+    dest: '{{k8s_work_dir}}/{{k8s_cert_json_dir}}'
+    backup: yes
+  loop: '{{k8s_cert_conf_files}}'
+  run_once: true

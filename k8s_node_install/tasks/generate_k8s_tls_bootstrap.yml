@@ -14,17 +14,10 @@
 
 
 - name: create k8s bootstrap kubeconfig
-  local_action: script generate_bootstrap_kubeconfig.sh {{k8s_work_conf_dir}}/bootstrap.kubeconfig kubernetes {{k8s_cert_dir}}/k8s-root-ca.pem {{k8s_master_ha_vip}} kubelet-bootstrap {{k8s_bootstrap_token.stdout}} {{k8s_work_dir}}/kubectl
+  local_action: script generate_bootstrap_kubeconfig.sh {{k8s_work_conf_dir}}/bootstrap.kubeconfig kubernetes {{k8s_cert_dir}}/k8s-root-ca.pem {{k8s_master_ha_vip}} kubelet-bootstrap {{k8s_bootstrap_token.stdout}} {{k8s_kubectl_cmd}}
   args:
     chdir: "{{k8s_work_dir}}"
     creates: "{{k8s_work_dir}}/{{k8s_work_conf_dir}}/bootstrap.kubeconfig"
   run_once: true
 
 
-- name: create k8s bootstrap token on k8s
-  local_action: script create_bootstrap_token.sh $(echo {{k8s_bootstrap_token.stdout}} | awk -F. '{print $1}') $(echo {{k8s_bootstrap_token.stdout}} | awk -F. '{print $2}') {{k8s_work_dir}}/kubectl admin.kubeconfig
-  args:
-    chdir: "{{k8s_work_dir}}/{{k8s_cert_dir}}"
-    creates: "{{k8s_work_dir}}/{{k8s_work_conf_dir}}/bootstrap.kubeconfig"
-  run_once: true
-  #ignore_errors: true

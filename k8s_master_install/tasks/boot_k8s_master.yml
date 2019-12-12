@@ -1,0 +1,13 @@
+- name: systemctl daemon-reload
+  systemd:
+    daemon_reload: yes
+
+- name: boot k8s master service
+  systemd:
+    name: '{{item}}'
+    state: started
+    enabled: yes
+  loop:
+    - kube-apiserver
+    - kube-scheduler
+    - kube-controller-manager

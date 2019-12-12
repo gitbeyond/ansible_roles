@@ -1,0 +1,40 @@
+{#
+  "hosts": [
+    "127.0.0.1",
+    "10.254.0.1",
+    "10.111.36.55",
+    "10.111.36.56",
+    "10.111.36.57",
+    "10.111.32.94",
+    "10.111.32.178",
+    "10.111.36.70",
+    "bj-k8s-master-55.tmtgeo.com",
+    "bj-k8s-master-56.tmtgeo.com",
+    "bj-k8s-master-57.tmtgeo.com",
+    "bj-k8s-node-84.tmtgeo.com",
+    "bj-k8s-node-178.tmtgeo.com",
+    "localhost",
+    "kubernetes",
+    "kubernetes.default",
+    "kubernetes.default.svc",
+    "kubernetes.default.svc.cluster",
+    "kubernetes.default.svc.cluster.local"
+#}
+{
+  "CN": "{{k8s_cert_kube_apiserver_ca_cn}}",
+  "hosts": {{k8s_cert_hosts | to_nice_json}}
+  ,
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "{{k8s_cert_c}}",
+      "ST": "{{k8s_cert_st}}",
+      "L": "{{k8s_cert_l}}",
+      "O": "{{k8s_cert_o}}",
+      "OU": "{{k8s_cert_ou}}"
+    }
+  ]
+}

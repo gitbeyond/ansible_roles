@@ -1,0 +1,6 @@
+- name: create ansible_k8s_certs dir
+  local_action:
+    module: file 
+    path: "{{k8s_work_dir}}/{{k8s_cert_dir}}" 
+    state: directory
+  run_once: true

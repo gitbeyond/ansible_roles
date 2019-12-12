@@ -1,0 +1,16 @@
+{
+  "CN": "{{k8s_cert_root_ca_cn}}",
+  "key": {
+    "algo": "rsa",
+    "size": 4096
+  },
+  "names": [
+    {
+      "C": "{{k8s_cert_c}}",
+      "ST": "{{k8s_cert_st}}",
+      "L": "{{k8s_cert_l}}",
+      "O": "{{k8s_cert_o}}",
+      "OU": "{{k8s_cert_ou}}"
+    }
+  ]
+}

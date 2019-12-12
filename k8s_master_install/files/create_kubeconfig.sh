@@ -1,4 +1,8 @@
 #!/bin/bash
+# editor: haifengsss@163.com
+# 2019/12/06
+# 用来生成 kubeconfig 的脚本
+# 可以生成 serviceAccount（比如 kubernetes 的 dashboard） 或者是 clusterRole 类型的 kubeconfig 
 
 cert_dir=./ansible_k8s_certs
 echo_black(){
