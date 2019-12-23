@@ -1,0 +1,35 @@
+{#
+  "hosts": [
+    "127.0.0.1",
+    "localhost",
+    "10.111.32.125",
+    "10.111.32.126",
+    "10.111.32.127",
+    "10.111.32.209",
+    "10.111.32.237",
+    "10.111.32.208",
+    "kvm1.test.com",
+    "kvm2.test.com",
+    "kvm3.test.com",
+    "kvm4.test.com",
+    "kvm5.test.com",
+    "kvm6.test.com"
+    ],
+#}
+{
+  "CN": "{{etcd_cert_server_ca_cn}}",
+  "hosts": {{etcd_cert_hosts | to_nice_json}},
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "{{etcd_cert_c}}",
+      "ST": "{{etcd_cert_st}}",
+      "L": "{{etcd_cert_l}}",
+      "O": "{{etcd_cert_o}}",
+      "OU": "{{etcd_cert_ou}}"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+- name: copy etcd backup script
+  template:
+    src: '{{etcd_backup_script}}'
+    dest: '{{script_deploy_dir}}'
+    owner: '{{etcd_run_user}}'
+    group: '{{etcd_run_user}}'
+    backup: yes
+
+- name: add etcd cron job
+  cron:
+    job: '/bin/bash {{script_deploy_dir}}/{{etcd_backup_script | basename}}'
+    name: 'etcd backup'
+    user: '{{etcd_run_user}}'
+    minute: '*/30'
+    backup: yes
+

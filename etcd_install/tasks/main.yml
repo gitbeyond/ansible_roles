@@ -1,17 +1,55 @@
+---
+- import_tasks: create_etcd_work_dir.yml
+  tags:
+    - create_etcd_work_dir
 
-- include: generate_certs.yml
+- import_tasks: generate_cert_confs.yml
+  tags:
+    - generate_cert_confs
+
+- import_tasks: generate_certs.yml
   tags:
     - generate_certs
-- include: install_etcd_for_binary.yml
+
+- import_tasks: create_etcd_user.yml
+  tags:
+    - create_etcd_user
+
+- import_tasks: create_etcd_dir.yml
+  tags:
+    - create_etcd_dir
+
+- include_tasks: install_etcd_for_binary.yml
   tags:
     - install_etcd_for_binary
-- include: copy_ssl_certs.yml
+  when: etcd_install_method == "local"
+
+- include_tasks: install_etcd_for_rpm.yml
+  tags:
+    - install_etcd_for_rpm
+  when: etcd_install_method == "rpm"
+
+- import_tasks: copy_etcd_conf.yml
+  tags:
+    - copy_etcd_conf
+
+- import_tasks: copy_ssl_certs.yml
   tags:
     - copy_ssl_certs
-- include: start_etcd.yml
+
+- import_tasks: start_etcd.yml
   tags:
     - start_etcd
 
-- include: set_etcdctl_env.yml
+- import_tasks: set_etcdctl_env.yml
   tags:
     - set_etcdctl_env
+
+- import_tasks: add_key_to_backup_host.yml
+  tags:
+    - add_key_to_backup_host
+
+- import_tasks: add_etcd_backup_task.yml
+  tags:
+    - add_etcd_backup_task
+

@@ -1,0 +1,37 @@
+
+- import_tasks: get_remote_host_pub_key.yml
+  tags:
+    - get_remote_host_pub_key
+  delegate_to: '{{backup_remote_host}}'
+  run_once: true
+  
+- name: generate backup_host_user ssh key
+  user:
+    name: '{{backup_local_user}}'
+    generate_ssh_key: true
+
+- name: get backup_host_user home
+  shell: awk -F':' '/^{{backup_local_user}}/{print $6}' /etc/passwd
+  register: backup_local_user_home
+ 
+- name: get backup_local_user ssh pub key
+  shell: cat {{backup_local_user_home.stdout}}/.ssh/id_rsa.pub
+  register: backup_local_user_pub_key
+
+- name: add backup pub key to backup_remote_host_pub_key host
+  lineinfile:
+    line: '{{hostvars[item].backup_local_user_pub_key.stdout}}'
+    path: "{{backup_remote_user_home.stdout}}/.ssh/authorized_keys"
+    create: yes
+    mode: "0600"
+  with_items: '{{ansible_play_hosts}}'
+  delegate_to: '{{backup_remote_host}}'
+  when: backup_remote_user_home is success and backup_remote_user_home.stdout is not none
+  run_once: true
+
+- name: add backup_remote_host pub key 
+  lineinfile:
+    line: "{{backup_remote_host}} {{backup_remote_host_pub_key.stdout}}"
+    path: "{{backup_local_user_home.stdout}}/.ssh/known_hosts"
+    create: yes
+    mode: "0644"

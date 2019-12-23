@@ -1,36 +1,44 @@
-- name: create ansible_etcd_certs dir
-  #local_action: file path="{{etcd_work_dir}}/ansible_etcd_certs" state=directory
-  local_action: file path="{{etcd_work_dir}}/{{etcd_cert_dir}}" state=directory
-  run_once: true
 
 - name: generate etcd-root-ca
-  local_action: shell /usr/bin/cfssl gencert -initca ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca
-  #shell: /usr/bin/cfssl gencert -initca ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca
+  local_action: shell {{etcd_cfssl_cmd_path}}/cfssl gencert -initca {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca
   args:
     chdir: "{{etcd_work_dir}}"
-    creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/etcd-root-ca.pem"
+    #creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/etcd-root-ca.pem"
+    creates: "{{etcd_cert_dir}}/etcd-root-ca.pem"
   run_once: true
-  #delegate_to: localhost
 
-- name: generate etcd-server-ca
-  local_action: shell /usr/bin/cfssl gencert -ca={{etcd_cert_dir}}/etcd-root-ca.pem -ca-key={{etcd_cert_dir}}/etcd-root-ca-key.pem -config=ca-config.json -profile=server server.json | cfssljson --bare {{etcd_cert_dir}}/etcd-server-ca
+- name: generate etcd certs
+  local_action: shell {{etcd_cfssl_cmd_path}}/cfssl gencert -ca={{etcd_cert_dir}}/etcd-root-ca.pem -ca-key={{etcd_cert_dir}}/etcd-root-ca-key.pem -config={{etcd_cert_json_dir}}/etcd-ca-config.json -profile={{item.split('-')[1]}} {{etcd_cert_json_dir}}/{{item}}-csr.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/{{item}}
   args:
     chdir: "{{etcd_work_dir}}"
-    creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/etcd-server-ca.pem"
+    #creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/{{item}}.pem"
+    creates: "{{etcd_cert_dir}}/{{item}}.pem"
+  loop:
+    - etcd-client-ca
+    - etcd-member-ca
+    - etcd-server-ca
   run_once: true
-  #delegate_to: localhost
-  
-- name: generate etcd-member-ca
-  local_action: shell /usr/bin/cfssl gencert -ca={{etcd_cert_dir}}/etcd-root-ca.pem -ca-key={{etcd_cert_dir}}/etcd-root-ca-key.pem -config=ca-config.json -profile=peer member.json | cfssljson --bare {{etcd_cert_dir}}/etcd-member-ca
-  args:
-    chdir: "{{etcd_work_dir}}"
-    creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/etcd-member-ca.pem"
-  run_once: true
-  #delegate_to: localhost
 
-- name: generate etcd-client-ca
-  local_action: shell /usr/bin/cfssl gencert -ca={{etcd_cert_dir}}/etcd-root-ca.pem -ca-key={{etcd_cert_dir}}/etcd-root-ca-key.pem -config=ca-config.json -profile=client client.json | cfssljson --bare {{etcd_cert_dir}}/etcd-client-ca
-  args:
-    chdir: "{{etcd_work_dir}}"
-    creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/etcd-client-ca.pem"
-  run_once: true
+
+#- name: generate etcd-server-ca
+#  local_action: shell {{etcd_cfssl_cmd_path}}/cfssl gencert -ca={{etcd_cert_dir}}/etcd-root-ca.pem -ca-key={{etcd_cert_dir}}/etcd-root-ca-key.pem -config=ca-config.json -profile=server server.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/etcd-server-ca
+#  args:
+#    chdir: "{{etcd_work_dir}}"
+#    creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/etcd-server-ca.pem"
+#  run_once: true
+#  #delegate_to: localhost
+#  
+#- name: generate etcd-member-ca
+#  local_action: shell {{etcd_cfssl_cmd_path}}/cfssl gencert -ca={{etcd_cert_dir}}/etcd-root-ca.pem -ca-key={{etcd_cert_dir}}/etcd-root-ca-key.pem -config=ca-config.json -profile=peer member.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/etcd-member-ca
+#  args:
+#    chdir: "{{etcd_work_dir}}"
+#    creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/etcd-member-ca.pem"
+#  run_once: true
+#  #delegate_to: localhost
+#
+#- name: generate etcd-client-ca
+#  local_action: shell {{etcd_cfssl_cmd_path}}/cfssl gencert -ca={{etcd_cert_dir}}/etcd-root-ca.pem -ca-key={{etcd_cert_dir}}/etcd-root-ca-key.pem -config=ca-config.json -profile=client client.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/etcd-client-ca
+#  args:
+#    chdir: "{{etcd_work_dir}}"
+#    creates: "{{etcd_work_dir}}/{{etcd_cert_dir}}/etcd-client-ca.pem"
+#  run_once: true

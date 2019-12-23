@@ -1,0 +1,19 @@
+{
+  "CN": "{{etcd_cert_client_ca_cn}}",
+  "hosts": [
+    ""
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "{{etcd_cert_c}}",
+      "ST": "{{etcd_cert_st}}",
+      "L": "{{etcd_cert_l}}",
+      "O": "{{etcd_cert_o}}",
+      "OU": "{{etcd_cert_ou}}"
+    }
+  ]
+}

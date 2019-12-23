@@ -1,0 +1,4 @@
+- name: create etcd user
+  user: 
+    name: '{{etcd_run_user}}' 
+    system: yes

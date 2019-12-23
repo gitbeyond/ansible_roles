@@ -1,16 +1,75 @@
 # global 
 app_base_dir: /data/apps/opt
+script_deploy_dir: '{{app_base_dir}}/script'
+
+etcd_cfssl_cmd_path: '/usr/bin'
+
 
 # etcd
 etcd_work_dir: /root/ningbo_bank/etcd
 etcd_local_conf_dir: "{{etcd_work_dir}}/ansible_etcd_confs"
 etcd_cert_dir: ansible_etcd_certs
+etcd_cert_json_dir: ansible_certs_json
+
+etcd_src_conf: 'etcd.conf'
 
 etcd_run_user: etcd
-etcd_packet: "{{etcd_work_dir}}/etcd-v3.2.26-linux-amd64.tar.gz"
+etcd_packet: "{{packet_base_dir}}/etcd-v3.2.26-linux-amd64.tar.gz"
 # etcd dir
 etcd_base_dir: /data/apps/opt/etcd
 etcd_data_dir: /data/apps/data/etcd
 etcd_conf_dir: /data/apps/config/etcd
 etcd_var_dir: /data/apps/var/etcd
 etcd_log_dir: /data/apps/log/etcd
+
+etcd_backup_dir: /data/apps/data/backup/etcd
+etcd_backup_script: 'etcd_backup.sh'
+# local, rpm, net
+etcd_install_method: local
+# etcd ca
+etcd_cert_c: "CN"
+etcd_cert_st: "BeiJing"
+etcd_cert_l: "Beijing"
+# geotmt.com or tmtgeo.com
+etcd_cert_o: "geotmt"
+# tech. sa, dev
+etcd_cert_ou: "sa"
+etcd_cert_root_ca_cn: 'etcd-root-ca'
+etcd_cert_server_ca_cn: 'etcd-server-ca'
+etcd_cert_member_ca_cn: '{{etcd_cert_server_ca_cn}}'
+etcd_cert_client_ca_cn: 'etcd-client-ca'
+etcd_cert_conf_files: '{{q("fileglob", "templates/*.json")}}'
+etcd_certs: '{{q("fileglob", etcd_work_dir+"/"+etcd_cert_dir+"/*.pem")}}'
+etcd_cert_hosts:
+
+
+# etcd backup
+
+#backup_remote_host: 
+#backup_remote_user:
+#backup_remote_dir:
+backup_local_user: '{{etcd_run_user}}'
+
+# per host needed define variables
+#etcd_name
+
+# etcd.conf
+etcd_initial_cluster_token: 'my-etcd-cluster'
+etcd_client_endpoints: '{% if ansible_play_name in  group_names -%}
+  "{%for host in ansible_play_hosts -%}
+      {% if host == ansible_play_hosts[-1] -%}
+          https://{{host}}:2379"
+      {% else -%}
+          https://{{host}}:2379,
+      {%- endif %}
+  {%- endfor%}
+{%- endif%}'
+etcd_member_endpoints: '{% if ansible_play_name in  group_names -%}
+  "{%for host in ansible_play_hosts -%}
+      {% if host == ansible_play_hosts[-1] -%}
+          {{hostvars[host].etcd_name}}=https://{{host}}:2380"
+      {% else -%}
+          {{hostvars[host].etcd_name}}=https://{{host}}:2380,
+      {%- endif %}
+  {%- endfor%}
+{%- endif%}'

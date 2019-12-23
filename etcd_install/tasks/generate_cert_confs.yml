@@ -1,0 +1,9 @@
+
+- name: generate etcd cert confs
+  local_action:
+    module: template
+    src: '{{item}}'
+    dest: '{{etcd_work_dir}}/{{etcd_cert_json_dir}}'
+    backup: yes
+  loop: '{{etcd_cert_conf_files}}'
+  run_once: true

@@ -1,13 +1,5 @@
 {
-  "insecure-registries": [
-{%for reg in docker_insecure_registry %}
-{%if reg == docker_insecure_registry[0]%}
-    "{{reg}}",
-  {%else%}
-  "{{reg}}"
-{%endif%}
-{%endfor%}
-  ],
+  "insecure-registries": {{docker_insecure_registry | to_nice_json}},
   "hosts": [
     "unix:///var/run/docker.sock"
   ],

@@ -1,0 +1,11 @@
+- name: create ansible_etcd_certs dir
+  local_action: 
+    module: file 
+    path: "{{item}}" 
+    state: directory
+  loop:
+    - '{{etcd_local_conf_dir}}'
+    - '{{etcd_work_dir}}/{{etcd_cert_dir}}'
+    - '{{etcd_work_dir}}/{{etcd_cert_json_dir}}'
+  run_once: true
+

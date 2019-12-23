@@ -1,7 +1,11 @@
 
 - name: copy etcd ssl file
-  copy: src={{ item }} dest={{ etcd_conf_dir }}/ssl owner={{ etcd_run_user }} group={{ etcd_run_user }} mode=0644 backup=yes
-  #with_items:
-  #  - { src: '{{etcd_work_dir}}/{{}}', dest: '{{ etcd_conf_dir }}/', owner: '{{etcd_run_user}}', group: '{{etcd_run_user}}', mode: "0644"} 
-  with_fileglob: '{{etcd_work_dir}}/{{etcd_cert_dir}}/*.pem'
+  copy: 
+    src: '{{ item }}' 
+    dest: '{{ etcd_conf_dir }}/ssl' 
+    owner: '{{ etcd_run_user }}' 
+    group: '{{ etcd_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{etcd_certs}}'
 
