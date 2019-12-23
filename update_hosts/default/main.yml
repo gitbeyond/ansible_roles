@@ -1,3 +1,0 @@
-hosts_file: 
-hosts_dest_dir: /tmp
-hosts_dest_name: '{{hosts_file.split("/")[-1]}}'

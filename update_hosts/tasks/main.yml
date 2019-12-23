@@ -1,6 +1,7 @@
 #- name: backup old hosts file
 #  shell: test -e /etc/hosts_v0 || /bin/cp /etc/hosts /etc/hosts_v0
-- include: update_hostname.yml
+
+- import_tasks: update_hostname.yml
   tags:
     - update_hostname
   when: hosts_file is defined and hosts_file is not none

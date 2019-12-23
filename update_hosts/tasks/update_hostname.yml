@@ -1,11 +1,19 @@
 #- name: backup old hosts file
 #  shell: test -e /etc/hosts_v0 || /bin/cp /etc/hosts /etc/hosts_v0
+
 - name: copy hosts file
-  copy: src='{{hosts_file}}' dest='{{hosts_dest_dir}}/{{hosts_dest_name}}' owner=root group=root mode=0644 backup=yes
+  copy: 
+    src: '{{hosts_file}}' 
+    dest: '{{hosts_dest_dir}}/{{hosts_dest_name}}' 
+    owner: root 
+    group: root
+    mode: "0644" 
+    backup: yes
 # 修改主机名
 - name: get hostname
   shell: grep '{{ ansible_default_ipv4.address }}' {{hosts_dest_dir}}/{{hosts_dest_name}} | awk "{print \$2}"
   register: hname
+
 - name: modify hostname
   hostname: 
     name: '{{ hname.stdout }}'
@@ -14,4 +22,5 @@
   file:
     path: '{{hosts_dest_dir}}/{{hosts_dest_name}}'
     state: absent
+  when: hosts_dest_dir != '/etc' and hosts_dest_name != 'hosts'
 
