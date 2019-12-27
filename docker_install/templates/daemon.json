@@ -1,10 +1,9 @@
 {
   "insecure-registries": [
 {%for reg in docker_insecure_registry %}
-{%if reg == docker_insecure_registry[0]%}
-    "{{reg}}",
-  {%else%}
-  "{{reg}}"
+    "{{reg}}"
+{%if reg != docker_insecure_registry[-1]%}
+   {{','-}}
 {%endif%}
 {%endfor%}
   ],

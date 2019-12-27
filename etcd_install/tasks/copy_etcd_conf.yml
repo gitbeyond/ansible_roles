@@ -8,6 +8,6 @@
     mode: '{{item.mode}}' 
     backup: yes
   with_items:
-    - {src: etcd.sh, dest: /etc/profile.d/, owner: root, group: root, mode: "0644"}
-    - {src: etcd.systemd, dest: /usr/lib/systemd/system/etcd.service, owner: root, group: root, mode: "0644"}
-    - {src: '{{etcd_local_conf_dir}}/etcd.conf', dest: '{{etcd_conf_dir}}', owner: '{{etcd_run_user}}', group: '{{etcd_run_user}}', mode: "0644"}
+    - {src: '{{etcd_env_file}}', dest: /etc/profile.d/, owner: root, group: root, mode: "0644"}
+    - {src: '{{etcd_src_service_conf}}', dest: /usr/lib/systemd/system/etcd.service, owner: root, group: root, mode: "0644"}
+    - {src: '{{etcd_src_conf}}', dest: '{{etcd_conf_dir}}', owner: '{{etcd_run_user}}', group: '{{etcd_run_user}}', mode: "0644"}

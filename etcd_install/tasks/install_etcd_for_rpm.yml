@@ -1,7 +1,4 @@
 
-
-
-
 - name: copy etcd rpm packet
   copy: 
     src: '{{etcd_packet}}'
@@ -10,6 +7,6 @@
 - name: install etcd
   yum: 
     name:
-      - '{{etcd_packet}}'
-    state: latest
+      - '/tmp/{{etcd_packet| basename}}'
+    state: present
 

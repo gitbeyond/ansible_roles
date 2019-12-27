@@ -3,7 +3,10 @@
   lineinfile: 
     line: '{{item.line}}' 
     path: '{{item.path}}' 
+    regexp: '{{item.regexp}}'
     backup: yes
   with_items:
     - line: "alias etcdctl='etcdctl --cacert={{etcd_conf_dir}}/ssl/etcd-root-ca.pem --cert={{etcd_conf_dir}}/ssl/etcd-client-ca.pem --key={{etcd_conf_dir}}/ssl/etcd-client-ca-key.pem --endpoints={{etcd_client_endpoints}}'"
       path: /root/.bashrc
+      regexp: 'alias etcdctl=.*'
+      

@@ -46,17 +46,6 @@ cp_tar_file_to_remote(){
     fi
 }
 
-keep_num_delete() {
-    backup_dir=$(test_dir_or_pdir ${backup_dir})
-
-    if [ -n "$2" ];then
-        local keep_day=$2
-    else
-        local keep_day=10
-    fi
-    old_file=$(ls -cr1 ${backup_dir} |head -n -10)
-    echo "rm -rf ${old_file}"
-}
 remote_delete_oldfile() {
     local project_remote_dir=$1
     local backup_num=10
@@ -102,7 +91,9 @@ keep_num_delete() {
     fi
     old_file=$(ls -cr1 ${backup_dir} |head -n -${keep_day})
     echo "rm -rf ${old_file}"
+    cd ${backup_dir}
     rm -rf ${old_file}
+    cd -
 }
 
 

@@ -6,12 +6,16 @@ etcd_cfssl_cmd_path: '/usr/bin'
 
 
 # etcd
-etcd_work_dir: /root/ningbo_bank/etcd
+etcd_work_dir: /root/k8s/etcd
 etcd_local_conf_dir: "{{etcd_work_dir}}/ansible_etcd_confs"
 etcd_cert_dir: ansible_etcd_certs
 etcd_cert_json_dir: ansible_certs_json
 
+#etcd_src_conf: '{{etcd_local_conf_dir}}/etcd.conf'
 etcd_src_conf: 'etcd.conf'
+#etcd_src_service_conf: '{{etcd_local_conf_dir}}/etcd.service'
+etcd_src_service_conf: 'etcd.service'
+etcd_env_file: 'etcd.sh'
 
 etcd_run_user: etcd
 etcd_packet: "{{packet_base_dir}}/etcd-v3.2.26-linux-amd64.tar.gz"
@@ -55,21 +59,15 @@ backup_local_user: '{{etcd_run_user}}'
 
 # etcd.conf
 etcd_initial_cluster_token: 'my-etcd-cluster'
-etcd_client_endpoints: '{% if ansible_play_name in  group_names -%}
-  "{%for host in ansible_play_hosts -%}
-      {% if host == ansible_play_hosts[-1] -%}
-          https://{{host}}:2379"
-      {% else -%}
-          https://{{host}}:2379,
-      {%- endif %}
-  {%- endfor%}
-{%- endif%}'
-etcd_member_endpoints: '{% if ansible_play_name in  group_names -%}
-  "{%for host in ansible_play_hosts -%}
-      {% if host == ansible_play_hosts[-1] -%}
-          {{hostvars[host].etcd_name}}=https://{{host}}:2380"
-      {% else -%}
-          {{hostvars[host].etcd_name}}=https://{{host}}:2380,
-      {%- endif %}
-  {%- endfor%}
-{%- endif%}'
+etcd_client_endpoints: "{%for host in ansible_play_hosts -%}
+    {{'https://'~host~':2379'-}}
+    {% if host != ansible_play_hosts[-1] -%}
+        {{','-}}
+    {%- endif %}
+{%- endfor%}"
+etcd_member_endpoints: "{%for host in ansible_play_hosts -%}
+    {{hostvars[host].etcd_name~'=https://'~host~':2380'-}}
+    {% if host != ansible_play_hosts[-1] -%}
+        {{','-}}
+    {%- endif %}
+{%- endfor%}"

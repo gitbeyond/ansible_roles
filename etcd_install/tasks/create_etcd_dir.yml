@@ -15,3 +15,4 @@
     - { path: "{{etcd_conf_dir}}", owner: '{{etcd_run_user}}', group: '{{etcd_run_user}}', mode: "0755" }
     - { path: "{{etcd_conf_dir}}/ssl", owner: '{{etcd_run_user}}', group: '{{etcd_run_user}}', mode: "0755"}
     - { path: "{{script_deploy_dir}}", owner: 'root', group: 'root', mode: "0755"}
+    - { path: "{{etcd_backup_dir}}", owner: 'root', group: 'root', mode: "0755"}

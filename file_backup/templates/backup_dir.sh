@@ -110,6 +110,7 @@ find_f_delete() {
 }
 
 keep_num_delete() {
+    local backup_dir=$1
     backup_dir=$(test_dir_or_pdir ${backup_dir})
     
     if [ -n "$2" ];then
@@ -119,6 +120,10 @@ keep_num_delete() {
     fi
     old_file=$(ls -cr1 ${backup_dir} |head -n -10)
     echo "rm -rf ${old_file}"
+    cd ${backup_dir}
+    rm -rf ${old_file}
+    cd -
+
 }
 
 remote_delete_oldfile() {
