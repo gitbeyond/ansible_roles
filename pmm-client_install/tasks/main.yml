@@ -26,6 +26,9 @@
   tags:
     - pmm_add_mysql
 
+- import_tasks: copy_pmm_conf.yml
+  tags:
+    - copy_pmm_conf
 
 
 ##- include: install_pmm_client_for_jar.yml

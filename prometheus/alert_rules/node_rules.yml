@@ -19,23 +19,24 @@ groups:
       summary: "{{$labels.instance}} CPU usage rate over 60%"
       description: "{{$labels.instance }} CPU usage rate over 60%, (current_value:{{$value}}%)"
   
-  - alert: node memory usage over 80%
-    expr: 100 -(node_memory_MemTotal_bytes -node_memory_MemFree_bytes+node_memory_Buffers_bytes+node_memory_Cached_bytes ) / node_memory_MemTotal_bytes * 100> 80
+  - alert: node memory usage over 90%
+    expr: 100 -(node_memory_MemTotal_bytes -node_memory_MemFree_bytes- node_memory_Buffers_bytes-node_memory_Cached_bytes ) / node_memory_MemTotal_bytes * 100> 90
     for: 1m
     labels:
       severity: High
     annotations:
-      summary: "{{$labels.instance}} memory usage over 80% "
-      description: "{{$labels.mountpoint }}  memory usage over 80%, (current_value:{{$value}}%)"
+      summary: "{{$labels.instance}} memory usage over 90% "
+      description: "{{$labels.mountpoint }}  memory usage over 90%, (current_value:{{$value}}%)"
 
-  - alert: node io use time over 60%
-    expr: 100-(avg(irate(node_disk_io_time_seconds_total[1m])) by(instance)* 100) < 60
+  - alert: node io use time over 90%
+    #expr: 100-(avg(irate(node_disk_io_time_seconds_total[1m])) by(instance)* 100) < 60
+    expr: (avg(irate(node_disk_io_time_seconds_total[1m])) by(instance)* 100) > 90
     for: 1m
     labels:
       severity: High
     annotations:
-      summary: "{{$labels.instance}} io use time over 60%"
-      description: "{{$labels.instance }} io use time over 60%,(current_value:{{$value}})"
+      summary: "{{$labels.instance}} io use time over 90%"
+      description: "{{$labels.instance }} io use time over 90%,(current_value:{{$value}})"
  
   - alert: node network received bytes over 100M
     expr: ((sum(rate (node_network_receive_bytes_total{device!~'tap.*|veth.*|br.*|docker.*|virbr*|lo*'}[5m])) by (instance)) / 100) > 102400

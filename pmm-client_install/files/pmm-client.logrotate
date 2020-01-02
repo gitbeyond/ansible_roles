@@ -1,0 +1,15 @@
+/var/log/pmm-*.log {
+    notifempty
+    daily
+    rotate 3
+    missingok
+    size 100M
+    compress
+    postrotate
+        ls /var/log/pmm-*.log |while read line; do
+            if [ -e ${line} ];then
+                echo "$(date) logrotated." > ${line}
+            fi
+        done
+    endscript
+}

@@ -40,14 +40,6 @@
 - name: cp and unarchive mysql_datadir_tarball to remote host
   unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ mysql_run_user }}' group={{ mysql_run_user }} creates={{ item.creates }}
   with_items:
-    - { src: '{{ mysql_data_packet }}', dest: '{{ mysql_data_dir}}/', creates: '{{ mysql_data_dir }}/{{mysql_app_name}}' }
+    - { src: '{{ mysql_data_packet }}', dest: '{{ mysql_data_dir}}/', creates: '{{ mysql_data_dir }}/mysql' }
 
   #ignore_errors: True
-- name: copy conf file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
-  with_items:
-    - { src: 'my.cnf', dest: '{{ mysql_conf_dir }}/', owner: '{{mysql_run_user}}', group: '{{mysql_run_user}}', mode: "0644"}
-    - { src: 'mysql.sh', dest: '/etc/profile.d/', owner: root, group: root, mode: "0644" }
-    - { src: 'mysql.logrotate', dest: '/etc/logrotate.d/mysql_for_ansible', owner: root, group: root, mode: "0644" }
-  tags:
-   - modify_mysql_conf

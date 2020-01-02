@@ -19,8 +19,8 @@ mha_client_hosts: "{{ansible_play_hosts}}"
 # supervisor
 supervisor_conf_dir:
 
-mysql_pass:
-mysql_user:
+mysql_login_pass:
+mysql_login_user:
 mysql_sock:
 mysql_vip:
 mysql_mha_user:

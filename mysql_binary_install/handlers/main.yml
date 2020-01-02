@@ -1,5 +1,7 @@
 - name: restart mysql service
-  service: name=mysql state=restarted
+  service: 
+    name: '{{mysql_app_name}}' 
+    state: restarted
 
 - name: add to system service list
   shell: '{{ item }}'

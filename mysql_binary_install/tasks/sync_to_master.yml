@@ -3,7 +3,16 @@
 #  with_items:
 #  - { src: 'my_client.cnf', dest: /root/.my.cnf, owner: root, group: root, mode: '0600'}
 - name: begin replication thread
-  mysql_replication: login_user={{mysql_login_user}} login_unix_socket={{mysql_sock}} login_password={{mysql_login_pass}} master_host={{mysql_master_server}} master_user={{mysql_master_sync_user}} master_password={{mysql_master_sync_pass}} master_auto_position=1 mode={{ item }}
+  mysql_replication: 
+    login_user: '{{mysql_login_user}}' 
+    login_unix_socket: '{{mysql_sock}}' 
+    login_password: '{{mysql_login_pass}}' 
+    master_host: '{{mysql_master_server}}' 
+    master_port: '{{mysql_master_port}}'
+    master_user: '{{mysql_master_sync_user}}' 
+    master_password: '{{mysql_master_sync_pass}}' 
+    master_auto_position: 1 
+    mode: '{{ item }}'
   with_items:
     - stopslave
     - changemaster

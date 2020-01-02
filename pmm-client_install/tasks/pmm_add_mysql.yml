@@ -4,9 +4,11 @@
 #- name: debug pmm script
 #  debug:
 #    msg: "pmm_add_mysql.sh {{mysql_pmm_user}} {{mysql_pmm_pass}} {{mysql_sock}} {{mysql_pmm_server}} {{pmm_info_update}}"
+
+#- name: pmm-admin add mysql
+#  script: pmm_add_mysql.sh {{mysql_pmm_user}} {{mysql_pmm_pass}} {{mysql_sock}} {{mysql_pmm_server}} {{mysql_app_name}}
+#  when: pmm_info_update == false
+
 - name: pmm-admin add mysql
-  script: pmm_add_mysql.sh {{mysql_pmm_user}} {{mysql_pmm_pass}} {{mysql_sock}} {{mysql_pmm_server}}
-  when: pmm_info_update == false
-- name: pmm-admin update mysql info
-  script: pmm_add_mysql.sh {{mysql_pmm_user}} {{mysql_pmm_pass}} {{mysql_sock}} {{mysql_pmm_server}} {{pmm_info_update}}
-  when: pmm_info_update == true
+  script: pmm_add_mysql.sh {{mysql_pmm_user}} {{mysql_pmm_pass}} {{mysql_sock}} {{mysql_pmm_server}} {{pmm_info_update}} {{mysql_app_name}}
+  #when: pmm_info_update == true
