@@ -19,7 +19,7 @@ pmm_client_boot_file:
 # group_vars
 mysql_pmm_user: pmm
 mysql_pmm_pass:
-mysql_pmm_priv: '*.*:REPLICATION CLIENT,PROCESS,SUPER'
+mysql_pmm_priv: '*.*:REPLICATION CLIENT,PROCESS,SUPER,RELOAD/performance_schema.*:SELECT'
 mysql_pmm_server:
 pmm_info_update: false
 #mysql_app_name:
