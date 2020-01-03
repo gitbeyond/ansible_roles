@@ -1,5 +1,6 @@
 /var/log/pmm-*.log {
     notifempty
+    copytruncate
     daily
     rotate 3
     missingok

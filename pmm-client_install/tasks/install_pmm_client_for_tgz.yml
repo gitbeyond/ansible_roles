@@ -54,3 +54,9 @@
   args:
     chdir: '{{pmm_client_base_dir}}'
   when: pmm_client_old_ver is success and pmm_client_current_ver.stdout != pmm_client_old_ver.stdout
+
+- name: create textfile-collector link
+  file:
+    src: textfile_collector
+    dest: /usr/local/percona/pmm-client/textfile-collector
+    state: link
