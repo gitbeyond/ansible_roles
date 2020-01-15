@@ -1,8 +1,8 @@
 - name: create mysql pmm user
   mysql_user: 
-    login_user: "{{mysql_user}}" 
+    login_user: "{{mysql_login_user}}" 
     login_unix_socket: "{{mysql_sock}}" 
-    login_password: "{{mysql_pass}}"
+    login_password: "{{mysql_login_pass}}"
     name: "{{mysql_pmm_user}}" 
     password: "{{ mysql_pmm_pass }}" 
     host: localhost 

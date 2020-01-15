@@ -1,8 +1,8 @@
 - name: create mysql mha user
   mysql_user: 
-    login_user: "{{mysql_user}}" 
+    login_user: "{{mysql_login_user}}" 
     login_unix_socket: "{{mysql_sock}}" 
-    login_password: "{{mysql_pass}}" 
+    login_password: "{{mysql_login_pass}}" 
     name: "{{mysql_mha_user}}" 
     password: "{{ mysql_mha_pass }}" 
     host: "{{mha_manager_host}}"

@@ -18,7 +18,8 @@
     - {src: '{{ PACKET_NAME.stdout }}', dest: '{{project_install_dir}}/', owner: '{{project_run_user}}', 
        group: '{{project_run_group}}', mode: "0755" }
        #group: '{{project_run_group}}', mode: "0755", creates: '{{project_install_dir}}/{{packet_dir_name.stdout}}' }
-  register: unarchive_result
+  #register: unarchive_result
+  register: cp_result
 
 - name: chmod project dir
   shell: "{{item}}"

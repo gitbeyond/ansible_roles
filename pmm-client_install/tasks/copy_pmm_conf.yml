@@ -1,0 +1,15 @@
+
+- name: cp pmm_client logrotate conf
+  copy: 
+    src: '{{item.src}}' 
+    dest: '{{item.dest}}'
+    owner: '{{item.owner}}' 
+    group: '{{item.group}}' 
+    mode: '{{item.mode}}'
+  with_items:
+    - src: 'pmm-client.logrotate'
+      dest: '/etc/logrotate.d/pmm-client'
+      owner: 'root' 
+      group: 'root'
+      mode: "0644" 
+
