@@ -1,0 +1,34 @@
+{#
+  "hosts": [
+    "127.0.0.1",
+    "localhost",
+    "10.111.36.55",
+    "10.111.36.56",
+    "10.111.36.57",
+    "10.111.32.94",
+    "10.111.32.178",
+    "10.111.36.70",
+    "bj-mongo-master-55.tmtgeo.com",
+    "bj-mongo-master-56.tmtgeo.com",
+    "bj-mongo-master-57.tmtgeo.com",
+    "bj-mongo-node-84.tmtgeo.com",
+    "bj-mongo-node-178.tmtgeo.com",
+#}
+{
+  "CN": "{{hostvars[item].ansible_fqdn}}",
+  "hosts": {{mongo_cert_hosts | flatten | to_nice_json}}
+  ,
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "{{mongo_cert_c}}",
+      "ST": "{{mongo_cert_st}}",
+      "L": "{{mongo_cert_l}}",
+      "O": "{{mongo_cert_o}}",
+      "OU": "{{mongo_cert_ou}}"
+    }
+  ]
+}

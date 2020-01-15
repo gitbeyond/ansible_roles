@@ -23,7 +23,7 @@ k8s_bootstrap_token: k8s-bootstrap-token
 
 k8s_run_user: kube
 
-
+k8s_sysctl_file: /etc/sysctl.d/36-kube-proxy.conf
 # type: list
 k8s_node_confs:
 k8s_node_service_confs:

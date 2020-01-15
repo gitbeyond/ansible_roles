@@ -1,0 +1,17 @@
+{
+  "CN": "{{mongo_cert_client_ca_cn}}",
+  "hosts": [],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "{{mongo_cert_c}}",
+      "ST": "{{mongo_cert_st}}",
+      "L": "{{mongo_cert_l}}",
+      "O": "{{mongo_cert_o}}",
+      "OU": "{{mongo_cert_ou}}"
+    }
+  ]
+}

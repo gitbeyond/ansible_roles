@@ -1,0 +1,27 @@
+- name: create ansible_mongo_certs dir
+  local_action:
+    module: file
+    path: "{{item}}"
+    state: directory
+  loop:
+    - '{{mongo_work_dir}}/{{mongo_cert_dir}}'
+    - '{{mongo_work_dir}}/{{mongo_cert_json_dir}}'
+  run_once: true
+
+- name: generate mongodb server cert confs
+  local_action:
+    module: template
+    src: 'mongo-member-csr.json'
+    dest: '{{mongo_work_dir}}/{{mongo_cert_json_dir}}/mongo-member-{{hostvars[item].ansible_fqdn}}-csr.json'
+    backup: yes
+  loop: '{{mongo_cluster_hosts}}'
+  run_once: true
+
+- name: generate mongodb cert confs
+  local_action:
+    module: template
+    src: '{{item}}'
+    dest: '{{mongo_work_dir}}/{{mongo_cert_json_dir}}'
+    backup: yes
+  loop: '{{mongo_cert_conf_files}}'
+  run_once: true

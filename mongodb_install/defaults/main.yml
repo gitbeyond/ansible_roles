@@ -1,0 +1,65 @@
+app_base_dir: /data/apps/opt
+mongo_install_dir: '{{app_base_dir}}'
+mongo_run_user: mongodb
+mongo_run_group: '{{mongo_run_user}}'
+mongo_run_user_system: yes
+mongo_base_name: mongodb
+
+mongo_packet:
+mongo_packet_creates: 'mongod'
+# tgz or jar
+mongo_packet_type: tgz
+mongo_base_dir: /data/apps/opt/{{mongo_base_name}}
+mongo_log_dir: /data/apps/log/{{mongo_base_name}}/{{mongo_instance_name}}
+mongo_conf_dir: /data/apps/config/{{mongo_base_name}}/{{mongo_instance_name}}
+mongo_var_dir: /data/apps/var/{{mongo_base_name}}/{{mongo_instance_name}}
+mongo_data_dir: /data/apps/data/{{mongo_base_name}}/{{mongo_instance_name}}
+mongo_bin_dir: '{{mongo_base_dir}}/bin'
+# 这个的作用是同一个服务启动多个时指定的名字，比如 mongo_base_name 为 redis是指软件名称，而 mongo_instance_name 可以叫做 redis_6379
+mongo_instance_name: '{{mongo_base_name}}'
+
+# self defined
+mongo_conf_ssl_dir: '{{mongo_conf_dir}}/ssl'
+mongo_conf_ssl_files:
+
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+mongo_boot_type: systemd
+mongo_src_boot_file:
+mongo_port: 9090
+
+# copy to /etc/profile.d/ of env file 
+mongo_env_file: 'mongodb.sh'
+
+# type: list
+#mongo_other_dirs:
+mongo_conf_files:
+
+# 
+mongo_work_dir: mongodb
+mongo_cert_json_dir: ansible_certs_json
+mongo_cert_dir: ansible_mongodb_certs
+mongo_cfssl_cmd_path: /usr/bin
+
+
+# cert
+mongo_cert_c: "CN"
+mongo_cert_st: "BeiJing"
+mongo_cert_l: "Beijing"
+mongo_cert_o: "mongo"
+mongo_cert_ou: "sa"
+mongo_cert_root_ca_cn: "mongodbroot"
+mongo_cert_hosts: 
+  - 127.0.0.1
+  - localhost
+  - '{{mongo_cluster_hosts}}'
+
+mongo_cert_client_ca_cn: "mongoclient"
+mongo_cert_server_ca_cn: "mongoserver"
+mongo_cluster_hosts: '{{ansible_play_hosts}}'
+mongo_cert_conf_files:
+  - mongo-root-ca-csr.json
+  - mongo-gencert.json  
+  - mongo-client-csr.json
+  - mongo-server-csr.json
+
+mongo_local_cert_conf_files: '{{q("fileglob", mongo_work_dir+"/"+mongo_cert_json_dir+"/*csr.json")}}'

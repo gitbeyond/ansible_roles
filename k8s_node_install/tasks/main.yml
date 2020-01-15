@@ -25,6 +25,14 @@
   tags:
     - create_bootstrap_token_on_k8s
 
+- import_tasks: k8s_load_modules.yml
+  tags:
+    - k8s_load_modules
+
+- import_tasks: k8s_install_dependence_packet.yml
+  tags:
+    - k8s_install_dependence_packet
+
 - import_tasks: boot_k8s_node.yml
   tags:
-    - boot_k8s_node.yml
+    - boot_k8s_node

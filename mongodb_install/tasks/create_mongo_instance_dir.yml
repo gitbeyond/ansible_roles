@@ -1,0 +1,14 @@
+- name: create mongodb instance dir
+  local_action:
+    module: file
+    path: "{{item}}"
+    state: directory
+    owner: '{{mongo_run_user}}'
+    group: '{{mongo_run_group}}'
+  loop:
+    #- '{{mongo_log_dir}}/{{mongo_instance_name}}'
+    #- '{{mongo_conf_dir}}/{{mongo_instance_name}}'
+    #- '{{mongo_data_dir}}/{{mongo_instance_name}}'
+    #- '{{mongo_var_dir}}/{{mongo_instance_name}}'
+    - '{{mongo_conf_ssl_dir}}'
+

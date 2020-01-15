@@ -1,0 +1,16 @@
+- name: generate mongodb-root-ca
+  local_action: shell {{mongo_cfssl_cmd_path}}/cfssl gencert -initca {{mongo_cert_json_dir}}/mongo-root-ca-csr.json | {{mongo_cfssl_cmd_path}}/cfssljson --bare {{mongo_cert_dir}}/mongo-root-ca
+  args:
+    chdir: "{{mongo_work_dir}}"
+    #creates: "{{mongo_work_dir}}/{{mongo_cert_dir}}/mongo-root-ca.pem"
+    creates: "{{mongo_cert_dir}}/mongo-root-ca.pem"
+  run_once: true
+
+- name: generate server and client cert
+  local_action: shell {{mongo_cfssl_cmd_path}}/cfssl gencert -ca={{mongo_cert_dir}}/mongo-root-ca.pem -ca-key={{mongo_cert_dir}}/mongo-root-ca-key.pem -config={{mongo_cert_json_dir}}/mongo-gencert.json -profile=mongodb {{mongo_cert_json_dir}}/{{item |basename}} | {{mongo_cfssl_cmd_path}}/cfssljson --bare {{mongo_cert_dir}}/{{item.replace('-csr.json', '') | basename}}
+  args:
+    chdir: "{{mongo_work_dir}}"
+    #creates: "{{mongo_work_dir}}/{{mongo_cert_dir}}/{{item.replace('-csr.json', '') | basename}}.pem"
+    creates: "{{mongo_cert_dir}}/{{item.replace('-csr.json', '') | basename}}.pem"
+  loop: '{{mongo_local_cert_conf_files}}'
+  run_once: true

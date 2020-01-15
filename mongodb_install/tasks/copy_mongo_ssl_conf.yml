@@ -1,0 +1,11 @@
+
+- name: copy mongod ssl conf file
+  template:
+    src: "{{ item }}" 
+    dest: "{{ mongod_conf_ssl_dir }}" 
+    owner: "{{ mongo_run_user }}" 
+    group: "{{ mongo_run_user }}" 
+    mode: "0600" 
+    backup: yes
+  loop: '{{mongod_conf_ssl_files}}'
+  when: item is not none

@@ -12,6 +12,7 @@ k8s_master_packet:
 
 k8s_work_dir: /root/k8s
 k8s_cert_json_dir: certs_json
+k8s_work_conf_dir: ansible_k8s_confs
 k8s_cert_dir: ansible_k8s_certs
 
 k8s_run_user: kube

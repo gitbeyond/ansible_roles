@@ -1,0 +1,8 @@
+- name: install k8s dependence packet
+  yum: 
+    name:
+      - conntrack-tools
+      - ipset
+      - ipvsadm
+    state: present
+  ignore_errors: true

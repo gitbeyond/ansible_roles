@@ -1,0 +1,17 @@
+---
+allow_duplicates: true
+
+dependencies:
+  - role: common_create_user
+    name: create_prom_user
+    tags:
+      - mongo_create_user
+  - role: common_create_dir
+    tags:
+      - mongo_create_dir   
+  - role: common_packet_install
+    tags:
+      - mongo_packet_install
+  - role: common_copy_conf_file
+    tags:
+      - mongo_copy_conf_file

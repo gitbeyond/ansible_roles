@@ -1,0 +1,16 @@
+{
+  "CN": "{{mongo_cert_root_ca_cn}}",
+  "key": {
+    "algo": "rsa",
+    "size": 4096
+  },
+  "names": [
+    {
+      "C": "{{mongo_cert_c}}",
+      "ST": "{{mongo_cert_st}}",
+      "L": "{{mongo_cert_l}}",
+      "O": "{{mongo_cert_o}}",
+      "OU": "{{mongo_cert_ou}}"
+    }
+  ]
+}

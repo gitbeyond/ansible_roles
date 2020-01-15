@@ -1,0 +1,25 @@
+storage:
+  dbPath: "{{mongo_data_dir}}"
+  directoryPerDB: true
+  engine: wiredTiger
+systemLog:
+  destination: file
+  path: "{{mongo_log_dir}}/{{mongo_instance_name}}.log"
+  logAppend: true
+  logRotate: rename
+replication:
+  oplogSizeMB: 2048 
+  replSetName: "{{mongo_instance_name}}"
+net:
+  ipv6: false
+  bindIpAll: true
+  port: {{mongo_port}}
+  unixDomainSocket:
+    enabled: true
+    pathPrefix: {{mongo_var_dir}}
+processManagement:
+  fork: true
+  pidFilePath: {{mongo_var_dir}}/{{mongo_instance_name}}.pid
+
+setParameter:
+  cursorTimeoutMillis: 20000
