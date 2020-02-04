@@ -12,13 +12,16 @@ mysql_backup_host={{mysql_backup_host}}
 mysql_basedir={{mysql_basedir.msg}}
 mysql_datadir={{mysql_datadir.msg}}
 backup_num={{mysql_backup_num}}
+BackPath={{mysql_backup_path}}
+Remote_BackPath={{mysql_backup_remote_path}}/$IP
+mysql_backup_remote_user={{mysql_backup_remote_user}}
+REMOT_HOST={{mysql_backup_remote_host}}
 
 {%raw%}
 day_dt=$(date +%F)
-REMOT_HOST="172.16.8.120"
-BackPath=/data/apps/data/mysqlbackup
+#BackPath=/data/apps/data/mysqlbackup
 OUT_FILE=/tmp/`basename $0`.out
-Remote_BackPath=/data2/mysqlbackup/$IP
+#Remote_BackPath=/data2/mysqlbackup/$IP
 # 如果 vip 是空的，那么就往下继续执行
 # 如果不为空，则判断本机是否有 vip
 check_vip(){
@@ -115,10 +118,10 @@ else
     exit 5
 fi
 cd ${BackPath}
-if ssh ${REMOT_HOST} [ ! -e ${Remote_BackPath} ];then
-    ssh ${REMOT_HOST} mkdir ${Remote_BackPath}
+if ssh ${mysql_backup_remote_user}@${REMOT_HOST} [ ! -e ${Remote_BackPath} ];then
+    ssh ${mysql_backup_remote_user}@${REMOT_HOST} mkdir ${Remote_BackPath}
 fi
-scp -r ${backup_file} ${REMOT_HOST}:${Remote_BackPath}/
+scp -r ${backup_file} ${mysql_backup_remote_user}@${REMOT_HOST}:${Remote_BackPath}/
 scp_stat=$?
 #scp_stat=0
 
@@ -136,10 +139,10 @@ old_file=$(find ${BackPath} -maxdepth 1 -type d -mtime +10)
 rm -rf ${old_file}
 # 删除远程备份目录的旧的备份
 
-remote_old_file=$(ssh ${REMOT_HOST} "cd ${Remote_BackPath}; ls -c1 |tail -n +$[backup_num+10]")
+remote_old_file=$(ssh ${mysql_backup_remote_user}@${REMOT_HOST} "cd ${Remote_BackPath}; ls -c1 |tail -n +$[backup_num+10]")
 remote_old_file=$(echo ${remote_old_file} | tr "\n" " ")
 echo ${remote_old_file}
-ssh -T ${REMOT_HOST} << EOF
+ssh -T ${mysql_backup_remote_user}@${REMOT_HOST} << EOF
    cd ${Remote_BackPath}
    rm -rf ${remote_old_file} 
 EOF

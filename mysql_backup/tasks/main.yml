@@ -17,6 +17,10 @@
   tags:
     - create_mysql_backup_user
 
+- import_tasks: create_backup_dir.yml
+  tags:
+    - create_backup_dir
+
 - include: add_key_to_backup_host.yml
   tags:
     - add_key_to_backup_host

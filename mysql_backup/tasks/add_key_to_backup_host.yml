@@ -1,9 +1,11 @@
 
-- include: get_remote_host_pub_key.yml
+#- include: get_remote_host_pub_key.yml
+- import_tasks: get_remote_host_pub_key.yml
   tags:
     - get_remote_host_pub_key
   delegate_to: '{{mysql_backup_remote_host}}'
   run_once: true
+  #when: mysql_backup_remote_host is not none
   
 - name: generate mysql_backup_host_user ssh key
   user:
@@ -20,10 +22,10 @@
 
 - name: add mysql_backup pub key to mysql_backup_remote_host_pub_key host
   lineinfile:
-    line: '{{item}} {{hostvars[item].mysql_backup_host_user_pub_key.stdout}}'
+    line: '{{hostvars[item].mysql_backup_host_user_pub_key.stdout}}'
     path: "{{mysql_backup_remote_user_home.stdout}}/.ssh/authorized_keys"
     create: yes
-    mode: "0644"
+    mode: "0600"
   with_items: '{{ansible_play_hosts}}'
   delegate_to: '{{mysql_backup_remote_host}}'
   when: mysql_backup_remote_user_home is success and mysql_backup_remote_user_home.stdout is not none

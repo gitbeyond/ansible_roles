@@ -12,12 +12,15 @@ mysql_vip={{mysql_vip}}
 mysql_backup_host={{mysql_backup_host}}
 mysql_basedir={{mysql_basedir.msg}}
 mysql_datadir={{mysql_datadir.msg}}
+REMOT_HOST={{mysql_backup_remote_host}}
+BackPath={{mysql_backup_path}}
+mysql_backup_remote_user={{mysql_backup_remote_user}}
+Remote_BackPath={{mysql_backup_remote_path}}/$IP
 
 
 {%raw%}
 day_dt=$(date +%F_%H-%M-%S)
-REMOT_HOST="172.16.8.120"
-BackPath=/data/apps/data/mysqlbackup
+#BackPath=/data/apps/data/mysqlbackup
 OUT_FILE=/tmp/`basename $0`.out
 check_vip(){
     if [ -n "${mysql_vip}" ];then
@@ -79,7 +82,7 @@ else
 fi
 
 #day_dt=$(date +%F)
-Remote_BackPath=/data2/mysqlbackup/$IP
+#Remote_BackPath=/data2/mysqlbackup/$IP
 mysql_opt="--user=${BK_USER} --password=${BK_PASS} --socket=${mysql_sock} --host=${mysql_host}"
 
 mysql_cmd=${mysql_basedir}/bin/mysql
@@ -158,10 +161,10 @@ fi
 #    
 #fi
 cd ${BackPath}
-if ssh ${REMOT_HOST} [ ! -e ${Remote_BackPath} ];then
-    ssh ${REMOT_HOST} mkdir ${Remote_BackPath}
+if ssh ${mysql_backup_remote_user}@${REMOT_HOST} [ ! -e ${Remote_BackPath} ];then
+    ssh ${mysql_backup_remote_user}@${REMOT_HOST} mkdir ${Remote_BackPath}
 fi
-scp -r ${BackPath}/${day_dt} ${REMOT_HOST}:${Remote_BackPath}/
+scp -r ${BackPath}/${day_dt} ${mysql_backup_remote_user}@${REMOT_HOST}:${Remote_BackPath}/
 scp_stat=$?
 
 if [ ${scp_stat} == 0 ];then

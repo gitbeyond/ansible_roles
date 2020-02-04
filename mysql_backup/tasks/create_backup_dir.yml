@@ -1,0 +1,14 @@
+- name: create mysql backup dir
+  file:
+    path: '{{mysql_backup_path}}'
+    owner: '{{mysql_backup_host_user}}'
+    state: directory
+
+- name: create mysql backup remote dir
+  file:
+    path: '{{mysql_backup_remote_path}}'
+    owner: '{{mysql_backup_remote_user}}'
+    state: directory
+  delegate_to: '{{mysql_backup_remote_host}}'
+  #when: mysql_backup_remote_host is not none
+  run_once: true

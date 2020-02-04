@@ -15,7 +15,7 @@ my $ssh_start_vip = "bond0:$key $vip";
 my $ssh_stop_vip = "bond0:$key down";  
 my $exit_code = 0;
 my $ifctrl = "/sbin/ifconfig";
-my $ssh_user = "{{mha_client_run_user}}";  
+#my $ssh_user = "{{mha_client_run_user}}";  
 
 GetOptions(  
 'command=s'          => \$command,  

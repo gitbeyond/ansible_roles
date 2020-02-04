@@ -10,10 +10,13 @@ mysql_script_dir:
 mysql_backup_weekday:
 mysql_backup_hour:
 mysql_backup_priv: "*.*:REPLICATION CLIENT,PROCESS,LOCK TABLES,RELOAD,REPLICATION SLAVE"
+mysql_backup_path: /data/apps/data/backup/mysql
+mysql_backup_host:
 
 mysql_backup_host_user: root
-mysql_backup_remote_host: 172.16.8.120
+mysql_backup_remote_host: 127.0.0.1
 mysql_backup_remote_user: root
+mysql_backup_remote_path: /data/apps/data/backup/mysql
 
 mysql_backup_packet: 
   - '{{packet_base_dir}}/percona-toolkit-3.0.10-1.el7.x86_64.rpm'
