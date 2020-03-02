@@ -1,8 +1,23 @@
 - name: nginx_reload
-  service: name=nginx state=reloaded
+  service: 
+    name: nginx 
+    state: reloaded
+  when: ansible_service_mgr == 'upstart'
 
 
+- name: nginx_reload
+  systemd: 
+    name: nginx 
+    state: reloaded
+    enabled: yes
+  when: ansible_service_mgr == 'systemd'
 
+- name: supervisorctl_restart_prog
+  supervisorctl: 
+    config: "{{supervisor_prim_conf}}" 
+    name: "{{project_prog_name}}" 
+    state: restarted 
+    supervisorctl_path: /usr/bin/supervisorctl
 
 - name: add to service list
   shell: '{{ item }}'

@@ -27,6 +27,8 @@
 - name: debug var
   debug:
     msg: "project_boot_type: {{project_boot_type}}"
+  tags:
+    - boot_project_for_supervisor
 
 - include_tasks: project_packet_build_docker_image.yml
   when: project_boot_type == "k8s" or project_boot_type == "docker"
@@ -45,10 +47,12 @@
     - boot_project
     - copy_project_nginx_file
 
+#- import_tasks: boot_project_for_supervisor.yml
 - include_tasks: boot_project_for_supervisor.yml
   when: project_boot_type == "supervisor"
   tags:
     - boot_project
+    - boot_project_for_supervisor
 
 - include_tasks: boot_project_for_systemd.yml
   when: project_boot_type == "systemd"

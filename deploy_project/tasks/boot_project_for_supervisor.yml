@@ -8,6 +8,10 @@
     mode: "0644"
     backup: yes
   register: copy_supervisor_file
+  tags:
+    - boot_project_for_supervisor
+  notify:
+    - supervisorctl_restart_prog
 
 - name: restart project prog
   supervisorctl: 
@@ -17,6 +21,8 @@
     supervisorctl_path: /usr/bin/supervisorctl
   #when: project_prog_group_name is not defined and copy_supervisor_file.changed == true
   when: project_prog_group_name is not defined 
+  #tags:
+  #  - boot_project_for_supervisor
 
 - name: restart project prog group
   supervisorctl: 
