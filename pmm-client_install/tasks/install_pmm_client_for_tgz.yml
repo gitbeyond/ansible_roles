@@ -60,3 +60,4 @@
     src: textfile_collector
     dest: /usr/local/percona/pmm-client/textfile-collector
     state: link
+  ignore_errors: true

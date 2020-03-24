@@ -1,0 +1,19 @@
+- name: check mongo whether set ssl
+  shell: "grep 'authorization: enabled' {{mongo_conf_dir}}/{{mongo_primary_conf_file | basename }}"
+  args:
+    removes: '{{mongo_conf_dir}}/{{mongo_primary_conf_file | basename }}'
+  register: mongodb_in_tls
+  ignore_errors: true
+
+- name: create mongo replicaset
+  mongodb_replicaset:
+    login_port: '{{mongo_port}}'
+    login_host: localhost
+    login_database: admin
+    login_password: '{{mongo_admin_password}}'
+    login_user: '{{mongo_admin_user}}'
+    replica_set: '{{mongo_instance_name}}'
+    members: '{{mongo_replicaset_members}}'
+    arbiter_at_index: '{{mongo_arbiter_at_index}}'
+  when: groups.mongo_237.index(inventory_hostname) == 0 and mongodb_in_tls is failed and mongo_replicaset_members != ''
+

@@ -1,6 +1,7 @@
 - name: systemctl_daemon_reload
   systemd:
     daemon_reload: yes
+  listen: common_reload_app_conf
 
 #- name: systemctl_restarted
 
