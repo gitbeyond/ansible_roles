@@ -1,0 +1,33 @@
+
+- name: set motd and issue
+  copy:
+    src: '{{item}}'
+    dest: '/etc/'
+    backup: yes
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - issue
+    - motd
+
+#- name: modify /etc/motd
+#  lineinfile:
+#    path: /etc/motd
+#    line: 'Authorized users only. All activity may be monitored and reported.'
+#    backup: yes 
+#    owner: root
+#    group: root
+#    mode: "0644"
+#
+#- name: modify /etc/issue
+#  lineinfile:
+#    path: /etc/issue
+#    line: 'Warning!!! If you are not the operations staff, loggout the system right now!!!'
+#    backup: yes 
+#    owner: root
+#    group: root
+#    regexp: '^(Kernel|\\)'
+#    mode: "0644"
+
+  

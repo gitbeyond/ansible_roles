@@ -1,0 +1,25 @@
+- name: create common admin user
+  user:
+    name: '{{system_common_admin_user}}'
+    password: '$6$mysecretsalt$yf3du7J8hen0MG.nKFA6P8sm0nM1vrXEW.PQYDKNmz1./Xc5MczLax0KziVIstctdjgYYSamAVpYY04EW63y6.'
+    generate_ssh_key: yes
+    ssh_key_bits: 2048 
+    update_password: always
+    append: yes
+    groups: wheel
+
+- name: set user sudo privilege
+  lineinfile:
+    line: '{{system_common_admin_user}} ALL =(ALL) NOPASSWD: ALL'
+    path: /etc/sudoers
+    backup: yes
+
+- name: set ssh no password login 
+  lineinfile:
+    line: '{{system_ssh_pub_key}}'
+    path: /home/{{system_common_admin_user}}/.ssh/authorized_keys
+    mode: "0600"
+    create: yes
+    backup: yes
+    owner: '{{system_common_admin_user}}'
+    group: '{{system_common_admin_user}}'

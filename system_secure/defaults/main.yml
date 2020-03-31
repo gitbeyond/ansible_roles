@@ -1,0 +1,39 @@
+system_common_admin_user: geo
+system_ssh_pub_key: "{{lookup('file', '${HOME}/.ssh/id_rsa.pub')}}"
+
+
+system_check_scripts:
+  - check_root_ssh.sh # ansible_job
+  - check_root_telnet.sh  # 
+  - check_ssh_run.sh # ansible_job
+  #- check_system_patch.sh
+  # 关闭不必要的服务或端口
+  - check_system_banner.sh  # ansible_job
+  - check_tmout_env.sh # ansible_job
+  - check_err_file.sh  # 
+  - check_root_ftp.sh  #
+  - check_any_ftp.sh   #
+  - check_ftp_banner.sh #
+  - check_ssh_banner.sh # ansible_job
+  - check_ip_source_route.sh # no exit , ansible_job
+  - check_tcpwrapper_conf.sh  # no exit, 
+  - check_ip_forward.sh    # no exit, ansible_job
+  - check_icmp_redirect.sh  # no exit 
+  - check_ntp_run.sh      #
+  - check_static_password.sh # no exit, ansible_job
+  - check_password_life.sh # no exit, ansible_job
+  - check_password_lock_policy.sh # no exit, ansible_job
+  - check_passwd_repeat.sh # no exit, ansible_job
+  - check_default_user_mask.sh #
+  - check_ftp_auth.sh
+  - check_user_privilege.sh # no exit, ansible_job
+  - check_log_login.sh #
+  - check_syslog_login.sh
+  - check_syslog_file.sh # no exit
+  - check_cron_log.sh 
+  - check_secure_log.sh # 这个没说有问题，实际是有问题
+  - check_log_to_remote.sh # no exit ，说没问题，实际有问题 
+  - check_all_user.sh
+  - check_system_user.sh # no exit, ansible_job 
+  - check_user_and_group.sh # no exit, 一般来说没问题 
+  - check_su_root.sh # no exit, ansible_job

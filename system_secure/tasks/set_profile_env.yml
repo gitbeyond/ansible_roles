@@ -1,0 +1,7 @@
+- name: set profile env
+  blockinfile:
+    marker: "# {mark} set common env"
+    block: |
+      export TMOUT=180
+    path: /etc/profile
+    backup: yes

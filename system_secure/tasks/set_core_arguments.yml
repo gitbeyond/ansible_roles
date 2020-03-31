@@ -1,0 +1,16 @@
+
+- name: modify core arguments
+  sysctl: 
+    name: '{{ item.name }}' 
+    value: '{{ item.value }}' 
+    reload: yes 
+    state: present 
+    ignoreerrors: yes 
+    sysctl_file: /etc/sysctl.conf
+  loop:
+    - { name: 'vm.swappiness', value: 0}
+    - { name: 'net.ipv4.conf.lo.accept_source_route', value: 0}
+    - { name: 'net.ipv4.conf.default.accept_source_route', value: 0}
+    - { name: 'net.ipv4.conf.all.accept_source_route', value: 0}
+    - { name: 'net.ipv4.conf.{{ansible_default_ipv4.interface}}.accept_source_route', value: 0}
+    - { name: 'net.ipv4.ip_forward', value: 0}
