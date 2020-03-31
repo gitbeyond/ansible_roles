@@ -25,12 +25,28 @@
 
 
 # 使用示例
+## 定义组变量
+```bash
+[root@docker-182 group_vars]# cat mongo_237.yml 
+
+mongo_packet: '{{packet_base_dir}}/mongodb-linux-x86_64-rhel70-4.2.2.tgz'
+
+mongo_cert_hosts:
+  - 127.0.0.1
+  - localhost
+  - 10.111.32.237
+  - 10.111.32.238
+  - 10.111.32.239
+  - mongo237.test.com
+  - mongo238.test.com
+  - mongo239.test.com
+```
+
 * 安装一个 configsvr replicaset,名字为 configsvr
 ```yaml
 - name: install mongodb
   hosts: mongo_237
-  #hosts: 10.111.32.237
-  remote_user: geo
+  remote_user: user1
   roles:
     - { role: mongodb_install, mongo_conf_files: [configsvr.yaml], 
         mongo_primary_conf_file: configsvr.yaml,
@@ -42,9 +58,8 @@
         mongo_admin_user: mongoroot,
         mongo_admin_password: 'myMONGO123',
         mongo_arbiter_at_index: null,
-        mongo_replicaset_members: ['10.111.32.237:27019', '10.111.32.208:27019', '10.111.32.199:27019'],
-        #mongo_shards: ['shard1/10.111.32.237:22001,10.111.32.208:22001,10.111.32.199:22001']
-        #mongo_shards: ['shard1/10.111.32.237:22001,10.111.32.208:22001,10.111.32.199:22001', 'shard2/10.111.32.237:22002,10.111.32.208:22002,10.111.32.199:22002']
+        #mongo_shards: ['shard1/10.111.32.237:22001,10.111.32.238:22001,10.111.32.239:22001']
+        #mongo_shards: ['shard1/10.111.32.237:22001,10.111.32.238:22001,10.111.32.239:22001', 'shard2/10.111.32.237:22002,10.111.32.238:22002,10.111.32.239:22002']
         }
 
 ```
@@ -53,8 +68,7 @@
 ```yaml
 - name: install mongodb
   hosts: mongo_237
-  #hosts: 10.111.32.237
-  remote_user: geo
+  remote_user: user1
   roles:
     - { role: mongodb_install, mongo_conf_files: [shard1.yaml], 
         mongo_primary_conf_file: shard1.yaml,
@@ -65,14 +79,14 @@
         mongo_port: "22001",
         mongo_admin_user: mongoroot,
         mongo_admin_password: 'myMONGO123',
-        mongo_replicaset_members: ['10.111.32.237:22001', '10.111.32.208:22001', '10.111.32.199:22001']
+        mongo_replicaset_members: ['10.111.32.237:22001', '10.111.32.238:22001', '10.111.32.239:22001']
         }
 ```
 * 安装一个 mongos 集群
 ```yaml
 - name: install mongodb
   hosts: mongo_237
-  remote_user: geo
+  remote_user: user1
   roles:
     - { role: mongodb_install, mongo_conf_files: [mongos.yaml], 
         mongo_primary_conf_file: mongos.yaml,
