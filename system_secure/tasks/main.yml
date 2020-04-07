@@ -1,0 +1,51 @@
+---
+- name: debug
+  debug:
+    msg: '{{system_ssh_pub_key}}'
+  tags:
+    - debug
+
+- import_tasks: modify_banner.yml
+  tags:
+    - modify_banner
+
+- import_tasks: set_profile_env.yml
+  tags:
+    - set_profile_env
+
+- import_tasks: set_core_arguments.yml
+  tags:
+    - set_core_arguments
+
+- import_tasks: set_pam_system-auth.yml
+  tags:
+    - set_pam_system-auth
+
+- import_tasks: set_login_defs.yml
+  tags:
+    - set_login_defs
+
+- import_tasks: set_security_file_mode.yml
+  tags:
+    - set_security_file_mode
+
+- import_tasks: lock_system_user.yml
+  tags:
+    - lock_system_user
+
+- import_tasks: set_pam_su.yml
+  tags:
+    - set_pam_su
+
+- import_tasks: set_common_admin_user.yml
+  tags:
+    - set_common_admin_user
+
+- import_tasks: disable_root_login.yml
+  tags:
+    - disable_root_login
+  notify: restart_sshd
+
+- import_tasks: running_check_scripts.yml
+  tags:
+    - running_check_scripts

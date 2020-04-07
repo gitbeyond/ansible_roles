@@ -1,19 +1,102 @@
+# 说明
+## 依赖项
+* 此 role 依赖于 `common_boot_app common_copy_conf_file common_create_dir common_create_user common_packet_install`.
+* 需要 cfssl, cfssljson 的命令行工具
+* 需要提前下载 mongodb 的 tgz 文件,然后使用变量指定
+* 配置文件需要自己写，可以参考 files 目录下的
+
+## role 的操作
+* 创建用户
+* 创建目录
+* 安装mongodb
+* 复制配置文件
+* 创建证书
+* 复制证书
+* 关闭THP
+* 以非replicaset和非认证启动集群
+* 配置文件中加入 replicaset 配置，重启,创建replicaset
+* 配置文件中加入 net.tls 配置，重启
+
+## 问题
+1. 在创建 replicaset 和添加 shard(这一步暂时因为第2个问题，不能实现) 中使用了 `ansible_play_hosts_all`这个变量来判断只在其中的一台上执行操作
+2. `mongodb_` 开头的几个模块中的 ssl 选项都没有提供证书的参数，这不能适配新版本的 ssl 选项，因为当开启 ssl之后，想添加 shard, 只能手动设置了(当然可以写个脚本来实现)。 
+
+* https://github.com/ansible/ansible/issues/66865 ： mongodb_replicaset: add sslCAFile and sslPEMKeyFile/tlsCAFile and tlsCertificateSelector options when ssl: yes (类似这样的问题还有很多)
+* https://github.com/ansible/ansible/issues/19504 : mongodb_user always reports as changed (添加用户时总是返回 changed, 我也遇到了这个问题)
 
 
-* 疑问: 使用 import_role 语句时的 handler 触发问题
-    * 如果现在的 role 中与引用的 role 有相同名称的 handler, 那么触发哪个?
-        * 测试结果，即使“被引用 role” 和 "当前 role" 同时存在相同名称的 handler,其触发的仍然是 "被引用 role" 的 handler
-        * 但是如果 '被引用的 role'中定义的 handler 只在 '当前 role' 中有，那么就会用‘当前 role’中的handler
-        * 如果“被引用的 role” 和 “当前的 role” 中都没有找到相关的 handler, 那么还在其他“被引用的 role”中找寻 “相同名字的 handler”(在一个 role,同时引入多个 role时)，就近原则
-    
-    * 当role引用role 时，如需要使用 handler, 应该只在基础role中定义 notify 的引用，而在调用 role中进行实际定义
-        * 如果某个调用的 role 不能触发 handler, 比如 mysql 即使更改了配置文件，也不期望其触发重启的操作，那么可以在调用的 role 里定义一个并不实际执行的 handler,这样不影响基础 role 的运行。也实现了定制化
+# 使用示例
+## 定义组变量
+```bash
+[root@docker-182 group_vars]# cat mongo_237.yml 
 
-    * 如果不在基础 role 中写 handler, 引用 role的 import_role 时如何定义触发 handler ?
-    
-    * 发现一个 listen 关键字，测试如下
-        * 当`notify: test_handler`时，如果没有 handler 使用 listen 关键字，那么就调用`name: test_handler`的任务
-        * 如果既有 `name: test_handler` 的任务，也有 `listen: test_handler `的，两个都会执行
-        * 如果两个都没有，会报错停止 `ERROR! The requested handler 'test_handler' was not found in either the main handlers list nor in the listening handlers list`
+mongo_packet: '{{packet_base_dir}}/mongodb-linux-x86_64-rhel70-4.2.2.tgz'
 
+mongo_cert_hosts:
+  - 127.0.0.1
+  - localhost
+  - 10.111.32.237
+  - 10.111.32.238
+  - 10.111.32.239
+  - mongo237.test.com
+  - mongo238.test.com
+  - mongo239.test.com
+```
 
+* 安装一个 configsvr replicaset,名字为 configsvr
+```yaml
+- name: install mongodb
+  hosts: mongo_237
+  remote_user: user1
+  roles:
+    - { role: mongodb_install, mongo_conf_files: [configsvr.yaml], 
+        mongo_primary_conf_file: configsvr.yaml,
+        mongo_replica_conf_file: configsvr_replicaset.yaml,
+        mongo_tls_conf_file: configsvr_net_tls.yaml,
+        mongo_src_boot_file: mongodb-configsvr.service,
+        mongo_instance_name: configsvr,
+        mongo_port: "27019",
+        mongo_admin_user: mongoroot,
+        mongo_admin_password: 'myMONGO123',
+        mongo_arbiter_at_index: null,
+        #mongo_shards: ['shard1/10.111.32.237:22001,10.111.32.238:22001,10.111.32.239:22001']
+        #mongo_shards: ['shard1/10.111.32.237:22001,10.111.32.238:22001,10.111.32.239:22001', 'shard2/10.111.32.237:22002,10.111.32.238:22002,10.111.32.239:22002']
+        }
+
+```
+
+* 安装一个 shard replicaset 名字为 shard1
+```yaml
+- name: install mongodb
+  hosts: mongo_237
+  remote_user: user1
+  roles:
+    - { role: mongodb_install, mongo_conf_files: [shard1.yaml], 
+        mongo_primary_conf_file: shard1.yaml,
+        mongo_replica_conf_file: shard1_replicaset.yaml,
+        mongo_tls_conf_file: shard1_net_tls.yaml,
+        mongo_src_boot_file: mongodb-shard1.service,
+        mongo_instance_name: shard1,
+        mongo_port: "22001",
+        mongo_admin_user: mongoroot,
+        mongo_admin_password: 'myMONGO123',
+        mongo_replicaset_members: ['10.111.32.237:22001', '10.111.32.238:22001', '10.111.32.239:22001']
+        }
+```
+* 安装一个 mongos 集群
+```yaml
+- name: install mongodb
+  hosts: mongo_237
+  remote_user: user1
+  roles:
+    - { role: mongodb_install, mongo_conf_files: [mongos.yaml], 
+        mongo_primary_conf_file: mongos.yaml,
+        #mongo_replica_conf_file: mongos_replicaset.yaml,
+        #mongo_tls_conf_file: mongos_net_tls.yaml,
+        mongo_src_boot_file: mongodb-mongos.service,
+        mongo_instance_name: mongos,
+        mongo_port: "30000",
+        mongo_admin_user: mongoroot,
+        mongo_admin_password: 'myMONGO123',
+        }
+```

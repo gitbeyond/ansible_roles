@@ -14,3 +14,16 @@
     creates: "{{mongo_cert_dir}}/{{item.replace('-csr.json', '') | basename}}.pem"
   loop: '{{mongo_local_cert_conf_files}}'
   run_once: true
+
+- name: merge key to pem
+  local_action:
+    module: blockinfile 
+    path: "{{item.replace('-csr.json', '.pem').replace(mongo_cert_json_dir,mongo_cert_dir)}}"
+    #block: "{{lookup('file', item.replace('-csr.json', '-key.pem'))}}"
+    block: "{{lookup('pipe', 'grep -v \"^-\" '+ item.replace('-csr.json', '-key.pem').replace(mongo_cert_json_dir,mongo_cert_dir))}}"
+    backup: yes
+    marker_end: '-----END'
+    marker_begin: '-----BEGIN'
+    marker: '{mark} RSA PRIVATE KEY-----'
+  loop: '{{mongo_local_cert_conf_files}}'
+  run_once: true

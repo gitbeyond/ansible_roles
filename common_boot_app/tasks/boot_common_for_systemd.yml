@@ -26,9 +26,11 @@
     dest: "/etc/rc.d/init.d/" 
     owner: "root" 
     group: "root" 
-    mode: "0644"
-  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+    mode: "0755"
   when: ansible_service_mgr == 'upstart' and common_src_boot_file is not none
+  notify: chkconfig_add_service
+
+- meta: flush_handlers
 
 - name: boot common for centos6
   service: 

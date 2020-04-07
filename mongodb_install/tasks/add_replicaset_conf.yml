@@ -1,0 +1,28 @@
+
+- name: add replicaset conf to conf_file
+  blockinfile:
+    backup: yes
+    block: '{{lookup("template", mongo_replica_conf_file)}}'
+    owner: '{{mongo_run_user}}'
+    group: '{{mongo_run_group}}'
+    mode: "0644" 
+    path: '{{mongo_conf_dir}}/{{mongo_primary_conf_file | basename }}'
+    marker: '# {mark} mongodb replicaset'
+  notify: mongodb_restart
+  #when: "'templates/'+ mongo_replica_conf_file" is exists
+
+- meta: flush_handlers
+
+- name: add replicaset conf to conf_file
+  local_action:
+    module: blockinfile
+    backup: no
+    block: '{{lookup("template", mongo_replica_conf_file)}}'
+    mode: "0644" 
+    path: '{{(item~"/"~mongo_primary_conf_file) | realpath}}'
+    marker: '# {mark} mongodb replicaset'
+  loop:
+  - 'templates'
+  - 'files'
+  when: item is exists 
+  run_once: true

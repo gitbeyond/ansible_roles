@@ -1,6 +1,11 @@
 - name: systemctl_daemon_reload
   systemd:
     daemon_reload: yes
+  listen: common_reload_app_conf
+
+- name: chkconfig_add_service
+  shell:
+    cmd: chkconfig --list {{common_instance_name}} || chkconfig --add {{common_instance_name}}
 
 #- name: systemctl_restarted
 

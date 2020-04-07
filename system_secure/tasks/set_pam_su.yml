@@ -1,0 +1,33 @@
+# 查看是否使用PAM禁止任何人su为root
+- name: set su rootok
+  lineinfile:
+    line: 'auth         sufficient      pam_rootok.so'
+    path: /etc/pam.d/su
+    backup: yes
+    insertbefore: '^auth\ +'
+    regexp: '^auth(\ |\t)+sufficient(\ |\t)+pam_rootok.so'
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: set su wheel
+  lineinfile:
+    line: 'auth            required        pam_wheel.so use_uid'
+    path: /etc/pam.d/su
+    backup: yes
+    insertafter: 'auth\ +sufficient\ +pam_rootok.so'
+    regexp: '^auth\ +required\ +pam_wheel.so'
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: set su 
+  lineinfile:
+    line: '#session              include         postlogin'
+    path: /etc/pam.d/su
+    backup: yes
+    #insertafter: 'auth\ +sufficient\ +pam_rootok.so'
+    regexp: '^#?session(\ |\t)+include(\ |\t)+postlogin'
+    owner: root
+    group: root
+    mode: "0644"

@@ -1,0 +1,4 @@
+replication:
+  oplogSizeMB: 1024
+  replSetName: {{mongo_instance_name}}
+  enableMajorityReadConcern: true

@@ -1,0 +1,17 @@
+[Unit]  
+  
+Description=mongodb   
+After=network.target remote-fs.target nss-lookup.target  
+    
+[Service]  
+LimitCORE=infinity
+LimitNOFILE=100000
+LimitNPROC=100000
+Type=forking  
+User={{mongo_run_user}}
+ExecStart=numactl --interleave=all {{mongo_base_dir}}/bin/mongod --config {{mongo_conf_dir}}/shard2.yaml
+ExecStop={{mongo_base_dir}}/bin/mongod --shutdown --config {{mongo_conf_dir}}/shard2.yaml  
+PrivateTmp=true  
+    
+[Install]  
+WantedBy=multi-user.target 

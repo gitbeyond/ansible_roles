@@ -1,0 +1,5 @@
+  tls:
+    mode: requireTLS
+    certificateKeyFile: {{mongo_conf_ssl_dir}}/mongo-server.pem
+    clusterFile: {{mongo_conf_ssl_dir}}/mongo-member-{{ansible_nodename}}.pem
+    CAFile: {{mongo_conf_ssl_dir}}/mongo-root-ca.pem

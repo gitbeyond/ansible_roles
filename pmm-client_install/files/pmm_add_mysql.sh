@@ -51,6 +51,11 @@ pmm_add_mysql(){
     return ${pmm_add_stat}
 }
 
+if [ "${pmm_local_server}" == "${pmm_server}" ];then
+    echo "pmm_server:1"
+else
+    pmm-admin config --server ${pmm_server}
+fi
 
 # 更新操作的话，先删除，再添加
 if [ "${pmm_info_update}" == "True" ];then
@@ -71,11 +76,6 @@ if [ "${pmm_info_update}" == "True" ];then
 fi
 
 
-if [ "${pmm_local_server}" == "${pmm_server}" ];then
-    echo "pmm_server:1"
-else
-    pmm-admin config --server ${pmm_server}
-fi
 
 
 pmm_add_mysql ${pmm_instance_name}

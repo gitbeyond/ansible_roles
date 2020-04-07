@@ -17,12 +17,29 @@ pmm_client_boot_type: supervisor
 pmm_client_boot_file:
 
 # group_vars
+# mysql
 mysql_pmm_user: pmm
 mysql_pmm_pass:
 mysql_pmm_priv: '*.*:REPLICATION CLIENT,PROCESS,SUPER,RELOAD/performance_schema.*:SELECT'
-mysql_pmm_server:
+#mysql_pmm_server:
+pmm_server:
 pmm_info_update: false
 #mysql_app_name:
 
+# mongodb
+#pmm_instance_name: '{{ansible_fqdn | default("True", true)}}'
+pmm_mongo_user: 
+pmm_mongo_pass: 
+pmm_mongo_cluster_name:
+pmm_mongo_server: 127.0.0.1
+pmm_mongo_port:
+#pmm_server:
+mongo_app_name: false
+pmm_mongodb_exporter_args:
+
+
+# linux:metrics
+pmm_node_exporter_args:
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+

@@ -40,7 +40,11 @@
 
 - name: update docker image
   local_action: shell /bin/bash {{project_install_dir}}/{{project_docker_build_script|basename}} {{project_prog_name}} 
-  #when: cp_result.changed == true or unarchive_result.changed == true
   when: cp_result.changed == true 
+  register: PROJECT_IMAGE
+
+- name: get docker image
+  local_action: shell /bin/bash {{project_install_dir}}/{{project_docker_build_script|basename}} {{project_prog_name}} get 
+  when: cp_result.changed == false
   register: PROJECT_IMAGE
 

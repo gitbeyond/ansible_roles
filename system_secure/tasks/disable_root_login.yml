@@ -1,0 +1,29 @@
+- name: set root don't remote login
+  lineinfile:
+    line: 'PermitRootLogin no'
+    path: /etc/ssh/sshd_config
+    backup: yes
+    insertafter: '#PermitRootLogin yes'
+    regexp: '^PermitRootLogin'
+    owner: root
+    group: root
+    mode: "0600"
+  #notify: restart_sshd
+
+- name: set sshd use protoco2
+  lineinfile:
+    #line: 'Protocol 2'
+    line: '{{item}}'
+    path: /etc/ssh/sshd_config
+    backup: yes
+    insertafter: '#{{item.split(" ")[0]}}'
+    regexp: '^{{item.split(" ")[0]}}'
+    owner: root
+    group: root
+    mode: "0600"
+  loop:
+    - 'Protocol 2'
+    - 'PrintMotd no'
+    - 'PrintLastLog no'
+    - 'Banner /etc/issue'
+  #notify: restart_sshd

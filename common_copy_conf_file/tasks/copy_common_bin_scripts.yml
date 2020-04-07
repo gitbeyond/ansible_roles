@@ -7,6 +7,7 @@
     group: "{{ common_run_user }}" 
     mode: "0644" 
     backup: yes
-  with_items: '{{common_bin_scripts}}'
-  when: item is not none
+  loop: 
+    - '{{common_bin_scripts}}'
+  when: item is exists
   notify: common_reload_app_conf

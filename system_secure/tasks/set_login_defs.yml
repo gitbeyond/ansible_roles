@@ -1,0 +1,16 @@
+- name: set login_defs
+  lineinfile:
+    #line: 'Protocol 2'
+    line: '{{item}}'
+    path: /etc/login.defs
+    backup: yes
+    insertafter: '#{{item.split(" ")[0]}}'
+    regexp: '^{{item.split(" ")[0]}}'
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - 'PASS_MAX_DAYS 90'
+    - 'PASS_MIN_DAYS 10'
+    - 'PASS_WARN_AGE 7'
+  #notify: restart_sshd

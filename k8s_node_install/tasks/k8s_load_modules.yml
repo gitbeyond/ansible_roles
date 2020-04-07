@@ -34,6 +34,13 @@
     - ip_vs_sed
     - ip_vs_ftp
     - nf_conntrack_ipv4
+    - ipt_rpfilter
+    - ipt_set
+    - sctp
+    - xt_sctp
+    - xt_set
+    - xt_u32
+    - ipip
 
 - name: cp modules load file
   copy:
