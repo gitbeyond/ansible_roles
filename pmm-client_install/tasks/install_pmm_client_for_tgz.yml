@@ -41,23 +41,27 @@
     chdir: '{{pmm_client_base_dir}}'
     creates: /usr/local/percona/pmm-client/textfile_collector/example.prom
   #when: pmm_client_old_var.stdout is not none 
+ 
+- name: debug
+  debug:
+    msg: '{{packet_dir_name}}'
 
 # update
 - name: get pmm_client current version
-  shell: '{{pmm_client_base_dir}}/bin/pmm-admin --version'
+  shell: '{{app_base_dir}}/{{packet_dir_name.stdout}}/bin/pmm-admin --version'
   register: pmm_client_current_ver
   ignore_errors: true
 
 
 - name: update pmm-client
-  shell: 'pmm-admin stop --all && {{pmm_client_base_dir}}/install'
+  shell: 'pmm-admin stop --all; {{app_base_dir}}/{{packet_dir_name.stdout}}/install'
   args:
-    chdir: '{{pmm_client_base_dir}}'
+    chdir: '{{app_base_dir}}/{{packet_dir_name.stdout}}'
   when: pmm_client_old_ver is success and pmm_client_current_ver.stdout != pmm_client_old_ver.stdout
 
-- name: create textfile-collector link
-  file:
-    src: textfile_collector
-    dest: /usr/local/percona/pmm-client/textfile-collector
-    state: link
-  ignore_errors: true
+#- name: create textfile-collector link
+#  file:
+#    src: textfile_collector
+#    dest: /usr/local/percona/pmm-client/textfile-collector
+#    state: link
+#  ignore_errors: true

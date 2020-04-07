@@ -9,6 +9,6 @@
 #  script: pmm_add_mysql.sh {{mysql_pmm_user}} {{mysql_pmm_pass}} {{mysql_sock}} {{mysql_pmm_server}} {{mysql_app_name}}
 #  when: pmm_info_update == false
 
-- name: pmm-admin add mysql
-  script: pmm_add_mysql.sh {{mysql_pmm_user}} {{mysql_pmm_pass}} {{mysql_sock}} {{pmm_server}} {{pmm_info_update}} {{mysql_app_name}}
+- name: pmm-admin add mongodb
+  script: pmm_add_mongodb.sh {{pmm_mongo_user}} {{pmm_mongo_pass}} {{pmm_mongo_cluster_name}} {{pmm_mongo_server}} {{pmm_mongo_port}} {{pmm_server}} {{pmm_info_update}} {{mongo_app_name}} "{{pmm_mongodb_exporter_args}}"
   #when: pmm_info_update == true

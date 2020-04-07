@@ -1,5 +1,7 @@
 system_common_admin_user: geo
-system_ssh_pub_key: "{{lookup('file', '${HOME}/.ssh/id_rsa.pub')}}"
+system_common_admin_pass: '$6$mysecretsalt$yf3du7J8hen0MG.nKFA6P8sm0nM1vrXEW.PQYDKNmz1./Xc5MczLax0KziVIstctdjgYYSamAVpYY04EW63y6.'
+#system_ssh_pub_key: '{{lookup("file", "${HOME}/.ssh/id_rsa.pub")}}'
+system_ssh_pub_key:
 
 
 system_check_scripts:
@@ -19,7 +21,7 @@ system_check_scripts:
   - check_tcpwrapper_conf.sh  # no exit, 
   - check_ip_forward.sh    # no exit, ansible_job
   - check_icmp_redirect.sh  # no exit 
-  - check_ntp_run.sh      #
+  - check_timeserver_run.sh
   - check_static_password.sh # no exit, ansible_job
   - check_password_life.sh # no exit, ansible_job
   - check_password_lock_policy.sh # no exit, ansible_job

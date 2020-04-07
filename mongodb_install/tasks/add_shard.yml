@@ -9,6 +9,7 @@
     ssl_cert_reqs: CERT_REQUIRED
     shard: '{{item}}'
   loop: '{{mongo_shards}}'
-  when: groups.mongo_237.index(inventory_hostname) == 0 and (mongodb_in_tls is not defined or mongodb_in_tls is success)
+  #when: groups.mongo_237.index(inventory_hostname) == 0 and (mongodb_in_tls is not defined or mongodb_in_tls is success)
+  when: ansible_play_hosts_all.index(inventory_hostname) == 0 and (mongodb_in_tls is not defined or mongodb_in_tls is success)
     
     

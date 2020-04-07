@@ -1,30 +1,46 @@
 # edirtor: haifeng
 # 2017/01/12
 
-- include: create_pmm_user.yml
+- import_tasks: create_pmm_user.yml
   tags:
     - create_pmm_user
 
-- include: create_pmm_dir.yml
+- import_tasks: create_pmm_dir.yml
   tags:
     - create_pmm_dir
 
-- include: install_pmm_client_for_tgz.yml
+- import_tasks: install_pmm_client_for_tgz.yml
   tags:
     - install_pmm_client_for_tgz
   when: pmm_client_packet_type == "tgz"
 
-- include: install_mysql_driver.yml
+- import_tasks: pmm_add_linux_metrics.yml
   tags:
-    - install_mysql_driver
+    - pmm_add_linux_metrics
 
-- include: create_mysql_user.yml
-  tags:
-    - create_mysql_user
+- name: debug
+  debug:
+    msg: '{{mysql_pmm_user}}'
 
-- include: pmm_add_mysql.yml
+#- include_tasks: install_mysql_driver.yml
+#  tags:
+#    - install_mysql_driver
+#  when: mysql_pmm_user is not none
+#
+#- include_tasks: create_mysql_user.yml
+#  tags:
+#    - create_mysql_user
+#  when: mysql_pmm_user != ''
+#
+#- include_tasks: pmm_add_mysql.yml
+#  tags:
+#    - pmm_add_mysql
+#  when: mysql_pmm_user != ''
+
+- include_tasks: pmm_add_mongodb.yml
   tags:
-    - pmm_add_mysql
+    - pmm_add_mongodb
+  when: pmm_mongo_user != ''
 
 - import_tasks: copy_pmm_conf.yml
   tags:

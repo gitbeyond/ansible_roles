@@ -18,6 +18,7 @@
 * 配置文件中加入 net.tls 配置，重启
 
 ## 问题
+1. 在创建 replicaset 和添加 shard(这一步暂时因为第2个问题，不能实现) 中使用了 `ansible_play_hosts_all`这个变量来判断只在其中的一台上执行操作
 2. `mongodb_` 开头的几个模块中的 ssl 选项都没有提供证书的参数，这不能适配新版本的 ssl 选项，因为当开启 ssl之后，想添加 shard, 只能手动设置了(当然可以写个脚本来实现)。 
 
 * https://github.com/ansible/ansible/issues/66865 ： mongodb_replicaset: add sslCAFile and sslPEMKeyFile/tlsCAFile and tlsCertificateSelector options when ssl: yes (类似这样的问题还有很多)

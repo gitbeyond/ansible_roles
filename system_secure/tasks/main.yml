@@ -1,4 +1,10 @@
 ---
+- name: debug
+  debug:
+    msg: '{{system_ssh_pub_key}}'
+  tags:
+    - debug
+
 - import_tasks: modify_banner.yml
   tags:
     - modify_banner
@@ -6,6 +12,10 @@
 - import_tasks: set_profile_env.yml
   tags:
     - set_profile_env
+
+- import_tasks: set_core_arguments.yml
+  tags:
+    - set_core_arguments
 
 - import_tasks: set_pam_system-auth.yml
   tags:

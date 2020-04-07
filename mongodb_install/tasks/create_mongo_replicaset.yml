@@ -15,5 +15,6 @@
     replica_set: '{{mongo_instance_name}}'
     members: '{{mongo_replicaset_members}}'
     arbiter_at_index: '{{mongo_arbiter_at_index}}'
-  when: groups.mongo_237.index(inventory_hostname) == 0 and mongodb_in_tls is failed and mongo_replicaset_members != ''
+  #when: groups.mongo_237.index(inventory_hostname) == 0 and mongodb_in_tls is failed and mongo_replicaset_members != ''
+  when: ansible_play_hosts_all.index(inventory_hostname) == 0 and mongodb_in_tls is failed and mongo_replicaset_members != ''
 

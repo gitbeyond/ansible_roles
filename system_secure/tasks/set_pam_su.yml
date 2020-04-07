@@ -27,7 +27,7 @@
     path: /etc/pam.d/su
     backup: yes
     #insertafter: 'auth\ +sufficient\ +pam_rootok.so'
-    regexp: '^session(\ |\t)+include(\ |\t)+postlogin'
+    regexp: '^#?session(\ |\t)+include(\ |\t)+postlogin'
     owner: root
     group: root
     mode: "0644"
