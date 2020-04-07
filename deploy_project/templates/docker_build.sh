@@ -10,7 +10,24 @@ project_src_packet=${project_src_dir}/${project_packet_name}
 project_work_dir={{project_install_dir}}
 registry_addr={{docker_registry_addr}}
 
+
 {%raw%}
+dt=$(date +%Y%m%d)
+image_base_name=$1
+action=$2
+last_image=$(docker images |grep ${registry_addr} |grep ${image_base_name} |head -n 1)
+
+if [ $# -lt 1 ];then
+    #echo "please input image_name and deploy_name"
+    echo "please input image_name"
+    exit 5
+fi
+
+if [ "${action}" == "get" ];then
+    echo ${last_image} |awk '{print $1":"$2}'
+    exit 0
+fi 
+
 cd ${project_work_dir}
 if [ -e Dockerfile ];then
     :
@@ -22,24 +39,17 @@ fi
 #/bin/cp ${project_src_packet} ${project_work_dir}
 /bin/cp ${project_packet_packet} ${project_work_dir}
 
-dt=$(date +%Y%m%d)
-image_base_name=$1
 #deploy=$2
 
-if [ $# -lt 1 ];then
-    #echo "please input image_name and deploy_name"
-    echo "please input image_name"
-    exit 5
-fi
 
 #registry_addr=172.16.27.4:5000
 
-last_image=$(docker images |grep ${registry_addr} |grep ${image_base_name} |head -n 1)
 if [ -n "${last_image}" ];then
     image_name=$(echo ${last_image} | awk '{print $1}')
 else
     image_name=${registry_addr}/geo/${image_base_name} 
 fi
+
 last_image_version=$(echo ${last_image} | awk '{print $2}')
 last_image_data=${last_image_version:1:8}
 

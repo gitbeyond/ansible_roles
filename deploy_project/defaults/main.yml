@@ -11,7 +11,7 @@ project_packet_type:
 # 为项目包名创建的软链的名字，如果包名发生了版本的变化，那么就需要在 supervisor的配置文件中更新包名，而使用软链接，只需要更新软链接即可
 #project_packet_link_name:
 # 项目名称，就是 jenkins 的项目名
-project_name:
+project_name: "{{lookup('env', 'JOB_NAME') | dirname}}"
 
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd, docker, k8s
 project_boot_type: supervisor

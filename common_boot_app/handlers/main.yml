@@ -2,6 +2,10 @@
   systemd:
     daemon_reload: yes
 
+- name: chkconfig_add_service
+  shell:
+    cmd: chkconfig --list {{common_instance_name}} || chkconfig --add {{common_instance_name}}
+
 #- name: systemctl_restarted
 
 #- name: supervisor_restarted

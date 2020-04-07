@@ -7,7 +7,7 @@
     group: "{{project_run_group}}" 
     mode: "0644"
     backup: yes
-  with_items: '{{project_k8s_res_files}}'
+  loop: '{{project_k8s_res_files}}'
   when: item is not none
   register: copy_k8s_res_file
 
