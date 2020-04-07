@@ -21,4 +21,6 @@
     name: "{{exporter_instance_name}}"
     state: restarted
   when: exporter_boot_type == 'supervisor'
-  listen: common_app_restarted
+  listen: 
+    - common_app_restarted
+    - common_supervisor_restarted
