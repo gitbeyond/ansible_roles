@@ -1,0 +1,10 @@
+
+- name: create mongo local user
+  mongodb_user:
+    database: admin
+    login_port: '{{ mongo_port }}'
+    login_host: localhost
+    name: '{{mongo_admin_user}}'
+    password: '{{mongo_admin_password}}' 
+    roles: root,readWriteAnyDatabase,userAdminAnyDatabase,dbAdminAnyDatabase,clusterAdmin
+  ignore_errors: true

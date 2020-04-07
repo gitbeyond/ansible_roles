@@ -1,0 +1,15 @@
+- name: configsvr add shard
+  mongodb_shard:
+    login_port: '{{mongo_port}}'
+    login_host: localhost
+    login_database: admin
+    login_password: '{{mongo_admin_password}}'
+    login_user: '{{mongo_admin_user}}'
+    ssl: yes
+    ssl_cert_reqs: CERT_REQUIRED
+    shard: '{{item}}'
+  loop: '{{mongo_shards}}'
+  #when: groups.mongo_237.index(inventory_hostname) == 0 and (mongodb_in_tls is not defined or mongodb_in_tls is success)
+  when: ansible_play_hosts_all.index(inventory_hostname) == 0 and (mongodb_in_tls is not defined or mongodb_in_tls is success)
+    
+    

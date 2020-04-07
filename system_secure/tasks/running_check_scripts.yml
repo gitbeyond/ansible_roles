@@ -1,0 +1,3 @@
+- name: running check scripts
+  script: '{{item}}'
+  loop: '{{system_check_scripts}}'

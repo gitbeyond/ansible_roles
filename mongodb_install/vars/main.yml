@@ -1,6 +1,7 @@
 
 common_run_user: '{{mongo_run_user}}'
 common_base_name: '{{mongo_base_name}}'
+common_instance_name: '{{mongo_base_name}}{%if mongo_instance_name%}{{"-"~mongo_instance_name}}{% endif %}'
 common_base_dir: '{{mongo_base_dir}}'
 common_log_dir: '{{mongo_log_dir}}'
 common_conf_dir: '{{mongo_conf_dir}}'
@@ -11,10 +12,11 @@ common_packet: '{{mongo_packet}}'
 common_packet_creates: '{{mongo_packet_creates}}'
 common_packet_type: '{{mongo_packet_type}}'
 
-common_bin_scripts: '{{mongo_bin_scripts}}'
+common_bin_scripts: '{{mongo_bin_scripts | default("")}}'
 common_child_confs: '{{mongo_child_confs}}'
 common_conf_files: '{{mongo_conf_files}}'
 common_env_file: '{{mongo_env_file}}'
 
 common_src_boot_file: '{{mongo_src_boot_file}}'
 common_boot_type: '{{mongo_boot_type}}'
+

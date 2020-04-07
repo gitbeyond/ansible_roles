@@ -1,0 +1,4 @@
+
+- name: pmm-admin add linux:metrics
+  script: 
+    cmd: pmm_add_linux_metrics.sh {{pmm_server}} {{pmm_info_update}} "{{pmm_node_exporter_args}}"

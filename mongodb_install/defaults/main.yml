@@ -6,34 +6,47 @@ mongo_run_user_system: yes
 mongo_base_name: mongodb
 
 mongo_packet:
-mongo_packet_creates: 'mongod'
-# tgz or jar
+mongo_packet_creates: 'bin/mongod'
+mongo_instance_name:
+# tgz or rpm 
 mongo_packet_type: tgz
 mongo_base_dir: /data/apps/opt/{{mongo_base_name}}
-mongo_log_dir: /data/apps/log/{{mongo_base_name}}/{{mongo_instance_name}}
-mongo_conf_dir: /data/apps/config/{{mongo_base_name}}/{{mongo_instance_name}}
-mongo_var_dir: /data/apps/var/{{mongo_base_name}}/{{mongo_instance_name}}
-mongo_data_dir: /data/apps/data/{{mongo_base_name}}/{{mongo_instance_name}}
+mongo_instance_path_name: '{%if mongo_instance_name%}{{"/"~mongo_instance_name}}{% endif %}'
+mongo_log_dir: /data/apps/log/{{mongo_base_name}}{{mongo_instance_path_name}}
+mongo_conf_dir: /data/apps/config/{{mongo_base_name}}{{mongo_instance_path_name}}
+mongo_var_dir: /data/apps/var/{{mongo_base_name}}{{mongo_instance_path_name}}
+mongo_data_dir: /data/apps/data/{{mongo_base_name}}{{mongo_instance_path_name}}
 mongo_bin_dir: '{{mongo_base_dir}}/bin'
-# 这个的作用是同一个服务启动多个时指定的名字，比如 mongo_base_name 为 redis是指软件名称，而 mongo_instance_name 可以叫做 redis_6379
-mongo_instance_name: '{{mongo_base_name}}'
+# 这个的作用是同一个服务启动多个时指定的名字，比如 mongo_base_name 为 mongodb是指软件名称，而 mongo_instance_name 可以叫做mongo-shard1
+#mongo_instance_name: '{{mongo_base_name}}'
 
+mongo_child_conf_dir:
+mongo_child_confs:
 # self defined
-mongo_conf_ssl_dir: '{{mongo_conf_dir}}/ssl'
-mongo_conf_ssl_files:
+mongo_conf_ssl_dir: '{%if mongo_instance_name%}{{mongo_conf_dir~"/../ssl"}}{%else%}{{mongo_conf_dir~"/ssl"}}{%endif%}'
+mongo_conf_ssl_files: '{{q("fileglob", mongo_work_dir+"/"+mongo_cert_dir+"/*.pem")}}'
 
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd
 mongo_boot_type: systemd
 mongo_src_boot_file:
-mongo_port: 9090
+mongo_port: 27017
 
 # copy to /etc/profile.d/ of env file 
 mongo_env_file: 'mongodb.sh'
 
+# mongo replicaset
+mongo_admin_password:
+mongo_admin_user:
+mongo_replicaset_members:
+mongo_arbiter_at_index: 2
+mongo_shards:
+
 # type: list
 #mongo_other_dirs:
 mongo_conf_files:
-
+mongo_primary_conf_file: "{{mongo_conf_files[0]}}"
+mongo_replica_conf_file: 
+mongo_tls_conf_file:
 # 
 mongo_work_dir: mongodb
 mongo_cert_json_dir: ansible_certs_json
@@ -52,6 +65,7 @@ mongo_cert_hosts:
   - 127.0.0.1
   - localhost
   - '{{mongo_cluster_hosts}}'
+  #- '{%for h in ansible_play_hosts%}{{hostvars[h].ansible_nodename}}{%endfor%}'
 
 mongo_cert_client_ca_cn: "mongoclient"
 mongo_cert_server_ca_cn: "mongoserver"

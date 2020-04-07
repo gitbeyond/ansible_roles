@@ -1,0 +1,76 @@
+
+net:
+# BEGIN mongodb tls
+  tls:
+    mode: requireTLS
+    certificateKeyFile: {{mongo_conf_ssl_dir}}/mongo-server.pem
+    clusterFile: {{mongo_conf_ssl_dir}}/mongo-member-{{ansible_nodename}}.pem
+    CAFile: {{mongo_conf_ssl_dir}}/mongo-root-ca.pem
+# END mongodb tls
+  port: {{mongo_port}}
+  bindIp: localhost,127.0.0.1,{{ansible_default_ipv4.address}}
+  bindIpAll: false
+  maxIncomingConnections: 65536
+  ipv6: false
+  unixDomainSocket:
+    enabled: true
+    pathPrefix: {{mongo_var_dir}}
+    filePermissions: 0700
+  wireObjectCheck: true
+  #compression:
+  #  compressors: 
+security:
+  clusterAuthMode: x509
+  authorization: enabled
+  #clusterIpSourceWhitelist:
+  #  -
+setParameter:
+  enableLocalhostAuthBypass: false 
+storage:
+  dbPath: {{mongo_data_dir}}
+  directoryPerDB: true 
+  syncPeriodSecs: 60
+  engine: wiredTiger 
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: 5
+      journalCompressor: snappy
+      directoryForIndexes: false
+      maxCacheOverflowFileSizeGB: 0
+    collectionConfig:
+      blockCompressor: snappy
+    indexConfig:
+      prefixCompression: true
+operationProfiling:
+  mode: slowOp
+  slowOpThresholdMs: 100
+  slowOpSampleRate: 1.0
+#replication:
+#  oplogSizeMB: 1024
+#  replSetName: shard1
+#  enableMajorityReadConcern: true
+sharding:
+  clusterRole: configsvr
+  archiveMovedChunks: false 
+systemLog:
+  verbosity: 0
+  syslogFacility: user
+  path: {{mongo_log_dir}}/{{mongo_instance_name}}.log
+  logAppend: true
+  logRotate: rename
+  destination: file
+  component:
+    accessControl:
+      verbosity: 0
+    command:
+      verbosity: 0
+processManagement:
+  fork: true
+  pidFilePath: {{mongo_var_dir}}/{{mongo_instance_name}}.pid
+  #timeZoneInfo:  
+# BEGIN mongodb replicaset
+replication:
+  oplogSizeMB: 1024
+  replSetName: configsvr
+  enableMajorityReadConcern: true
+# END mongodb replicaset

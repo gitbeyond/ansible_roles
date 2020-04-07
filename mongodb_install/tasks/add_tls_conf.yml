@@ -1,0 +1,62 @@
+
+- name: add net tls conf to conf_file
+  blockinfile:
+    backup: yes
+    block: '{{lookup("template", mongo_tls_conf_file)}}'
+    owner: '{{mongo_run_user}}'
+    group: '{{mongo_run_group}}'
+    mode: "0644" 
+    path: '{{mongo_conf_dir}}/{{mongo_primary_conf_file | basename }}'
+    marker: '# {mark} mongodb tls'
+    insertafter: "net:"
+  notify: mongodb_restart
+  #when: 'templates/'+ mongo_tls_conf_file is exists
+
+- name: set clusterAuthMode to x509
+  lineinfile:
+    backup: yes
+    line: "{{item}}"
+    owner: '{{mongo_run_user}}'
+    group: '{{mongo_run_group}}'
+    mode: "0644" 
+    path: '{{mongo_conf_dir}}/{{mongo_primary_conf_file | basename }}'
+    insertafter: 'security'
+    regexp: '{{item.split(":")[0]}}'
+  loop:
+    - '  authorization: enabled'
+    - '  clusterAuthMode: x509'
+    
+
+#- meta: flush_handlers
+
+- name: add tls conf to src_conf
+  local_action:
+    module: blockinfile
+    backup: no
+    block: '{{lookup("file", "templates/"~mongo_tls_conf_file)}}'
+    mode: "0644" 
+    path: '{{(item~"/"~mongo_primary_conf_file) | realpath}}'
+    marker: '# {mark} mongodb tls'
+    insertafter: "net:"
+  loop:
+  - 'templates'
+  - 'files'
+  #when: item is exists and 'templates/'+ mongo_tls_conf_file is exists
+  when: item is exists 
+  run_once: true
+
+- name: set src_conf clusterAuthMode to x509
+  local_action:
+    module: lineinfile
+    backup: no
+    line: "{{item}}"
+    owner: '{{mongo_run_user}}'
+    group: '{{mongo_run_group}}'
+    mode: "0644" 
+    path: '{{("templates/"~mongo_primary_conf_file) | realpath}}'
+    insertafter: 'security'
+    regexp: '{{item.split(":")[0]}}'
+  loop:
+    - '  authorization: enabled'
+    - '  clusterAuthMode: x509'
+  run_once: true

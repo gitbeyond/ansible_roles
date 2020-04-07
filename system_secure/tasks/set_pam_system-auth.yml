@@ -1,0 +1,54 @@
+# 静态口令是否符合标准
+- name: set system-auth pam_cracklib 
+  lineinfile:
+    line: 'password requisite  pam_cracklib.so retry=3 minlen=8 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1'
+    path: /etc/pam.d/system-auth
+    backup: yes
+    insertafter: 'password(\ |\t)+requisite'
+    regexp: '^password(\ |\t)+requisite(\ |\t)+pam_cracklib.so'
+    owner: root
+    group: root
+    mode: "0644"
+
+# 检查口令锁定策略
+- name: set system-auth auth_pam_tally2
+  lineinfile:
+    line: 'auth required pam_tally2.so deny=5 onerr=fail no_magic_root unlock_time=180'
+    path: /etc/pam.d/system-auth
+    backup: yes
+    insertafter: 'auth(\ |\t)+required'
+    regexp: '^auth(\ |\t)+required(\ |\t)+pam_tally2.so'
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: set system-auth account_pam_tally2
+  lineinfile:
+    line: 'account  required  pam_tally2.so'
+    path: /etc/pam.d/system-auth
+    backup: yes
+    insertafter: 'account(\ |\t)+required'
+    regexp: '^account(\ |\t)+required(\ |\t)+pam_tally2.so'
+    owner: root
+    group: root
+    mode: "0644"
+
+# 检查口令重复次数限制
+- name: ensure opasswd exist
+  file:
+    path: /etc/security/opasswd
+    state: file
+    mode: "0600"
+    owner: root
+    group: root
+
+- name: set system-auth password_pam_unix
+  lineinfile:
+    line: 'password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok remember=5'
+    path: /etc/pam.d/system-auth
+    backup: yes
+    insertafter: 'password(\ |\t)+requisite'
+    regexp: '^password(\ |\t)+sufficient(\ |\t)+pam_unix.so'
+    owner: root
+    group: root
+    mode: "0644"

@@ -1,3 +1,11 @@
+#- name: debug
+#  debug:
+#    msg: "{{mongo_replica_conf_file| realpath}}"
+#  tags: 
+#    - debug
+- import_tasks: mongodb_set_core_args.yml
+  tags:
+    - mongodb_set_core_args
 
 - import_tasks: generate_mongo_cert_confs.yml
   tags:
@@ -11,8 +19,36 @@
   tags:
     - copy_mongo_ssl_conf
 
+- import_tasks: install_pymongo.yml
+  tags:
+    - install_pymongo
+
 - import_role:
     name: common_boot_app
   tags:
     - mongo_boot
 
+- import_tasks: create_mongo_user.yml
+  tags:
+    - create_mongo_local_user
+  when: mongo_replica_conf_file is not none
+
+- include_tasks: add_replicaset_conf.yml
+  tags:
+    - add_replicaset_conf
+  when: mongo_replica_conf_file is not none
+
+- include_tasks: create_mongo_replicaset.yml
+  tags:
+    - create_mongo_replicaset
+  when: mongo_replica_conf_file is not none
+
+- include_tasks: add_tls_conf.yml
+  tags:
+    - add_tls_conf
+  when: mongo_tls_conf_file is not none
+
+- import_tasks: add_shard.yml
+  tags:
+    - add_shard
+  when: mongo_shards is not none

@@ -1,11 +1,18 @@
+- name: create mongod ssl dir
+  file:
+    path: '{{ mongo_conf_ssl_dir }}'
+    state: directory
+    owner: '{{mongo_run_user}}'
+    group: "{{mongo_run_user}}"
+    mode: "0755"
 
 - name: copy mongod ssl conf file
   template:
     src: "{{ item }}" 
-    dest: "{{ mongod_conf_ssl_dir }}" 
+    dest: "{{ mongo_conf_ssl_dir }}" 
     owner: "{{ mongo_run_user }}" 
     group: "{{ mongo_run_user }}" 
     mode: "0600" 
     backup: yes
-  loop: '{{mongod_conf_ssl_files}}'
-  when: item is not none
+  loop: '{{mongo_conf_ssl_files}}'
+  when: item is exists

@@ -1,0 +1,8 @@
+
+- name: close trnasparent huge page
+  shell: 
+    cmd: echo never > {{item}}
+    removes: '{{item}}'
+  loop:
+    - /sys/kernel/mm/transparent_hugepage/enabled
+    - /sys/kernel/mm/transparent_hugepage/defrag

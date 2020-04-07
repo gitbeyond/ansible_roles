@@ -1,0 +1,12 @@
+- name: install pymongo
+  yum:
+    name:
+    - python-pymongo
+    - python-pip
+    state: present
+
+- name: upgrade pymongo
+  pip:
+    name: pymongo==3.10.1
+    state: present
+    extra_args: "--index-url http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com"

@@ -8,6 +8,7 @@
     - '{{mongo_work_dir}}/{{mongo_cert_json_dir}}'
   run_once: true
 
+# 针对每个 server 生成不同的 csr 文件
 - name: generate mongodb server cert confs
   local_action:
     module: template
@@ -17,6 +18,7 @@
   loop: '{{mongo_cluster_hosts}}'
   run_once: true
 
+# 生成 cilent, CA, server 的 csr 文件
 - name: generate mongodb cert confs
   local_action:
     module: template
