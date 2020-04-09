@@ -14,3 +14,10 @@
     enabled: yes
   listen: restart_sshd
   when: ansible_service_mgr == 'systemd'
+
+#- name: set user empty passwd
+#  user:
+#    name: '{{item}}'
+#    password: '*'
+#  loop: "{{ test_user_result | json_query('results[?rc==`0`].item')}}"
+#  listen: set_user_empty_passwd

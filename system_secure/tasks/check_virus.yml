@@ -1,0 +1,2 @@
+- name: running check_virus script
+  script: 'check_virus.sh'

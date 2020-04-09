@@ -1,0 +1,9 @@
+# authconfig --passminlen=8 --passmaxclassrepeat=4 --enablereqlower --enablerequpper --enablereqdigit --enablereqother --passalgo=sha512 --update
+- name: update_pwquality_file
+  copy:
+    src: '{{system_pwquality_file}}'
+    dest: '/etc/security/pwquality.conf'
+    backup: yes
+    owner: root
+    group: root
+    mode: "0644"

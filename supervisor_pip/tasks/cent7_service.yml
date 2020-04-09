@@ -1,6 +1,16 @@
 - name: copy supervisord boot file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
-  with_items:
-    - { src: '{{supervisor_prog_name}}.service', dest: '/usr/lib/systemd/system/{{supervisor_prog_name}}.service', owner: root, group: root, mode: "0644" }
-- name: systemd daemon reload for supervisord
-  systemd: daemon_reload=yes name={{supervisor_prog_name}}
+  template: 
+    src: '{{supervisor_boot_file}}'
+    dest: '/usr/lib/systemd/system/{{supervisor_prog_name}}.service'
+    owner: '{{ supervisor_run_user }}'
+    group: '{{ supervisor_run_user }}'
+    mode: "0644"
+    backup: yes
+  notify: systemd daemon reload
+
+- name: systemd start supervisord
+  systemd: 
+    daemon_reload: yes 
+    name: '{{supervisor_prog_name}}'
+    state: started
+    enabled: yes

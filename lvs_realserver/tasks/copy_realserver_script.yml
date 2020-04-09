@@ -5,9 +5,13 @@
     dest: '{{ item.dest }}' 
     owner: root 
     group: root 
-    mode: "0755"
+    mode: "{{item.mode}}"
   with_items:
     - src: realserver
       dest: '/etc/rc.d/init.d/'
+      mode: "0755"
+    - src: realserver.service
+      dest: '/usr/lib/systemd/system/'
+      mode: "0644"
   notify:
     - systemctl_daemon_reload

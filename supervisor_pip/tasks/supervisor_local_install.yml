@@ -1,5 +1,5 @@
-# edirtor: haifeng
-# 2019/04/28
+# edietor: haifeng
+# 2020/04/09
 
 
 - name: register packet vars
@@ -7,7 +7,7 @@
   #register: {{ item.split('/')[-1].split('-')[0]}}
   #register: "{{packet_name}}"
   register: packet_vars
-  with_items: "{{supervisor_packets}}"
+  #with_items: "{{supervisor_packets}}"
   run_once: true
 
 #- name: test vars
@@ -21,34 +21,34 @@
 #  run_once: true
 
 - name: mkdir soft basedir
-  file: path={{source_deploy_dir}} state=directory owner=root group=root mode=0755
+  file: 
+    path: '{{source_deploy_dir}}' 
+    state: directory 
+    owner: '{{supervisor_run_user}}'
+    group: '{{supervisor_run_user}}'
+    mode: "0755"
 
 - name: copy supervisor packet
   #unarchive: src={{ item }} dest={{ source_deploy_dir }} owner=root group=root creates={{ item.creates }}
   #unarchive: src={{ item }} dest={{ source_deploy_dir }} owner=root group=root creates={{source_deploy_dir}}/{{ item.split('/')[-1].replace('.tar.gz','')}}
-  unarchive: src={{ item }} dest={{ source_deploy_dir }} owner=root group=root creates="{{source_deploy_dir}}/{% for var in packet_vars.results %}{% if var.item == item %} var.stdout {% endif %}{% endfor %}"
-  with_items: '{{supervisor_packets}}'
+  unarchive: 
+    src: '{{ item }}' 
+    dest: '{{ source_deploy_dir }}' 
+    owner: root 
+    group: root 
+    creates: "{{source_deploy_dir}}/{{packet_vars.stdout}}"
+    #creates: "{{source_deploy_dir}}/{% for var in packet_vars.results %}{% if var.item == item %} var.stdout {% endif %}{% endfor %}"
+  #with_items: '{{supervisor_packets}}'
     #- {src: '{{ jdk_packet }}', dest: '{{jdk_install_dir}}/', owner: root, group: root, creates: '{{jdk_install_dir}}/{{jdk_dir_name}}'}
 
 - name: install packet
   shell: python setup.py install
   args:
-    chdir: "{{source_deploy_dir}}/{{item.stdout}}"
+    #chdir: "{{source_deploy_dir}}/{{item.stdout}}"
+    chdir: "{{source_deploy_dir}}/{{packet_vars.stdout}}"
     #creates: "supervisor-3.1.4-py2.7.egg-info"
-    creates: /usr/lib64/python{{python_version}}/site-packages/{{item.stdout}}-py{{python_version}}.egg-info || /usr/lib/python{{python_version}}/site-packages/{{item.stdout}}-py{{python_version}}.egg-info
-  with_items: "{{packet_vars.results}}"
+    #creates: /usr/lib64/python{{python_version}}/site-packages/{{item.stdout}}-py{{python_version}}.egg-info || /usr/lib/python{{python_version}}/site-packages/{{item.stdout}}-py{{python_version}}.egg-info
+    #creates: /usr/lib64/python{{python_version}}/site-packages/{{packet_vars.stdout}}-py{{python_version}}.egg-info || /usr/lib/python{{python_version}}/site-packages/{{packet_vars.stdout}}-py{{python_version}}.egg-info
+    creates: /usr/lib*/python{{python_version}}/site-packages/{{packet_vars.stdout}}-py{{python_version}}.*
+  #with_items: "{{packet_vars.results}}"
 
-#- name: install meld3
-#  shell: python setup.py install
-#  args:
-#    chdir: "{{source_deploy_dir}}/meld3-1.0.2"
-#    creates: /usr/lib/python{{python_version}}/site-packages/meld3-1.0.2-py{{python_version}}.egg
-#    # /usr/lib64/python{{python_version}}/site-packages/meld3-0.6.10-py{{python_version}}.egg-info
-#    #creates: /usr/lib64/python2.7/site-packages/meld3-0.6.10-py2.7.egg-info
-#  #with_items: "{{supervisor_packet}}"
-#
-#- name: install supervisor
-#  shell: python setup.py install
-#  args:
-#    chdir: "{{source_deploy_dir}}/supervisor-3.3.5"
-#    creates: /usr/bin/supervisorctl

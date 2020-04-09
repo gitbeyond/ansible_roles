@@ -1,12 +1,17 @@
 ---
-- include: install_realserver_packet.yml
+- import_tasks: install_realserver_packet.yml
   tags:
     - install_realserver_packet
 
-- include: copy_realserver_script.yml
+- import_tasks: copy_realserver_script.yml
   tags:
     - copy_realserver_script
 
-- include: boot_realserver.yml
+- import_tasks: boot_realserver.yml
   tags:
     - boot_realserver
+
+- include_tasks: create_prom_monitor_metrics.yml
+  tags:
+    - create_prom_monitor_metrics
+  when: lvs_realserver_generate_metrics == true

@@ -39,36 +39,47 @@ rh_status() {
     return $RETVAL
 }
 
+rs_start(){
+    #ifconfig lo:0 $VIP netmask 255.255.255.255 broadcast $VIP
+    ip add add ${VIP}/32 broadcast ${VIP} dev lo label lo:0
+    #ip add add ${VIP}/32 dev lo label lo:0
+    #/sbin/route add -host $VIP dev lo:0
+    ip rou add ${VIP}/32 via ${VIP} dev lo scope link
+    echo "1" >/proc/sys/net/ipv4/conf/lo/arp_ignore
+    echo "2" >/proc/sys/net/ipv4/conf/lo/arp_announce
+    echo "1" >/proc/sys/net/ipv4/conf/all/arp_ignore
+    echo "2" >/proc/sys/net/ipv4/conf/all/arp_announce
+    echo "RealServer Start OK"
+}
+
+rs_stop(){
+    #ifconfig lo:0 down
+    ip add del ${VIP}/32 dev lo
+    ip rou del ${VIP}/32 dev lo
+    #route del $VIP >/dev/null 2>&1
+    echo "0" >/proc/sys/net/ipv4/conf/lo/arp_ignore
+    echo "0" >/proc/sys/net/ipv4/conf/lo/arp_announce
+    echo "0" >/proc/sys/net/ipv4/conf/all/arp_ignore
+    echo "0" >/proc/sys/net/ipv4/conf/all/arp_announce
+    echo "RealServer Stoped"
+}
 
 case "$1" in
 start)
-        #ifconfig lo:0 $VIP netmask 255.255.255.255 broadcast $VIP
-        ip add add ${VIP}/32 broadcast ${VIP} dev lo label lo:0
-        #ip add add ${VIP}/32 dev lo label lo:0
-        #/sbin/route add -host $VIP dev lo:0
-        ip rou add ${VIP}/32 via ${VIP} dev lo scope link
-        echo "1" >/proc/sys/net/ipv4/conf/lo/arp_ignore
-        echo "2" >/proc/sys/net/ipv4/conf/lo/arp_announce
-        echo "1" >/proc/sys/net/ipv4/conf/all/arp_ignore
-        echo "2" >/proc/sys/net/ipv4/conf/all/arp_announce
-        echo "RealServer Start OK"
-        ;;
+    rs_start
+    ;;
 stop)
-        #ifconfig lo:0 down
-        ip add del ${VIP}/32 dev lo
-        ip rou del ${VIP}/32 dev lo
-        #route del $VIP >/dev/null 2>&1
-        echo "0" >/proc/sys/net/ipv4/conf/lo/arp_ignore
-        echo "0" >/proc/sys/net/ipv4/conf/lo/arp_announce
-        echo "0" >/proc/sys/net/ipv4/conf/all/arp_ignore
-        echo "0" >/proc/sys/net/ipv4/conf/all/arp_announce
-        echo "RealServer Stoped"
-        ;;
+    rs_stop
+    ;;
 status)
-        rh_status 
-        ;;
+    rh_status 
+    ;;
+restart)
+    rs_stop
+    rs_start
+    ;;
 *)
-        echo "Usage: $0 {start|stop|status}"
-        exit 1
+    echo "Usage: $0 {start|stop|status|restart}"
+    exit 1
 esac
 exit ${RETVAL}

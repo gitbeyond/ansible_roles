@@ -7,3 +7,8 @@
   with_items:
     - chkconfig --list '{{supervisor_prog_name}}' || chkconfig --add '{{supervisor_prog_name}}'
 
+- name: set supervisord boot and starting up
+  service: name={{ item.name }} state={{ item.state }} enabled=yes
+  with_items:
+    - { name: "{{supervisor_prog_name}}", state: started }
+

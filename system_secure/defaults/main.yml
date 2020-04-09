@@ -2,7 +2,27 @@ system_common_admin_user: geo
 system_common_admin_pass: '$6$mysecretsalt$yf3du7J8hen0MG.nKFA6P8sm0nM1vrXEW.PQYDKNmz1./Xc5MczLax0KziVIstctdjgYYSamAVpYY04EW63y6.'
 #system_ssh_pub_key: '{{lookup("file", "${HOME}/.ssh/id_rsa.pub")}}'
 system_ssh_pub_key:
+system_pwquality_file: 'pwquality.conf'
 
+system_hdp_users:
+  - ams
+  - ambari-qa
+  - hadoop
+  - hdfs
+  - users
+  - hbase
+  - hcat
+  - hive
+  - hcat
+  - kafka
+  - mapred
+  - spark
+  - spark
+  - storm
+  - tez
+  - httpfs
+  - yarn
+  - zookeeper
 
 system_check_scripts:
   - check_root_ssh.sh # ansible_job

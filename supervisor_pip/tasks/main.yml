@@ -1,34 +1,28 @@
 # edirtor: haifeng
 # 2017/01/12
 
-
-- include: supervisor_{{supervisor_install_method}}_install.yml
-  tags:
-    - install_supervisor
-#  when: supervisor_install_method == "local"
-
-#- include: supervisor_net_install.yml
-#  when: supervisor_install_method == "net"
-
-- include: create_supervisor_dir.yml
+- import_tasks: create_supervisor_dir.yml
   tags:
     - create_supervisor_dir
 
-- include: copy_supervisor_conf.yml
+- include_tasks: supervisor_local_install.yml
+  tags:
+    - install_supervisor
+  loop: '{{supervisor_packets}}'
+  when: supervisor_install_method == "local"
+
+- include_tasks: supervisor_net_install.yml
+  when: supervisor_install_method == "net"
+  tags:
+    - install_supervisor
+
+- import_tasks: copy_supervisor_conf.yml
   tags:
     - copy_supervisor_conf
 
-- include: cent6_service.yml
-  #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 6
-  # ansible-2.3.0.0
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+- include_tasks: cent6_service.yml
+  when: ansible_service_mgr == 'upstart'
 
-- include: cent7_service.yml
-  #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
-
-- name: set supervisord boot and starting up
-  service: name={{ item.name }} state={{ item.state }} enabled=yes
-  with_items:
-    - { name: "{{supervisor_prog_name}}", state: started }
+- include_tasks: cent7_service.yml
+  when: ansible_service_mgr == 'systemd'
 

@@ -15,9 +15,9 @@
 
 example:
 ```
----
-- hosts: 10.111.32.254
-  remote_user: root
+- hosts: 10.111.32.209
+  remote_user: geo
   roles:
-   - { role: system_init, ntp_server: "cn.pool.ntp.org", hadoop_yes: true}
+    - {role: system_secure, system_ssh_pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDvV20+EMwX5yLV6aP3Qf+B2+Td4G7LTcKTp8VTln019F6bud0CEBQkMH9PZdY/G9kYUdCBQOSVx7IprnYjOXTy4MVQZNrZoWtQQfhjiXSVArUr7nAXEwaDh1MO0FXrfOVKgfvK0j9T/vfdXe2JfdPaKo9UarO1IomGWSIa/HWBsr10rqSYuD7JlCrN3jw+xtPVhadXyRLloiHyx740CkMnYLzOeGVxfzBn97PrRadga1ITzu5+D7i6qSsHJnthZGu6OUnnMBjVUJdf4/aiZgRmO+owTXmMXlsssssssssssssssssssssssBHphiK5Q+9oPeu7H root@localhost.localdomain", system_common_admin_pass: '$6$mysecretsalt$yf3du7J8hen0MG.nKFA6P8sm0nM1vrXEW.PQYDKNmz1./Xc5MczLax0KziVIstctdjgYYSamAVpYY04EW63y6.'}
+
 ```

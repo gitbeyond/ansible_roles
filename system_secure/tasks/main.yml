@@ -37,6 +37,19 @@
   tags:
     - set_pam_su
 
+- import_tasks: set_hdp_user_empty_password.yml
+  tags:
+    - set_hdp_user_empty_password
+  #when: hdp_cluster == true
+
+- import_tasks: update_authconfig.yml
+  tags:
+    - update_authconfig
+
+- import_tasks: check_virus.yml
+  tags:
+    - check_virus
+
 - import_tasks: set_common_admin_user.yml
   tags:
     - set_common_admin_user

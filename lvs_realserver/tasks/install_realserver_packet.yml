@@ -3,4 +3,5 @@
   yum:
     name:
       - net-tools
+      - iproute
     state: present

@@ -1,32 +1,85 @@
 #!/bin/bash
 #chkconfig: 2345 70 30  #234
-
 VIP={{lvs_vip}}
+ip_dev=lo
 source /etc/rc.d/init.d/functions
+RETVAL=0
+
+
+rs_status(){
+    # status == 0 is right
+    ip add sh ${ip_dev} |grep ${VIP} &> /dev/null
+    vip_status=$?
+    # rouer status
+    vip_route=$(ip rou sh root ${VIP} scope link)
+    [ -n "${vip_route}" ] && rou_status=0 || rou_status=1
+    # kernel argument value
+    lo_arp_ignore_val=$(cat /proc/sys/net/ipv4/conf/lo/arp_ignore)
+    #[ ${lo_arp_ignore_val} == 0 ] && lo_arp_ignore_status=1 || lo_arp_ignore_status=0
+    lo_arp_announce_val=$(cat /proc/sys/net/ipv4/conf/lo/arp_announce)
+    all_arp_ignore_val=$(cat /proc/sys/net/ipv4/conf/all/arp_ignore)
+    all_arp_announce_val=$(cat /proc/sys/net/ipv4/conf/all/arp_announce)
+    for item in lo_arp_ignore_val lo_arp_announce_val all_arp_ignore_val all_arp_announce_val;do
+        item_status=${item/val/status}
+        [ ${!item} == 0 ] && eval ${item_status}=1 || eval ${item_status}=0
+    done
+    for stat in vip_status rou_status lo_arp_ignore_status lo_arp_announce_status all_arp_ignore_status all_arp_announce_status;do
+        stat_val=${!stat}
+        if [ ${stat_val} -ne 0 ];then
+            echo "RealServer is abnormal"
+            return ${stat_val}
+        fi
+    done 
+    echo "RealServer is ok"
+    return ${vip_status}
+}
+rh_status() {
+    rs_status
+    RETVAL=$?
+    return $RETVAL
+}
+
+rs_start(){
+    #ifconfig lo:0 $VIP netmask 255.255.255.255 broadcast $VIP
+    ip add add ${VIP}/32 broadcast ${VIP} dev lo label lo:0
+    #ip add add ${VIP}/32 dev lo label lo:0
+    #/sbin/route add -host $VIP dev lo:0
+    ip rou add ${VIP}/32 via ${VIP} dev lo scope link
+    echo "1" >/proc/sys/net/ipv4/conf/lo/arp_ignore
+    echo "2" >/proc/sys/net/ipv4/conf/lo/arp_announce
+    echo "1" >/proc/sys/net/ipv4/conf/all/arp_ignore
+    echo "2" >/proc/sys/net/ipv4/conf/all/arp_announce
+    echo "RealServer Start OK"
+}
+
+rs_stop(){
+    #ifconfig lo:0 down
+    ip add del ${VIP}/32 dev lo
+    ip rou del ${VIP}/32 dev lo
+    #route del $VIP >/dev/null 2>&1
+    echo "0" >/proc/sys/net/ipv4/conf/lo/arp_ignore
+    echo "0" >/proc/sys/net/ipv4/conf/lo/arp_announce
+    echo "0" >/proc/sys/net/ipv4/conf/all/arp_ignore
+    echo "0" >/proc/sys/net/ipv4/conf/all/arp_announce
+    echo "RealServer Stoped"
+}
+
 case "$1" in
 start)
-        ifconfig lo:0 $VIP netmask 255.255.255.255 broadcast $VIP
-        #ip add add ${VIP}/32  broadcast ${VIP} label lo:0 dev lo
-        /sbin/route add -host $VIP dev lo:0
-        echo "1" >/proc/sys/net/ipv4/conf/lo/arp_ignore
-        echo "2" >/proc/sys/net/ipv4/conf/lo/arp_announce
-        echo "1" >/proc/sys/net/ipv4/conf/all/arp_ignore
-        echo "2" >/proc/sys/net/ipv4/conf/all/arp_announce
-        echo "RealServer Start OK"
-        ;;
+    rs_start
+    ;;
 stop)
-        ifconfig lo:0 down
-        #ip add del ${VIP}/32 dev lo label lo:0
-        route del $VIP >/dev/null 2>&1
-        echo "0" >/proc/sys/net/ipv4/conf/lo/arp_ignore
-        echo "0" >/proc/sys/net/ipv4/conf/lo/arp_announce
-        echo "0" >/proc/sys/net/ipv4/conf/all/arp_ignore
-        echo "0" >/proc/sys/net/ipv4/conf/all/arp_announce
-        echo "RealServer Stoped"
-        ;;
-        *)
-        echo "Usage: $0 {start|stop}"
-        exit 1
+    rs_stop
+    ;;
+status)
+    rh_status 
+    ;;
+restart)
+    rs_stop
+    rs_start
+    ;;
+*)
+    echo "Usage: $0 {start|stop|status|restart}"
+    exit 1
 esac
-exit 0
-
+exit ${RETVAL}

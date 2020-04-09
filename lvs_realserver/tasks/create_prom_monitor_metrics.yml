@@ -1,0 +1,22 @@
+- name: create realserver script dir
+  file:
+    path: '{{script_deploy_dir}}/realserver'
+    state: directory
+    owner: root
+    group: root
+
+- name: copy realserver_check script
+  template: 
+    src: 'check_realserver.sh'
+    dest: '{{ script_deploy_dir }}/realserver' 
+    owner: root 
+    group: root 
+    mode: "0644"
+
+- name: add realserver_check cron job 
+  cron:
+    name: check_realserver 
+    backup: yes
+    job: "/bin/bash {{script_deploy_dir}}/realserver/check_realserver.sh"
+    minute: "*/1"
+    user: root
