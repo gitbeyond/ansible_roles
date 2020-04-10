@@ -20,8 +20,8 @@ mysql_port: 3306
 #mysql_master_sync_pass
 #mysql_slave_sync_user
 #mysql_slave_sync_pass
-
+mysql_user_sql_log_gin: False
 # type list
-mysql_app_users:
+mysql_app_users: []
 # type list
-mysql_app_old_users:
+mysql_app_old_users: []

@@ -1,7 +1,8 @@
 - name: install MySQL-python packet
-  yum: name={{item.name}} state={{item.state}}
-  with_items:
-    - { name: MySQL-python, state: latest}
+  yum: 
+    name:
+    - MySQL-python 
+    state: latest
 
 - name: rename ~/.my.cnf if exists
   shell: mv ~/.my.cnf ~/.my.cnf_ansible_tmp
@@ -10,36 +11,50 @@
     removes: ~/.my.cnf
   ignore_errors: true
 
-- name: debug var
-  debug:
-    msg: 'mysql_app_users: {{mysql_app_users}}'
+#- name: debug var
+#  debug:
+#    msg: 'mysql_app_users: {{mysql_app_users}}'
 
 - name: create mysql app user
   mysql_user: 
     login_user: '{{mysql_login_user}}' 
     login_unix_socket: '{{mysql_sock}}' 
     login_password: '{{mysql_login_pass}}' 
+    sql_log_bin: '{{mysql_user_sql_log_gin }}'
     name: '{{item.name}}'
     password: '{{ item.password }}' 
     host: '{{ item.host }}' 
     priv: "{{item.priv}}" 
+    encrypted: '{{item.encrypted | default(False, true)}}'
+    append_privs: '{{item.append_privs | default(False, true)}}'
     state: present
-  with_items: '{{mysql_app_users}}'  
+  loop: '{{mysql_app_users}}'  
   when: mysql_app_users is defined and item is not none
+  tags:
+    - mysql_create_user
 
+#- name: debug 2
+#  debug:
+#    msg: 'mysql_app_old_users: {{mysql_app_old_users}}'
+#  tags:
+#    - mysql_delete_old_user
 
 - name: delete mysql app old user
   mysql_user: 
     login_user: '{{mysql_login_user}}' 
     login_unix_socket: '{{mysql_sock}}' 
     login_password: '{{mysql_login_pass}}' 
-    name: '{{item.name}}'
-    host: '{{ item.host }}' 
+    sql_log_bin: '{{mysql_user_sql_log_gin }}'
+    name: '{{item.name | default("haha", true)}}'
+    host: '{{ item.host | default("localhost", true)}}' 
     #password: '{{ item.password }}' 
     #priv: "{{item.priv}}" 
     state: absent
-  with_items: '{{mysql_app_old_users}}'  
-  when: mysql_app_old_users is defined and item is not none
+  #when: mysql_app_old_users is defined and mysql_app_old_users is not none and item is not none
+  when: mysql_app_old_users is defined and mysql_app_old_users is not none
+  loop: '{{mysql_app_old_users}}'  
+  tags:
+    - mysql_delete_old_user
 
 - name: rename ~/.my.cnf_ansible_tmp if exists
   shell: mv ~/.my.cnf_ansible_tmp ~/.my.cnf

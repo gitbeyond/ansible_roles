@@ -26,7 +26,7 @@ rs_status(){
     for stat in vip_status rou_status lo_arp_ignore_status lo_arp_announce_status all_arp_ignore_status all_arp_announce_status;do
         stat_val=${!stat}
         if [ ${stat_val} -ne 0 ];then
-            echo "RealServer is abnormal"
+            echo "RealServer is abnormal" >&2
             return ${stat_val}
         fi
     done 

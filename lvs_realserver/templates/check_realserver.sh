@@ -8,7 +8,7 @@ metric_name=node_ipvs_realserver_status
 check_realserver(){
     echo "# HELP ${metric_name} realserver running status, 0 : error, 1 : running"
     echo "# TYPE ${metric_name} gauge"
-    /etc/init.d/realserver status
+    /etc/init.d/realserver status &> /dev/null
     if [ $? == 0 ];then
         echo "${metric_name} 1"
     else
@@ -16,7 +16,7 @@ check_realserver(){
     fi
 }
 
-if [ -d ${metric_file_full_path} ];then 
+if [ -d ${node_exporter_textfile_directory} ];then 
     check_realserver > ${metric_file_full_path}_1 && /bin/mv ${metric_file_full_path}_1 ${metric_file_full_path}
 else
     exit 1
