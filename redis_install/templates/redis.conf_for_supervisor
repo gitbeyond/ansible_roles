@@ -43,11 +43,11 @@ daemonize no
 
 # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
 # default. You can specify a custom pid file location here.
-pidfile {{var_dir}}/redis.pid
+pidfile {{redis_var_dir}}/{{redis_service_name}}.pid
 
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
-port {{app_port}}
+port {{redis_port}}
 
 # TCP listen() backlog.
 #
@@ -105,7 +105,7 @@ loglevel notice
 # Specify the log file name. Also the empty string can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
-logfile "{{log_dir}}/redis_6379.log"
+logfile "{{redis_log_dir}}/{{redis_service_name}}.log"
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
@@ -179,7 +179,8 @@ rdbcompression yes
 rdbchecksum yes
 
 # The filename where to dump the DB
-dbfilename dump.rdb
+#dbfilename dump.rdb
+dbfilename {{redis_service_name}}.rdb
 
 # The working directory.
 #
@@ -189,7 +190,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir {{ data_dir }}
+dir {{ redis_data_dir }}
 
 ################################# REPLICATION #################################
 
@@ -453,7 +454,7 @@ maxclients 10000
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
 # maxmemory <bytes>
-maxmemory 30g
+maxmemory 3g
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached. You can select among five behaviors:
@@ -513,7 +514,7 @@ appendonly no
 
 # The name of the append only file (default: "appendonly.aof")
 
-appendfilename "appendonly.aof"
+appendfilename "{{redis_service_name}}.aof"
 
 # The fsync() call tells the Operating System to actually write data on disk
 # instead of waiting for more data in the output buffer. Some OS will really flush

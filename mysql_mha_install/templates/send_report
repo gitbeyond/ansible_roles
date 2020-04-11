@@ -7,11 +7,11 @@ use Getopt::Long;
 
 #new_master_host and new_slave_hosts are set only when recovering master succeeded
 my ( $dead_master_host, $new_master_host, $new_slave_hosts, $subject, $body );
-my $smtp='smtp.263.net';
+my $smtp='localhost';
 my $mail_from='mha_manager';
-my $mail_user='zabbix@geotmt.com';
-my $mail_pass='7805020sch';
-my $mail_to=['wanghaifeng@geotmt.com','songchunhui@geotmt.com'];
+my $mail_user='zabbix@localhost.com';
+my $mail_pass='123456';
+my $mail_to=['abcdef@localhost.com'];
 GetOptions(
   'orig_master_host=s' => \$dead_master_host,
   'new_master_host=s'  => \$new_master_host,

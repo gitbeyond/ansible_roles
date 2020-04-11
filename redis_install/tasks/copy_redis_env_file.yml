@@ -1,0 +1,20 @@
+- name: copy redis log rotate file
+  template: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}'
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644"
+  with_items:
+    - { src: "redis.logrotate", dest: '/etc/logrotate.d/redis_for_ansible'}
+  when: redis_run_method == "system"
+
+- name: copy redis env file
+  template:
+    src: '{{redis_env_file}}'
+    dest: '/etc/profile.d/redis.sh'
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+

@@ -17,24 +17,3 @@
     config: '{{supervisor_prim_conf}}'
   when: redis_is_multi_instance == false
 
-- name: copy supervisor redis conf file
-  template: 
-    src: '{{ item.redis_src_boot_conf }}' 
-    dest: '{{ supervisor_conf_dir }}/{{item.redis_service_name}}.ini' 
-    owner: 'root' 
-    group: 'root' 
-    mode: "0644" 
-    backup: yes
-  with_items: '{{redis_instances}}'
-  when: redis_is_multi_instance == true
-  #notify:
-  #  - supervisorctl_reboot_{{item.redis_service_name}}
-  register: copy_redis_instances_supervisor_boot_file
-
-- name: restart redis_service when redis_conf is changed
-  supervisorctl:
-    name: '{{item.item}}'
-    state: restarted
-    config: '{{supervisor_prim_conf}}'
-  with_items: '{{copy_redis_instances_supervisor_boot_file.results + copy_redis_instances_conf.results}}'
-  when: item.changed == true

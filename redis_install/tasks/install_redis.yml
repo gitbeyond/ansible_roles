@@ -6,13 +6,17 @@
   when: redis_packet is not none
 
 - name: cp and unarchive redis to remote host
-  unarchive: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} creates={{ item.creates }}
-  with_items:
-    - {src: '{{ redis_packet }}', dest: '{{ redis_install_dir }}/', owner: '{{redis_run_user}}', group: '{{redis_run_user}}', creates: '{{ redis_install_dir }}/{{redis_dir_name.stdout}}'}
+  unarchive: 
+    src: '{{ redis_packet }}' 
+    dest: '{{ redis_install_dir }}' 
+    owner: '{{ redis_run_user }}' 
+    group: '{{ redis_run_user }}' 
+    creates: '{{ redis_install_dir }}/{{redis_dir_name.stdout}}'
 
 - name: create redis link dir
-  file: src={{ item.src }} dest={{item.dest}} state={{ item.state }}
-  with_items:
-    - { src: "{{redis_install_dir}}/{{redis_dir_name.stdout}}", dest: "{{redis_base_dir}}", state: link}
+  file: 
+    src: '{{redis_install_dir}}/{{redis_dir_name.stdout}}' 
+    dest: '{{redis_base_dir}}' 
+    state: 'link'
   when: redis_dir_name.stdout != redis_app_name
 

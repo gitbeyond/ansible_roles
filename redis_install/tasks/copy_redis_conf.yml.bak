@@ -34,18 +34,18 @@
 
 - name: copy redis_instances conf file
   template:
-    src: '{{ redis_src_conf }}' 
-    dest: '{{redis_conf_dir }}/{{redis_service_name}}.conf' 
+    src: '{{ item.redis_src_conf }}' 
+    dest: '{{redis_conf_dir }}/{{item.redis_service_name}}.conf' 
     owner: '{{ redis_run_user }}' 
     group: '{{ redis_run_user }}' 
     mode: "0644" 
     backup: yes
     #redis_service_name: "{{item.redis_service_name}}"
     #redis_requirepass: "{{item.redis_requirepass}}"
-  #loop: '{{redis_instances}}'
-  #when: redis_is_multi_instance == true 
-  #register: copy_redis_instances_conf
-  #loop_control:
-  #  index_var: idx
+  loop: '{{redis_instances}}'
+  when: redis_is_multi_instance == true 
+  register: copy_redis_instances_conf
+  loop_control:
+    index_var: idx
     #extended: yes
 

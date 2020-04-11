@@ -3,7 +3,7 @@
     name: '{{redis_service_name}}' 
     state: restarted
 
-- name: restart redis service for supervisor
+- name: supervisor_restart_redis
   supervisorctl: 
     name: '{{redis_service_name}}'
     state: restarted

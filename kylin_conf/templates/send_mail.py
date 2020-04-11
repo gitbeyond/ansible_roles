@@ -16,9 +16,9 @@ def _format_addr(s):
         Header(name, 'utf-8').encode(),
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
-from_addr = 'zabbix@geotmt.com'
-password = '7805020sch'
-to_addr = 'wanghaifeng@geotmt.com'
+from_addr = ''
+password = ''
+to_addr = ''
 smtp_server = 'smtpcom.263xmail.com'
 project_name = sys.argv[1]
 #msg_text="""

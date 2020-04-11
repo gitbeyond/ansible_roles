@@ -1,5 +1,6 @@
 - name: create redis user
-  user: name={{ item.name }} state=present system={{ item.system }}
-  with_items:
-    - { name: '{{redis_run_user}}', system: yes}
+  user: 
+    name: '{{ redis_run_user }}' 
+    state: present 
+    system: yes
 
