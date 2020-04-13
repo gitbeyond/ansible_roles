@@ -10,17 +10,17 @@ import sys
 
 #project_name = '{{group_names[-1]}} {{ansible_default_ipv4.address}}'
 project_name = sys.argv[1]
-{%raw%}
 def _format_addr(s):
     name, addr = parseaddr(s)
     return formataddr((
         Header(name, 'utf-8').encode(),
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
-from_addr = ''
-password = ''
-to_addr = ['', '']
-smtp_server = 'smtpcom.263xmail.com'
+from_addr = '{{mysql_backup_mail_user}}'
+password = '{{mysql_backup_mail_pass}}'
+to_addr = [{%for item in mysql_backup_mail_to %}"{{item}}",{%endfor%}]
+smtp_server = '{{mysql_backup_mail_smtp}}'
+{%raw%}
 #msg_text="""
 #%s civp log put to hdfs already succeed.
 #log size is %s.

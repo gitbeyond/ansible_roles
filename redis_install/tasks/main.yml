@@ -15,10 +15,16 @@
   tags:
     - copy_redis_env_file
 
+#- include_tasks: copy_redis_conf.yml
+#  tags:
+#    - copy_redis_conf
+#  loop: '{{range(0, redis_instances | length | int) | list}}'
+#  when: redis_is_multi_instance == true
+
 - include_tasks: copy_redis_conf.yml
   tags:
     - copy_redis_conf
-  loop: '{{range(0, redis_instances | length | int) | list}}'
+  when: redis_is_multi_instance == false
 
 - include_tasks: centos6_service.yml
   when: redis_run_method == "system" and ansible_service_mgr == 'upstart'
@@ -30,12 +36,22 @@
   tags:
     - centos7_service
 
+- name: debug var
+  debug:
+    msg: "num: {{redis_instance_num}} -- length: {{redis_instances_length}} -- redis_sentinel: {{redis_sentinel_statments}}"
+
 #- include_tasks: supervisor_service.yml
 - include_tasks: supervisor_service_multi_instance.yml
   when: redis_run_method == "supervisor"
   tags:
     - supervisor_service
-  loop: '{{range(0, redis_instances | length | int) | list}}'
+  loop: '{{range(0, redis_instance_num | int) | list}}'
+  #loop: '{{range(0, redis_instances | length | int) | list}}'
+
+#- include_tasks: supervisor_service.yml
+#  when: redis_run_method == "supervisor" and redis_is_multi_instance == false
+#  tags:
+#    - supervisor_service
 
 - include: redis_core_args.yml
   tags:

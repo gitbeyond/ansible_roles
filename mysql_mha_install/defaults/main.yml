@@ -16,6 +16,13 @@ mha_instance_report_script: send_report
 
 mha_client_hosts: "{{ansible_play_hosts}}"
 
+mha_mail_smtp: 'localhost'
+mha_mail_from: 'mha_manager'
+mha_mail_user: 'mha@localhost'
+mha_mail_pass: '123456'
+mha_mail_to:
+  - root@localhost
+
 # supervisor
 supervisor_conf_dir:
 
@@ -26,5 +33,4 @@ mysql_vip:
 mysql_mha_user:
 mysql_mha_pass:
 mysql_mha_priv: '*.*:all'
-
 

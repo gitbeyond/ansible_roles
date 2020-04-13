@@ -8,9 +8,9 @@
   tags:
     - install_mha_client
 
-- include: create_mha_user.yml
+- include: create_mha_mysql_user.yml
   tags:
-    - create_mha_user
+    - create_mha_mysql_user
 
 - include: add_key_to_mha_client_host.yml
   tags:

@@ -10,23 +10,10 @@ local_target_parent_dir: /data/apps/data/backup
 backup_script_dir: '{{script_deploy_dir}}/backup'
 backup_cron_hour: '5'
 
+backup_mail_smtp: 'localhost'
+backup_mail_from: 'mha_manager'
+backup_mail_user: 'mha@localhost'
+backup_mail_pass: '123456'
+backup_mail_to:
+  - root@localhost
 
-mysql_pass:
-mysql_user:
-mysql_sock:
-mysql_backup_user:
-mysql_backup_pass:
-
-mysql_vip:
-mysql_script_dir:
-mysql_backup_weekday:
-mysql_backup_hour:
-mysql_backup_priv: "*.*:REPLICATION CLIENT,PROCESS,LOCK TABLES,RELOAD,REPLICATION SLAVE"
-
-mysql_backup_host_user: root
-mysql_backup_remote_host: 172.16.8.120
-mysql_backup_remote_user: root
-
-mysql_backup_packet: 
-  - '{{packet_base_dir}}/percona-toolkit-3.0.10-1.el7.x86_64.rpm'
-  - '{{packet_base_dir}}/percona-xtrabackup-24-2.4.12-1.el7.x86_64.rpm'

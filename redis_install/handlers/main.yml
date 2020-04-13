@@ -8,6 +8,22 @@
     name: '{{redis_service_name}}'
     state: restarted
 
+
+- name: supervisor_add_redis
+  supervisorctl:
+    name: '{{redis_service_name}}'
+    state: present
+    config: '{{supervisor_prim_conf}}'
+  #loop: 
+  #- '{{item}}'
+    
+- name: supervisor_restart_redis
+  supervisorctl:
+    name: '{{redis_service_name}}'
+    state: restarted
+    config: '{{supervisor_prim_conf}}'
+  when: redis_restart_with_notify == true
+
 - name: add to system service list
   shell: '{{ item }}'
   with_items:

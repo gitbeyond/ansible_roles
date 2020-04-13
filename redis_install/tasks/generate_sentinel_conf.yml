@@ -22,7 +22,7 @@
     #path: "/tmp/test.hh"
     backup: '{%if item == redis_sentinel_statments[0]-%}yes{%else-%}no{%-endif%}'
     create: yes
-  with_items: "{{redis_sentinel_statments}}"
+  loop: "{{redis_sentinel_statments}}"
     #- sentinel monitor redis-civp-session 172.16.25.49 6389 2
     #- sentinel auth-pass redis-civp-session 123456
     #- sentinel down-after-milliseconds redis-civp-session 5000

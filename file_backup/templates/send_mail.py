@@ -17,10 +17,10 @@ def _format_addr(s):
         Header(name, 'utf-8').encode(),
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
-from_addr = ''
-password = ''
-to_addr = []
-smtp_server = 'smtpcom.263xmail.com'
+from_addr = '{{backup_mail_from}}'
+password = '{{backup_mail_pass}}'
+to_addr = [{%for item in backup_mail_to %}"{{item}}",{%endfor%}]
+smtp_server = '{{backup_mail_smtp}}'
 #msg_text="""
 #%s civp log put to hdfs already succeed.
 #log size is %s.

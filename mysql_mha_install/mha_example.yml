@@ -1,9 +1,0 @@
----
-- hosts: newcivp_mysql_6
-  remote_user: root
-  roles:
-    - { role: mysql_mha_install,
-        mha_client_packet: '{{packet_base_dir}}/mha4mysql-node-0.58-0.el7.centos.noarch.rpm',
-        mha_manager_host: "172.16.100.124",
-        mha_instance_name: "mha_oldcivp_mysql_6",
-        mha_instance_src_conf: '{{file_base_dir}}/newcivp9/mha/mha_instance.conf'}

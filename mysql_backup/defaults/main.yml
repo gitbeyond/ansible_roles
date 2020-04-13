@@ -18,6 +18,13 @@ mysql_backup_remote_host: 127.0.0.1
 mysql_backup_remote_user: root
 mysql_backup_remote_path: /data/apps/data/backup/mysql
 
+mysql_backup_mail_smtp: 'localhost'
+mysql_backup_mail_from: 'mha_manager'
+mysql_backup_mail_user: 'mha@localhost'
+mysql_backup_mail_pass: '123456'
+mysql_backup_mail_to:
+  - root@localhost
+
 mysql_backup_packet: 
   - '{{packet_base_dir}}/percona-toolkit-3.0.10-1.el7.x86_64.rpm'
   - '{{packet_base_dir}}/percona-xtrabackup-24-2.4.12-1.el7.x86_64.rpm'

@@ -13,3 +13,4 @@
     - { role: nginx_conf, nginx_confs: "{{kylin_nginx_confs}}"}
 
 
+# 这个后期不再维护，其功能直接用 kylin_install 实现

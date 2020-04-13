@@ -1,19 +1,25 @@
 - name: copy supervisor redis conf file
   template: 
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+    src: '{{ redis_src_boot_conf }}' 
+    dest: '{{ supervisor_conf_dir }}/{{redis_service_name}}.ini' 
     owner: 'root' 
     group: 'root' 
     mode: "0644" 
     backup: yes
-  with_items:
-    - { src: "{{redis_src_boot_conf}}", dest: '{{supervisor_conf_dir}}/{{redis_service_name}}.ini'}
-  when: redis_is_multi_instance == false
+  notify:
+    #- supervisor_add_redis
+    - supervisor_restart_redis
+  #when: redis_is_multi_instance == false
 
-- name: update supervisor
+#- meta: flush_handlers
+
+- name: supervisor start redis
   supervisorctl: 
     name: '{{redis_service_name}}' 
-    state: 'present' 
+    state: '{{item}}'
     config: '{{supervisor_prim_conf}}'
-  when: redis_is_multi_instance == false
+  loop:
+    - present
+    - started
+  #when: redis_is_multi_instance == false
 

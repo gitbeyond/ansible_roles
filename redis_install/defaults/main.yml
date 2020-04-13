@@ -4,9 +4,6 @@ supervisor_prim_conf: /data/apps/config/supervisord/supervisord.conf
 
 
 redis_packet:
-#redis_master_server:
-#redis_master_port:
-#redis_master_pass:
 
 redis_app_name: redis
 redis_install_dir: '{{app_base_dir}}'
@@ -16,10 +13,7 @@ redis_conf_dir: '/data/apps/config/{{redis_app_name}}'
 redis_var_dir: '/data/apps/var/{{redis_app_name}}'
 redis_data_dir: '/data/apps/data/{{redis_app_name}}'
 redis_log_dir: '/data/apps/log/{{redis_app_name}}'
-#redis_port: 6379
-#redis_service_name: "redis_{{redis_port}}"
-#redis_src_conf: redis.conf
-#redis_src_boot_conf: redis.ini
+
 redis_env_file: redis.sh
 
 # system or supervisor
@@ -28,7 +22,8 @@ redis_run_method: supervisor
 # sentinel
 redis_sentinel_conf:
 
-redis_is_multi_instance: false
+redis_is_multi_instance: true
+redis_restart_with_notify: false
 # a host has multiple redis instance
 #redis_instances:
 #  - redis_port: 6379
@@ -68,17 +63,43 @@ redis_instances: []
 #    redis_master_server: "172.16.25.49"
 #    redis_master_port: 6396
 #    redis_sentinel_name: "redis_vq"
+redis_instances_length: "{{redis_instances | length}}"
+redis_instance_num: "{% if redis_instances_length | int > 0 %}{{redis_instances_length}}{%else%}1{%endif%}"
+redis_instance: '{{redis_instances[item]}}'
+redis_port: '{{redis_instance.redis_port}}'
+redis_service_name: '{{redis_instance.redis_service_name}}'
+redis_src_conf: '{{redis_instance.redis_src_conf}}'
+redis_src_boot_conf: '{{redis_instance.redis_src_boot_conf}}'
+redis_requirepass: '{{redis_instance.redis_requirepass}}'
+redis_master_pass: '{{redis_instance.redis_master_pass}}'
+redis_master_server: '{{redis_instance.redis_master_server}}'
+redis_master_port: '{{redis_instance.redis_master_port}}'
+redis_sentinel_name: '{{redis_instance.redis_sentinel_name}}'
 
-redis: '{{redis_instances[item]}}'
-redis_port: '{{redis.redis_port}}'
-redis_service_name: '{{redis.redis_service_name}}'
-redis_src_conf: '{{redis.redis_src_conf}}'
-redis_src_boot_conf: '{{redis.redis_src_boot_conf}}'
-redis_requirepass: '{{redis.redis_requirepass}}'
-redis_master_pass: '{{redis.redis_master_pass}}'
-redis_master_server: '{{redis.redis_master_server}}'
-redis_master_port: '{{redis.redis_master_port}}'
-redis_sentinel_name: '{{redis.redis_sentinel_name}}'
+redis_sentinel_slave_num: 2
+redis_sentinel_down_after_milliseconds: 5000
+redis_sentinel_failover_timeout: 60000
+
+#redis_sentinel_statments: "{%if redis_instances_length | int > 0%}
+#    {% for item in redis_instances%}
+#         sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}}
+#    {%endfor%}
+#{%else%}
+#        sentinel monitor {{redis_sentinel_name}} {{redis_master_server}} {{redis_master_port}}
+#{%endif%}"
+redis_sentinel_statments: "[{%if redis_instances_length | int > 0%}
+    {% for item in redis_instances%}
+         'sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}}', 
+         'sentinel auth-pass {{item.redis_sentinel_name}} {{item.redis_master_pass}}', 
+         'sentinel down-after-milliseconds {{item.redis_sentinel_name}} {{redis_sentinel_down_after_milliseconds}}', 
+         'sentinel failover-timeout {{item.redis_sentinel_name}} {{redis_sentinel_failover_timeout}}', 
+    {%endfor%}
+{%else%}
+        'sentinel monitor {{redis_sentinel_name}} {{redis_master_server}} {{redis_master_port}}', 
+        'sentinel auth-pass {{redis_sentinel_name}} {{redis_master_pass}}', 
+        'sentinel down-after-milliseconds {{redis_sentinel_name}} {{redis_sentinel_down_after_milliseconds}}', 
+        'sentinel failover-timeout {{redis_sentinel_name}} {{redis_sentinel_failover_timeout}}'
+{%endif%}]"
 
 
-redis_sentinel_statments: "[{% for item in redis_instances%}'sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}} 2', 'sentinel auth-pass {{item.redis_sentinel_name}} {{item.redis_master_pass}}', 'sentinel down-after-milliseconds {{item.redis_sentinel_name}} 5000', 'sentinel failover-timeout {{item.redis_sentinel_name}} 60000', {%endfor%}]"
+#redis_sentinel_statments: "[{% for item in redis_instances%}'sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}} 2', 'sentinel auth-pass {{item.redis_sentinel_name}} {{item.redis_master_pass}}', 'sentinel down-after-milliseconds {{item.redis_sentinel_name}} 5000', 'sentinel failover-timeout {{item.redis_sentinel_name}} 60000', {%endfor%}]"
