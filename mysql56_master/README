@@ -1,5 +1,0 @@
-- hosts: 10.111.32.61
-  remote_user: root
-  roles:
-    - { role: mysql56_master , slave_mysql: 10.111.32.58, mysql_version: 5.6.30 }
-

@@ -1,5 +1,0 @@
-
-- name: copy civp tomcat file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ civp_run_user }} group={{ civp_run_user }} mode={{item.mode}} backup=yes
-  with_items: "{{civp_tomcat_confs}}"
-  #with_fileglob: '{{etcd_work_dir}}/{{etcd_cert_dir}}/*.pem'

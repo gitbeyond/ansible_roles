@@ -1,2 +1,0 @@
-- name: restart mysql_server
-  service: name=mysql state=restarted

@@ -1,5 +1,0 @@
-# edirtor: haifeng
-# 2017/01/12
-- include: sync_logstash_conf.yml
-  tags:
-    - sync_logstash_conf

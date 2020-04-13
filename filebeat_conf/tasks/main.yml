@@ -1,4 +1,0 @@
-- include: sync_filebeat_conf.yml
-  tags:
-    - sync_filebeat_conf
-

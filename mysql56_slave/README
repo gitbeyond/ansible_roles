@@ -1,3 +1,0 @@
-date: 2017/3/7
-这个 ROLE 是安装并启动 mysql_slave server,在使用过程中，注意以下几点：
-1.需要将 mysql_master 所在分组命名为：fz_mysql_master,

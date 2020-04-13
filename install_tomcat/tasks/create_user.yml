@@ -1,5 +1,0 @@
-- name: create tomcat user
-  user: name={{ item.name }} state=present system={{ item.system }}
-  with_items:
-    - { name: tomcat, system: no }
-
