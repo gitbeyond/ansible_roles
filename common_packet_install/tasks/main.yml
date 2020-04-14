@@ -8,7 +8,7 @@
 
 #- import_tasks: install_common_for_jar.yml
 - include_tasks: install_common_for_jar.yml
-  when: common_packet_type == "jar" and common_packet is not none
+  when: (common_packet_type == "jar" or common_packet_type == "binary") and common_packet is not none
   #tags:
   #  - install_common_for_jar
 

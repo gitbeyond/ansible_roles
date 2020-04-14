@@ -18,7 +18,7 @@
     daemon_reload: yes 
     enabled: yes
   #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7 and copy_systemd_file.changed == true
-  when: ansible_service_mgr == 'systemd'
+  when: ansible_service_mgr == 'systemd' and common_instance_name is not none and common_src_boot_file is not none
 
 - name: copy common sysv boot file
   template: 
@@ -38,4 +38,4 @@
     state: restarted 
     enabled: yes
   #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
-  when: ansible_service_mgr == 'upstart'
+  when: ansible_service_mgr == 'upstart' and common_instance_name is not none and common_src_boot_file is not none

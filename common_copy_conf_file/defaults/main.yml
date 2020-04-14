@@ -29,9 +29,9 @@ common_env_file:
 
 # type: list
 #common_other_dirs:
-common_conf_files:
-common_child_confs:
-common_bin_scripts:
+common_conf_files: []
+common_child_confs: []
+common_bin_scripts: []
 
 
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}

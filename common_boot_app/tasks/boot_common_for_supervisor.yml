@@ -13,10 +13,10 @@
   supervisorctl:
     name: "{{common_instance_name}}"
     state: "{{item}}"
-  with_items:
+  loop:
     - present
     - started
-  when: common_instance_name is not none
+  when: common_instance_name is not none and common_src_boot_file is not none
 
 #- name: restart common prog
 #  supervisorctl: 

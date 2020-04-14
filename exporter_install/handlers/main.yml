@@ -16,6 +16,7 @@
     - common_app_restarted
     - common_reload_app_conf
 
+# 这里的 listen 是因为在 common_boot_app 中有 notify 的设置
 - name: systemctl_restarted
   systemd:
     name: "{{exporter_instance_name}}"

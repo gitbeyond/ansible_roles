@@ -7,7 +7,7 @@ common_base_name:
 
 common_packet:
 common_packet_creates:
-# tgz or jar
+# tgz or jar or binary
 common_packet_type: tgz
 common_base_dir: /data/apps/opt/{{common_base_name}}
 common_log_dir: /data/apps/log/{{common_base_name}}
