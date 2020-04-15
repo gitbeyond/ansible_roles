@@ -75,30 +75,24 @@ redis_master_pass: '{{redis_instance.redis_master_pass}}'
 redis_master_server: '{{redis_instance.redis_master_server}}'
 redis_master_port: '{{redis_instance.redis_master_port}}'
 redis_sentinel_name: '{{redis_instance.redis_sentinel_name}}'
+redis_external_service_name: '{{redis_service_name}}'
 
 redis_sentinel_slave_num: 2
 redis_sentinel_down_after_milliseconds: 5000
 redis_sentinel_failover_timeout: 60000
 
-#redis_sentinel_statments: "{%if redis_instances_length | int > 0%}
-#    {% for item in redis_instances%}
-#         sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}}
-#    {%endfor%}
-#{%else%}
-#        sentinel monitor {{redis_sentinel_name}} {{redis_master_server}} {{redis_master_port}}
-#{%endif%}"
 redis_sentinel_statments: "[{%if redis_instances_length | int > 0%}
     {% for item in redis_instances%}
-         'sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}}', 
+         'sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}} {{redis_sentinel_slave_num}}', 
          'sentinel auth-pass {{item.redis_sentinel_name}} {{item.redis_master_pass}}', 
          'sentinel down-after-milliseconds {{item.redis_sentinel_name}} {{redis_sentinel_down_after_milliseconds}}', 
          'sentinel failover-timeout {{item.redis_sentinel_name}} {{redis_sentinel_failover_timeout}}', 
     {%endfor%}
 {%else%}
-        'sentinel monitor {{redis_sentinel_name}} {{redis_master_server}} {{redis_master_port}}', 
-        'sentinel auth-pass {{redis_sentinel_name}} {{redis_master_pass}}', 
-        'sentinel down-after-milliseconds {{redis_sentinel_name}} {{redis_sentinel_down_after_milliseconds}}', 
-        'sentinel failover-timeout {{redis_sentinel_name}} {{redis_sentinel_failover_timeout}}'
+    'sentinel monitor {{redis_sentinel_name}} {{redis_master_server}} {{redis_master_port}} {{redis_sentinel_slave_num}}', 
+    'sentinel auth-pass {{redis_sentinel_name}} {{redis_master_pass}}', 
+    'sentinel down-after-milliseconds {{redis_sentinel_name}} {{redis_sentinel_down_after_milliseconds}}', 
+    'sentinel failover-timeout {{redis_sentinel_name}} {{redis_sentinel_failover_timeout}}'
 {%endif%}]"
 
 

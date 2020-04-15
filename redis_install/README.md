@@ -50,6 +50,49 @@ redis_sentinel_name: "redis_svc3"
 
 ```
 
+### 部署 redis_exporter
+```ini
+# redis_exporter/redis_exporter.ini
+[program:{{redis_external_service_name}}]
+command={{redis_base_dir}}/redis_exporter -export-client-list -redis.addr redis://127.0.0.1:{{redis_port}} -redis.password {{redis_requirepass}} -web.listen-address :{{redis_port | int + 10000 }}
+directory={{redis_base_dir}}
+user={{redis_run_user}}
+priority=70
+startsecs=10
+autostart=true
+autorestart=true
+startretries=0
+stopsignal=TERM
+stopwaitsecs=5
+redirect_stderr=false
+stdout_logfile={{redis_log_dir}}/{{redis_service_name}}_exporter__std.log 
+stdout_logfile_maxbytes=10MB  
+stdout_logfile_backups=10    
+stdout_capture_maxbytes=1MB  
+stdout_events_enabled=false  
+stderr_logfile={{redis_log_dir}}/{{redis_service_name}}_exporter_err.log
+stderr_logfile_maxbytes=10MB   
+stderr_logfile_backups=10     
+stderr_capture_maxbytes=1MB  
+stderr_events_enabled=false
+```
+
+```yaml
+- hosts: redis
+  roles:
+  - {role: redis_install,
+     redis_packet: /data/apps/soft/ansible/redis_exporter-v1.5.2.linux-amd64.tar.gz,
+     redis_run_method: supervisor,
+     redis_env_file: redis_exporter/redis_exporter.sh,
+     redis_run_user: nobody,
+     redis_app_name: redis_exporter,
+     redis_src_conf: '',
+     redis_sentinel_conf: '',
+     redis_external_service_name: '{{redis_service_name}}_exporter',
+     redis_restart_with_notify: true,
+     redis_src_boot_conf: 'redis_exporter/redis_exporter.ini'}
+```
+
 ## 注意事项
 - 默认编译好的 redis-server 直接在 --prefix 目录下，这里需要放置在 prefis/bin/ 目录下
 - `supervisor_conf_dir`, 这个参数是指定 supervisor 的配置目录的
@@ -60,5 +103,4 @@ redis_sentinel_name: "redis_svc3"
 - `redis_sentinel_conf` 此变量指定的是远程server 上的sentinel 配置文件，如果redis 与 sentinel 部署在同一台上，可以生成redis 的sentinel 配置
 
 # 问题
-* 多实例与单示例的区别很小，只不过现在没办法对"是否循环"进行判断
 * 目前只实现了 supervisor 控制redis的操作。
