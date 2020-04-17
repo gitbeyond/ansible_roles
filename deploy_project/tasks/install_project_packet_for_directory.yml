@@ -1,22 +1,8 @@
 
-#- name: get project packet name
-#  local_action: shell if [ {{project_deploy_version}} == "0" ];then ls {{project_source_dir}}/{{project_packet_name}}; else ls {{project_archive_dir}}/{{project_packet_name}}_{{project_deploy_version}};fi
-#  register: PACKET_NAME
-#  ignore_errors: True
-
-- name: get project packet dir name
-  local_action: 
-    module: shell
-    cmd: tar tvf {{PACKET_NAME.stdout}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
-  #when: PACKET_NAME is defined and PACKET_NAME is not skipped
-  register: packet_dir_name
-  run_once: true
-
-
 - name: cp project packet to remote
-  unarchive: 
-    src: '{{PACKET_NAME.stdout}}'
-    dest: '{{project_install_dir}}' 
+  synchronize: 
+    src: '{{project_source_dir}}/{{project_packet_name}}'
+    dest: '{{project_install_dir}}/{{project_packet_name}}' 
     owner: '{{project_run_user}}' 
     group: '{{project_run_group}}' 
     mode: "0755"
@@ -33,22 +19,11 @@
   #register: unarchive_result
   register: cp_result
 
-- name: chmod project dir
-  shell: "{{item}}"
-  with_items:
-    - 'find {{project_install_dir}}/{{packet_dir_name.stdout}} -type d -exec chmod 0755 {} \;'
-    - 'find {{project_install_dir}}/{{packet_dir_name.stdout}} -type f -exec chmod 0644 {} \;'
-
-#- name: deub
-#  debug:
-#    msg: "cp_result: {{cp_result}}"
 
 - name: update project packet link file
   file:
-    #src: '{{project_install_dir}}/{{packet_dir_name.stdout}}'
-    src: '{{packet_dir_name.stdout}}'
+    src: '{{project_install_dir}}/{{project_packet_name}}'
     dest: '{{project_install_dir}}/{{project_packet_link_name}}'
-    #dest: '{{project_packet_link_name}}'
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'
     state: link
@@ -56,7 +31,7 @@
   #with_items:
   #  - {src: '{{project_install_dir}}/{{packet_dir_name.stdout}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', 
   #     owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
-  when: project_packet_link_name is not none and packet_dir_name.stdout != project_packet_link_name
+  when: project_packet_link_name is not none and packet_dir_name | basename != project_packet_link_name
   #when: project_packet_link_name is none
     #- {src: '{{project_install_dir}}/{{PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
 

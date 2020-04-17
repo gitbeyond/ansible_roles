@@ -18,10 +18,10 @@
   systemd: 
     name: nginx 
     state: reloaded 
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7 and copy_nginx_file.changed == true
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd' and copy_nginx_file.changed == true
 
 - name: reload nginx for centos6
   service: 
     name: nginx 
     state: reloaded
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6 and copy_nginx_file.changed == true
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart' and copy_nginx_file.changed == true

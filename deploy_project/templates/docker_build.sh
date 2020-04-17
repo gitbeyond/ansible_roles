@@ -1,5 +1,7 @@
 #!/bin/bash
-PATH={{ansible_env.PATH}}
+export PATH={{ansible_env.PATH}}
+set -e
+
 jenkins_home={{jenkins_home_dir}}
 project_name={{project_name}}
 #project_src_dir=${jenkins_home}/workspace/${project_name}/guide-admin/target
@@ -15,7 +17,7 @@ registry_addr={{docker_registry_addr}}
 dt=$(date +%Y%m%d)
 image_base_name=$1
 action=$2
-last_image=$(docker images |grep ${registry_addr} |grep ${image_base_name} |head -n 1)
+last_image=$(docker images |grep ${registry_addr} |grep ${image_base_name} | sort -n -t 2 -r |head -n 1)
 
 if [ $# -lt 1 ];then
     #echo "please input image_name and deploy_name"
@@ -37,7 +39,7 @@ else
 fi
 
 #/bin/cp ${project_src_packet} ${project_work_dir}
-/bin/cp ${project_packet_packet} ${project_work_dir}
+#/bin/cp ${project_packet_packet} ${project_work_dir}
 
 #deploy=$2
 
@@ -56,7 +58,7 @@ last_image_data=${last_image_version:1:8}
 if [ "${last_image_data}" == ${dt} ];then
     last_image_version_count=${last_image_version:9}
     last_image_version_count=${last_image_version_count:-0}
-    new_image_version_count=$[last_image_version_count+1]
+    new_image_version_count=$((10#${last_image_version_count}+1))
     if [ ${#new_image_version_count} == 1 ];then
         new_image_version_count=0${new_image_version_count}
     fi

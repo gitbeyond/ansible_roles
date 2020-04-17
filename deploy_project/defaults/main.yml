@@ -6,32 +6,35 @@ project_host:
 project_prog_name: 
 # 项目打包后的包名,如果带有版本号那么须使用 myproject*.jar 这样
 project_packet_name:
-# tgz or jar
+# tgz or jar or directory
 project_packet_type:
 # 为项目包名创建的软链的名字，如果包名发生了版本的变化，那么就需要在 supervisor的配置文件中更新包名，而使用软链接，只需要更新软链接即可
-#project_packet_link_name:
+project_packet_link_name:
 # 项目名称，就是 jenkins 的项目名
-project_name: "{{lookup('env', 'JOB_NAME') | dirname}}"
-
+#project_name: "{{lookup('env', 'JOB_NAME')}}"
+project_name: "{{lookup('env', 'JOB_BASE_NAME')}}"
+project_workspace: "{{lookup('env', 'WORKSPACE')}}"
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd, docker, k8s
 project_boot_type: supervisor
 project_boot_file:
 
-project_source_dir:
+project_source_dir: '{{project_workspace}}'
 
 #project_install_dir:
 #project_data_dir:
 #project_log_dir:
-#project_dir: []
+project_dir: []
+project_dirs: '{{project_dir | default([],true)}}'
 
 project_archive_dir: /data3/apps/data/jenkins_data/{{project_name}}
+project_is_archive: false
 project_deploy_version: "0"
 
 # docker k8s 部署相关
 project_docker_build_script: docker_build.sh
 project_docker_file:
 project_k8s_kubeconfig:
-project_k8s_res_files:
+project_k8s_res_files: []
   
 
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}

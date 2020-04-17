@@ -7,7 +7,7 @@
     group: "root" 
     mode: "0644"
   register: copy_systemd_file
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd'
 
 - name: boot project for centos7
   systemd: 
@@ -15,7 +15,7 @@
     state: restarted  
     daemon_reload: yes 
     enabled: yes
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7 and copy_systemd_file.changed == true
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd' and copy_systemd_file.changed == true
 
 - name: copy project sysv boot file
   template: 
@@ -24,11 +24,11 @@
     owner: "root" 
     group: "root" 
     mode: "0644"
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart'
 
 - name: boot project for centos6
   service: 
     name: "{{project_prog_name}}" 
     state: restarted 
     enabled: yes
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart'
