@@ -1,8 +1,16 @@
 
 - name: create supervisor dir
-  file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
-  with_items:
+  file: 
+    path: '{{ item.path }}' 
+    owner: '{{ supervisor_run_user }}' 
+    group: '{{ item.group | default(supervisor_run_user, true)}}' 
+    mode: "0755" 
+    state: 'directory'
+  loop:
   #  - { path: '{{ install_dir }}', owner: '{{ prog_user }}', group: '{{ prog_user }}', mode: '0755', state: directory }
-    - { path: '{{ supervisor_log_dir }}', owner: '{{ supervisor_run_user }}', group: '{{ supervisor_run_user }}', mode: "0755", state: directory }
-    - { path: '{{ supervisor_var_dir }}', owner: '{{ supervisor_run_user }}', group: root, mode: "0755", state: directory }
-    - { path: '{{ supervisor_conf_dir }}', owner: '{{ supervisor_run_user }}', group: root, mode: "0755", state: directory }
+    - path: '{{ supervisor_log_dir }}' 
+      #group: '{{ supervisor_run_user }}'
+    - path: '{{ supervisor_var_dir }}' 
+      group: root
+    - path: '{{ supervisor_conf_dir }}' 
+      group: root

@@ -20,9 +20,9 @@ exporter_instance_name: '{{exporter_base_name}}'
 
 
 # type: list
-exporter_conf_files:
-exporter_child_confs:
-exporter_port:  
+exporter_conf_files: []
+exporter_child_confs: []
+exporter_port:
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd
 exporter_boot_type: supervisor
 exporter_src_boot_file:
