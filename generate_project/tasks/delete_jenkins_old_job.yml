@@ -1,0 +1,8 @@
+
+- name: delete old jenkins job
+  jenkins_job:
+    user: '{{project_jenkins_user}}'
+    password: '{{project_jenkins_password}}'
+    name: '{{project_jenkins_name}}'
+    state: absent
+    url: '{{project_jenkins_url}}'

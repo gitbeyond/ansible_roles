@@ -1,0 +1,23 @@
+project_prog_name:
+project_name:
+
+project_src_jenkinsfile:
+project_vars_file: '{{project_prog_name | default(project_name, true)}}.yml'
+
+# 整个项目的变量的"字符串"
+project_main_vars_file: 'vars/main.yml'
+project_main_var_name: projects
+project_vars_list: '{{lookup("file", project_main_vars_file) | from_yaml | json_query(project_main_var_name)}}'
+
+# jenkins 相关
+project_jenkins_config:
+project_jenkins_name: '{{project_name}}'
+project_jenkins_user:
+project_jenkins_password:
+project_jenkins_url:
+project_old_jenkins_name:
+# jenkins cli
+project_jenkins_cli_jar: 
+java_cmd: '{{lookup("env","JAVA_HOME")}}/bin/java'
+project_jenkins_api_token:
+project_jenkins_view:

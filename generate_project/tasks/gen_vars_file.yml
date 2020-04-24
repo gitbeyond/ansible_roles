@@ -1,0 +1,9 @@
+
+- name: generate vars file
+  #template:
+  blockinfile:
+    block: |
+      {{project_vars | to_nice_yaml}}
+    dest: 'vars/{{project_vars_file}}'
+    create: yes
+   

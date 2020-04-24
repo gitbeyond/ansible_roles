@@ -1,0 +1,12 @@
+- name: generate jenkins job config
+  template:
+    src: '{{project_jenkins_config}}'
+    dest: 'files/{{project_jenkins_name}}.xml'
+
+- name: create jenkins job
+  jenkins_job:
+    user: '{{project_jenkins_user}}'
+    password: '{{project_jenkins_password}}'
+    name: '{{project_jenkins_name}}'
+    config: '{{lookup("template", project_jenkins_config)}}'
+    url: '{{project_jenkins_url}}'

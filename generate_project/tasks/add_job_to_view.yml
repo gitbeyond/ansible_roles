@@ -1,0 +1,9 @@
+
+- name: add job to view
+  shell: 
+    #cmd: {{java_cmd}} -jar {{project_jenkins_cli_jar}} -s {{project_jenkins_url}} -webSocket
+    cmd: {{java_cmd}} -jar {{project_jenkins_cli_jar}} -webSocket add-job-to-view {{project_jenkins_view}} {{project_jenkins_name}}
+  environment:
+    JENKINS_URL: '{{project_jenkins_url}}'   
+    JENKINS_API_TOKEN: '{{project_jenkins_api_token}}'
+    JENKINS_USER_ID: '{{project_jenkins_user}}'
