@@ -69,4 +69,66 @@ projects:
       project_name: '{{item.project_name}}'
       project_jenkins_name: '{{project_name}}-pipe'
     loop: '{{lookup("file", "vars/main.yml") | from_yaml | json_query("projects")}}'
+
+
+# 多子模块的变量配置示例
+project_run_user: tomcat
+project_dir:
+  - '{{project_install_dir}}'
+  - '{{project_log_dir}}'
+project_packet_type: jar
+project_hosts: saas_server
+project_local_workdir: postloan
+project_name: daihou-pl
+project_maven_tool: mvn3.5_/data/apps/opt/maven
+project_maven_options: clean package -Dmaven.test.skip=true
+project_git_url: git@git.geotmt.com:postloan/geo_pleam.git
+project_src_jenkinsfile: jar-template.Jenkinsfile
+project_log_dir: /data/apps/log/saas/daihou/{{project_prog_name}}
+project_install_dir: /data/apps/opt/saas/daihou/{{project_prog_name}}
+project_boot_file: common.ini
+project_source_dir: '{{project_workspace}}/{{project_prog_name}}/target'
+project_prog_jmx_args: '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port={{project_run_port + 10000}} -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -javaagent:/data/apps/opt/jmx_exporter/jmx_exporter.jar={{project_run_port + 20000}}:/data/apps/config/jmx_exporter/tomcat_jmx.yml'
+project_packet_link_name: '{{project_prog_name}}.jar'
+project_prog_run_args: '-server -Xms1g -Xmx1g {{project_prog_jmx_args}} -Deureka.client.serviceUrl.defaultZone={{project_eureka_url}} -Dserver.port={{project_run_port}} -jar {{project_packet_link_name}}'
+project_health_url:  /actuator/health 
+
+
+
+
+projects:
+  - project_prog_name: pl-case-flashboard
+    project_packet_name: '{{project_prog_name}}.jar'
+    project_run_port: 9141
+  - project_prog_name: pl-case-center
+    project_packet_name: 'pl-strategy-center.jar'
+    project_run_port: 9142
+  - project_prog_name: pl-strategy-center
+    project_packet_name: 'pl-strategy.jar'
+    project_run_port: 9143
+  - project_prog_name: pl-biz-center
+    project_packet_name: '{{project_prog_name}}.jar'
+    project_run_port: 9144
+  - project_prog_name: pl-control-center
+    project_packet_name: '{{project_prog_name}}.jar'
+    project_run_port: 9145
+  - project_prog_name: pl-statistics-center
+    project_packet_name: '{{project_prog_name}}.jar'
+    project_run_port: 9146
+
+
+
+# 这个例子是针对一个项目下有多个子模块的
+- hosts: localhost
+  vars_files:
+    - vars/main.yml
+  tasks:
+  - name: generate project
+    include_role:
+      name: generate_project
+    vars:
+      project_vars: '{{item}}'
+      project_prog_name: '{{item.project_prog_name | default(project_name, true)}}' # 这一行是重点
+    loop: '{{lookup("file", "vars/main.yml") | from_yaml | json_query("projects")}}'
+
 ```

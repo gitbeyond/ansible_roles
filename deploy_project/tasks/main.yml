@@ -70,3 +70,7 @@
     - archive_packet
   when: project_is_archive == true
 
+- include_tasks: url_health_check.yml
+  tags:
+    - url_health_check
+  when: project_health_url is not none

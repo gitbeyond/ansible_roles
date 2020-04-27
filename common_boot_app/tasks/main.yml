@@ -4,7 +4,7 @@
 - include_tasks: boot_common_for_supervisor.yml
   #tags:
   #  - boot_common_for_supervisor
-  when: common_boot_type == 'supervisor'
+  when: common_boot_type == 'supervisor' and common_src_boot_file is not none and common_src_boot_file != ''
 
 - include_tasks: boot_common_for_systemd.yml
   when: common_boot_type == 'systemd' 

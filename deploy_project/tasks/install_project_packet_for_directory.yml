@@ -1,37 +1,29 @@
-
+# /path/to/src 
+# /path/dest/src
 - name: cp project packet to remote
   synchronize: 
     src: '{{project_source_dir}}/{{project_packet_name}}'
-    dest: '{{project_install_dir}}/{{project_packet_name}}' 
+    #dest: '{{project_install_dir}}/{{project_packet_name}}' 
+    dest: '{{project_install_dir}}' 
     owner: '{{project_run_user}}' 
     group: '{{project_run_group}}' 
     mode: "0755"
-    #src: '{{item.src}}' 
-    #dest: '{{item.dest}}' 
-    #owner: '{{item.owner}}' 
-    #group: '{{item.group}}' 
-    #mode: '{{item.mode}}'
-  #when: PACKET_NAME is defined and PACKET_NAME is not skipped
-  #with_items:
-  #  - {src: '{{ PACKET_NAME.stdout }}', dest: '{{project_install_dir}}/', owner: '{{project_run_user}}', 
-  #     group: '{{project_run_group}}', mode: "0755" }
-       #group: '{{project_run_group}}', mode: "0755", creates: '{{project_install_dir}}/{{packet_dir_name.stdout}}' }
-  #register: unarchive_result
   register: cp_result
 
 
+- name: chmod project dir
+  shell: "{{item}}"
+  loop:
+    - 'find {{project_install_dir}} -type d -exec chmod 0755 {} \;'
+    - 'find {{project_install_dir}} -type f -exec chmod 0644 {} \;'
+
 - name: update project packet link file
   file:
-    src: '{{project_install_dir}}/{{project_packet_name}}'
-    dest: '{{project_install_dir}}/{{project_packet_link_name}}'
+    src: '{{project_install_dir}}'
+    #dest: '{{project_install_dir}}/{{project_packet_link_name}}'
+    dest: '{{project_packet_link_name}}'
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'
     state: link
-  #file: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} state={{item.state}}
-  #with_items:
-  #  - {src: '{{project_install_dir}}/{{packet_dir_name.stdout}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', 
-  #     owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
-  when: project_packet_link_name is not none and packet_dir_name | basename != project_packet_link_name
-  #when: project_packet_link_name is none
-    #- {src: '{{project_install_dir}}/{{PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
+  when: project_packet_link_name is not none and project_install_dir != project_packet_link_name
 

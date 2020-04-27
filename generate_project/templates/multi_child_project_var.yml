@@ -1,0 +1,49 @@
+serial_num: 1
+
+project_jenkins_config: jar-template.xml
+project_jenkins_url: 
+project_jenkins_user: 
+project_jenkins_password: 
+project_pipeline_git_url: 
+project_pipeline_git_credentials_id: 
+project_pipeline_git_branch: '*/master'
+project_pipeline_script_path: 'playbooks/{{project_local_workdir}}/files/{{project_name}}.Jenkinsfile'
+
+project_jenkins_view: my_view
+project_jenkins_cli_jar: /data/apps/soft/ansible/jenkins/2.222.1/jenkins-cli.jar
+project_jenkins_api_token: 
+
+project_run_user: tomcat
+project_dir:
+  - '{{project_install_dir}}'
+  - '{{project_log_dir}}'
+  - '{{project_tmp_dir}}'
+project_packet_type: jar
+project_hosts: my_server
+project_local_workdir: postloan
+project_name: my_project
+project_maven_tool: mvn3.5_/data/apps/opt/maven
+project_maven_options: clean package -Dmaven.test.skip=true
+project_git_url: 
+project_src_jenkinsfile: jar-template.Jenkinsfile
+project_log_dir: /data/apps/log/saas
+project_tmp_dir: /data/apps/var/saas
+project_install_dir: /data/apps/opt/saas
+project_boot_file: common.ini
+project_source_dir: '{{project_workspace}}/{{project_prog_name}}/target'
+project_eureka_url: 
+project_prog_jmx_args: '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port={{project_run_port + 10000}} -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -javaagent:/data/apps/opt/jmx_exporter/jmx_exporter.jar={{project_run_port + 20000}}:/data/apps/config/jmx_exporter/tomcat_jmx.yml'
+project_packet_link_name: '{{project_prog_name}}.jar'
+project_prog_run_args: '-server -Xms1g -Xmx1g {{project_prog_jmx_args}} -Deureka.client.serviceUrl.defaultZone={{project_eureka_url}} -Dserver.port={{project_run_port}} -jar {{project_packet_link_name}}'
+project_health_url:  /actuator/health 
+
+
+
+
+projects:
+  - project_prog_name: my-prog1
+    project_packet_name: '{{project_prog_name}}.jar'
+    project_run_port: 9141
+  - project_prog_name: my-prog2
+    project_packet_name: '{{project_prog_name}}.jar'
+    project_run_port: 9142

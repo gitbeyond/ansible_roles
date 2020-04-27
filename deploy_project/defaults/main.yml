@@ -1,5 +1,5 @@
 jenkins_home_dir: /data/apps/data/jenkins
-project_run_user: 
+project_run_user:  nobody
 project_run_group: '{{project_run_user}}'
 project_host:
 # 如果程序是一个 jar 包，使用 supervisor 启动时的进程名称
@@ -36,6 +36,9 @@ project_docker_file:
 project_k8s_kubeconfig:
 project_k8s_res_files: []
   
+project_health_check_url: 'http://{{ansible_default_ipv4.address}}:{{project_run_port}}{{project_health_url}}'
+project_health_check_url_method: GET
+project_health_check_status_code: 200
 
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

@@ -16,6 +16,29 @@
         project_source_dir: "{{project_workspace}}/xxl-job-executor-samples/syncdsconf/target",
         project_install_dir: "/data/apps/opt/{{project_prog_name}}",
         project_log_dir: "/data/apps/log/xxl-job" }
+
+
+
+# 目录的发布,注意，这个project_install_dir 不包含源目录的base目录，如想连同源目录一同copy,要在 project_install_dir 中写上源目录
+# 如 
+# src: /path/to/src 是源目录，其中包含index.html
+# dest: /path/to/dest
+# 最后的效果是 /path/to/dest/index.html
+# project_packet_link_name 软链的名字要写成绝对路径的方式
+- hosts: '{{project_host}}'
+  remote_user: root
+  roles:
+    - { role: deploy_project,
+        project_run_user: "nginx",
+        project_prog_name: "web1",
+        project_packet_name: "build", 
+        project_packet_link_name: "/data/apps/opt/myweb",
+        project_name: "web1", 
+        project_boot_type: "nginx",
+        project_boot_file: "/data/apps/data/ansible/{{project_name}}/{{project_prog_name}}.conf",
+        project_source_dir: "{{project_workspace}}",
+        project_install_dir: "/data/apps/opt/{{project_prog_name}}",
+        project_log_dir: "/data/apps/log/nginx" }
 ```
 
 变量说明

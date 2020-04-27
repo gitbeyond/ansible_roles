@@ -9,6 +9,7 @@ example:
     - { role: exporter_install, exporter_packet: /data/apps/soft/ansible/exporter/jmx_prometheus_javaagent-0.12.0.jar,
         exporter_run_user: root, 
         exporter_packet_type: jar,
+        exporter_src_boot_file: '',  # 由于 exporter_install 可以部署多种 exporter, 所以为了防止其加载 group_vars 中的 exporter_src_boot_file, 要显示指定这个变量，如果没有，置为空字符串
         exporter_base_name: 'jmx_exporter', 
         exporter_conf_files: ['jmx_exporter/tomcat_jmx.yml' ]}
 

@@ -1,6 +1,8 @@
 - name: restart_logstash 
-  supervisorctl: name={{ item }} state=restarted
-  with_items:
+  supervisorctl: 
+    name: '{{ item }}' 
+    state: restarted
+  loop:
     - '{{logstash_app_name}}'
 
 #- name: restart_logstash

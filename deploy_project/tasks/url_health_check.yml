@@ -1,0 +1,11 @@
+
+- name: check url health
+  local_action:
+    module: uri
+    url: '{{project_health_check_url}}'
+    method: '{{project_health_check_url_method}}'
+    status_code: '{{project_health_check_status_code}}'
+  register: url_check_result
+  until: url_check_result.status == project_health_check_status_code
+  retries: 15
+  delay: 5

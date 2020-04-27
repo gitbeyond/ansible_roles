@@ -1,0 +1,6 @@
+- name: create project dir
+  file:
+    path: '{{item}}'
+    state: directory
+  loop:
+    - files

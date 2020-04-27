@@ -1,18 +1,27 @@
+- import_tasks: create_project_dir.yml
+  tags:
+    - create_project_dir
 
 - import_tasks: gen_vars_file.yml
   tags:
     - gen_vars_file
 
-- import_tasks: gen_jenkinsfile.yml
+- include_tasks: gen_jenkinsfile.yml
   tags:
     - gen_jenkinsfile
+  when: project_src_jenkinsfile is not none
 
-- import_tasks: gen_jenkins_job.yml
+- include_tasks: gen_jenkins_job.yml
   tags:
     - gen_jenkins_job
   when: project_jenkins_config is not none
 
-- import_tasks: delete_jenkins_old_job.yml
+- include_tasks: delete_jenkins_old_job.yml
   tags:
     - delete_jenkins_old_job
   when: project_old_jenkins_name is not none
+
+- include_tasks: add_job_to_view.yml
+  tags:
+    - add_job_to_view
+  when: project_jenkins_view is not none
