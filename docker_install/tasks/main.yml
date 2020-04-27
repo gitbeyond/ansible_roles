@@ -1,28 +1,32 @@
 
-- include: create_docker_group.yml
+- import_tasks: create_docker_group.yml
   tags:
     - create_docker_group
 
-- include: create_docker_dir.yml
+- import_tasks: create_docker_dir.yml
   tags:
     - create_docker_dir
   #when: ansible_os_family == "RedHat" and docker_install_method == 'net'
 
-- include: copy_docker_conf_file.yml
+- import_tasks: copy_docker_conf_file.yml
   tags:
     - copy_docker_conf_file
 
-- include: install_docker_for_net.yml
+- include_tasks: install_docker_for_net.yml
   when: docker_install_method == "net"
   tags:
     - install_docker_for_net
 
-- include: install_docker_for_local.yml
+- include_tasks: install_docker_for_local.yml
   when: docker_install_method == "local"
   tags:
     - install_docker_for_local
 
-- include: boot_docker.yml
+- import_tasks: docker_set_kernel_args.yml
+  tags:
+    - docker_set_kernel_args
+
+- import_tasks: boot_docker.yml
   tags:
     - boot_docker
 
