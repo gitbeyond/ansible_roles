@@ -1,14 +1,15 @@
 - name: get mysql basedir
   mysql_variables:
-    login_password: "{{mysql_pass}}"
-    login_user: "{{mysql_user}}"
+    login_password: "{{mysql_login_pass}}"
+    login_user: "{{mysql_login_user}}"
     login_unix_socket: "{{mysql_sock}}"
     variable: basedir
   register: mysql_basedir
+
 - name: get mysql datadir
   mysql_variables:
-    login_password: "{{mysql_pass}}"
-    login_user: "{{mysql_user}}"
+    login_password: "{{mysql_login_pass}}"
+    login_user: "{{mysql_login_user}}"
     login_unix_socket: "{{mysql_sock}}"
     variable: datadir
   register: mysql_datadir

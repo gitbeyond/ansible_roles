@@ -1,5 +1,5 @@
 #!/bin/bash
-export PATH={{ansible_env["PATH"]}}
+export PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:{{ansible_env["PATH"]}}
 BK_USER={{mysql_backup_user}}
 BK_PASS="{{mysql_backup_pass}}"
 IP="{{ansible_default_ipv4.address}}"

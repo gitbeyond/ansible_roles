@@ -73,4 +73,4 @@
 - include_tasks: url_health_check.yml
   tags:
     - url_health_check
-  when: project_health_url is not none
+  when: project_health_url is not none and project_boot_type != 'k8s'

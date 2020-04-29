@@ -8,3 +8,4 @@
     host: "{{mha_manager_host}}"
     priv: "{{mysql_mha_priv}}"
     state: present
+    sql_log_bin: False

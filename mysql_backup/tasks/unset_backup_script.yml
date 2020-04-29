@@ -1,8 +1,12 @@
 - name: delete mysql_innodb_status script
-  file: path={{item}} state=absent
-  with_items:
+  file: 
+    path: '{{item}}' 
+    state: absent
+  loop:
     - '{{ mysql_script_dir }}/mysql_backup.sh'
     - '{{ mysql_script_dir }}/send_mail.py'
+    - '{{ mysql_script_dir }}/mysql_binlog_backup.sh'
+
 - name: set mysql backup cron job absent
   cron:
     name: "mysql backup"
@@ -11,6 +15,7 @@
     hour: "{{mysql_backup_hour}}"
     minute: 00
     state: absent
+
 - name: set mysql binlog backup cron job absent
   cron:
     name: "mysql binlog backup"

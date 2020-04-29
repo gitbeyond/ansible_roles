@@ -1,6 +1,6 @@
 
-mysql_pass:
-mysql_user:
+mysql_login_pass:
+mysql_login_user:
 mysql_sock:
 mysql_backup_user:
 mysql_backup_pass:
@@ -25,6 +25,6 @@ mysql_backup_mail_pass: '123456'
 mysql_backup_mail_to:
   - root@localhost
 
-mysql_backup_packet: 
+mysql_backup_packets: 
   - '{{packet_base_dir}}/percona-toolkit-3.0.10-1.el7.x86_64.rpm'
   - '{{packet_base_dir}}/percona-xtrabackup-24-2.4.12-1.el7.x86_64.rpm'

@@ -1,7 +1,9 @@
 - name: install MySQL-python packet
-  yum: name={{item.name}} state={{item.state}}
-  with_items:
-    - { name: MySQL-python, state: latest}
+  yum: 
+    name:
+      - MySQL-python
+    state: latest
+
 - name: rename ~/.my.cnf if exists
   shell: mv ~/.my.cnf ~/.my.cnf_ansible_tmp
   args:
@@ -10,7 +12,16 @@
   ignore_errors: true
 
 - name: create sync user
-  mysql_user: login_user={{mysql_login_user}} login_unix_socket={{mysql_sock}} login_password={{mysql_login_pass}} name={{mysql_slave_sync_user}} password={{ mysql_slave_sync_pass }} host={{ mysql_slave_server }} priv="*.*:REPLICATION SLAVE" state=present
+  mysql_user: 
+    login_user: '{{mysql_login_user}}' 
+    login_unix_socket: '{{mysql_sock}}' 
+    login_password: '{{mysql_login_pass}}' 
+    name: '{{mysql_slave_sync_user}}' 
+    password: '{{ mysql_slave_sync_pass }}' 
+    host: '{{ mysql_slave_server }}' 
+    priv: "*.*:REPLICATION SLAVE" 
+    state: present
+    sql_log_bin: False
 #- name: create backup user
 #  mysql_user: login_user={{mysql_User}} login_unix_socket={{mysql_sockPath}} login_password={{mysql_Pass}} name=bakuser password={{ bakuser_pass }} host=localhost priv="*.*:REPLICATION CLIENT,PROCESS,RELOAD,LOCK TABLES" state=present
 

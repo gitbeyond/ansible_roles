@@ -1,19 +1,18 @@
-- include: install_bakcup_package.yml
+- include_tasks: install_bakcup_package.yml
   tags:
     - install_mysql_backup_package
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd'
 
-- include: install_bakcup_package_6.yml
+- include_tasks: install_bakcup_package_6.yml
   tags:
     - install_mysql_backup_package
-  #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 6
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart'
 
-- include: register_mysql_var.yml
+- import_tasks: register_mysql_var.yml
   tags:
     - register_mysql_var
 
-- include: create_backup_user.yml
+- import_tasks: create_backup_user.yml
   tags:
     - create_mysql_backup_user
 
@@ -21,11 +20,11 @@
   tags:
     - create_backup_dir
 
-- include: add_key_to_backup_host.yml
+- import_tasks: add_key_to_backup_host.yml
   tags:
     - add_key_to_backup_host
 
-- include: copy_backup_script.yml
+- import_tasks: copy_backup_script.yml
   tags:
     - copy_mysql_backup_script
   #when: mysql_vip is undefined and mysql_backup_host == ansible_default_ipv4
@@ -34,7 +33,7 @@
   when: (mysql_vip is none and mysql_backup_host == ansible_default_ipv4.address) or mysql_vip is not none
   #when: mysql_backup_host == ansible_default_ipv4.address
   
-- include: unset_backup_script.yml
+- include_tasks: unset_backup_script.yml
   tags:
     - unset_mysql_backup_script
   when: mysql_vip is none and mysql_backup_host != ansible_default_ipv4.address

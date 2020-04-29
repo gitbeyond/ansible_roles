@@ -6,7 +6,7 @@
     group: root 
     mode: "0644" 
     backup: yes
-  with_items: '{{mysql_backup_packet}}'
+  with_items: '{{mysql_backup_packets}}'
 
 
 #- name: debug var
@@ -16,9 +16,21 @@
 #    #msg:  "{% for pac in mysql_backup_packet %}{% set a='/tmp/'+pac.split('/')[-1] %} {%endfor%}"
 #    #msg:  "{{ '/tmp/'+pac.split('/')[-1]  for pac in mysql_backup_packet }}"
 
+- name: install mysql backup dependence package
+  yum: 
+    #name: "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ] + ['MySQL-python']"
+    name:
+      - iproute
+      - MySQL-python
+    state: present
+    enablerepo: "base,epel"
+
 - name: install mysql backup package
   yum: 
-    name: "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ] + ['MySQL-python']"
+    #name: "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ] + ['MySQL-python']"
+    name: "{{ mysql_backup_packets | map('basename') | map('regex_replace', '^','/tmp/') | list }}"
+      #- iproute
+      #- MySQL-python
       #- /tmp/percona-toolkit-3.0.10-1.el7.x86_64.rpm
       #- /tmp/percona-xtrabackup-24-2.4.12-1.el7.x86_64.rpm
       #- "{{mysql_backup_packet | map('regex_replace','(.*)','/tmp/\\1') | list}}"
@@ -39,7 +51,10 @@
 
 - name: retry install mysql backup package
   yum: 
-    name: "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ] + ['MySQL-python']"
+    #name: "[ {% for pac in mysql_backup_packet %}'{{ '/tmp/'+pac.split('/')[-1] }}', {%endfor%} ] + ['MySQL-python']"
+    name: "{{ mysql_backup_packets | map('basename') | map('regex_replace', '^','/tmp/') | list }}"
+      #- iproute
+      #- MySQL-python
       #- "{{mysql_backup_packet | map('regex_replace','(.*)','/tmp/\\1') | list}}"
       #- MySQL-python
     state: present
