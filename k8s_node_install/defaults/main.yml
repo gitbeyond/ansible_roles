@@ -9,7 +9,9 @@ k8s_install_dir:
 
 # kubelet
 k8s_kubelet_root_dir: /data1/apps/data/kubelet
+k8s_kubelet_log_dir: /data/apps/log/kubelet
 
+k8s_proxy_log_dir: /data/apps/log/kube-proxy
 
 k8s_node_packet:
 
