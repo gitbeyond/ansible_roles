@@ -14,7 +14,7 @@
 
 
 - name: create k8s bootstrap kubeconfig
-  local_action: script generate_bootstrap_kubeconfig.sh {{k8s_work_conf_dir}}/bootstrap.kubeconfig kubernetes {{k8s_cert_dir}}/k8s-root-ca.pem {{k8s_master_ha_vip}} kubelet-bootstrap {{k8s_bootstrap_token.stdout}} {{k8s_kubectl_cmd}}
+  local_action: script generate_bootstrap_kubeconfig.sh {{k8s_work_conf_dir}}/bootstrap.kubeconfig kubernetes {{k8s_cert_dir}}/k8s-root-ca.pem {{k8s_master_ha_vip}} {{k8s_master_ha_port}} kubelet-bootstrap {{k8s_bootstrap_token.stdout}} {{k8s_kubectl_cmd}}
   args:
     chdir: "{{k8s_work_dir | realpath}}"
     creates: "{{k8s_work_dir| realpath }}/{{k8s_work_conf_dir}}/bootstrap.kubeconfig"

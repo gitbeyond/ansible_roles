@@ -9,30 +9,26 @@
 - name: create k8s dir
   file: 
     path: '{{ item.path }}' 
-    owner: '{{ item.owner }}' 
-    group: '{{ item.group }}' 
-    mode: '{{ item.mode }}' 
-    state: '{{ item.state }}'
+    owner: 'root' 
+    group: 'root' 
+    mode: "0755" 
+    state: 'directory'
   loop:
-    - { path: "{{app_base_dir}}", owner: root, group: root, mode: "0755", state: directory }
-    - { path: "{{k8s_install_dir}}", owner: root, group: root, mode: "0755", state: directory }
-    - { path: "{{k8s_conf_dir}}/ssl", owner: root, group: root, mode: "0755", state: directory }
-    - { path: "/data/apps/log/kubelet", owner: root, group: root, mode: "0755", state: directory }
-    - { path: "/data/apps/log/kube-proxy", owner: root, group: root, mode: "0755", state: directory }
-    - { path: "{{k8s_kubelet_root_dir}}/pki", owner: root, group: root, mode: "0755", state: directory }
+    - path: "{{app_base_dir}}"
+    - path: "{{k8s_install_dir}}"
+    - path: "{{k8s_conf_dir}}/ssl"
+    - path: "{{k8s_kubelet_log_dir}}"
+    - path: "{{k8s_proxy_log_dir}}"
+    - path: "{{k8s_kubelet_root_dir}}/pki"
 
 - name: create k8s link dir
   file: 
     src: '{{item.src}}'
     path: '{{ item.path }}' 
-    owner: '{{ item.owner }}' 
-    group: '{{ item.group }}' 
-    mode: '{{ item.mode }}' 
-    state: '{{ item.state }}'
+    owner: 'root' 
+    group: 'root' 
+    mode: "0777"
+    state: 'link'
   loop:
     - src: '{{k8s_kubelet_root_dir}}'
       path: /var/lib/kubelet
-      owner: root
-      group: root
-      mode: "0777"
-      state: link

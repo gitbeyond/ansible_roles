@@ -6,7 +6,10 @@ k8s_kubectl_cmd: '{{k8s_work_dir}}/kubectl'
 k8s_cfssl_cmd_path: '/usr/bin'
 # 这个变量是 k8s 加上 k8s 的版本指定的 如:/data/apps/opt/k8s_1.11.10, 暂时手动指定这个变量
 k8s_install_dir:
-
+k8s_audit_log_dir: "/data/apps/log/kube-audit"
+k8s_apiserver_log_dir: "/data/apps/log/kube-apiserver" 
+k8s_controller_log_dir: "/data/apps/log/kube-controller-manager"
+k8s_scheduler_log_dir: "/data/apps/log/kube-scheduler"
 
 k8s_master_packet:
 k8s_master_dir_name: "{{lookup('pipe', 'tar tvf '+ k8s_master_packet).split('\n')[-1].split(' ')[-1].split('/')| first}}"
@@ -28,6 +31,7 @@ k8s_cert_kube_controller_manager_ca_cn: 'system:kube-controller-manager'
 k8s_cert_kube_proxy_ca_cn: 'system:kube-proxy'
 k8s_cert_kubernetes_admin_ca_cn: 'kubernetes-admin'
 k8s_cert_kube_scheduler_ca_cn: 'system:kube-scheduler'
+k8s_cert_admin_ca_o: 'system:masters'
 k8s_cert_prometheus_adapter_ca_cn: 'serving'
 k8s_cert_c: "CN"
 k8s_cert_st: "BeiJing"

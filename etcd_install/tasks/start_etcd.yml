@@ -1,3 +1,19 @@
+
+- name: copy etcd service conf file
+  template: 
+    src: '{{item.src}}' 
+    dest: '{{item.dest}}' 
+    owner: '{{item.owner | default("root", true)}}' 
+    group: '{{item.group | default("root", true)}}' 
+    mode: "0644" 
+    backup: yes
+  loop:
+    - src: '{{etcd_src_service_conf}}'
+      dest: /usr/lib/systemd/system/etcd.service
+  notify: systemctl_daemon_reload
+
+- meta: flush_handlers
+
 - name: start etcd service
   systemd:
     name: etcd

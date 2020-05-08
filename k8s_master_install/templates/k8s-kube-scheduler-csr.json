@@ -10,7 +10,7 @@
       "C": "{{k8s_cert_c}}",
       "ST": "{{k8s_cert_st}}",
       "L": "{{k8s_cert_l}}",
-      "O": "{{k8s_cert_o}}",
+      "O": "{{k8s_cert_kube_scheduler_ca_cn}}",
       "OU": "{{k8s_cert_ou}}"
     }
   ]

@@ -1,4 +1,4 @@
-# edirtor: haifeng
+# editor: haifeng
 # 2017/01/12
 
 - name: get k8s_node packet dir name
@@ -13,14 +13,19 @@
     owner: '{{ k8s_run_user }}'
     group: '{{ k8s_run_user }}' 
     creates: '{{ item.creates }}'
-  with_items:
-    - { src: '{{k8s_node_packet}}', dest: '{{ k8s_install_dir}}/', creates: '{{ k8s_install_dir }}/kubernetes/node', mode: "0755" }
+  loop:
+    - src: '{{k8s_node_packet}}'
+      dest: '{{ k8s_install_dir}}/'
+      creates: '{{ k8s_install_dir }}/kubernetes/node'
+      mode: "0755"
 
 - name: create k8s link dir
   file: 
     src: '{{ item.src }}' 
     dest: '{{item.dest}}' 
     state: '{{ item.state }}'
-  with_items:
-    - { src: "{{k8s_install_dir}}/kubernetes", dest: '{{k8s_base_dir}}', state: link}
+  loop:
+    - src: "{{k8s_install_dir}}/kubernetes"
+      dest: '{{k8s_base_dir}}'
+      state: link
 

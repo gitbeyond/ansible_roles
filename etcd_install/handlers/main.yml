@@ -1,4 +1,4 @@
-- name: add to system service list
+- name: systemctl_daemon_reload
   shell: '{{ item }}'
   with_items:
     - systemctl daemon-reload

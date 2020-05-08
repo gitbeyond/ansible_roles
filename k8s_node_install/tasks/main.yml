@@ -1,5 +1,5 @@
-# edirtor: haifeng
-# 2017/01/12
+# editor: haifeng
+# 2020/04/30
 
 # 这个须在集群启动成功后才可执行
 
@@ -16,6 +16,8 @@
     - install_k8s_node
 
 - import_tasks: copy_k8s_node_conf.yml
+  tags:
+    - copy_k8s_node_conf
 
 - import_tasks: copy_k8s_node_service_conf.yml
   tags:
