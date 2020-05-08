@@ -1,6 +1,7 @@
 project_prog_name:
 project_name:
 
+
 project_src_jenkinsfile:
 project_vars_file: '{{project_prog_name | default(project_name, true)}}.yml'
 
@@ -8,6 +9,10 @@ project_vars_file: '{{project_prog_name | default(project_name, true)}}.yml'
 project_main_vars_file: 'vars/main.yml'
 project_main_var_name: projects
 project_vars_list: '{{lookup("file", project_main_vars_file) | from_yaml | json_query(project_main_var_name)}}'
+
+# env
+project_workspace: "{{lookup('env', 'WORKSPACE') | default('./', true)}}"
+project_source_dir: '{{project_workspace}}'
 
 # jenkins 相关
 project_jenkins_config:

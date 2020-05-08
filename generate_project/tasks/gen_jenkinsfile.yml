@@ -2,7 +2,7 @@
   include_vars:
     file: '{{project_vars_file}}'
 
-- name: generate vars file
+- name: generate jenkins file
   template:
     src: '{{project_src_jenkinsfile}}' 
     #dest: 'files/{{project_prog_name | default(project_name, true)}}.Jenkinsfile'

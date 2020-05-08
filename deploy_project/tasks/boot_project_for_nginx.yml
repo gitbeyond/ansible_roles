@@ -2,13 +2,15 @@
 - name: copy project nginx conf file
   #template: src="/data/apps/data/ansible/{{project_name}}/{{prog_name}}.ini" dest="{{super_conf_dir}}" owner="{{user}}" group="{{user}}" mode=0644
   template: 
-    src: "{{project_boot_file}}" 
+    #src: "{{project_boot_file}}" 
+    src: "{{item}}" 
     dest: "{{nginx_conf_dir}}/conf.d/" 
     owner: "{{nginx_run_user}}" 
     group: "{{nginx_run_user}}" 
     mode: "0644"
     backup: yes
   register: copy_nginx_file
+  loop: '{{project_boot_files}}'
   tags:
     - copy_project_nginx_file
   notify:

@@ -5,9 +5,14 @@
     src: '{{project_source_dir}}/{{project_packet_name}}'
     #dest: '{{project_install_dir}}/{{project_packet_name}}' 
     dest: '{{project_install_dir}}' 
-    owner: '{{project_run_user}}' 
-    group: '{{project_run_group}}' 
-    mode: "0755"
+    recursive: true
+    rsync_opts:
+      - "--owner={{project_run_user}}"
+      - "--group={{project_run_group}}"
+      - "--chown={{project_run_user}}:{{project_run_group}}"
+    #owner: '{{project_run_user}}' 
+    #group: '{{project_run_group}}' 
+    #mode: "push"
   register: cp_result
 
 

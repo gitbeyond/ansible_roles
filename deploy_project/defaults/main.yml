@@ -13,10 +13,12 @@ project_packet_link_name:
 # 项目名称，就是 jenkins 的项目名
 #project_name: "{{lookup('env', 'JOB_NAME')}}"
 project_name: "{{lookup('env', 'JOB_BASE_NAME')}}"
-project_workspace: "{{lookup('env', 'WORKSPACE')}}"
+project_workspace: "{{lookup('env', 'WORKSPACE') | default('./', true)}}"
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd, docker, k8s
 project_boot_type: supervisor
 project_boot_file:
+project_boot_files:
+  - '{{project_boot_file}}'
 
 project_source_dir: '{{project_workspace}}'
 

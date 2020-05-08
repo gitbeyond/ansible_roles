@@ -19,11 +19,14 @@
 
 
 
-# 目录的发布,注意，这个project_install_dir 不包含源目录的base目录，如想连同源目录一同copy,要在 project_install_dir 中写上源目录
+# 目录的发布,注意，源目录带不带最后的 / 将产生不同的效果
 # 如 
 # src: /path/to/src 是源目录，其中包含index.html
-# dest: /path/to/dest
-# 最后的效果是 /path/to/dest/index.html
+# dest: /path/to
+# 最后的效果是 /path/to/src/index.html
+# src: /path/to/src/ 是源目录，其中包含index.html
+# dest: /path/to
+# 最后的效果是 /path/to/index.html
 # project_packet_link_name 软链的名字要写成绝对路径的方式
 - hosts: '{{project_host}}'
   remote_user: root

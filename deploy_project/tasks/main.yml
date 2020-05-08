@@ -1,9 +1,10 @@
 # editor: haifengsss@163.com
 # 2019/11/27
 
-- import_tasks: get_project_name.yml
+- include_tasks: get_project_name.yml
   tags:
     - get_project_name
+  when: project_packet_type != 'directory'
 
 - import_tasks: create_project_dir.yml
   tags:
@@ -73,4 +74,4 @@
 - include_tasks: url_health_check.yml
   tags:
     - url_health_check
-  when: project_health_url is not none and project_boot_type != 'k8s'
+  when: project_health_url is not none and project_health_url != '' and project_boot_type != 'k8s'
