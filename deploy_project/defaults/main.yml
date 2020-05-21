@@ -50,3 +50,11 @@ project_health_check_status_code: 200
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
 #nginx_conf_dir: /data/apps/config/nginx
 #nginx_run_user: nginx
+project_etcd_host: 127.0.0.1
+project_etcd_ca_cert: /data/apps/config/etcd/ssl/etcd-root-ca.pem
+project_etcd_client_cert: /data/apps/config/etcd/ssl/etcd-client-ca.pem
+project_etcd_client_key: /data/apps/config/etcd/ssl/etcd-client-ca-key.pem
+project_monitor_key:
+project_monitor_data:
+project_log_key:
+project_log_data:

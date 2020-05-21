@@ -1,0 +1,11 @@
+groups:
+- name: systemd
+  rules:
+  - alert: systemd service has down
+    annotations:
+      message: 'systemd service "{{$labels.name}}" is down on {{$labels.instance}}.'
+    expr: node_systemd_unit_state{state="active"} != 1
+    for: 1m
+    labels:
+      severity: critical
+    

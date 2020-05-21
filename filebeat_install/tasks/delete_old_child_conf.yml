@@ -1,0 +1,7 @@
+
+- name: delete old child conf file
+  file:
+    path: "{{filebeat_child_conf_dir}}/{{ item }}" 
+    state: absent
+  loop: '{{filebeat_old_child_confs}}'
+  when: item is not none and item != ''

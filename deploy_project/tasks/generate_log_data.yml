@@ -1,0 +1,12 @@
+ 
+- name: write log_data to etcd3  
+  local_action:
+    module: etcd3
+    host: '{{project_etcd_host}}'
+    ca_cert: '{{project_etcd_ca_cert}}'
+    client_cert: '{{project_etcd_client_cert}}'
+    client_key: '{{project_etcd_client_key}}'
+    key: '{{project_log_key | default("project_name")}}'
+    value: '{{project_log_data | to_json}}'
+    state: present
+  run_once: true

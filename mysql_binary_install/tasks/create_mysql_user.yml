@@ -1,0 +1,16 @@
+# editor: haifengsss@163.com
+# 2020/05/21
+
+- name: create link for /data1 to /data
+  file: 
+    src: '/data1' 
+    dest: '/data' 
+    state: link
+  tags:
+    - mysql_create_data_dir_soft_link
+
+- name: create mysql user
+  user: 
+    name: '{{ mysql_run_user }}' 
+    state: present 
+    system: 'yes'

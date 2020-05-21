@@ -3,6 +3,7 @@
 mysql_app_name: mysql
 mysql_run_user: mysql
 app_base_dir: /data/apps/opt
+mysql_install_dir: '{{app_base_dir}}'
 mysql_base_dir: "{{app_base_dir}}/{{mysql_app_name}}"
 mysql_data_dir: /data/apps/data/{{mysql_app_name}}
 mysql_conf_dir: /data/apps/config/{{mysql_app_name}}

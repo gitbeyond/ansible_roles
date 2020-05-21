@@ -19,6 +19,11 @@
   tags:
     - create_prom_dir
 
+- import_tasks: delete_old_child_conf.yml
+  tags:
+    - prom_copy_conf_file
+    - delete_old_child_conf
+
 - import_tasks: copy_prom_ssl_conf.yml
   tags:
     - copy_prom_ssl_conf

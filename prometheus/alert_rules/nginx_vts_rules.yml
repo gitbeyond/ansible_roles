@@ -6,7 +6,7 @@ groups:
       message: 'nginx "cluster: {{ $labels.cluster }}" "instance: {{$labels.instance}}": insufficient members ({{ $value
         }}).'
     expr: |
-      irate(nginx_vts_server_requests_total{code="5xx"}[5m]) > 1
+      irate(nginx_vts_server_requests_total{code="5xx"}[5m]) > 0
     for: 1m
     labels:
       severity: critical
@@ -15,8 +15,7 @@ groups:
       message: 'nginx "cluster: {{ $labels.cluster }}" "instance: {{$labels.instance}}" "backend: {{$labels.backend}}" "upstream: {{$labels.upstream}}": insufficient members ({{ $value
         }}).'
     expr: |
-      irate(nginx_vts_server_requests_total{code="5xx"}[5m]) > 1
+      irate(nginx_vts_server_requests_total{code="5xx"}[5m]) > 0
     for: 1m
     labels:
       severity: critical
-

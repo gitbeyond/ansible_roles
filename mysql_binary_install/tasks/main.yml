@@ -1,31 +1,47 @@
-# edirtor: haifeng
-# 2019/05/11
+# editor: haifeng
+# 2020/05/21
 
-- include: install_mysql.yml
+- import_tasks: create_mysql_user.yml
   tags:
-    - install_mysql
+    - mysql_create_user
+
+- import_tasks: create_mysql_dir.yml
+  tags:
+    - mysql_create_dir
+
+- import_tasks: install_mysql.yml
+  tags:
+    - mysql_install
+
+- import_tasks: copy_mysql_init_data_dir.yml
+  tags:
+    - mysql_copy_init_data_dir
 
 - import_tasks: copy_mysql_conf.yml
   tags:
-    - copy_mysql_conf
+    - mysql_copy_conf
 
-- include: after_install_operation.yml
+- import_tasks: after_install_operation.yml
   tags:
-    - after_install_operation
+    - mysql_after_install_operation
 
 - include_tasks: cent6_service.yml
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart'
+  tags:
+    - mysql_boot
 
 - include_tasks: cent7_service.yml
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
-
-- include: create_syncuser.yml
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd'
   tags:
-    - create_syncuser
+    - mysql_boot
+
+- import_tasks: create_syncuser.yml
+  tags:
+    - mysql_create_syncuser
   when: mysql_slave_server is defined and mysql_slave_server is not none
 
 #- include: core_argument.yml
-- include: sync_to_master.yml
+- import_tasks: sync_to_master.yml
   tags:
-    - sync_to_master
+    - mysql_sync_to_master
   when: mysql_master_server is defined and mysql_master_server is not none

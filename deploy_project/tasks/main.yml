@@ -90,3 +90,16 @@
     - project_jar_supervisor
     - project_tgz_nginx
   when: project_health_url is not none and project_health_url != '' and project_boot_type != 'k8s'
+
+#- include_tasks: generate_monitor_data.yml
+- import_tasks: generate_monitor_data.yml
+  tags:
+    - generate_monitor_data
+    - project_jar_supervisor
+  when: project_monitor_data is not none and project_monitor_data != ''
+
+- import_tasks: generate_log_data.yml
+  tags:
+    - generate_log_data
+    - project_jar_supervisor
+  when: project_log_data is not none and project_log_data != ''

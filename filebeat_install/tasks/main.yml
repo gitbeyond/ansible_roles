@@ -22,6 +22,11 @@
   tags:
     - copy_filebeat_child_conf
 
+- import_tasks: delete_old_child_conf.yml
+  tags:
+    - copy_filebeat_child_conf
+    - delete_old_child_conf
+
 - include: boot_filebeat_for_supervisor.yml
   when: filebeat_boot_type == 'supervisor'
   tags:

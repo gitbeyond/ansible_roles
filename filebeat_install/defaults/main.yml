@@ -14,5 +14,7 @@ filebeat_env_file: filebeat.sh
 filebeat_run_user: root
 
 # type: list
-filebeat_child_confs:
+filebeat_child_confs: []
+filebeat_old_child_conf:
+filebeat_old_child_confs: [ '{{filebeat_old_child_conf}}' ]
 filebeat_child_conf_dir: '{{filebeat_conf_dir}}/inputs.d'

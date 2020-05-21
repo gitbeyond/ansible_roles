@@ -1,25 +1,5 @@
-# edirtor: haifeng
-# 2018/08/30
-
-- name: create parent dir
-  file: src={{ item.src }} dest={{item.dest}} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
-  with_items:
-    - { src: /data1, dest: /data, owner: root, group: root, mode: "0777", state: link}
-- name: create mysql user
-  user: name={{ item.name }} state=present system={{ item.system }}
-  with_items:
-    - { name: '{{ mysql_run_user }}', system: yes}
-#- name: install epel-release
-#  yum: name=epel-release state=latest
-- name: create mysql dir
-  file: path={{ item.path }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
-  with_items:
-    - { path: '{{ app_base_dir }}', owner: root, group: root, mode: "0755", state: directory }
-    - { path: '{{ mysql_log_dir }}', owner: '{{ mysql_run_user }}', group: '{{ mysql_run_user }}', mode: "0755", state: directory }
-    - { path: '{{ mysql_binlog_dir }}', owner: '{{ mysql_run_user }}', group: '{{ mysql_run_user }}', mode: "0755", state: directory }
-    - { path: '{{ mysql_conf_dir }}', owner: '{{ mysql_run_user }}', group: '{{ mysql_run_user }}', mode: "0755", state: directory }
-    - { path: '{{ mysql_data_dir }}', owner: '{{mysql_run_user}}', group: '{{mysql_run_user}}', mode: "0755", state: directory }
-    - { path: '{{ mysql_var_dir }}', owner: '{{ mysql_run_user }}', group: '{{mysql_run_user}}', mode: "0755", state: directory }
+# editor: haifeng
+# 2020/05/21
 
 - name: get mysql packet dir name
   local_action: shell tar tvf {{mysql_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
@@ -27,19 +7,17 @@
   run_once: true
 
 - name: cp and unarchive mysql_binary_tarball to remote host
-  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ mysql_run_user }}' group={{ mysql_run_user }} creates={{ item.creates }} mode=0755
-  with_items:
-    - { src: '{{ mysql_packet }}', dest: '{{ app_base_dir}}/', creates: '{{ app_base_dir }}/{{mysql_dir_name.stdout}}' }
+  unarchive: 
+    src: '{{ mysql_packet }}' 
+    dest: '{{ mysql_install_dir }}' 
+    owner: '{{ mysql_run_user }}' 
+    group: '{{ mysql_run_user }}' 
+    creates: '{{ app_base_dir }}/{{mysql_dir_name.stdout}}' 
+    mode: "0755"
 
 - name: create mysql link dir
-  file: src={{ item.src }} dest={{item.dest}} state={{ item.state }}
-  with_items:
-    - { src: "{{app_base_dir}}/{{mysql_dir_name.stdout}}", dest: "{{mysql_base_dir}}", state: link}
+  file: 
+    src: '{{ mysql_install_dir}}/{{mysql_dir_name.stdout }}' 
+    dest: '{{mysql_base_dir}}' 
+    state: link
   when: mysql_dir_name.stdout != "mysql"
-
-- name: cp and unarchive mysql_datadir_tarball to remote host
-  unarchive: src={{ item.src }} dest={{ item.dest }} owner='{{ mysql_run_user }}' group={{ mysql_run_user }} creates={{ item.creates }}
-  with_items:
-    - { src: '{{ mysql_data_packet }}', dest: '{{ mysql_data_dir}}/', creates: '{{ mysql_data_dir }}/mysql' }
-
-  #ignore_errors: True

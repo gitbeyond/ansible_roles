@@ -1,0 +1,11 @@
+# node_supervisord_state, disunderstand
+groups:
+- name: supervisord
+  rules:
+  - alert: supervisor subprocess has down 
+    annotations:
+      message: 'supervisor subprocess "{{$labels.name}}" is down on {{$labels.instance}}.'
+    expr: node_supervisord_up != 1
+    for: 1m
+    labels:
+      severity: critical

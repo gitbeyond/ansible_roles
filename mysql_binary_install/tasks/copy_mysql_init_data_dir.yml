@@ -1,0 +1,10 @@
+# editor: haifeng
+# 2020/05/21
+
+- name: cp and unarchive mysql_datadir_tarball to remote host
+  unarchive: 
+    src: '{{ mysql_data_packet }}'
+    dest: '{{ mysql_data_dir }}' 
+    owner: '{{ mysql_run_user }}' 
+    group: '{{ mysql_run_user }}' 
+    creates: '{{ mysql_data_dir }}/mysql'

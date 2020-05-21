@@ -1,0 +1,71 @@
+# https://www.cnblogs.com/fsckzy/p/12053604.html
+groups:
+- name:  Redis
+  rules: 
+    - alert: RedisDown
+      expr: redis_up == 0
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Redis down (instance {{ $labels.instance }})"
+        description: "Redis had downed. VALUE = {{ $value }}  LABELS: {{ $labels }}"
+    - alert: MissingBackup
+      # 最后一次写入 rdb 的时间
+      expr: time() - redis_rdb_last_save_timestamp_seconds > 86400
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Missing backup (instance {{ $labels.instance }})"
+        description: "Redis has not been backuped for 24 hours  VALUE = {{ $value }}  LABELS: {{ $labels }}"       
+    - alert: OutOfMemory
+      expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 90
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Out of memory (instance {{ $labels.instance }})"
+        description: "Redis is running out of memory (> 90%)  VALUE = {{ $value }}  LABELS: {{ $labels }}"
+    - alert: ReplicationBroken
+      expr: delta(redis_connected_slaves[1m]) < 0
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Replication broken (instance {{ $labels.instance }})"
+        description: "Redis instance lost a slave VALUE = {{ $value }} LABELS: {{ $labels }}"
+    - alert: TooManyConnections
+      #expr: redis_connected_clients > 1000
+      expr: redis_config_maxclients - redis_connected_clients < 500
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Too many connections (instance {{ $labels.instance }})"
+        description: "Redis instance has too many connections  VALUE = {{ $value }}  LABELS: {{ $labels }}"       
+    - alert: NotEnoughConnections
+      expr: redis_connected_clients < 5
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Not enough connections (instance {{ $labels.instance }})"
+        description: "Redis instance should have more connections (> 5)  VALUE = {{ $value }}  LABELS: {{ $labels }}"
+    - alert: RejectedConnections
+      expr: increase(redis_rejected_connections_total[1m]) > 0
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "Rejected connections (instance {{ $labels.instance }})"
+        description: "Some connections to Redis has been rejected\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+    - alert: redis_available_fds less than 200
+      expr: process_max_fds - process_open_fds < 200
+      for: 5m
+      labels:
+        severity: error
+      annotations:
+        summary: "redis_available_fds (instance {{ $labels.instance }})"
+        description: "redis_available_fds less than 200.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+

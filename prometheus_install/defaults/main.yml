@@ -36,9 +36,11 @@ prom_env_file:
 
 # type: list
 #prom_other_dirs:
-prom_conf_files:
-prom_child_confs:
-prom_bin_scripts:
+prom_conf_files: []
+prom_child_confs: []
+prom_old_child_conf:
+prom_old_child_confs: [ '{{prom_old_child_conf}}' ]
+prom_bin_scripts: []
 
 
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
