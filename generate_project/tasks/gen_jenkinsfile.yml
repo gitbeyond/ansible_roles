@@ -6,5 +6,6 @@
   template:
     src: '{{project_src_jenkinsfile}}' 
     #dest: 'files/{{project_prog_name | default(project_name, true)}}.Jenkinsfile'
-    dest: 'files/{{project_jenkins_name}}.Jenkinsfile'
+    #dest: 'files/{{project_jenkins_name}}.Jenkinsfile'
+    dest: 'files/{{project_name}}.Jenkinsfile'
     mode: "0644" 

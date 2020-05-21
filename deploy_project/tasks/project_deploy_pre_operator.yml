@@ -1,0 +1,6 @@
+- name: exec project_deploy_pre_command
+  local_action:
+    module: shell
+    cmd: '{{project_deploy_pre_command}}'
+    chdir: '{{project_workspace}}'
+    executable: '{{project_deploy_pre_command_executable}}'

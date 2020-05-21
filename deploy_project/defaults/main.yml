@@ -1,9 +1,13 @@
 jenkins_home_dir: /data/apps/data/jenkins
+
+project_deploy_pre_command:
+project_deploy_pre_command_executable: /bin/bash
+
 project_run_user:  nobody
 project_run_group: '{{project_run_user}}'
 project_host:
 # 如果程序是一个 jar 包，使用 supervisor 启动时的进程名称
-project_prog_name: 
+project_prog_name: '{{project_name}}'
 # 项目打包后的包名,如果带有版本号那么须使用 myproject*.jar 这样
 project_packet_name:
 # tgz or jar or directory
