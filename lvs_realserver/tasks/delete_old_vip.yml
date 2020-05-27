@@ -1,0 +1,14 @@
+---
+
+#* 提供了old_vip ，
+#        * 但是实际上已经不存在了， changed：false , 脚本的退出码是 0
+#        * ip 和 rou 任意一个操作了，就是 changed: true, 脚本的退出码是 10
+#        * 如果删除失败了，那么 需要使用 failed_when: , 退出码是 11 吧
+#* 未提供vip的时候是跳过的，因此不需要判断
+
+- name: delete old vip
+  shell:
+    cmd: /etc/rc.d/init.d/realserver delete {{lvs_old_vip}}
+  register: lvs_old_vip_del_stat
+  failed_when: lvs_old_vip_del_stat.rc == 11
+  changed_when: lvs_old_vip_del_stat.rc == 10

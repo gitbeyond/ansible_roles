@@ -1,34 +1,42 @@
-# edirtor: haifeng
-# 2017/01/12
+# editor: haifengsss@163.com
+# 2020/05/27
 
-- include: create_nginx_user.yml
+- import_tasks: create_nginx_user.yml
   tags:
     - create_nginx_user
 
-- include: create_nginx_dir.yml
+- import_tasks: create_nginx_dir.yml
   tags:
     - create_nginx_dir
 
-- include: install_nginx.yml
+- import_tasks: install_nginx.yml
   tags:
     - install_nginx
-- include: copy_nginx_conf.yml
+
+- import_tasks: copy_nginx_conf.yml
   tags:
     - copy_nginx_conf
 
-- include: copy_nginx_child_conf.yml
+- import_tasks: copy_nginx_child_conf.yml
   tags:
     - copy_nginx_child_conf
   when: nginx_child_confs is not none
 
-- include: cent6_service.yml
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+- import_tasks: install_dependence_packet.yml
+  tags:
+    - install_nginx_dependence_packet
+  #when: nginx_install_method == "net" 
 
-- include: cent7_service.yml
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
+- include_tasks: cent6_service.yml
+  tags:
+    - nginx_boot
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart'
 
-- include: install_dependence_packet.yml
-  when: nginx_install_method == "net" 
-
+- include_tasks: cent7_service.yml
+  tags:
+    - nginx_boot
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd'
 
 - include: core_argument.yml
+  tags:
+    - nginx_add_core_args

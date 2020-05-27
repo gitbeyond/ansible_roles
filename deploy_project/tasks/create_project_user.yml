@@ -1,0 +1,8 @@
+# editor: haifeng
+# 2020/05/27
+
+- name: create nginx user
+  user:
+    name: '{{ project_run_user }}' 
+    state: present 
+    system: '{{ project_user_is_system }}'

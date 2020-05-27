@@ -56,7 +56,7 @@
   #with_items:
   #  - {src: '{{project_install_dir}}/{{packet_dir_name.stdout}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', 
   #     owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
-  when: project_packet_link_name is not none and packet_dir_name.stdout != project_packet_link_name
+  when: project_packet_link_name is not none and project_packet_link_name != '' and packet_dir_name.stdout != project_packet_link_name
   #when: project_packet_link_name is none
     #- {src: '{{project_install_dir}}/{{PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
 

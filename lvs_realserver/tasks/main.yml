@@ -11,7 +11,13 @@
   tags:
     - boot_realserver
 
+- include_tasks: delete_old_vip.yml
+  tags:
+    - lvs_rs_delete_old_vip
+  when: lvs_old_vip is not none and lvs_old_vip != ''
+
 - include_tasks: create_prom_monitor_metrics.yml
   tags:
     - create_prom_monitor_metrics
   when: lvs_realserver_generate_metrics == true
+

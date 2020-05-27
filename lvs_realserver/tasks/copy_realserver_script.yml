@@ -6,7 +6,7 @@
     owner: root 
     group: root 
     mode: "{{item.mode}}"
-  with_items:
+  loop:
     - src: realserver
       dest: '/etc/rc.d/init.d/'
       mode: "0755"

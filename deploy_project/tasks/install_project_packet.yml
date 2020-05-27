@@ -20,7 +20,7 @@
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'
     state: link
-  when: project_packet_link_name is not none and PACKET_NAME.stdout | basename != project_packet_link_name
+  when: project_packet_link_name is not none and project_packet_link_name != '' and PACKET_NAME.stdout | basename != project_packet_link_name
 
 
 

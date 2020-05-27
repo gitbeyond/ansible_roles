@@ -4,6 +4,7 @@ project_deploy_pre_command:
 project_deploy_pre_command_executable: /bin/bash
 
 project_run_user:  nobody
+project_user_is_system: true
 project_run_group: '{{project_run_user}}'
 project_host:
 # 如果程序是一个 jar 包，使用 supervisor 启动时的进程名称

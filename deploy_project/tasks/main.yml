@@ -6,6 +6,11 @@
     - project_deploy_pre_operator
   when: project_deploy_pre_command is not none
 
+- import_tasks: create_project_user.yml
+  tags:
+    - project_create_user
+    - project_jar_supervisor
+
 - include_tasks: get_project_name.yml
   tags:
     - get_project_name

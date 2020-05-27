@@ -10,8 +10,8 @@
 * 打开 rc-local service
 * 关闭透明大页
 
-- ntp_serve 指定 ntp 的地址
-- 是否关闭透明大页，取决于 host 是否存在于 hadoop 的组中，或者定义 hadoop_yes: true, 否则会跳过关闭透明大页的操作
+- `ntp_server` 指定 ntp 的地址
+- 是否关闭透明大页，取决于 host 是否存在于 hadoop 的组中，或者定义 `hadoop_yes: true`, 否则会跳过关闭透明大页的操作
 
 example:
 ```

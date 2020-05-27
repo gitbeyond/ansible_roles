@@ -1,4 +1,5 @@
 lvs_vip:
+lvs_old_vip:
 lvs_realserver_generate_metrics: true
 node_exporter_textfile_directory: /data/apps/data/node_exporter/textfile_collector
 script_deploy_dir: '{{script_deploy_dir | default("/data/apps/opt/script")}}'

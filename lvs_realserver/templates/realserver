@@ -1,7 +1,9 @@
 #!/bin/bash
 #chkconfig: 2345 70 30  #234
 VIP={{lvs_vip}}
+OLD_VIP=$2
 ip_dev=lo
+source /etc/bashrc
 source /etc/rc.d/init.d/functions
 RETVAL=0
 
@@ -41,10 +43,10 @@ rh_status() {
 
 rs_start(){
     #ifconfig lo:0 $VIP netmask 255.255.255.255 broadcast $VIP
-    ip add add ${VIP}/32 broadcast ${VIP} dev lo label lo:0
+    ip add add ${VIP}/32 broadcast ${VIP} dev ${ip_dev} label ${ip_dev}:0
     #ip add add ${VIP}/32 dev lo label lo:0
     #/sbin/route add -host $VIP dev lo:0
-    ip rou add ${VIP}/32 via ${VIP} dev lo scope link
+    ip rou add ${VIP}/32 via ${VIP} dev ${ip_dev} scope link
     echo "1" >/proc/sys/net/ipv4/conf/lo/arp_ignore
     echo "2" >/proc/sys/net/ipv4/conf/lo/arp_announce
     echo "1" >/proc/sys/net/ipv4/conf/all/arp_ignore
@@ -54,14 +56,52 @@ rs_start(){
 
 rs_stop(){
     #ifconfig lo:0 down
-    ip add del ${VIP}/32 dev lo
-    ip rou del ${VIP}/32 dev lo
+    ip add del ${VIP}/32 dev ${ip_dev}
+    ip rou del ${VIP}/32 dev ${ip_dev}
     #route del $VIP >/dev/null 2>&1
     echo "0" >/proc/sys/net/ipv4/conf/lo/arp_ignore
     echo "0" >/proc/sys/net/ipv4/conf/lo/arp_announce
     echo "0" >/proc/sys/net/ipv4/conf/all/arp_ignore
     echo "0" >/proc/sys/net/ipv4/conf/all/arp_announce
     echo "RealServer Stoped"
+}
+
+rs_delete_ip(){
+    default_stat=13
+    if [ -n "${OLD_VIP}" ];then
+        ip_del_stat=${default_stat}
+        rou_del_stat=${default_stat}
+        if ip a sh ${ip_dev} |grep "${OLD_VIP}";then
+            echo "ip add del ${VIP} dev ${ip_dev}"
+            ip add del ${VIP} dev ${ip_dev}
+            ip_del_stat=$?
+        fi
+        
+        if ip rou sh |gerp "${OLD_VIP}";then
+            echo "ip rou del ${VIP} dev ${ip_dev}"
+            ip rou del ${VIP} dev ${ip_dev}
+            rou_del_stat=$?
+        fi
+
+    else
+        echo "${OLD_VIP} is null."
+        return 0
+    fi 
+    
+    if [ ${ip_del_stat} == ${default_stat} ] && [ ${rou_del_stat} == ${default_stat} ];then
+        return 0
+        RETVAL=0
+    else
+        if [ ${ip_del_stat} == 0 ] && [ ${rou_del_stat} == 0 ];then
+            return 10
+            RETVAL=10
+        else
+            echo "ip_del_stat ${ip_del_stat}, rou_del_stat: ${rou_del_stat}"
+            return 11
+            RETVAL=11
+        fi
+    fi
+    
 }
 
 case "$1" in
@@ -77,6 +117,9 @@ status)
 restart)
     rs_stop
     rs_start
+    ;;
+delete)
+    rs_delete_ip    
     ;;
 *)
     echo "Usage: $0 {start|stop|status|restart}"
