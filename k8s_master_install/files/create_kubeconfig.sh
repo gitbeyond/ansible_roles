@@ -142,22 +142,37 @@ kube_cluster_priv=${kube_cluster_priv:-true}
 
 kube_group_name=${kube_group_name:-kubernetes}
 
-if [ -n "${kube_sa_name}" ];then
-    if [ -n "${kube_user_name}" ];then
+if [ -n "${kube_sa_name}" ] && [ -n "${kube_user_name}" ];then
         echo_red "--kube_user_name ${kube_user_name} conflict --kube_sa_name ${kube_sa_name}."
-        exit 8
-    fi
+        #exit 8
+    #fi
 fi
 
 
 
 # 检查参数是否为 null
 for arg in ${args[@]};do
+    arg_null_num=0
+
     if [ -n "${!arg}" ];then
         echo_green "${arg}: ${!arg}"
     else
-        echo_red "the ${arg} is null. exit."
-        exit 2
+        echo_red "the ${arg} is null."
+        #exit 2
+        if [ "${arg}" == "kube_user_name" ] || [ "${arg}" == "kube_sa_name" ];then
+            #if [ -n "${!arg}" ];then
+            #    :
+            #else
+                arg_null_num=$((arg_null_num+1))
+            #fi
+        else
+            echo_red "exit"
+            exit 2
+        fi
+    fi
+
+    if [ ${arg_null_num} -gt 1 ];then
+        exit 3
     fi
 done
 
@@ -271,7 +286,7 @@ rb_result=$?
 #if [ "${sa_result}" == "0" ] && [ "${rb_result}" == "0" ];then
 if [ "${rb_result}" == "0" ];then
     echo_red "the object already exist."
-    exit 7
+    #exit 7
 else
     :
 fi
@@ -285,7 +300,7 @@ $kube_cmd config set-cluster ${kube_cluster_name} --embed-certs=true --server=${
 # 如果 sa 的对象存在，则退出，不存在则创建
 if [ -n "${kube_sa_name}" ];then
     $kube_cmd -n ${kube_ns} get sa ${kube_sa_name}
-    error_exit 5 16
+    error_exit 0 16
     #sa_result=$?
     #if [ ${sa_result} == 0 ];then
     #    echo_red "the object alread exist."
@@ -316,7 +331,7 @@ if [ -n "${kube_sa_name}" ];then
 
 fi
 
-if [ -n "${kube_user_name}" ]
+if [ -n "${kube_user_name}" ];then
     create_cert
     cd ${cert_dir}
     set -e

@@ -1,0 +1,7 @@
+# editor: haifengsss@163.com
+# 2020/05/29
+
+- name: init pgsql data dir
+  shell:
+    cmd: '{{pgsql_base_dir}}/bin/initdb {{pgsql_initdb_args}}'
+    creates: '{{pgsql_data_dir}}/global'

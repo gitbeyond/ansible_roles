@@ -12,7 +12,7 @@
     dest: '{{ mysql_install_dir }}' 
     owner: '{{ mysql_run_user }}' 
     group: '{{ mysql_run_user }}' 
-    creates: '{{ app_base_dir }}/{{mysql_dir_name.stdout}}' 
+    creates: '{{ mysql_install_dir }}/{{mysql_dir_name.stdout}}' 
     mode: "0755"
 
 - name: create mysql link dir

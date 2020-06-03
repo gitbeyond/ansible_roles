@@ -1,0 +1,54 @@
+###
+# kubernetes system config
+#
+# The following values are used to configure the kube-apiserver
+#
+# The address on the local server to listen to.
+KUBE_API_ADDRESS="--advertise-address={{ansible_default_ipv4.address}} --bind-address={{ansible_default_ipv4.address}}"
+# The port on the local server to listen on.
+KUBE_API_PORT="--secure-port=6443"
+# Port minions listen on
+# KUBELET_PORT="--kubelet-port=10250"
+# Comma separated list of nodes in the etcd cluster
+KUBE_ETCD_SERVERS="--etcd-servers={{etcd_client_endpoints}}"
+# Address range to use for services
+KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range=10.254.0.0/16"
+# default admission control policies
+#KUBE_ADMISSION_CONTROL="--admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota,NodeRestriction"
+KUBE_ADMISSION_CONTROL="--enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,ResourceQuota,NodeRestriction"
+# Add your own!
+KUBE_API_ARGS="--authorization-mode=RBAC,Node \
+--anonymous-auth=false \
+--kubelet-https=true \
+--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname \
+--kubelet-client-certificate=/etc/kubernetes/ssl/k8s-kube-apiserver-kubelet-client.pem \
+--kubelet-client-key=/etc/kubernetes/ssl/k8s-kube-apiserver-kubelet-client-key.pem \
+--enable-bootstrap-token-auth=true \
+--service-node-port-range=30000-50000 \
+--tls-cert-file=/etc/kubernetes/ssl/k8s-kube-apiserver.pem \
+--tls-private-key-file=/etc/kubernetes/ssl/k8s-kube-apiserver-key.pem \
+--client-ca-file=/etc/kubernetes/ssl/k8s-root-ca.pem \
+--service-account-key-file=/etc/kubernetes/ssl/k8s-sa.pub \
+--storage-backend=etcd3 \
+--etcd-cafile=/etc/etcd/ssl/etcd-root-ca.pem \
+--etcd-certfile=/etc/etcd/ssl/etcd-client-ca.pem \
+--etcd-keyfile=/etc/etcd/ssl/etcd-client-ca-key.pem \
+--apiserver-count=3 \
+--audit-policy-file=/etc/kubernetes/audit-policy.yaml \
+--audit-log-maxage=30 \
+--audit-log-maxbackup=3 \
+--audit-log-maxsize=100 \
+--audit-log-path=/data/apps/log/kube-audit/audit.log \
+--event-ttl=1h \
+--proxy-client-cert-file=/etc/kubernetes/ssl/k8s-front-proxy-client.pem \
+--proxy-client-key-file=/etc/kubernetes/ssl/k8s-front-proxy-client-key.pem \
+--runtime-config=api/all=true \
+--enable-aggregator-routing=true \
+--requestheader-client-ca-file=/etc/kubernetes/ssl/k8s-front-proxy-ca.pem \
+--requestheader-allowed-names=front-proxy-client \
+--requestheader-extra-headers-prefix=X-Remote-Extra- \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--logtostderr=false \
+--log-dir=/data/apps/log/kube-apiserver"
+#--etcd-quorum-read=true \

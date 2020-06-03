@@ -1,0 +1,22 @@
+###
+# The following values are used to configure the kubernetes controller-manager
+# defaults from config and apiserver should be adequate
+# Add your own!
+KUBE_CONTROLLER_MANAGER_ARGS="--bind-address=0.0.0.0 \
+--service-cluster-ip-range=10.254.0.0/16 \
+--cluster-name=kubernetes \
+--cluster-signing-cert-file=/etc/kubernetes/ssl/k8s-root-ca.pem \
+--cluster-signing-key-file=/etc/kubernetes/ssl/k8s-root-ca-key.pem \
+--service-account-private-key-file=/etc/kubernetes/ssl/k8s-sa.key \
+--root-ca-file=/etc/kubernetes/ssl/k8s-root-ca.pem \
+--kubeconfig=/etc/kubernetes/kube-controller-manager.kubeconfig \
+--use-service-account-credentials=true \
+--experimental-cluster-signing-duration=87600h0m0s \
+--leader-elect=true \
+--node-monitor-grace-period=40s \
+--node-monitor-period=5s \
+--pod-eviction-timeout=5m0s \
+--cert-dir=/data/apps/log/kube-controller-manager \
+--v=2 \
+--logtostderr=false \
+--log-dir=/data/apps/log/kube-controller-manager"

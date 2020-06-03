@@ -1,0 +1,18 @@
+[Unit]
+Description=Kubernetes Kubelet Server
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After=docker.service
+Requires=docker.service
+
+[Service]
+WorkingDirectory={{k8s_kubelet_root_dir}}
+EnvironmentFile=-/etc/kubernetes/kube-config
+EnvironmentFile=-/etc/kubernetes/kubelet
+ExecStart={{k8s_base_dir}}/node/bin/kubelet \
+	    $KUBELET_HOSTNAME \
+	    $KUBELET_ARGS
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

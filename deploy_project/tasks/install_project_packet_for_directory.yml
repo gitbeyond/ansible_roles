@@ -1,5 +1,12 @@
 # /path/to/src 
 # /path/dest/src
+
+- name: project_hosts install rsync
+  yum:
+    name: rsync
+    state: present
+  ignore_errors: true
+
 - name: cp project packet to remote
   synchronize: 
     src: '{{project_source_dir}}/{{project_packet_name}}'

@@ -1,0 +1,37 @@
+
+- import_tasks: create_pg_user.yml
+  tags:
+    - pgsql_create_user
+
+- import_tasks: create_pg_dir.yml
+  tags:
+    - pgsql_create_dir
+
+- import_tasks: install_pgsql.yml
+  tags:
+    - pgsql_install
+
+- import_tasks: copy_pgsql_init_data_dir.yml
+  tags:
+    - pgsql_copy_init_data_dir
+  when: pgsql_data_packet is not none and pgsql_data_packet != ''
+
+- import_tasks: pgsql_init_datadir.yml
+  tags:
+    - pgsql_init_datadir
+  when: pgsql_data_packet is none or pgsql_data_packet == ''
+
+- import_tasks: copy_pgsql_conf.yml
+  tags:
+    - pgsql_copy_conf
+
+- import_tasks: boot_pgsql_for_systemd.yml
+  tags:
+    - pgsql_boot_for_systemd
+    - pgsql_boot
+
+- import_tasks: pgsql_create_repl_user.yml
+  tags:
+    - pgsql_create_repl_user
+
+

@@ -1,0 +1,30 @@
+- name: pgsql create repl user
+  postgresql_user:
+    login_host: '{{pgsql_var_dir}}'
+    port: '{{pgsql_run_port | int}}'
+    name: '{{item}}'
+    password: '{{pgsql_sync_pass}}'
+    role_attr_flags: 'replication'
+    conn_limit: 5
+  loop:
+    - '{{pgsql_sync_user}}'
+
+- name: pgsql set hba_conf for repl user
+  postgresql_pg_hba:
+    dest: '{{pgsql_data_dir}}/pg_hba.conf'
+    contype: host
+    databases: replication
+    users: '{{pgsql_sync_user}}'
+    source: '{{item}}'
+    method: md5
+    create: true
+    backup: yes
+    backup_file: "{{pgsql_var_dir}}/pg_hba.conf_{{now(fmt='%Y%m%d_%H%M%S')}}"
+    owner: '{{pgsql_run_user}}'
+    group: '{{pgsql_run_user}}'
+    mode: "0644"
+  loop:
+    - '{{pgsql_master_server}}'
+    - '{{pgsql_slave_server}}'
+  when: item is not none and item != ''
+

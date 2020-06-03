@@ -1,0 +1,8 @@
+# editor: haifengsss@163.com
+# 2020/05/29
+
+- name: create pgsql user
+  user: 
+    name: '{{ pgsql_run_user }}' 
+    state: present 
+    #system: 'yes'

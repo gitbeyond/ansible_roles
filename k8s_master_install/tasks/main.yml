@@ -4,18 +4,24 @@
 - import_tasks: create_k8s_work_dir.yml
   tags:
     - create_k8s_work_dir
+  become: no
 
 - import_tasks: generate_k8s_cert_confs.yml
   tags:
     - generate_k8s_cert_confs
+  become: no
+  #become_method: sudo
+  #become_user: root
 
 - import_tasks: generate_k8s_certs.yml
   tags:
     - generate_k8s_certs
+  become: no
 
 - import_tasks: generate_k8s_kubeconfig.yml
   tags:
     - generate_k8s_kubeconfig
+  become: no
 
 - import_tasks: create_k8s_dir.yml
   tags:

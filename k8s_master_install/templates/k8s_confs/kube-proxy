@@ -1,0 +1,21 @@
+###
+# kubernetes proxy config
+
+# default config should be adequate
+
+# Add your own!
+#KUBE_PROXY_ARGS="--bind-address={{ansible_default_ipv4.address}} \
+#  --v=2 \
+#  --hostname-override={{ansible_nodename}} \
+#  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig \
+#  --proxy-mode=iptables \
+#  --cluster-cidr=10.254.0.0/16 \
+#  --logtostderr=false \
+#  --log-dir=/data/apps/log/kube-proxy"
+
+KUBE_PROXY_ARGS="--config=/etc/kubernetes/kube-proxy.yaml \
+  --logtostderr=false \
+  --v=2 \
+  --log-dir=/data/apps/log/kube-proxy"
+
+

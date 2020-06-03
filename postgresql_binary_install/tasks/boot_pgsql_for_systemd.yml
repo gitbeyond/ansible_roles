@@ -1,0 +1,18 @@
+- name: pgsql copy boot file
+  template: 
+    src: '{{ pgsql_service_conf }}' 
+    dest: '/usr/lib/systemd/system/{{pgsql_service_name}}.servic' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644"
+    backup: yes
+  notify:
+    - systemctl_daemon_reload
+  tags:
+    - pgsql_copy_boot_file
+
+- name: set pgsql boot and starting up
+  systemd: 
+    name: '{{pgsql_service_name}}'
+    enabled: yes 
+    state: started

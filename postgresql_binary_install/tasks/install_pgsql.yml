@@ -1,0 +1,23 @@
+# editor: haifengsss@163.com
+# 2020/05/29
+
+- name: get pgsql packet dir name
+  local_action: shell tar tvf {{pgsql_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  register: pgsql_dir_name
+  run_once: true
+
+- name: cp and unarchive pgsql_binary_tarball to remote host
+  unarchive: 
+    src: '{{ pgsql_packet }}' 
+    dest: '{{ pgsql_install_dir }}' 
+    owner: '{{ pgsql_run_user }}' 
+    group: '{{ pgsql_run_user }}' 
+    creates: '{{ pgsql_install_dir }}/{{pgsql_dir_name.stdout}}' 
+    mode: "0755"
+
+- name: create pgsql link dir
+  file: 
+    src: '{{ pgsql_install_dir}}/{{pgsql_dir_name.stdout }}' 
+    dest: '{{ pgsql_base_dir}}' 
+    state: link
+  when: pgsql_dir_name.stdout != "pgsql"

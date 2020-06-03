@@ -1,0 +1,21 @@
+
+- name: pgsql copy conf file
+  template: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest |default(pgsql_data_dir) }}' 
+    owner: '{{ item.owner |default(pgsql_run_user, true) }}' 
+    group: '{{ item.group |default(pgsql_run_user, true) }}' 
+    mode: "0644"
+    backup: yes
+  loop:
+    - src: '{{pgsql_primary_conf}}'
+    - src: '{{pgsql_hba_conf}}'
+    - src: '{{pgsql_ident_conf}}'
+    - src: 'pgsql.sh'
+      dest: '/etc/profile.d/{{pgsql_app_name}}.sh'
+      owner: root 
+      group: root
+    #- src: 'pgsql.logrotate'
+    #  dest: '/etc/logrotate.d/{{pgsql_app_name}}_for_ansible'
+    #  owner: root
+    #  group: root

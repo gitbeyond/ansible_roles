@@ -1,0 +1,7 @@
+###
+# kubernetes scheduler config
+# default config should be adequate
+# Add your own!
+KUBE_SCHEDULER_ARGS="--leader-elect=true --bind-address=0.0.0.0 --logtostderr=false \
+--log-dir=/data/apps/log/kube-scheduler \
+--kubeconfig=/etc/kubernetes/kube-scheduler.kubeconfig"

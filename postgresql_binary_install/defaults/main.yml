@@ -1,0 +1,30 @@
+app_base_dir: /data/apps/opt
+pgsql_run_user: postgres
+pgsql_run_port: 5432
+
+pgsql_app_name: pgsql
+pgsql_install_dir: '{{app_base_dir}}'
+pgsql_base_dir: "{{app_base_dir}}/{{pgsql_app_name}}"
+pgsql_data_dir: /data/apps/data/{{pgsql_app_name}}
+pgsql_conf_dir: /data/apps/config/{{pgsql_app_name}}
+pgsql_log_dir: /data/apps/log/{{pgsql_app_name}}
+pgsql_var_dir: /data/apps/var/{{pgsql_app_name}}
+
+pgsql_packet:
+pgsql_data_packet:
+
+pgsql_initdb_args: '-U {{pgsql_run_user}} -D {{pgsql_data_dir}}'
+
+pgsql_primary_conf: postgresql.conf
+pgsql_hba_conf: pg_hba.conf
+pgsql_ident_conf: pg_ident.conf
+pgsql_profile: pgsql.sh
+pgsql_logrotate_conf:
+pgsql_service_name: postgresql
+pgsql_service_conf: '{{pgsql_service_name}}.service'
+
+pgsql_sync_user: pgsync
+pgsql_sync_pass: 'pgSY0f5N9wL7sW1Pc'
+
+pgsql_master_server:
+pgsql_slave_server:
