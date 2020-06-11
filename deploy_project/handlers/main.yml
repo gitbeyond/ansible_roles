@@ -1,15 +1,16 @@
-- name: nginx_reload
+- name: nginx_reload_for_upstart
   service: 
     name: nginx 
     state: reloaded
+  listen: nginx_reload
   when: ansible_service_mgr == 'upstart'
 
-
-- name: nginx_reload
+- name: nginx_reload_for_systemd
   systemd: 
     name: nginx 
     state: reloaded
     enabled: yes
+  listen: nginx_reload
   when: ansible_service_mgr == 'systemd'
 
 - name: supervisorctl_restart_prog

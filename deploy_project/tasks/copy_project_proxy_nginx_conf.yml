@@ -1,0 +1,38 @@
+
+- name: copy project proxy nginx conf file
+  template: 
+    src: "{{item}}" 
+    dest: "{{nginx_child_conf_dir}}" 
+    owner: "{{nginx_run_user}}" 
+    group: "{{nginx_run_user}}" 
+    mode: "0644"
+    backup: yes
+  register: copy_proxy_nginx_file
+  loop: '{{project_proxy_nginx_confs}}'
+  when: item is not none and item != ''
+  tags:
+    - copy_project_proxy_nginx_conf
+  run_once: true
+  delegate_to: '{{host_item}}'
+  remote_user: '{{project_proxy_nginx_remote_user}}'
+  #notify:
+  #  - nginx_reload
+
+#- meta: flush_handlers
+- name: reload proxy nginx for centos7
+  systemd: 
+    name: nginx 
+    state: reloaded 
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd' and copy_proxy_nginx_file.changed == true
+  run_once: true
+  delegate_to: '{{host_item}}'
+  remote_user: '{{project_proxy_nginx_remote_user}}'
+
+- name: reload proxy nginx for centos6
+  service: 
+    name: nginx 
+    state: reloaded
+  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart' and copy_proxy_nginx_file.changed == true
+  run_once: true
+  delegate_to: '{{host_item}}'
+  remote_user: '{{project_proxy_nginx_remote_user}}'

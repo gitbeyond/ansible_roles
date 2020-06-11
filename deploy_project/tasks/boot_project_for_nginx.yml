@@ -1,10 +1,8 @@
-
 - name: copy project nginx conf file
-  #template: src="/data/apps/data/ansible/{{project_name}}/{{prog_name}}.ini" dest="{{super_conf_dir}}" owner="{{user}}" group="{{user}}" mode=0644
   template: 
     #src: "{{project_boot_file}}" 
     src: "{{item}}" 
-    dest: "{{nginx_conf_dir}}/conf.d/" 
+    dest: "{{nginx_child_conf_dir}}" 
     owner: "{{nginx_run_user}}" 
     group: "{{nginx_run_user}}" 
     mode: "0644"
@@ -16,14 +14,16 @@
   notify:
     - nginx_reload
 
-- name: reload nginx for centos7
-  systemd: 
-    name: nginx 
-    state: reloaded 
-  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd' and copy_nginx_file.changed == true
+- meta: flush_handlers
 
-- name: reload nginx for centos6
-  service: 
-    name: nginx 
-    state: reloaded
-  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart' and copy_nginx_file.changed == true
+#- name: reload nginx for centos7
+#  systemd: 
+#    name: nginx 
+#    state: reloaded 
+#  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd' and copy_nginx_file.changed == true
+#
+#- name: reload nginx for centos6
+#  service: 
+#    name: nginx 
+#    state: reloaded
+#  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart' and copy_nginx_file.changed == true

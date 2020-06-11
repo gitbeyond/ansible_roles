@@ -2,6 +2,7 @@
 # 2020/05/08
 
 - include_tasks: project_deploy_pre_operator.yml
+  name: project_deploy_pre_operator
   tags:
     - project_deploy_pre_operator
   when: project_deploy_pre_command is not none
@@ -11,7 +12,8 @@
     - project_create_user
     - project_jar_supervisor
 
-- include_tasks: get_project_name.yml
+- include_tasks: get_project_packet_name.yml
+  name: get_project_packet_name
   tags:
     - get_project_name
     - project_jar_supervisor
@@ -25,18 +27,21 @@
     - project_tgz_nginx
 
 - include_tasks: install_project_packet_for_tgz.yml
+  name: install_project_packet_for_tgz
   tags:
     - install_project_packet
     - project_tgz_nginx
   when: project_packet_type == "tgz" and PACKET_NAME is defined and PACKET_NAME is not skipped
 
 - include_tasks: install_project_packet.yml
+  name: install_project_packet
   tags:
     - install_project_packet
     - project_jar_supervisor
   when: project_packet_type == "jar"
 
 - include_tasks: install_project_packet_for_directory.yml
+  name: install_project_packet_for_directory
   tags:
     - install_project_packet_for_directory
   when: project_packet_type == "directory"
@@ -53,25 +58,51 @@
     - boot_project_for_supervisor
 
 - include_tasks: project_packet_build_docker_image.yml
+  name: project_packet_build_docker_image
   when: (project_boot_type == "k8s" or project_boot_type == "docker") and project_docker_file is not none and project_docker_file != ""
   tags:
     - project_packet_build_docker_image
 
 - include_tasks: boot_project_for_k8s.yml
+  name: boot_project_for_k8s
   tags:
     - boot_project_for_k8s
   when: project_boot_type == "k8s" and project_k8s_kubeconfig is not none
 
 
-- include_tasks: boot_project_for_nginx.yml
+- import_tasks: boot_project_for_nginx.yml
   when: project_boot_type == "nginx" and project_boot_file is not none
   tags:
     - boot_project
     - copy_project_nginx_file
     - project_tgz_nginx
+    - project_jar_supervisor
+
+- include_tasks: project_set_remote_user.yml
+  name: project_set_remote_user
+  tags:
+    - project_set_remote_user
+  when: ((project_proxy_nginx_conf is not none and project_proxy_nginx_conf != '') or (project_proxy_nginx_confs | length > 0 )) and inventory_hostname == ansible_play_hosts_all[-1]
+
+- include_tasks: copy_project_proxy_nginx_conf.yml
+  name: copy_project_proxy_nginx_conf
+  tags:
+    - copy_project_proxy_nginx_conf
+  when: ((project_proxy_nginx_conf is not none and project_proxy_nginx_conf != '') or (project_proxy_nginx_confs | length > 0 )) and inventory_hostname == ansible_play_hosts_all[-1]
+  loop: '{{project_proxy_nginx_server}}'
+  loop_control:
+    loop_var: host_item
+
+#- import_tasks: copy_project_nginx_conf.yml
+#  when: project_nginx_confs is not none or (project_nginx_conf != '' and project_nginx_conf is not none)
+#  tags:
+#    - copy_project_nginx_file
+#    - project_tgz_nginx
+#    - project_jar_supervisor
 
 #- import_tasks: boot_project_for_supervisor.yml
 - include_tasks: boot_project_for_supervisor.yml
+  name: boot_project_for_supervisor
   when: project_boot_type == "supervisor" and project_boot_file is not none
   tags:
     - boot_project
@@ -85,11 +116,13 @@
     - boot_project_for_systemd
 
 - include_tasks: archive_packet.yml
+  name: archive_packet
   tags:
     - archive_packet
   when: project_is_archive == true
 
 - include_tasks: url_health_check.yml
+  name: url_health_check
   tags:
     - url_health_check
     - project_jar_supervisor
@@ -101,10 +134,20 @@
   tags:
     - generate_monitor_data
     - project_jar_supervisor
-  when: project_monitor_data is not none and project_monitor_data != ''
+  #when: project_monitor_data is not none and project_monitor_data != ''
+  when: 
+    - project_monitor_data is not none 
+    - project_monitor_data != ''
+    - project_monitor_key is not none 
+    - project_monitor_key != ''
 
 - import_tasks: generate_log_data.yml
   tags:
     - generate_log_data
     - project_jar_supervisor
-  when: project_log_data is not none and project_log_data != ''
+  #when: project_log_data is not none and project_log_data != ''
+  when: 
+    - project_log_data is not none 
+    - project_log_data != ''
+    - project_log_key is not none 
+    - project_log_key != ''

@@ -54,3 +54,9 @@
     * k8s 这个类型的会用 template 生成 k8s 的资源文件，而后向集群进行提交，这个支持有限，有些资源提交时会报错
     * docker 这个只会生成镜像
 * `project_boot_file`: 包的服务配置文件，如果是前端项目，这个role会将 nginx 子配 `{{nginx_conf_dir}}/conf.d` 下
+
+
+# 注意
+* 当使用 `include_tasks` 时，不能在执行 playbook 时指定 --tags ，这种情况下指定的 tags 如果是由 `include_tasks` 所包含的，那么什么都不会执行
+* `include_tasks` 的时候，可以指定一个 name, 当不指定 --tags 时，在包含成功还是skipping的时候，会显示这个 name, import_tasks 的则不会，跳过时会依次跳过所包含的yml中的所有任务
+* `include_tasks` 的任务可以使用 loop 关键字，而 `import_tasks` 的则不能

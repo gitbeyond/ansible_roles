@@ -1,5 +1,5 @@
 jenkins_home_dir: /data/apps/data/jenkins
-
+# 部署前的操作,比如执行 tar 命令
 project_deploy_pre_command:
 project_deploy_pre_command_executable: /bin/bash
 
@@ -21,9 +21,31 @@ project_name: "{{lookup('env', 'JOB_BASE_NAME')}}"
 project_workspace: "{{lookup('env', 'WORKSPACE') | default('./', true)}}"
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd, docker, k8s
 project_boot_type: supervisor
+
+# 目前前端项目的（当 project_boot_type 为 nginx 时，project_boot_file 为 nginx 的配置文件，也可以用 project_nginx_conf 来指定）
 project_boot_file:
 project_boot_files:
   - '{{project_boot_file}}'
+
+# 项目中需要为其配置 nginx 代理的配置文件,这个文件不是复制至目标主机，而是需要 delegate_to 别的 nginx 主机
+project_proxy_nginx_conf:
+project_proxy_nginx_confs:
+  - '{{project_proxy_nginx_conf}}'
+
+# delegate_to 的主机组,即使只有一台，也应该写成列表，因为这里要进行循环
+# 默认使用当前目标主机组
+project_proxy_nginx_server: '{{ansible_play_hosts_all}}'
+# delegate_to 的主机的用户，有可能其与目标主机使用的是不同的 remote_user
+project_proxy_nginx_remote_user: '{{project_target_remote_user}}'
+
+
+project_nginx_conf:
+project_nginx_confs:
+  - '{{project_nginx_conf}}'
+
+project_conf_file:
+project_conf_files:
+  - '{{project_conf_file}}'
 
 project_source_dir: '{{project_workspace}}'
 
@@ -59,3 +81,6 @@ project_monitor_key:
 project_monitor_data:
 project_log_key:
 project_log_data:
+
+# nginx 
+nginx_child_conf_dir: '{{nginx_conf_dir}}/conf.d'
