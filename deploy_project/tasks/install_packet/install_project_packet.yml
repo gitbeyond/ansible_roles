@@ -1,0 +1,9 @@
+
+
+- include_tasks: install_project_packet_for_{{project_packet_type}}.yml
+  name: project_install_packet
+  when: 
+    - project_packet_type is not none
+    - project_packet_type != ''
+  #tags:
+  #  - project_install_packet

@@ -1,0 +1,8 @@
+
+- include_tasks: boot_project_for_{{project_boot_type}}.yml
+  name: project_boot
+  when:
+    - project_boot_type is not none
+    - project_boot_type != ''
+  #tags:
+  #  - project_boot

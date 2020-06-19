@@ -18,21 +18,41 @@
   #notify:
   #  - nginx_reload
 
-#- meta: flush_handlers
-- name: reload proxy nginx for centos7
-  systemd: 
-    name: nginx 
-    state: reloaded 
-  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd' and copy_proxy_nginx_file.changed == true
-  run_once: true
-  delegate_to: '{{host_item}}'
-  remote_user: '{{project_proxy_nginx_remote_user}}'
+#- name: gather facts from proxy nginx
+#  setup:
+#  run_once: true
+#  delegate_to: '{{host_item}}'
+#  remote_user: '{{project_proxy_nginx_remote_user}}'
 
-- name: reload proxy nginx for centos6
-  service: 
-    name: nginx 
-    state: reloaded
-  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart' and copy_proxy_nginx_file.changed == true
-  run_once: true
-  delegate_to: '{{host_item}}'
-  remote_user: '{{project_proxy_nginx_remote_user}}'
+
+# 这里有一个问题，就是 ansible_service_mgr 这个变量到底是目标机器还是委派的机器的？
+- name: project_proxy_nginx_reload
+  include_tasks: nginx_reload/centos_{{hostvars[host_item]["ansible_service_mgr"]}}_reload_nginx.yml
+  when:
+    - ansible_os_family == "RedHat"
+    - copy_proxy_nginx_file.changed == true
+
+#- meta: flush_handlers
+#- name: reload proxy nginx for systemd
+#  systemd: 
+#    name: nginx 
+#    state: reloaded 
+#  when: 
+#    - ansible_os_family == "RedHat"
+#    - ansible_service_mgr == 'systemd'
+#    - copy_proxy_nginx_file.changed == true
+#  run_once: true
+#  delegate_to: '{{host_item}}'
+#  remote_user: '{{project_proxy_nginx_remote_user}}'
+#
+#- name: reload proxy nginx for upstart
+#  service: 
+#    name: nginx 
+#    state: reloaded
+#  when: 
+#    - ansible_os_family == "RedHat"
+#    - ansible_service_mgr == 'upstart'
+#    - copy_proxy_nginx_file.changed == true
+#  run_once: true
+#  delegate_to: '{{host_item}}'
+#  remote_user: '{{project_proxy_nginx_remote_user}}'

@@ -16,11 +16,11 @@ project_maven_options: -U clean package -Ppro -Dmaven.test.skip=true
 project_src_jenkinsfile: jar-template.Jenkinsfile
 
 project_jenkins_config: jar-template.xml
-project_jenkins_url: http://jenkins.ops.geotmt.com:8080/
+project_jenkins_url: http://jenkins.mygit.com:8080/
 project_jenkins_user: admin
 
-project_jenkins_password: geotmt@000
-project_pipeline_git_url: 'git@git.geotmt.com:sa/xy_hf_ansible.git'
+project_jenkins_password: 123456
+project_pipeline_git_url: 'git@git.mygit.com:sa/xy_hf_ansible.git'
 project_pipeline_git_credentials_id: '15865d01-62a1-45ff-9f55-d95374652f27'
 project_pipeline_git_branch: '*/master'
 project_pipeline_script_path: 'playbooks/user_center/files/{{project_prog_name | default(project_name, true)}}.Jenkinsfile'
@@ -28,7 +28,7 @@ project_pipeline_script_path: 'playbooks/user_center/files/{{project_prog_name |
 
 projects:
   - project_name: saas-web-gateway
-    project_git_url: git@git.geotmt.com:saas-platform/web-gateway.git
+    project_git_url: git@git.mygit.com:saas-platform/web-gateway.git
     project_packet_name: saas-web-gateway*.jar  # 生成的包名, 可以使用通配符 如  saas-web-gateway*.jar
     project_packet_link_name: 'saas-web-gateway.jar'
     project_log_dir: /data/apps/log/saas    # 自己定义
@@ -42,7 +42,7 @@ projects:
     project_health_url:  /health # 健康检测的 url, 没有可不提供
     project_src_jenkinsfile: jar-template.Jenkinsfile
   - project_name: saas-user-portal
-    project_git_url: git@git.geotmt.com:saas-platform/user-portal.git
+    project_git_url: git@git.mygit.com:saas-platform/user-portal.git
     project_npm_tool: # 自己定义， 开发提供版本
     project_install_dir: # 自己定义, 如 /data/apps/opt/saas-user-portal/ ,再加上 {{project_build_dir}} 如 build, 也就是 /data/apps/opt/saas-user-portal/build
     project_npm_args: 
@@ -82,7 +82,7 @@ project_local_workdir: postloan
 project_name: daihou-pl
 project_maven_tool: mvn3.5_/data/apps/opt/maven
 project_maven_options: clean package -Dmaven.test.skip=true
-project_git_url: git@git.geotmt.com:postloan/geo_pleam.git
+project_git_url: git@git.mygit.com:postloan/geo_pleam.git
 project_src_jenkinsfile: jar-template.Jenkinsfile
 project_log_dir: /data/apps/log/saas/daihou/{{project_prog_name}}
 project_install_dir: /data/apps/opt/saas/daihou/{{project_prog_name}}

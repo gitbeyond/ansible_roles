@@ -1,18 +1,41 @@
 
 nginx_run_user: nginx
+nginx_app_name: nginx
+nginx_packet:
 app_base_dir: /data/apps/opt
-nginx_base_dir: "{{app_base_dir}}/nginx"
-nginx_data_dir: /data/apps/data/nginx
-nginx_conf_dir: /data/apps/config/nginx
-nginx_log_dir: /data/apps/log/nginx
-nginx_var_dir: /data/apps/var/nginx
 nginx_install_dir: '{{app_base_dir}}'
+nginx_base_dir: "{{nginx_install_dir}}/{{nginx_app_name}}"
+nginx_data_dir: '/data/apps/data/{{nginx_app_name}}'
+nginx_conf_dir: '/data/apps/config/{{nginx_app_name}}'
+nginx_log_dir: '/data/apps/log/{{nginx_app_name}}'
+nginx_var_dir: '/data/apps/var/{{nginx_app_name}}'
+nginx_child_conf_dir: '{{nginx_conf_dir}}/conf.d'
 nginx_install_method: net
+# type: list
+nginx_other_confs:
+  - other/koi-utf
+  - other/koi-win
+  - other/win-utf
+  - other/mime.types
+
 nginx_confs:
   - nginx.conf
   - htpasswd
 
+nginx_env_file: nginx.sh
+nginx_logrotate_file: nginx.logrotate
+nginx_boot_file:
+nginx_systemd_file: 'nginx.systemd'
 #type: list
 nginx_child_confs:
-nginx_child_conf_dir: '{{nginx_conf_dir}}/conf.d'
-
+nginx_dependence_packets:
+  - libevent-devel
+  - libevent
+  - pcre-devel
+  - openssl-devel
+  - libxslt-devel
+  - libxml2-devel
+  - gd-devel
+  - perl-ExtUtils-Embed
+  - GeoIP-devel
+  - gperftools-libs

@@ -1,0 +1,12 @@
+
+- include_tasks: boot_project_for_supervisor.yml
+  name: project_boot_for_supervisor
+  when: project_boot_type == "supervisor" and project_boot_file is not none
+  tags:
+    - boot_project_for_supervisor
+
+- include_tasks: boot_project_for_systemd.yml
+  name: project_boot_for_systemd
+  when: project_boot_type == "systemd" and project_boot_file is not none
+  tags:
+    - boot_project_for_systemd

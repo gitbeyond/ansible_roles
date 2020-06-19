@@ -1,4 +1,4 @@
-
+# 这里没有加 run_once: true ，是因为有多个 hosts 时，要都进行检测
 - name: check url health
   local_action:
     module: uri
@@ -9,3 +9,4 @@
   until: url_check_result.status == project_health_check_status_code
   retries: 15
   delay: 5
+

@@ -1,7 +1,11 @@
 - name: reload_nginx_service
   systemd: 
-    name: nginx 
+    name: '{{nginx_app_name}}'
     state: reloaded
+
+- name: systemctl_daemon_reload
+  systemd:
+    daemon_reload: yes
 
 - name: add to service list
   shell: '{{ item }}'

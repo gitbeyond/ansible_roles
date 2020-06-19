@@ -1,4 +1,10 @@
 
+- include_tasks: project_packet_build_docker_image.yml
+  name: project_packet_build_docker_image
+  when: project_docker_file is not none and project_docker_file != ""
+  tags:
+    - project_packet_build_docker_image
+
 - name: copy project k8s resource file
   template: 
     src: "{{item}}" 
@@ -15,5 +21,5 @@
   k8s:
     kubeconfig: '{{project_k8s_kubeconfig}}'
     src: '{{project_install_dir}}/{{item | basename}}'
-  with_items: '{{project_k8s_res_files}}'
+  loop: '{{project_k8s_res_files}}'
   when: item is not none

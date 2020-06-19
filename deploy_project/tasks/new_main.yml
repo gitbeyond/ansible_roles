@@ -5,17 +5,13 @@
   tags:
     - project_common_prepare_tasks
 
-- import_tasks: install_packet/install_project_packet.yml
+- import_tasks: install_project_packet.yml
   tags:
     - install_project_packet
 
-- import_tasks: boot_project/boot_project.yml
+- import_tasks: boot_project.yml
   tags:
     - boot_project
-
-#- import_tasks: project_set_proxy_nginx_conf.yml
-#  tags:
-#    - project_set_proxy_nginx_conf
 
 - import_tasks: project_common_after_tasks.yml
   tags:

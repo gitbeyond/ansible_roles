@@ -13,6 +13,11 @@
   tags:
     - install_nginx
 
+- import_tasks: install_dependence_packet.yml
+  tags:
+    - install_nginx_dependence_packet
+  #when: nginx_install_method == "net" 
+  #
 - import_tasks: copy_nginx_conf.yml
   tags:
     - copy_nginx_conf
@@ -22,21 +27,11 @@
     - copy_nginx_child_conf
   when: nginx_child_confs is not none
 
-- import_tasks: install_dependence_packet.yml
-  tags:
-    - install_nginx_dependence_packet
-  #when: nginx_install_method == "net" 
-
-- include_tasks: cent6_service.yml
+- import_tasks: nginx_boot.yml
   tags:
     - nginx_boot
-  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart'
 
-- include_tasks: cent7_service.yml
-  tags:
-    - nginx_boot
-  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd'
-
-- include: core_argument.yml
+#- include_tasks: core_argument.yml
+- import_tasks: core_argument.yml
   tags:
     - nginx_add_core_args

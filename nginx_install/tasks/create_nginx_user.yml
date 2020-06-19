@@ -1,10 +1,12 @@
-# edirtor: haifeng
-# 2019/10/23
+# editor: haifengsss@163.com
+# 2020/06/18
 
 - name: create nginx user
   user:
     name: '{{ item.name }}' 
     state: present 
     system: '{{ item.system }}'
-  with_items:
-    - { name: '{{ nginx_run_user }}', system: no ,shell: '/sbin/nologin'}
+    shell: '/sbin/nologin'
+  loop:
+    - name: '{{ nginx_run_user }}' 
+      system: no

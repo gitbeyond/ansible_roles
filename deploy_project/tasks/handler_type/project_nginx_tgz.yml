@@ -1,0 +1,31 @@
+
+# 一般来说, nginx 都已经在目标机器安装完成了，所以这里不引入创建用户的操作
+
+#- import_tasks: get_project_packet_name.yml
+#  name: project_get_packet_name
+#  tags:
+#    - project_get_packet_name
+#
+#- import_tasks: create_project_dir.yml
+#  name: project_create_dir
+#  tags:
+#    - create_project_dir
+#
+#- import_tasks: project_common_prepare_tasks.yml
+#  tags:
+#    - project_common_prepare_tasks
+
+- import_tasks: install_project_packet_for_tgz.yml
+  name: install_project_packet_for_tgz
+  tags:
+    - install_project_packet
+    - project_tgz_nginx
+  when: project_packet_type == "tgz" and PACKET_NAME is defined and PACKET_NAME is not skipped
+
+- import_tasks: boot_project_for_nginx.yml
+  when: project_boot_type == "nginx" and project_boot_file is not none
+  tags:
+    - boot_project
+    - copy_project_nginx_file
+    - project_tgz_nginx
+    - project_jar_supervisor

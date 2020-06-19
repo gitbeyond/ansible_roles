@@ -1,0 +1,15 @@
+
+- include_tasks: project_set_remote_user.yml
+  name: project_set_remote_user
+  #tags:
+  #  - project_set_remote_user
+  #when: ((project_proxy_nginx_conf is not none and project_proxy_nginx_conf != '') or (project_proxy_nginx_confs | length > 0 )) and inventory_hostname == ansible_play_hosts_all[-1]
+
+- include_tasks: copy_project_proxy_nginx_conf.yml
+  name: copy_project_proxy_nginx_conf
+  #tags:
+  #  - copy_project_proxy_nginx_conf
+  #when: ((project_proxy_nginx_conf is not none and project_proxy_nginx_conf != '') or (project_proxy_nginx_confs | length > 0 )) and inventory_hostname == ansible_play_hosts_all[-1]
+  loop: '{{project_proxy_nginx_server}}'
+  loop_control:
+    loop_var: host_item

@@ -1,0 +1,34 @@
+# editor: haifengsss@163.com
+# 2020/06/18
+
+#- import_tasks: create_project_user.yml
+#  name: project_create_user
+#  tags:
+#    - project_create_user
+#    - project_jar_supervisor
+#
+#- import_tasks: get_project_packet_name.yml
+#  name: project_get_packet_name
+#  tags:
+#    - get_project_name
+#    - project_jar_supervisor
+#
+#- import_tasks: create_project_dir.yml
+#  tags:
+#    - project_create_dir
+
+#- import_tasks: project_common_prepare_tasks.yml
+#  tags:
+#    - project_common_prepare_tasks
+
+#- import_tasks: install_project_packet.yml
+- import_tasks: install_project_packet_for_binary.yml
+  name: install_project_packet
+  tags:
+    - install_project_packet
+
+- import_tasks: boot_project_for_supervisor.yml
+  name: project_boot_for_supervisor
+  when: project_boot_file is not none and project_boot_file != ''
+  tags:
+    - boot_project_for_supervisor

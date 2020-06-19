@@ -1,15 +1,39 @@
 - name: copy nginx env file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
-  with_items:
-    #- { src: 'nginx.conf', dest: '{{ config_dir }}/nginx/', owner: root, group: root, mode: '0644'}
-    - { src: 'nginx.sh', dest: '/etc/profile.d/', owner: root, group: root, mode: "0644" }
-    - { src: 'nginx.logrotate', dest: '/etc/logrotate.d/nginx', owner: root, group: root, mode: "0644" }
-    #- { src: 'htpasswd', dest: '{{ config_dir }}/nginx/' , owner: 'root', group: 'root', mode: '0644'}
+  template: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
+  loop:
+  - src: '{{nginx_env_file}}'
+    dest: '/etc/profile.d/'
+  - src: '{{nginx_logrotate_file}}' 
+    dest: '/etc/logrotate.d/{{nginx_app_name}}'
 
 - name: copy nginx conf file
-  template: src={{ item }} dest={{ nginx_conf_dir }} owner={{nginx_run_user}} group={{nginx_run_user }} mode="0644" backup=yes
-  with_items: '{{nginx_confs}}'
+  template: 
+    src: '{{ item }}' 
+    dest: '{{ nginx_conf_dir }}' 
+    owner: '{{nginx_run_user}}' 
+    group: '{{nginx_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{nginx_confs}}'
   tags:
-   - modify_nginx_conf
+  - modify_nginx_conf
   notify:
-   - reload_nginx_service
+  - reload_nginx_service
+
+- name: copy nginx other conf file
+  copy: 
+    src: '{{ item }}' 
+    dest: '{{ nginx_conf_dir }}' 
+    owner: '{{nginx_run_user}}' 
+    group: '{{nginx_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{nginx_other_confs}}'
+  tags:
+  - nginx_copy_other_confs

@@ -7,7 +7,7 @@
     state: present
   ignore_errors: true
 
-- name: cp project packet to remote
+- name: rsync project packet to remote
   synchronize: 
     src: '{{project_source_dir}}/{{project_packet_name}}'
     #dest: '{{project_install_dir}}/{{project_packet_name}}' 

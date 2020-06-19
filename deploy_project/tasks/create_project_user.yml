@@ -1,7 +1,7 @@
-# editor: haifeng
+# editor: haifengsss@163.com
 # 2020/05/27
 
-- name: create nginx user
+- name: create project user
   user:
     name: '{{ project_run_user }}' 
     state: present 

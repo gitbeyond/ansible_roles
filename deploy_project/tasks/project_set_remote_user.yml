@@ -1,4 +1,4 @@
 
 - name: set project_target_remote_user var
   set_fact:
-    project_target_remote_user: '{{ansible_ssh_user}}'
+    project_target_remote_user: '{{ansible_ssh_user | default(lookup("env", "USER"))}}'

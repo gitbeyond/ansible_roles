@@ -1,15 +1,5 @@
 - name: install nginx dependence packet
   yum: 
-    name:
-      - libevent-devel
-      - libevent
-      - pcre-devel
-      - openssl-devel
-      - libxslt-devel
-      - libxml2-devel
-      - gd-devel
-      - perl-ExtUtils-Embed
-      - GeoIP-devel
-      - gperftools-libs
+    name: '{{nginx_dependence_packets}}'
     state: latest
   ignore_errors: true

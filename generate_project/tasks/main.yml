@@ -1,15 +1,18 @@
 - import_tasks: create_project_dir.yml
   tags:
     - create_project_dir
+  become: no
 
 - import_tasks: gen_vars_file.yml
   tags:
     - gen_vars_file
+  become: no
 
 - include_tasks: gen_jenkinsfile.yml
   tags:
     - gen_jenkinsfile
   when: project_src_jenkinsfile is not none
+  become: no
 
 - include_tasks: gen_jenkins_job.yml
   tags:

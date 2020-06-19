@@ -1,0 +1,52 @@
+
+- include_tasks: project_set_proxy_nginx_conf.yml
+  name: project_set_proxy_nginx_conf
+  #tags:
+  #  - project_set_proxy_nginx_conf
+  when: ((project_proxy_nginx_conf is not none and project_proxy_nginx_conf != '') or (project_proxy_nginx_confs | length > 0 )) and inventory_hostname == ansible_play_hosts_all[-1]
+
+
+- include_tasks: url_health_check.yml
+  name: project_url_health_check
+  #tags:
+  #  - project_url_health_check
+  when: 
+    - project_health_url is not none 
+    - project_health_url != ''
+    - project_boot_type != 'k8s'
+
+# 这个归档包的操作，现在大多数情况下都没用到
+# 如果要用的话，还应该判断一下，那些情况下需要打包, 比如说如果这个 project 开启了健康检测
+# 健康检测成功了再归档，健康检测失败的不归档
+- include_tasks: archive_packet.yml
+  name: project_archive_packet
+  #tags:
+  #  - archive_packet
+  when: 
+    - project_is_archive == true
+    - project_deploy_version|int == 0 
+    - PACKET_NAME is defined
+    - PACKET_NAME is not skipped
+
+- include_tasks: generate_monitor_data.yml
+  name: project_generate_monitor_data
+  #tags:
+  #  - generate_monitor_data
+  when:
+    - project_monitor_data is not none
+    - project_monitor_data != ''
+    - project_monitor_key is not none
+    - project_monitor_key != ''
+    - inventory_hostname == ansible_play_hosts_all[-1]
+
+
+- include_tasks: generate_log_data.yml
+  name: project_generate_log_data
+  #tags:
+  #  - generate_log_data
+  when:
+    - project_log_data is not none
+    - project_log_data != ''
+    - project_log_key is not none
+    - project_log_key != ''
+    - inventory_hostname == ansible_play_hosts_all[-1]

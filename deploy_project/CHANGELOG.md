@@ -42,5 +42,53 @@
 * delegate_facts 的参数在此可以忽略
 * environment: 在调用 deploy_project role 的 playbook中使用此参数时未生效，在 shell 中指定此变量时生效了。原因是此变量是在目标主机生效的
     * ANSIBLE_STDOUT_CALLBACK: skippy
- 
 
+
+delegate_facts 的测试
+```yaml
+- name: test delegate vars1
+  shell: "echo inventory_hostname: {{inventory_hostname}}, hostname: $(hostname)"
+  delegate_to: '{{item}}'
+  loop: '{{groups[nginx_server]}}'
+  run_once: true
+  remote_user: '{{nginx_server_remote_user}}'
+```
+上面这种未使用 delegate_facts 参数，那么 `{{inventory_hostname}}` 为 mysql_65 中的一台机器，$(hostname) 则是真实的 mongo_237 机器(任务是在这上面执行的)。
+
+添加了 delegate_facts 参数之后，发现效果一样,暂时不解。
+ 
+# 2020/06/17 defaults/main.yml add `project_run_port: 80`
+
+config-repo  是一个不需要启动的项目，它的配置文件中没有 project_run_port 变量，然后在生成 project_monitor_data 变量时就报错了。因此添加一个 project_run_port: 80 的默认变量 
+
+
+# 2020/06/19 use include_tasks and import_tasks rewrite main.yml
+
+通过结合 include_tasks 和 import_takss，减少了 main.yml 中的冗余代码，使结构更加清晰，且减少了执行时的output信息。
+
+目的是:
+1. 不指定 tags 时，信息量能少一些，至少信息不能多
+2. 可以选择指定 tag， 减少不必要的判断(这里目前做得并不好，后续的 url_check, archive_packet 都不能显式地跳过)
+
+* 第一种方式: 实现 project_supervisor_jar, project_nginx_tgz, project_nginx_directory ...， 即使用 boot_type 与 packet_type 结合的方式
+    * 好处是可以使用 tag 指定相关类型的tag, 实现精细化运行
+    * 问题是像 project_nginx_tgz 或 project_nginx_directory 当中都引入了 boot_project_for_nginx.yml 这个文件，当不指定 tag 的时候，且条件不满足时会发生多次跳过同一个任务的情况，信息十分繁琐。
+
+* 第二种方式: 将各个包类型的 yml 放至一个 使用 include_tasks 引入一个 yml 文件中，然后 import 这个文件，如
+```yaml
+- include_tasks: install_project_packet_for_{{project_packet_type}}.yml
+  tags:
+    - install_project_packet
+```
+这样的话，如果不指定 tag 时，只会显示一次 include_tasks，指定 tag 只是可以显式执行某一部分的操作了,比如，只执行 更新 启动文件的操作这样，有一些操作是有依赖性的，比如 `install_packet` 的就依赖 `get_packet_name` 的, 这个依赖性，这个依赖性后面再关注
+
+
+* 包类型多种
+* 启动类型多种
+
+* 启动之后的操作
+    * 是否复制 project_proxy_nginx_conf
+    * 是否进行健康检测
+    * 是否对包进行归档, 如果要进行归档，那么得对健康检测没问题的才归档(k8s 上的无法检测,)
+        * systemd 或 supervisor 启动的二进制类型的包才进行健康检测 
+    * 是否生成监控和日志数据

@@ -1,0 +1,19 @@
+- include_tasks: project_deploy_pre_operator.yml
+  name: project_deploy_pre_operator
+  tags:
+    - project_deploy_pre_operator
+  when: project_deploy_pre_command is not none
+
+- import_tasks: get_project_packet_name.yml
+  name: get_project_packet_name
+  tags:
+    - project_get_packet_name
+
+# 当 project_boot_type: k8s 时，这个用户应该是默认的本地用户，用来创建工作目录，构建镜像
+- import_tasks: create_project_user.yml
+  tags:
+    - project_create_user
+
+- import_tasks: create_project_dir.yml
+  tags:
+    - project_create_dir
