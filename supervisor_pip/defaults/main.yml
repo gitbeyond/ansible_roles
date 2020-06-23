@@ -2,7 +2,8 @@ python_version: "{{ansible_python_version[0:-2]}}"
 supervisor_run_user: root
 #packet_name: "{{ item.split('/')[-1].split('-')[0]}}"
 #
-supervisor_boot_file: "{%if ansible_service_mgr == 'systemd'%}supervisord.service{%else%}supervisord.init{%endif%}"
+#supervisor_boot_file: "{%if ansible_service_mgr == 'systemd'%}supervisord.service{%else%}supervisord.init{%endif%}"
+supervisor_boot_file: "supervisord.{{ansible_service_mgr}}"
 supervisor_prog_name: supervisord
 supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
 supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

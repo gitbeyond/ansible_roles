@@ -1,6 +1,0 @@
-#date: 2017/9/28
-- hosts: 172.16.9.254
-  remote_user: root
-  roles:
-    - { role: mysql57_slave, packet_dir: /root/wanghaifeng/, master_mysql: 172.16.9.253, mysql_version: "5.7.18"}
-

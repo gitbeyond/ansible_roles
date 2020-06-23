@@ -7,4 +7,4 @@
     group: "{{ filebeat_run_user }}" 
     mode: "0644" 
     backup: yes
-  with_items: '{{filebeat_child_confs}}'
+  loop: '{{filebeat_child_confs}}'

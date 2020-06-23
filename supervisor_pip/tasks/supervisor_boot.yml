@@ -1,0 +1,3 @@
+
+- include_tasks: supervisor_{{ansible_service_mgr}}_service.yml
+  name: supervisor_boot

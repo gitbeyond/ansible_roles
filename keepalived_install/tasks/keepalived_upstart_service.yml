@@ -1,0 +1,18 @@
+- name: copy keepalived upstart boot file
+  template: 
+    src: '{{ keepalived_boot_file }}'
+    dest: '/etc/rc.d/init.d/{{keepalived_app_name}}'
+    owner: root
+    group: root
+    mode: "0755"
+    backup: yes
+
+- name: add keepalived to service list
+  shell:
+    cmd: chkconfig --list {{keepalived_app_name}} || chkconfig --add {{keepalived_app_name}}
+
+- name: set keepalived boot and starting up
+  service: 
+    name: '{{ keepalived_app_name }}'
+    state: started
+    enabled: yes

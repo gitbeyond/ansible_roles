@@ -1,16 +1,28 @@
 - name: copy keepalived env file
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} backup=yes
-  with_items:
-    #- { src: 'keepalived.conf', dest: '{{ config_dir }}/keepalived/', owner: root, group: root, mode: '0644'}
-    - { src: 'keepalived.sh', dest: '/etc/profile.d/', owner: root, group: root, mode: "0644" }
-    - { src: 'keepalived.env', dest: '{{keepalived_conf_dir}}/keepalived.env', owner: root, group: root, mode: "0644" }
+  template: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  loop:
+    - src: '{{keepalived_env_file}}'
+      dest: '/etc/profile.d/'
+    - src: '{{keepalived_sysconfig_file}}'
+      dest: '{{keepalived_conf_dir}}/'
     #- { src: 'keepalived.logrotate', dest: '/etc/logrotate.d/keepalived', owner: root, group: root, mode: "0644" }
-    #- { src: 'htpasswd', dest: '{{ config_dir }}/keepalived/' , owner: 'root', group: 'root', mode: '0644'}
 
 - name: copy keepalived conf file
-  template: src={{ item }} dest={{ keepalived_conf_dir }} owner={{keepalived_run_user}} group={{keepalived_run_user }} mode="0644" backup=yes
-  with_items: '{{keepalived_confs}}'
+  template: 
+    src: '{{ item }}'
+    dest: '{{ keepalived_conf_dir }}' 
+    owner: '{{keepalived_run_user}}' 
+    group: '{{keepalived_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{keepalived_confs}}'
   tags:
    - modify_keepalived_conf
   notify:
-   - restart keepalived service
+   - reload_keepalived_for_{{ansible_service_mgr}}

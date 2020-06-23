@@ -1,24 +1,26 @@
-# edirtor: haifeng
-# 2017/01/12
+# editor: haifengsss@163.com
+# update date: 2020/06/23
 
-- include: create_keepalived_dir.yml
+- import_tasks: create_keepalived_dir.yml
   tags:
-    - create_keepalived_dir
-- include: install_keepalived.yml
-  tags:
-    - install_keepalived
-- include: copy_keepalived_conf.yml
-  tags:
-    - copy_keepalived_conf
+    - keepalived_create_dir
 
-- include: install_keepalived_dependence_packet.yml
+- import_tasks: install_keepalived.yml
   tags:
-    - install_keepalived_dependence_packet
-#- include: cent6_service.yml
-#  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+    - keepalived_install
 
-- include: cent7_service.yml
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
+- import_tasks: copy_keepalived_conf.yml
+  tags:
+    - keepalived_copy_conf
+
+- import_tasks: install_keepalived_dependence_packet.yml
+  tags:
+    - keepalived_install_dependence_packet
+
+- import_tasks: keepalived_boot.yml
+  tags:
+    - keepalived_boot
+
 
 #- include: install_dependence_packet.yml
 #  when: keepalived_install_method == "net" 

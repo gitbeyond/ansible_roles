@@ -1,38 +1,35 @@
-# edirtor: haifeng
-# 2019/10/12
+# editor: haifengsss@163.com
+# 2020/06/22
 
-- include: create_filebeat_user.yml
+- import_tasks: create_filebeat_user.yml
   tags:
-    - create_filebeat_user
+    - filebeat_create_user
 
-- include: create_filebeat_dir.yml 
+- import_tasks: create_filebeat_dir.yml 
   tags:
-    - create_filebeat_dir
+    - filebeat_create_dir
 
-- include: install_filebeat.yml
+- import_tasks: install_filebeat.yml
   tags:
-    - install_filebeat
+    - filebeat_install
 
-- include: copy_filebeat_conf.yml
+- import_tasks: copy_filebeat_conf.yml
   tags:
-    - copy_filebeat_conf
+    - filebeat_copy_conf
 
-- include: copy_filebeat_child_conf.yml
+- import_tasks: copy_filebeat_child_conf.yml
   when: filebeat_child_confs is not none
   tags:
     - copy_filebeat_child_conf
+    - filebeat_copy_child_conf
 
 - import_tasks: delete_old_child_conf.yml
   tags:
     - copy_filebeat_child_conf
-    - delete_old_child_conf
+    - filebeat_copy_child_conf
+    - filebeat_delete_old_child_conf
 
-- include: boot_filebeat_for_supervisor.yml
-  when: filebeat_boot_type == 'supervisor'
+- import_tasks: filebeat_boot.yml
   tags:
-    - boot_filebeat
+    - filebeat_boot
 
-- include: boot_filebeat_for_systemd.yml
-  when: filebeat_boot_type == 'systemd'
-  tags:
-    - boot_filebeat

@@ -1,6 +1,0 @@
-- name: create sync user
-  mysql_user: login_user={{ dbuser }} login_unix_socket=/var/lib/mysql/mysql.sock login_password={{ upassword }} name=mysync password={{ mysync_pass }} host={{ slave_mysql }} priv="*.*:REPLICATION SLAVE" state=present
-- name: create monitor user
-  mysql_user: login_user={{ dbuser }} login_unix_socket=/var/lib/mysql/mysql.sock login_password={{ upassword }} name=zabbix password={{ zabbix_pass }} host=localhost priv="*.*:REPLICATION CLIENT,PROCESS/mysql.*:SELECT/information\_schema.*:SELECT" state=present
-- name: create backup user
-  mysql_user: login_user={{ dbuser }} login_unix_socket=/var/lib/mysql/mysql.sock login_password={{ upassword }} name=bakuser password={{ bakuser_pass }} host=localhost priv="*.*:REPLICATION CLIENT,PROCESS,RELOAD,LOCK TABLES" state=present

@@ -26,15 +26,19 @@
     - copy_redis_conf
   when: redis_is_multi_instance == false
 
-- include_tasks: centos6_service.yml
-  when: redis_run_method == "system" and ansible_service_mgr == 'upstart'
+- import_tasks: redis_system_service.yml
   tags:
-    - centos6_service
+    - redis_system_service
 
-- include_tasks: centos7_service.yml
-  when: redis_run_method == "system" and ansible_service_mgr == 'systemd'
-  tags:
-    - centos7_service
+#- include_tasks: centos6_service.yml
+#  when: redis_run_method == "system" and ansible_service_mgr == 'upstart'
+#  tags:
+#    - centos6_service
+#
+#- include_tasks: centos7_service.yml
+#  when: redis_run_method == "system" and ansible_service_mgr == 'systemd'
+#  tags:
+#    - centos7_service
 
 - name: debug var
   debug:

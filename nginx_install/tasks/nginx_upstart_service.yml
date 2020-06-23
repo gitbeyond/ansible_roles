@@ -7,13 +7,12 @@
     mode: "0755" 
     backup: yes
   loop:
-  - src: 'nginx.init'
-    dest: '/etc/rc.d/init.d/nginx'
+  - src: '{{nginx_boot_file}}'
+    dest: '/etc/rc.d/init.d/{{nginx_app_name}}'
 
 - name: add nginx to service list
-  shell: '{{ item }}'
-  with_items:
-    - chkconfig --list {{nginx_app_name}} || chkconfig --add {{nginx_app_name}}
+  shell:
+    cmd: chkconfig --list {{nginx_app_name}} || chkconfig --add {{nginx_app_name}}
 
 - name: set nginx boot and starting up
   service: 

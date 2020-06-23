@@ -25,3 +25,5 @@ mysql_user_sql_log_gin: False
 mysql_app_users: []
 # type list
 mysql_app_old_users: []
+
+mysql_user_install_driver: True

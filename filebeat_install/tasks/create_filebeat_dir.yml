@@ -4,13 +4,14 @@
     path: "{{ item.path }}" 
     owner: "{{ filebeat_run_user }}" 
     group: "{{ filebeat_run_user }}" 
-    mode: "{{ item.mode }}" 
-    state: "{{ item.state }}"
-  with_items:
-    - { path: "{{filebeat_conf_dir}}", mode: "0755", state: directory }
-    - { path: "{{filebeat_data_dir}}",  mode: "0755", state: directory }
-    - { path: "{{filebeat_log_dir}}", mode: "0755", state: directory }
-    - { path: "{{filebeat_child_conf_dir}}", mode: "0755", state: directory }
-    - { path: "{{filebeat_conf_dir}}/inputs.d", mode: "0755", state: directory }
-    - { path: "{{filebeat_conf_dir}}/modules.d", mode: "0755", state: directory }
+    mode: "0755" 
+    state: "directory"
+  loop:
+    - path: "{{filebeat_conf_dir}}"
+    - path: "{{filebeat_data_dir}}"
+    - path: "{{filebeat_log_dir}}"
+    - path: "{{filebeat_child_conf_dir}}"
+    - path: "{{filebeat_modules_conf_dir}}"
+    #- path: "{{filebeat_conf_dir}}/inputs.d"
+    #- path: "{{filebeat_conf_dir}}/modules.d"
 

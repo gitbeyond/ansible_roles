@@ -1,0 +1,19 @@
+- name: copy supervisord upstart boot file
+  template: 
+    src: '{{supervisor_boot_file}}' 
+    dest: '/etc/rc.d/init.d/{{supervisor_prog_name}}' 
+    owner: root
+    group: root
+    mode: "0755"
+    backup: yes
+
+- name: add supervisord to service list
+  shell: 
+    cmd: chkconfig --list '{{supervisor_prog_name}}' || chkconfig --add '{{supervisor_prog_name}}'
+
+- name: set supervisord boot and starting up
+  service: 
+    name: '{{supervisor_prog_name}}'
+    state: started 
+    enabled: yes
+

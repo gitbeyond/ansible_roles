@@ -1,17 +1,12 @@
 - name: restart_filebeat_for_supervisor
   supervisorctl: 
-    name: '{{ item }}' 
+    name: '{{ filebeat_app_name }}' 
     state: restarted
-  with_items:
-    - '{{filebeat_app_name}}'
-  when: filebeat_boot_type == 'supervisor'
 
 - name: restart_filebeat_for_systemd
   systemd:
-    name: '{{ item }}'
+    name: '{{ filebeat_app_name }}'
     state: restarted
-  with_items:
-    - '{{filebeat_app_name}}'
 
 - name: supervisor update
   shell: supervisorctl update

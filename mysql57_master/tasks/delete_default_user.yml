@@ -1,7 +1,0 @@
----
-- name: delete default user
-  mysql_user: login_user={{ dbuser }} login_unix_socket=/var/lib/mysql/mysql.sock login_password={{ upassword }} name={{ item.name }} host={{ item.host }}  state=absent
-  with_items:
-    - { name: root, host: '127.0.0.1'}
-    - { name: root, host: '::1'}
-    - { name: root, host: "{{ ansible_hostname }}"}

@@ -45,7 +45,6 @@
 
 - name: restart redis when redis_conf is changed
   supervisorctl:
-    #name: '{{redis_service_name}}'
     name: '{{redis_external_service_name}}'
     state: restarted
     config: '{{supervisor_prim_conf}}'

@@ -1,9 +1,0 @@
-- include: install_mysql.yml
-  tags:
-    - install_mysql_slave
-- include: change_master.yml
-  tags:
-    - start_slave
-- include: delete_default_user.yml
-  tags:
-    - delete_default_user

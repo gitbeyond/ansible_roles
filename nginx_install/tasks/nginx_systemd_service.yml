@@ -7,7 +7,7 @@
     mode: "0644" 
     backup: yes
   loop:
-    - src: '{{nginx_boot_file | default(nginx_systemd_file, true)}}'
+    - src: '{{nginx_boot_file)}}'
       dest: '/usr/lib/systemd/system/{{nginx_app_name}}.service'
   notify:
     - systemctl_daemon_reload

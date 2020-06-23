@@ -6,7 +6,8 @@
     group: '{{ supervisor_run_user }}'
     mode: "0644"
     backup: yes
-  notify: systemd daemon reload
+  notify: 
+    - systemd_daemon_reload
 
 - name: systemd start supervisord
   systemd: 

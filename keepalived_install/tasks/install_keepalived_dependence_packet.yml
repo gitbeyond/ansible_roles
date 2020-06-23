@@ -1,7 +1,5 @@
 - name: install keepalived dependence packet
   yum: 
-    name:
-      - net-snmp-agent-libs
-      - openssl-libs
+    name: '{{keepalived_dependence_packets}}'
     state: latest
   ignore_errors: true

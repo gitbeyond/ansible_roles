@@ -1,8 +1,0 @@
-# 作用是部署 jmx_exporter 到各个机器上
-# 使用时需要去掉 var/main.yml 中的变量,或在 group_vars/all.yml 中配置变量
-
-- name: install jmx_exporter
-  hosts: hdp7_kylin
-  remote_user: root
-  roles:
-    - { role: jmx_exporter }

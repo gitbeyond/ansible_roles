@@ -3,6 +3,7 @@
     name:
     - MySQL-python 
     state: latest
+  when: mysql_user_install_driver == True
 
 - name: rename ~/.my.cnf if exists
   shell: mv ~/.my.cnf ~/.my.cnf_ansible_tmp

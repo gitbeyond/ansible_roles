@@ -60,3 +60,6 @@
 * 当使用 `include_tasks` 时，不能在执行 playbook 时指定 --tags ，这种情况下指定的 tags 如果是由 `include_tasks` 所包含的，那么什么都不会执行
 * `include_tasks` 的时候，可以指定一个 name, 当不指定 --tags 时，在包含成功还是skipping的时候，会显示这个 name, import_tasks 的则不会，跳过时会依次跳过所包含的yml中的所有任务
 * `include_tasks` 的任务可以使用 loop 关键字，而 `import_tasks` 的则不能
+* 关于生成监控数据和日志数据的操作
+    1. 一般来说，同类的项目放在同一个工作区当中，所以生成一份监控数据，和日志数据
+    2. 这些数据可以配置在 main.yml 中，也可以配置在“写入数据的project"中, 其key一定要配置在 "写入数据的project"中，避免每个project都去向etcd写入数据（虽然是没有问题的，但是感觉没有必要让其执行操作）

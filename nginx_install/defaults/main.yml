@@ -24,7 +24,7 @@ nginx_confs:
 
 nginx_env_file: nginx.sh
 nginx_logrotate_file: nginx.logrotate
-nginx_boot_file:
+nginx_boot_file: 'nginx.{{ansible_service_mgr | default("systmed", ture)}}'
 nginx_systemd_file: 'nginx.systemd'
 #type: list
 nginx_child_confs:

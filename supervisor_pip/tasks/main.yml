@@ -5,32 +5,39 @@
   tags:
     - create_supervisor_dir
 
-- include_tasks: supervisor_local_install.yml
-  name: supervisor_local_install
+- import_tasks: supervisor_install.yml
   tags:
-    - install_supervisor
-  loop: '{{supervisor_packets}}'
-  when: supervisor_install_method == "local"
+    - supervisor_install
 
-- include_tasks: supervisor_net_install.yml
-  name: supervisor_net_install
-  when: supervisor_install_method == "net"
-  tags:
-    - install_supervisor
+#- include_tasks: supervisor_local_install.yml
+#  name: supervisor_local_install
+#  tags:
+#    - install_supervisor
+#  loop: '{{supervisor_packets}}'
+#  when: supervisor_install_method == "local"
+#
+#- include_tasks: supervisor_net_install.yml
+#  name: supervisor_net_install
+#  when: supervisor_install_method == "net"
+#  tags:
+#    - install_supervisor
 
 - import_tasks: copy_supervisor_conf.yml
   tags:
     - copy_supervisor_conf
 
-- include_tasks: cent6_service.yml
-  name: supervisor_boot_for_upstart
-  when: ansible_service_mgr == 'upstart'
+- import_tasks: supervisor_boot.yml
   tags:
     - supervisor_boot
 
-- include_tasks: cent7_service.yml
-  name: supervisor_boot_for_systemd
-  when: ansible_service_mgr == 'systemd'
-  tags:
-    - supervisor_boot
-
+#- include_tasks: cent6_service.yml
+#  name: supervisor_boot_for_upstart
+#  when: ansible_service_mgr == 'upstart'
+#  tags:
+#    - supervisor_boot
+#
+#- include_tasks: cent7_service.yml
+#  name: supervisor_boot_for_systemd
+#  when: ansible_service_mgr == 'systemd'
+#  tags:
+#    - supervisor_boot
