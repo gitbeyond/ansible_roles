@@ -1,15 +1,14 @@
 
-- name: link /data1 to /data dir
+- name: link /data to /data1 dir
   file: 
-    src: '{{ item.src }}' 
-    dest: '{{item.dest}}' 
-    owner: '{{ item.owner | default("root", true)}}'
-    group: '{{ item.group | default("root", true)}}' 
-    mode: '{{ item.mode | default("0777", true)}}' 
-    state: '{{ item.state | default("link", true)}}'
-  loop:
-  - src: /data1
-    dest: /data
+    src: '/data1' 
+    dest: '/data' 
+    owner: 'root'
+    group: 'root' 
+    mode: "0777" 
+    state: 'link'
+  when:
+    - '"/data1" in ansible_mounts | json_query("[*].mount")'
   tags:
     - create_data_soft_link
 

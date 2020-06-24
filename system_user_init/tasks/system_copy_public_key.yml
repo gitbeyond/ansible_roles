@@ -1,0 +1,8 @@
+
+#- name: get remote user home dir
+#  shell:
+#    cmd: "grep '^{{item.user}}' /etc/passwd |awk -F: '{print $6}'"
+#  register: user_home
+#  changed_when: "item.user not in user_home.stdout"
+#  failed_when: user_home.stderr != ""
+

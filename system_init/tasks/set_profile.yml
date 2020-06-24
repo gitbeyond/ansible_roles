@@ -1,5 +1,11 @@
 - name: add profile conf
-  copy: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode='0644' backup=yes
-  with_items:
+  copy: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  loop:
     - { src: 'system_init.sh', dest: '/etc/profile.d/' }
 

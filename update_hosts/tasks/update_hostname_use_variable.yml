@@ -1,0 +1,7 @@
+# editor: haifengsss@163.com
+# create date: 2020/06/24
+
+- name: set hostname use hostname variable
+  hostname: 
+    name: '{{ hostname }}'
+

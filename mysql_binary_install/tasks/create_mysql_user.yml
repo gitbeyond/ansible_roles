@@ -8,6 +8,8 @@
     state: link
   tags:
     - mysql_create_data_dir_soft_link
+  when:
+    - '"/data1" in ansible_mounts | json_query("[*].mount")'
 
 - name: create mysql user
   user: 

@@ -1,0 +1,21 @@
+# 2018/05/07
+# update date: 2020/06/23
+
+#- include_tasks: ipv6off_sysctl.yml
+#  tags:
+#    - ipv6off_sysctl
+
+
+- name: close ipv6 module
+  copy: 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  loop:
+    - { src: 'ipv6.conf', dest: '/etc/modprobe.d/ipv6.conf' }
+# systemd-sysctl.service
+# sysctl --load 
+# https://www.thegeekdiary.com/centos-rhel-6-how-to-disable-ipv6/ 

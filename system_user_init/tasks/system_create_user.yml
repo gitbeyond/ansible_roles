@@ -1,0 +1,12 @@
+
+
+- include_tasks: system_create_admin_user.yml
+  name: system_create_user
+  #loop: '{{system_admin_users}}'
+  loop: '{{system_users}}'
+  loop_control:
+    extended: yes
+
+#- include_tasks: system_copy_public_key.yml
+#  name: system_copy_public_key
+#  loop: '{{system_admin_users}}'

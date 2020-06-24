@@ -1,14 +1,16 @@
 - name: disable THP on-the-fly
   shell: "{{item}}"
-  with_items:
+  loop:
     - "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
     - "echo never > /sys/kernel/mm/transparent_hugepage/defrag"
+
 - name: add disable THP command to rc.local
   lineinfile: 
     path: /etc/rc.d/rc.local 
     line: "{{item}}" 
-    backup: yes
-  with_items:
+    #backup: yes
+    backup: '{%if loop.first -%}yes{%else-%}no{%-endif%}'
+  loop:
     - "echo never > /sys/kernel/mm/transparent_hugepage/enabled" 
     - "echo never > /sys/kernel/mm/transparent_hugepage/defrag"
  

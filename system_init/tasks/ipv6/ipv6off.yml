@@ -1,0 +1,7 @@
+
+- import_tasks: ipv6off_sysctl.yml
+  tags:
+    - ipv6off_sysctl
+
+- include_tasks: ipv6off_on_{{ansible_distribution_major_version}}_system.yml
+  name: ipv6off

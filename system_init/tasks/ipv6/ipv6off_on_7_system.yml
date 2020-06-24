@@ -1,0 +1,50 @@
+# 2018/05/07
+# update date: 2020/06/23
+
+#- inculde_tasks: ipv6off_sysctl.yml
+#  tags:
+#    - ipv6off_sysctl
+
+
+#- name: get grub content
+#  slurp:
+#    src: /etc/default/grub
+#  register: grub_conf
+
+#- name: debug grub_conf
+#  debug:
+#    msg: '{{grub_conf["content"] | b64decode}}'
+#
+#- name: debug grub cmdline
+#  debug:
+#    msg: '{{grub_cmdline}}'
+- name: get grub cmdline
+  shell:
+    cmd: grep "^GRUB_CMDLINE_LINUX" /etc/default/grub
+  register: grub_cmdline
+  changed_when: "'GRUB_CMDLINE_LINUX' not in grub_cmdline.stdout"
+  #changed_when: grub_cmdline.rc == 0
+  failed_when: grub_cmdline.stderr != ""
+
+
+- name: add close ipv6 args to grub
+  lineinfile: 
+    path: /etc/default/grub 
+    #regexp: 'GRUB_CMDLINE_LINUX="(ipv6.disable=1 )?(.*)"' 
+    regexp: 'GRUB_CMDLINE_LINUX="(.*)"' 
+    backrefs: yes 
+    line: 'GRUB_CMDLINE_LINUX="ipv6.disable=1 \1"' 
+    backup: yes
+  when: "'ipv6.disable=1' not in grub_cmdline.stdout"
+
+- name: generate grub.cfg
+  script:
+    cmd: generate_grub.sh
+  register: grub_gen_stat
+  failed_when: grub_gen_stat.rc == 12
+  changed_when: grub_gen_stat.rc == 11
+
+
+# systemd-sysctl.service
+# sysctl --load 
+# https://www.thegeekdiary.com/centos-rhel-7-how-to-disable-ipv6/

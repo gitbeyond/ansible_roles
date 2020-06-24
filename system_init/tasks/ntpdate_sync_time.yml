@@ -1,6 +1,8 @@
 ---
 - name: install ntpdate packet
-  yum: name={{ item.name }} state={{ item.state }}
+  yum: 
+    name: '{{ item.name }}' 
+    state: '{{ item.state }}'
   with_items:
     - { name: ntpdate, state: latest}
 - name: add sync time cron job

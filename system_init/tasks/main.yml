@@ -1,48 +1,54 @@
 ---
-- include: install_packet.yml
+- import_tasks: install_packet.yml
   tags:
     - install_base_packet
-- include: DNS_conf.yml
-  tags:
-    - install_base_DNS
-- include: core_argument.yml
+
+#- import_tasks: DNS_conf.yml
+#  tags:
+#    - install_base_DNS
+
+- import_tasks: core_argument.yml
   tags:
     - modify_core_argument
-- include: ipv6off.yml
+
+- import_tasks: ipv6/ipv6off.yml
   tags:
     - off_ipv6
-- include: limit_conf.yml
+
+- import_tasks: limits/limit_conf.yml
   tags:
     - set_ulimit
-- include: set_profile.yml
+
+- import_tasks: set_profile.yml
   tags:
     - set_profile
-- include: off_selinux.yml
+
+- import_tasks: off_selinux.yml
   tags:
     - off_selinux
-#- include: ntpdate_sync_time.yml
+#- import_tasks: ntpdate_sync_time.yml
 #  tags:
 #    - ntpdate_sync_time
-- include: open_rc-local.yml
+- import_tasks: open_rc-local.yml
   #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
   tags:
     - set_rc-local_enable
-#- include: close_THP.yml
+#- import_tasks: close_THP.yml
 #  when: "'hadoop' in group_names or hadoop_yes == true"
 #  tags:
 #    - close_THP
-- include: close_pre-install_service.yml
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+
+- import_tasks: close_pre-install_service.yml
   tags:
-    - close_7_default_service
-- include: close_pre-install_service_6.yml
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
-  tags:
-    - close_6_default_service
-- include: shell_audit.yml
+    - close_pre-install_service
+  when: ansible_os_family == "RedHat" 
+
+
+- import_tasks: shell_audit.yml
   tags:
     - shell_audit
-- include: create_data_to_data1_link.yml
+ 
+- import_tasks: create_data_to_data1_link.yml
   tags:
     - create_data_to_data1_link

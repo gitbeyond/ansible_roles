@@ -1,0 +1,11 @@
+- name: set limit conf
+  copy: 
+    src: '{{ item }}' 
+    dest: '/etc/security/limits.d/' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  loop: '{{ system_limit_confs }}'
+  when: item is exists
+

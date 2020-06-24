@@ -1,3 +1,5 @@
 ---
 - name: off selinux
-  selinux: policy=targeted state=disabled
+  selinux: 
+    policy: targeted 
+    state: disabled

@@ -6,7 +6,7 @@
 #  with_items:
 #    - { name: '{{ keepalived_run_user }}', system: no ,shell: '/sbin/nologin'}
 
-- name: link /data1 to /data dir
+- name: link /data to /data1 dir
   file: 
     src: /data1 
     dest: /data 
@@ -14,6 +14,8 @@
     group: root 
     mode: "0777" 
     state: link
+  when:
+    - '"/data1" in ansible_mounts | json_query("[*].mount")'
   tags:
     - create_data_soft_link
 

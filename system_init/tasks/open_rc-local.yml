@@ -3,6 +3,7 @@
   file: 
     path: /etc/rc.d/rc.local
     mode: 'u+x'
+
 - name: enable rc-local service
   systemd: 
     name: rc-local

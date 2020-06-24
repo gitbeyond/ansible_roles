@@ -1,0 +1,16 @@
+
+- name: restart_sshd_for_upstart
+  service:
+    name: sshd
+    state: restarted
+    enabled: yes
+  #listen: restart_sshd
+  #when: ansible_service_mgr == 'upstart'
+ 
+- name: restart_sshd_for_systemd
+  systemd:
+    name: sshd
+    state: restarted
+    enabled: yes
+  #listen: restart_sshd
+  #when: ansible_service_mgr == 'systemd'

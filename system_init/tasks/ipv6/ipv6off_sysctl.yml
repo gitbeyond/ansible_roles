@@ -1,0 +1,15 @@
+# 2018/05/07
+# update date: 2020/06/23
+
+- name: sysctl set ipv6 off
+  sysctl: 
+    name: '{{ item.name }}' 
+    value: '{{ item.value }}' 
+    reload: yes 
+    state: present 
+    ignoreerrors: yes 
+    sysctl_file: /etc/sysctl.d/system_init.conf
+  loop:
+    - { name: 'net.ipv6.conf.all.disable_ipv6', value: 1}
+    - { name: 'net.ipv6.conf.default.disable_ipv6', value: 1}
+

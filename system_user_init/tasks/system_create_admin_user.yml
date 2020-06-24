@@ -1,0 +1,38 @@
+
+- name: create admin users
+  user:
+    name: '{{item.user}}'
+    password: '{{item.password}}'
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    update_password: always
+  #loop: '{{system_admin_users}}'
+  register: user_info
+
+- name: set user sudo privilege
+  lineinfile:
+    line: '{{item.sudo_priv}}'
+    state: present
+    path: /etc/sudoers
+    backup: '{%if ansible_loop.first -%}yes{%else-%}no{%-endif%}'
+    validate: '/usr/sbin/visudo -cf %s'
+  when: item.sudo_priv is not none
+
+- name: copy public key to user
+  lineinfile:
+    line: '{{system_ansible_pub_key}}'
+    path: '{{user_info.home}}/.ssh/authorized_keys'
+    mode: "0600"
+    create: yes
+    backup: yes
+    owner: '{{item.user}}'
+    group: '{{item.user}}'
+  when: item.sudo_priv is not defined or item.copy_pub_key == True 
+
+#- name: debug user info
+#  debug:
+    #msg: '{{ system_admin_users | json_query("[?sudo_priv == ''admin ALL =(ALL) NOPASSWD: ALL''] | [0]")}}'
+#    msg: '{{ system_users | json_query("[?sudo_priv.contains(@,''admin ALL =(ALL) NOPASSWD: ALL'')]")}}'
+
+# https://jmespath.org/tutorial.html#functions
+# 这里禁止root登录时，想从 system_admin_users 中选出一个具有 root sudo 权限的用户，但是不太容易选到

@@ -1,0 +1,9 @@
+system_users: 
+#  - user:
+#    password:
+#    sudo_priv:
+#    copy_pub_key:
+
+system_admin_user: '{{system_users[0]["user"]}}'
+system_ansible_pub_key:
+system_root_password:

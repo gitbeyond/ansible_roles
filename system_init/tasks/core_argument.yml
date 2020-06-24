@@ -1,9 +1,14 @@
 # 2018/05/07
-# 2018/05/07 modified to sysctl
-#- name: backup sysctl.conf
+# update date: 2020/06/23 modified to sysctl
+#
 - name: modify core arguments
-  #sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes sysctl_file=/etc/sysctl.d/system_init.conf
-  sysctl: name={{ item.name }} value={{ item.value }} reload=yes state=present ignoreerrors=yes sysctl_file=/etc/sysctl.conf
+  sysctl: 
+    name: '{{ item.name }}' 
+    value: '{{ item.value }}' 
+    reload: yes 
+    state: present 
+    ignoreerrors: yes 
+    sysctl_file: /etc/sysctl.conf
   with_items:
     - { name: 'vm.swappiness', value: 0}
     - { name: 'net.ipv4.tcp_timestamps', value: '1'}

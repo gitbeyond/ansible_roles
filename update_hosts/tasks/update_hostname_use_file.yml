@@ -1,0 +1,5 @@
+
+- include_tasks: update_hostname.yml
+  name: update_hostname_use_file
+  when: hosts_file is defined and hosts_file is not none
+

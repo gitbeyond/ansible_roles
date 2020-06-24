@@ -3,3 +3,5 @@
     src: /data1
     dest: /data
     state: link
+  when:
+    - '"/data1" in ansible_mounts | json_query("[*].mount")'

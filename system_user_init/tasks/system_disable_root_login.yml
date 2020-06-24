@@ -1,0 +1,19 @@
+
+#- name: debug user
+#  shell: echo ${USER}; env
+
+- name: set root don't remote login
+  lineinfile:
+    line: 'PermitRootLogin no'
+    path: /etc/ssh/sshd_config
+    backup: yes
+    insertafter: '#PermitRootLogin yes'
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart_sshd_for_{{ansible_service_mgr}}
+
+- name: update root default password
+  user:
+    name: root
+    password: '{{system_root_password}}'
+    update_password: always
+  when: system_root_password is not none and system_root_password != ''
