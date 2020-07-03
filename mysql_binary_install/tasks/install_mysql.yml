@@ -2,7 +2,9 @@
 # 2020/05/21
 
 - name: get mysql packet dir name
-  local_action: shell tar tvf {{mysql_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tf {{mysql_packet}} |head -n 1 |awk -F'/' '{print $1}'
   register: mysql_dir_name
   run_once: true
 

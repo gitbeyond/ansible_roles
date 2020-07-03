@@ -2,18 +2,12 @@
 
 - name: cp common packet to remote
   copy: 
-    src: '{{item.src}}' 
-    dest: '{{item.dest}}' 
-    owner: '{{item.owner}}' 
-    group: '{{item.group}}' 
-    mode: '{{item.mode}}'
+    src: '{{ common_packet }}'
+    dest: '{{common_install_dir}}/'
+    owner: '{{common_run_user}}' 
+    group: '{{common_run_group}}'
+    mode: "0644" 
   when: common_packet is not none
-  with_items:
-    - src: '{{ common_packet }}'
-      dest: '{{common_base_dir}}/'
-      owner: '{{common_run_user}}' 
-      group: '{{common_run_group}}'
-      mode: "0644" 
   register: cp_packet_result
 
 - name: debug val
@@ -22,16 +16,9 @@
 
 - name: update common packet link file for jar
   file: 
-    src: '{{item.src}}' 
-    dest: '{{item.dest}}' 
-    owner: '{{item.owner}}' 
-    group: '{{item.group}}' 
-    state: '{{item.state}}'
-  with_items:
-    #- src: '{{common_install_dir}}/{{common_packet | basename}}'
-    - src: '{{common_packet | basename}}'
-      dest: '{{common_base_dir}}/{{common_base_name}}.jar'
-      owner: '{{common_run_user}}'
-      group: '{{common_run_group}}'
-      state: link 
+    src: '{{common_packet | basename}}'
+    dest: '{{common_base_dir}}/{{common_base_name}}.jar'
+    owner: '{{common_run_user}}'
+    group: '{{common_run_group}}'
+    state: link 
   when: common_base_dir is not none and common_packet | basename != common_base_name

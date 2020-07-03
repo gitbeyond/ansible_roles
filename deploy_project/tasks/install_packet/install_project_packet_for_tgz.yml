@@ -1,3 +1,6 @@
+# tar xf jdk-11.0.7_linux-x64_bin.tar.gz -C /tmp/test/  --strip-components 1
+# tar --exclude="*/*/*" -tf jdk-11.0.7_linux-x64_bin.tar.gz
+# echo 'etc/fstab/ahah' |sed -n 's#\([\^\/]\)\?\(\/.*\)#\1#p'
 
 #- name: get project packet name
 #  local_action: shell if [ {{project_deploy_version}} == "0" ];then ls {{project_source_dir}}/{{project_packet_name}}; else ls {{project_archive_dir}}/{{project_packet_name}}_{{project_deploy_version}};fi
@@ -7,7 +10,10 @@
 - name: get project packet dir name
   local_action: 
     module: shell
-    cmd: tar tvf {{PACKET_NAME.stdout}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+    #cmd: tar tvf {{PACKET_NAME.stdout}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+    cmd: tar tf {{PACKET_NAME.stdout}} |head -n 1 |awk -F'/' '{print $1}'
+    args:
+      warn: false
   #when: PACKET_NAME is defined and PACKET_NAME is not skipped
   register: packet_dir_name
   run_once: true

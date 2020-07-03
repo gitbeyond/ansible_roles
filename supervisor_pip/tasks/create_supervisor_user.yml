@@ -1,0 +1,9 @@
+# editor: haifengsss@163.com
+# 2020/07/01
+
+- name: create supervisor user
+  user:
+    name: '{{ supervisor_run_user }}' 
+    state: present 
+    system: '{{ supervisor_run_user_is_system }}'
+  when: supervisor_run_user != 'root'

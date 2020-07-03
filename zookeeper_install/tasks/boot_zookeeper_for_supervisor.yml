@@ -1,0 +1,20 @@
+- name: copy zookeeper boot file
+  template: 
+    src: "{{zookeeper_boot_file}}" 
+    dest: "{{supervisor_conf_dir}}/{{zookeeper_base_name}}.ini" 
+    owner: "root" 
+    group: "root" 
+    backup: yes
+    mode: "0644"
+  #when: zookeeper_boot_file is not none
+
+- name: restart zookeeper prog
+  supervisorctl: 
+    config: "{{supervisor_prim_conf}}" 
+    name: "{{zookeeper_base_name}}" 
+    state: "{{item}}"
+    supervisorctl_path: "/usr/bin/supervisorctl"
+  loop:
+    - present
+    - started
+  #when: zookeeper_boot_file is not none

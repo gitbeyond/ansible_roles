@@ -1,6 +1,10 @@
 
 - name: get etcd packet dir name
-  local_action: shell [ -e {{etcd_packet}} ] && tar tvf {{etcd_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell
+    cmd: tar tf {{etcd_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    args:
+      warn: false
   register: etcd_dir_name
   run_once: true
 

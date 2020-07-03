@@ -1,6 +1,6 @@
 - name: create zookeeper user
-  user: name={{ item.name }} state=present system={{ item.system }}
-  with_items:
-    - name: '{{ zookeeper_run_user }}'
-      system: no
+  user: 
+    name: '{{ zookeeper_run_user }}' 
+    state: present 
+    system: 'no'
   when: zookeeper_run_user is not none and zookeeper_run_user != 'root'

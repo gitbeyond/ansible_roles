@@ -20,7 +20,7 @@ nginx_other_confs:
 
 nginx_confs:
   - nginx.conf
-  - htpasswd
+  #- htpasswd
 
 nginx_env_file: nginx.sh
 nginx_logrotate_file: nginx.logrotate

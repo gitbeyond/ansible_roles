@@ -1,13 +1,23 @@
 
 - name: copy zookeeper conf file
   template: 
+    src: "{{zookeeper_conf_file}}" 
+    dest: "{{zookeeper_conf_dir}}" 
+    owner: "{{zookeeper_run_user}}" 
+    group: "{{zookeeper_run_group}}" 
+    mode: "0644"
+    backup: yes
+  when: zookeeper_conf_file is not none and zookeeper_conf_file != ''
+
+- name: copy zookeeper conf files
+  template: 
     src: "{{item}}" 
     dest: "{{zookeeper_conf_dir}}" 
     owner: "{{zookeeper_run_user}}" 
     group: "{{zookeeper_run_group}}" 
     mode: "0644"
     backup: yes
-  with_items: '{{zookeeper_conf_file}}'
+  loop: '{{zookeeper_conf_files}}'
   when: item is not none
   #register: copy_conf_file
  
@@ -32,15 +42,4 @@
 #    backup: yes
 #  with_items: '{{zookeeper_jmx_conf_file}}'
   
-
-- name: copy zookeeper boot file
-  template: 
-    src: "{{zookeeper_boot_file}}" 
-    dest: "{{supervisor_conf_dir}}" 
-    owner: "{{zookeeper_run_user}}" 
-    group: "{{zookeeper_run_group}}" 
-    backup: yes
-    mode: "0644"
-  when: zookeeper_boot_file is not none
-
 

@@ -1,0 +1,7 @@
+startDelaySeconds: 0
+#hostPort: 127.0.0.1:{{zookeeper_jmx_port}}
+ssl: false
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+rules:
+  - pattern: ".*"

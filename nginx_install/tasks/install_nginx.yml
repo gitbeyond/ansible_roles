@@ -1,6 +1,9 @@
 
 - name: get nginx packet dir name
-  local_action: shell tar tvf {{nginx_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  #local_action: shell tar tvf {{nginx_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tf {{nginx_packet}} |head -n 1 |awk -F'/' '{print $1}'
   register: nginx_dir_name
   run_once: true
 

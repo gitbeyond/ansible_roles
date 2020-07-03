@@ -1,7 +1,11 @@
 
 
 - name: get exporter packet dir name
-  local_action: shell tar tvf {{exporter_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tf {{exporter_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    args:
+      warn: false
   register: packet_dir_name
   run_once: true
 

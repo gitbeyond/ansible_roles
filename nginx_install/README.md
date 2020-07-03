@@ -13,7 +13,7 @@ example:
 
 需要注意的几个变量:
 * `nginx_confs`: 这个是一个列表，包含了nginx的配置文件，`dest_dir` 都是 `{{nginx_conf_dir}}` 这个目录，也就是说默认没有精细化的配置，安装后只是一个服务器，虚拟主机需要自己另行配置，默认包含 nginx.conf 和 htpasswd 这个 `stub_status` 模块的密码文件
-* `nginx_install_method`: 如果值为 net,会使用  yum 安装一些依赖包，比如 geoip-devel, 如果是在没网的环境中，编译的时候，酌情开启一些模块，这样依赖少，可以至少保证正常工作，那时请将这个变量的值设为 local, 这个 net 的安装操作暂未实现, 安装的依赖包是编译 nginx 依赖的包,可以自己指定，变量参见 `defaults/main.yml`
+* `nginx_install_method`: 当前只实现了 local 的方式, 会使用  yum 安装一些依赖包，比如 geoip-devel, 如果是在没网的环境中，编译的时候，酌情开启一些模块，这样依赖少，可以至少保证正常工作，那时请将这个变量的值设为 local, 这个 net 的安装操作暂未实现, 安装的依赖包是编译 nginx 依赖的包,可以自己指定，变量参见 `defaults/main.yml`
 
 
 ## nginx 的编译参数
@@ -55,4 +55,5 @@ drwxr-xr-x 2 nginx nginx   39 Dec 19 14:16 conf.d
 这些文件的内容并不能确定一定是一样的，如何将其copy至目标机器上，就是一个问题。
 
 * 将这些文件都写在 `nginx_confs` 变量中复制过去，最简单的做法，但是一般情况下变化的只有 nginx.conf 这一个文件而已,而其他的文件在copy时也会浪费时间。
+* 增加了 `nginx_other_confs` 的变量，包含了一些辅助的配置文件.可以自己指定这个变量
 

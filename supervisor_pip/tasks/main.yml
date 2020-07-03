@@ -1,5 +1,10 @@
-# edirtor: haifeng
+# editor: haifengsss@163.com
 # 2017/01/12
+# update date: 2020/06/29
+
+- import_tasks: create_supervisor_user.yml
+  tags:
+    - supervisor_create_user
 
 - import_tasks: create_supervisor_dir.yml
   tags:

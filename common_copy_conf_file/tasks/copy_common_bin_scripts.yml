@@ -5,8 +5,9 @@
     dest: "{{ common_bin_dir }}" 
     owner: "{{ common_run_user }}" 
     group: "{{ common_run_user }}" 
-    mode: "0644" 
+    mode: "0755" 
     backup: yes
   loop: '{{common_bin_scripts}}'
-  when: item is exists
+  #when: item is exists
+  when: item is not none
   notify: common_reload_app_conf

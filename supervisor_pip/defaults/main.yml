@@ -1,5 +1,7 @@
+source_deploy_dir: /data/apps/soft
 python_version: "{{ansible_python_version[0:-2]}}"
 supervisor_run_user: root
+supervisor_run_user_is_system: False
 #packet_name: "{{ item.split('/')[-1].split('-')[0]}}"
 #
 #supervisor_boot_file: "{%if ansible_service_mgr == 'systemd'%}supervisord.service{%else%}supervisord.init{%endif%}"
@@ -16,7 +18,7 @@ supervisor_packets:
   - '{{packet_base_dir}}/supervisor-3.3.5.tar.gz'
 
 supervisor_src_conf: "supervisord.conf"
-supervisor_version: '4.0.4'
+supervisor_version: '4.1.10'
 supervisor_http_host: 127.0.0.1
 supervisor_http_port: 9121
 supervisor_http_user: pysuper

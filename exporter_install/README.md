@@ -11,6 +11,7 @@ example:
         exporter_packet_type: jar,
         exporter_src_boot_file: '',  # 由于 exporter_install 可以部署多种 exporter, 所以为了防止其加载 group_vars 中的 exporter_src_boot_file, 要显示指定这个变量，如果没有，置为空字符串
         exporter_base_name: 'jmx_exporter', 
+        exporter_install_dir: '{{app_base_dir}}/{{exporter_base_name}}',
         exporter_conf_files: ['jmx_exporter/tomcat_jmx.yml' ]}
 
 # 安装 redis_exporter
@@ -28,4 +29,15 @@ example:
         exporter_src_boot_file: redis_exporter/redis_exporter_1.ini,
         exporter_port: 16389  }
 
+# 部署 kafka
+- hosts: kafka_cluster
+  roles:
+    - { role: exporter_install, exporter_packet: /data/apps/soft/ansible/kafka/kafka_2.11-1.1.1.tgz,
+        exporter_run_user: kafka,
+        exporter_base_name: kafka,
+        exporter_conf_dir: '{{exporter_base_dir}}/config',
+        exporter_src_boot_file: 'kafka/kafka.ini',
+        exporter_conf_files: ['kafka/server.properties'],
+        exporter_bin_scripts: ['kafka/kafka-server-start.sh'],
+        kafka_zk_url: '{{ groups["kafka_cluster"] | map("regex_replace","$",":2181") | join(",") }}'}
 ```

@@ -1,6 +1,8 @@
 
 - name: get filebeat packet dir name
-  local_action: shell tar tvf {{filebeat_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tvf {{filebeat_packet}} |head -n 1 |awk -F'/' '{print $1}'
   register: filebeat_dir_name
   when: filebeat_packet is not none and filebeat_packet is exists
   run_once: true

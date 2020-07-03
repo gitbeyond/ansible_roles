@@ -1,8 +1,15 @@
 ---
 - name: get jdk packet dir name
-  local_action: shell tar tvf {{jdk_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tf {{jdk_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    args:
+      warn: false
   register: jdk_dir_name
   run_once: true
+  changed_when: jdk_dir_name.rc != 0
+  failed_when: jdk_dir_name.stderr != "" and jdk_dir_name.stdout == ""
+
 
 - name: ensure install dir present
   file: 

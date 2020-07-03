@@ -1,0 +1,16 @@
+[program:{{exporter_base_name}}]
+command = {{exporter_base_dir}}/bin/kafka-server-start.sh {{exporter_conf_dir}}/server.properties
+autostart = true
+autorestart = true
+priority = 30
+startsecs = 5
+startretries = 3
+user = {{exporter_run_user}}
+redirect_stderr = false
+#environment=KAFKA_HEAP_OPTS="-Xmx1G -Xms1G"
+stdout_logfile={{exporter_log_dir}}/%(program_name)s_std.log
+stderr_logfile={{exporter_log_dir}}/%(program_name)s_err.log
+stdout_logfile_backups= 5
+stdout_events_enabled = 1
+stderr_logfile_backups= 5
+stderr_events_enabled = 1

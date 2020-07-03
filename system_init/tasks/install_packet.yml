@@ -3,8 +3,15 @@
   yum: 
     name: 
       - epel-release
+      #- libselinux
+    state: "latest"
+
+- name: install libselinux
+  yum: 
+    name: 
       - libselinux
     state: "latest"
+    update_only: yes
   #loop:
   #  - name: epel-release
   #  - name: libselinux

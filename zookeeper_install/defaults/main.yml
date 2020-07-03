@@ -1,20 +1,30 @@
 app_base_dir: /data/apps/opt
-zookeeper_run_user: root
+zookeeper_run_user: zookeeper
 zookeeper_run_group: '{{zookeeper_run_user}}'
 zookeeper_base_name: zookeeper
-
+zookeeper_app_name:
 zookeeper_packet:
+
 # tgz or jar
 zookeeper_packet_type: tgz
+zookeeper_install_dir: '{{app_base_dir}}'
 zookeeper_base_dir: /data/apps/opt/{{zookeeper_base_name}}
 zookeeper_log_dir: /data/apps/log/{{zookeeper_base_name}}
-zookeeper_conf_dir: /data/apps/opt/{{zookeeper_base_name}}/conf
+#zookeeper_conf_dir: /data/apps/opt/{{zookeeper_base_name}}/conf
+zookeeper_conf_dir: /data/apps/config/{{zookeeper_base_name}}
 
 zookeeper_conf_file:
-zookeeper_port:  
-# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+zookeeper_conf_files:
+  - 'java.env'
+  - 'zoo.cfg'
+  - 'zookeeper_jmx.yml'
+
+zookeeper_run_port: 2181
+zookeeper_jmx_port: 12181
+zk_jmx_exporter_port: 22181
+# 项目启动的方式, 目前可选择 supervisor, systemd
 zookeeper_boot_type: supervisor
-zookeeper_boot_file:
+zookeeper_boot_file: 'zookeeper.{{zookeeper_boot_type}}'
 
 
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
