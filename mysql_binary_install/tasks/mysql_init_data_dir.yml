@@ -1,0 +1,9 @@
+
+- name: mysql init data dir
+  shell:
+    cmd: '{{mysql_dir_name.stdout}}/bin/mysqld --defaults-file={{mysql_conf_dir}}/my.cnf --initialize'
+    creates: '{{mysql_data_dir}}/mysql'
+    
+
+- name: get mysql random password
+  shell: 

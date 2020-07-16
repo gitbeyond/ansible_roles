@@ -42,6 +42,10 @@
         jmx_exporter_base_dir: /data/apps/opt/jmx_exporter}
 ```
 
+# 注意
+* 默认的配置文件是 3.4 版本的, 在部署 3.5 版本时，发现有些配置需要进行更新，如 `admin.serverPort=8080`
+* 当决定自己定义配置文件时，要把相关的配置文件全部定义，如 `java.env, zoo.cfg, zookeeper_jmx.yml` 等等,如果只定义一个 zoo.cfg，那表示不会用到 java.env
+
 # CHANGELOG
 ## 2020/06/29
 `zookeeper_conf_file` 变为 `zookeeper_conf_files`, 如果配置文件只有一个，可以使用 `zookeeper_conf_file`

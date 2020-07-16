@@ -18,6 +18,7 @@ zookeeper_conf_files:
   - 'java.env'
   - 'zoo.cfg'
   - 'zookeeper_jmx.yml'
+  - 'log4j.properties'
 
 zookeeper_run_port: 2181
 zookeeper_jmx_port: 12181

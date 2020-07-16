@@ -1,0 +1,36 @@
+- type: log
+  enabled: true
+  json:
+    keys_under_root: true
+    overwrite_keys: true
+  paths:
+    - /data/apps/log/nginx/*access*.log
+  fields:
+    #log_topics: nginx-access
+    log_topics: nginx_fk_api_access
+  processors:
+    - script:
+        lang: javascript
+        id: nginx_access_js
+        source: >
+          function process(event) {
+              var upstream_response_time = event.Get("upstream_response_time");
+              var total_upstream_res_time=0;
+              if (upstream_response_time.indexOf(',') > -1){
+                  var upstream_response_time_list = upstream_response_time.split(',');
+                  var i;
+                  for (i=0; i< upstream_response_time_list.length; i++){
+                      total_upstream_res_time += parseFloat(upstream_response_time_list[i]);
+                  }
+              }else{
+                  total_upstream_res_time = parseFloat(upstream_response_time);     
+              }
+              event.Put("total_upstream_response_time", total_upstream_res_time);
+          }
+
+- type: log
+  paths:
+    - /data/apps/log/nginx/*error*.log
+  fields:
+    log_topics: nginx-error
+    #log_topics: nginx_fk_api_error

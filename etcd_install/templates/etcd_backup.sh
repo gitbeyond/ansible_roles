@@ -1,5 +1,17 @@
 #!/bin/bash
 set -e
+
+lock_file={{etcd_var_dir}}/etcd_backup.lock
+exec 3<> ${lock_file}
+
+if flock -n 3;then
+    #echo "get ${lock_file} lock file."
+    :
+else
+    echo "get lock file failed. now exit."
+    exit 5
+fi
+
 exec >> {{etcd_log_dir}}/backup_etcd.log
 
 Date=`date +%Y-%m-%d-%H-%M`

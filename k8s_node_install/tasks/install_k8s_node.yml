@@ -2,7 +2,9 @@
 # 2017/01/12
 
 - name: get k8s_node packet dir name
-  local_action: shell tar tvf {{k8s_node_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tf {{k8s_node_packet}} |head -n 1 |awk -F'/' '{print $1}'
   register: k8s_node_dir_name
   run_once: true
 

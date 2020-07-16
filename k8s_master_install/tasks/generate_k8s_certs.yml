@@ -1,19 +1,23 @@
 
 - name: generate k8s-root-ca
-  local_action: shell {{k8s_cfssl_cmd_path}}/cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | {{k8s_cfssl_cmd_path}}/cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca
-  args:
-    chdir: "{{k8s_work_dir}}"
-    #creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-root-ca.pem"
-    creates: "{{k8s_cert_dir}}/k8s-root-ca.pem"
+  local_action: 
+    module: shell 
+    cmd: '{{k8s_cfssl_cmd_path}}/cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | {{k8s_cfssl_cmd_path}}/cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca'
+    args:
+      chdir: "{{k8s_work_dir}}"
+      #creates: "{{k8s_work_dir}}/{{k8s_cert_dir}}/k8s-root-ca.pem"
+      creates: "{{k8s_cert_dir}}/k8s-root-ca.pem"
   run_once: true
   tags:
     - generate_k8s_root_ca
 
 - name: generate kube-apiserver-ca kubernetes-admin kube-apiserver-kubelet-client
-  local_action: shell {{k8s_cfssl_cmd_path}}/cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes {{k8s_cert_json_dir}}/{{item}}-csr.json | {{k8s_cfssl_cmd_path}}/cfssljson --bare {{k8s_cert_dir}}/{{item}}
-  args:
-    chdir: "{{k8s_work_dir}}"
-    creates: "{{k8s_cert_dir}}/{{item}}.pem"
+  local_action: 
+    module: shell 
+    cmd: '{{k8s_cfssl_cmd_path}}/cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes {{k8s_cert_json_dir}}/{{item}}-csr.json | {{k8s_cfssl_cmd_path}}/cfssljson --bare {{k8s_cert_dir}}/{{item}}'
+    args:
+      chdir: "{{k8s_work_dir}}"
+      creates: "{{k8s_cert_dir}}/{{item}}.pem"
   loop:
     - k8s-kube-apiserver
     - k8s-kubernetes-admin
@@ -49,10 +53,12 @@
   run_once: true
 
 - name: generate sa public key
-  local_action: shell openssl rsa -in {{k8s_cert_dir}}/k8s-sa.key -pubout -out {{k8s_cert_dir}}/k8s-sa.pub 
-  args:
-    chdir: "{{k8s_work_dir}}"
-    creates: "{{k8s_cert_dir}}/k8s-sa.pub"
+  local_action: 
+    module: shell 
+    cmd: openssl rsa -in {{k8s_cert_dir}}/k8s-sa.key -pubout -out {{k8s_cert_dir}}/k8s-sa.pub 
+    args:
+      chdir: "{{k8s_work_dir}}"
+      creates: "{{k8s_cert_dir}}/k8s-sa.pub"
   run_once: true
 
 

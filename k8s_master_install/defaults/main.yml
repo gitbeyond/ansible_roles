@@ -12,7 +12,8 @@ k8s_controller_log_dir: "/data/apps/log/kube-controller-manager"
 k8s_scheduler_log_dir: "/data/apps/log/kube-scheduler"
 
 k8s_master_packet:
-k8s_master_dir_name: "{{lookup('pipe', 'tar tvf '+ k8s_master_packet).split('\n')[-1].split(' ')[-1].split('/')| first}}"
+#k8s_master_dir_name: "{{lookup('pipe', 'tar tf '+ k8s_master_packet).split('\n')[-1].split(' ')[-1].split('/')| first}}"
+k8s_master_dir_name: "{{lookup('pipe', 'tar tf '+ k8s_master_packet).split('\n')[-1].split('/')| first}}"
 k8s_work_dir: /root/k8s
 k8s_cert_json_dir: certs_json
 k8s_work_conf_dir: ansible_k8s_confs

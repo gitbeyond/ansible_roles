@@ -17,7 +17,20 @@ Remote_BackPath={{mysql_backup_remote_path}}/$IP
 mysql_backup_remote_user={{mysql_backup_remote_user}}
 REMOT_HOST={{mysql_backup_remote_host}}
 
+lock_file={{mysql_var_dir}}/.mysql_backup.lock
+
 {%raw%}
+exec 3<> ${lock_file}
+if flock -n 3;then
+    #echo "get ${lock_file} lock file."
+    :
+else
+    echo "get lock file failed. now exit."
+    mail_text="mysql_backup ${project_name} get lock file failed. now exit."
+    python ${mail_script} "${project_name}" "${mail_text}"
+    exit 5
+fi
+
 day_dt=$(date +%F)
 #BackPath=/data/apps/data/mysqlbackup
 OUT_FILE=/tmp/`basename $0`.out
