@@ -13,7 +13,7 @@ keepalived_confs:
   - keepalived.conf
 keepalived_env_file: keepalived.sh
 keepalived_sysconfig_file: keepalived.env
-keepalived_boot_file: 'keepalived.{{ansible_service_mgr |default("systmed", ture)}}'
+keepalived_boot_file: 'keepalived.{{ansible_service_mgr |default("systmed", true)}}'
 
 keepalived_dependence_packets:
   - net-snmp-agent-libs

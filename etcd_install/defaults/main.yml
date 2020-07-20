@@ -3,7 +3,7 @@ app_base_dir: /data/apps/opt
 script_deploy_dir: '{{app_base_dir}}/script'
 
 etcd_cfssl_cmd_path: '/usr/bin'
-
+etcd_install_dir: '{{app_base_dir}}'
 
 # etcd
 etcd_work_dir: /root/k8s/etcd

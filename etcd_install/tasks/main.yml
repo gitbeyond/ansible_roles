@@ -19,15 +19,19 @@
   tags:
     - create_etcd_dir
 
-- include_tasks: install_etcd_for_binary.yml
+- import_tasks: etcd_install/etcd_install.yml
   tags:
-    - install_etcd_for_binary
-  when: etcd_install_method == "local"
+    - etcd_install
 
-- include_tasks: install_etcd_for_rpm.yml
-  tags:
-    - install_etcd_for_rpm
-  when: etcd_install_method == "rpm"
+#- include_tasks: install_etcd_for_binary.yml
+#  tags:
+#    - install_etcd_for_binary
+#  when: etcd_install_method == "local"
+#
+#- include_tasks: install_etcd_for_rpm.yml
+#  tags:
+#    - install_etcd_for_rpm
+#  when: etcd_install_method == "rpm"
 
 - import_tasks: copy_etcd_conf.yml
   tags:

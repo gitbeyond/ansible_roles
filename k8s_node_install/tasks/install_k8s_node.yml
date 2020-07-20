@@ -5,6 +5,7 @@
   local_action: 
     module: shell 
     cmd: tar tf {{k8s_node_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false
   register: k8s_node_dir_name
   run_once: true
 

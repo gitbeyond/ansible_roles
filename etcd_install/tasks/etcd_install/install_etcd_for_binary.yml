@@ -16,8 +16,9 @@
     owner: '{{ etcd_run_user }}' 
     group: '{{ etcd_run_user }}' 
     creates: '{{ item.creates }}'
-  with_items:
-    - { src: '{{etcd_packet}}', dest: '{{ app_base_dir}}/', creates: '{{ app_base_dir }}/{{etcd_dir_name.stdout}}', mode: "0755" }
+    mode: "0755"
+  loop:
+    - { src: '{{etcd_packet}}', dest: '{{ etcd_install_dir}}/', creates: '{{ etcd_install_dir }}/{{etcd_dir_name.stdout}}' }
 
 - name: create etcd link dir
   file: 
