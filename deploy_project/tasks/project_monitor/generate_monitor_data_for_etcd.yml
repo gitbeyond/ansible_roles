@@ -2,6 +2,9 @@
   debug:
     msg: '{{project_monitor_data}}'
     #msg: '{{test_json}}'
+  when:
+    - project_monitor_data is not none
+
 - name: write monitor_data to etcd3
   local_action:
     module: etcd3
@@ -14,3 +17,8 @@
     value: '{{project_monitor_data | to_json}}'
     state: present
   run_once: true
+  when:
+    - project_monitor_data is not none
+    - project_monitor_data != ''
+    - project_monitor_key is not none
+    - project_monitor_key != ''

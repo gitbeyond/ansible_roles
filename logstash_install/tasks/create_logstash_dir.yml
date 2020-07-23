@@ -1,17 +1,16 @@
-# edirtor: haifeng
-# 2019/2/13
+# editor: haifengsss@163.com
+# update date: 2020/06/23
 
 - name: create logstash dir
   file: 
-    path: "{{ item.path }}" 
+    path: "{{ item }}" 
     owner: "{{ logstash_run_user }}" 
     group: "{{ logstash_run_user }}" 
-    mode: "{{ item.mode }}" 
-    state: "{{ item.state }}"
-  with_items:
-    #- { path: "{{app_base_dir}}", mode: "0755", owner: root, group: root, state: directory }
-    - { path: "{{logstash_conf_dir}}", mode: "0755", state: directory }
-    - { path: "{{logstash_data_dir}}", mode: "0755", state: directory }
-    - { path: "{{logstash_log_dir}}", mode: "0755", state: directory }
-    - { path: "{{logstash_var_dir}}", mode: "0755", state: directory }
+    mode: "0755" 
+    state: "directory"
+  loop:
+    - "{{logstash_conf_dir}}"
+    - "{{logstash_data_dir}}"
+    - "{{logstash_log_dir}}"
+    - "{{logstash_var_dir}}"
 

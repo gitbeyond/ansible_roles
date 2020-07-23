@@ -1,0 +1,4 @@
+
+- include_tasks: generate_monitor_data_for_{{project_monitor_data_generate_method}}.yml
+  name: generate_monitor_data
+

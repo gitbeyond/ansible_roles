@@ -1,0 +1,15 @@
+ 
+- name: copy project filebeat conf
+  template:
+    src: '{{ project_log_collect_conf }}'
+    dest: '{{ project_log_conf_dir }}'
+    backup: yes
+    mode: "0644"
+  when: 
+  - project_log_collect_conf is not none
+  - project_log_collect_conf != ''
+  #- project_filebeat_conf is exist
+
+ 
+
+

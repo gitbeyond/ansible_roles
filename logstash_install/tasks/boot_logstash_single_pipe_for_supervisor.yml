@@ -7,7 +7,7 @@
     group: 'root' 
     mode: "0644"
     backup: yes
-  with_items: '{{logstash_pipeline_instances}}'
+  loop: '{{logstash_pipeline_instances}}'
   register: ini_result
   notify:
     - supervisor_update
@@ -21,6 +21,6 @@
   supervisorctl: 
     name: '{{ item.logstash_pipeline_name }}' 
     state: started
-  with_items:
+  loop:
     - "{{logstash_pipeline_instances}}"
   when: logstash_install_result.failed == False and logstash_install_result.changed != True

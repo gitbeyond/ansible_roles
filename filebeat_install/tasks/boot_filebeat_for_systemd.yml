@@ -13,12 +13,18 @@
     backup: yes
   register: ini_result
   notify:
+    - systemctl_daemon_reload
     - restart_filebeat_for_systemd
 
-- name: systemctl daemon-reload
-  shell: systemctl daemon-reload
-  when: ini_result.results.failed == False and ini_result.changed == True
-  ignore_errors: true
+#- name: debug filebeat vars
+#  debug: 
+#    msg: "{{ini_result}}"
+
+#- name: systemctl daemon-reload
+#  shell: systemctl daemon-reload
+#  #when: ini_result.result.failed == False and ini_result.changed == True
+#  when: ini_result.changed == True
+#  ignore_errors: true
 
 
 - name: start filebeat

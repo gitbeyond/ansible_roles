@@ -24,3 +24,10 @@
   shell: '{{ item }}'
   with_items:
     - systemctl daemon-reload
+
+
+- name: project_prom_reload
+  uri:
+    url: http://{{project_monitor_server}}:{{project_monitor_server_port}}/-/reload
+    method: POST
+  listen: project_monitor_server_reload

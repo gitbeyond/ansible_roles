@@ -28,25 +28,25 @@
     - PACKET_NAME is defined
     - PACKET_NAME is not skipped
 
-- include_tasks: generate_monitor_data.yml
+- include_tasks: project_monitor/generate_monitor_data.yml
   name: project_generate_monitor_data
   #tags:
   #  - generate_monitor_data
   when:
-    - project_monitor_data is not none
-    - project_monitor_data != ''
-    - project_monitor_key is not none
-    - project_monitor_key != ''
+    #- project_monitor_data is not none
+    #- project_monitor_data != ''
+    #- project_monitor_key is not none
+    #- project_monitor_key != ''
     - inventory_hostname == ansible_play_hosts_all[-1]
 
 
-- include_tasks: generate_log_data.yml
+- include_tasks: project_log/generate_log_data.yml
   name: project_generate_log_data
   #tags:
   #  - generate_log_data
   when:
-    - project_log_data is not none
-    - project_log_data != ''
-    - project_log_key is not none
-    - project_log_key != ''
+    #- project_log_data is not none
+    #- project_log_data != ''
+    #- project_log_key is not none
+    #- project_log_key != ''
     - inventory_hostname == ansible_play_hosts_all[-1]

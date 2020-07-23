@@ -6,9 +6,9 @@
     dest: '{{logstash_base_dir}}/config/' 
     owner: '{{ logstash_run_user }}' 
     group: '{{ logstash_run_user }}' 
-    mode: '0644'
+    mode: "0644"
     backup: yes
-  with_items: '{{logstash_src_confs}}'
+  loop: '{{logstash_src_confs}}'
     #- { src: 'jvm.options', dest: '{{logstash_base_dir}}/config/', mode: '0644'}
     #- { src: 'logstash.yml', dest: '{{logstash_base_dir}}/config/', mode: '0644'}
     #- { src: 'log4j2.properties', dest: '{{logstash_base_dir}}/config/', mode: '0644'}
@@ -18,10 +18,8 @@
 
 - name: copy logstash env file
   template:
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+    src: '{{ logstash_env_file }}' 
+    dest: '/etc/profile.d/' 
     owner: root 
     group: root 
-    mode: '{{ item.mode }}'
-  with_items:
-    - { src: '{{logstash_env_file}}', dest: '/etc/profile.d/', mode: "0644"}
+    mode: '0644'

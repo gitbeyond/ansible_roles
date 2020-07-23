@@ -66,3 +66,7 @@
 
 
 * ansible 获取 `JAVA_HOME` 变量时，有时候可以，有时候就不可以,后来确认是由于 `ANSIBLE_SUDO_FLAGS=-E --preserve-env=PATH` 变量的原因。因为使用了 sudo, 通过普通用户连接远程机器，sudo 之后变量就没了，加上了`ANSIBLE_SUDO_FLAGS` 环境变量后，就会携带相关的变量，也就没问题了
+
+# 2020/07/14
+
+`project_monitor_server` 的变量是 delegate_to 的地址，这个变量如果在 when 中进行判断，如判断其不为空时才执行task是行不通的。会报错

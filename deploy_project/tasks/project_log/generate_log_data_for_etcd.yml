@@ -10,3 +10,9 @@
     value: '{{project_log_data | to_json}}'
     state: present
   run_once: true
+  when:
+    - project_log_data is not none
+    - project_log_data != ''
+    - project_log_key is not none
+    - project_log_key != ''
+  

@@ -92,3 +92,27 @@ config-repo  是一个不需要启动的项目，它的配置文件中没有 pro
     * 是否对包进行归档, 如果要进行归档，那么得对健康检测没问题的才归档(k8s 上的无法检测,)
         * systemd 或 supervisor 启动的二进制类型的包才进行健康检测 
     * 是否生成监控和日志数据
+
+# 2020/07/09 增加使用 file 来完成日志与监控的操作
+
+考虑到有些场景不可能有 ansible-confd 的存在，所以增加了
+* project_filebeat_conf
+* project_prom_file_sd_conf
+* project_prom_conf: project_prom_file_sd_conf 变量的别名
+* project_prom_file_sd_dir
+来将相关的文件直接复制至相关目录来完成日志的收集，和监控的添加。
+
+不放弃原来的方法，增加如下变量,目前的可取值为 file 和 etcd(etcd3)
+* project_log_data_generate_method
+* project_monitor_data_generate_method
+
+考虑得更广泛一些的话，收集日志可能使用的不是 filebeat, 而是用 promtail, fluent-bit 等其他组件，  
+那么变量名称叫做 project_filebeat_conf 就不太合适了。  
+
+这个也适用于监控系统，比如使用的是 zabbix,或statsd  而不是 prom，其处理逻辑就不一样。
+
+还有 nginx, 现在的变量叫做 project_nginx_confs, 而像 treafik, BFE,Envoy 等前端代理的发展，很可能就会替代 nginx。
+
+所以再增加:
+* `project_log_collect_conf: # 对应filebeat配置文件`
+* `project_log_conf_dir: # 对应filebeat配置文件的目录`

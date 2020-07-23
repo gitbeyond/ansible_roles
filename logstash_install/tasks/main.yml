@@ -1,23 +1,23 @@
-# edirtor: haifeng
-# 2019/10/14
+# editor: haifengsss@163.com
+# update date: 2020/06/23
 
-- include: create_logstash_user.yml
+- import_tasks: create_logstash_user.yml
   tags:
     - create_logstash_user
 
-- include: create_logstash_dir.yml 
+- import_tasks: create_logstash_dir.yml 
   tags:
     - create_logstash_dir
 
-- include: install_logstash.yml
+- import_tasks: install_logstash.yml
   tags:
     - install_logstash
 
-- include: copy_logstash_settings.yml
+- import_tasks: copy_logstash_settings.yml
   tags:
     - copy_logstash_settings
 
-- include: copy_logstash_pipeline_conf.yml
+- import_tasks: copy_logstash_pipeline_conf.yml
   tags:
     - copy_logstash_pipeline_conf
 

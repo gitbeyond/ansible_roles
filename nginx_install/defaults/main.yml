@@ -27,7 +27,7 @@ nginx_logrotate_file: nginx.logrotate
 nginx_boot_file: 'nginx.{{ansible_service_mgr | default("systmed", true)}}'
 nginx_systemd_file: 'nginx.systemd'
 #type: list
-nginx_child_confs:
+nginx_child_confs: []
 nginx_dependence_packets:
   - libevent-devel
   - libevent

@@ -3,6 +3,10 @@
     name: '{{ filebeat_app_name }}' 
     state: restarted
 
+- name: systemctl_daemon_reload
+  systemd:
+    daemon_reload: yes
+
 - name: restart_filebeat_for_systemd
   systemd:
     name: '{{ filebeat_app_name }}'
