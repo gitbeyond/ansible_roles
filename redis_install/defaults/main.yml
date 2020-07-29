@@ -88,12 +88,13 @@ redis_sentinel_statments: "[{%if redis_instances_length | int > 0%}
          'sentinel down-after-milliseconds {{item.redis_sentinel_name}} {{redis_sentinel_down_after_milliseconds}}', 
          'sentinel failover-timeout {{item.redis_sentinel_name}} {{redis_sentinel_failover_timeout}}', 
     {%endfor%}
-{%else%}
-    'sentinel monitor {{redis_sentinel_name}} {{redis_master_server}} {{redis_master_port}} {{redis_sentinel_slave_num}}', 
-    'sentinel auth-pass {{redis_sentinel_name}} {{redis_master_pass}}', 
-    'sentinel down-after-milliseconds {{redis_sentinel_name}} {{redis_sentinel_down_after_milliseconds}}', 
-    'sentinel failover-timeout {{redis_sentinel_name}} {{redis_sentinel_failover_timeout}}'
 {%endif%}]"
 
+# 在生成语句时，由于如下变量存在没有值的情况，所以会报错
+#{%else%}
+#    'sentinel monitor {{redis_sentinel_name}} {{redis_master_server}} {{redis_master_port}} {{redis_sentinel_slave_num}}', 
+#    'sentinel auth-pass {{redis_sentinel_name}} {{redis_master_pass}}', 
+#    'sentinel down-after-milliseconds {{redis_sentinel_name}} {{redis_sentinel_down_after_milliseconds}}', 
+#    'sentinel failover-timeout {{redis_sentinel_name}} {{redis_sentinel_failover_timeout}}'
 
 #redis_sentinel_statments: "[{% for item in redis_instances%}'sentinel monitor {{item.redis_sentinel_name}} {{item.redis_master_server}} {{item.redis_master_port}} 2', 'sentinel auth-pass {{item.redis_sentinel_name}} {{item.redis_master_pass}}', 'sentinel down-after-milliseconds {{item.redis_sentinel_name}} 5000', 'sentinel failover-timeout {{item.redis_sentinel_name}} 60000', {%endfor%}]"

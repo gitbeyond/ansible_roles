@@ -5,7 +5,7 @@
     dest: '{{ item.dest |default(pgsql_data_dir) }}' 
     owner: '{{ item.owner |default(pgsql_run_user, true) }}' 
     group: '{{ item.group |default(pgsql_run_user, true) }}' 
-    mode: "0644"
+    mode: "{{ item.mode | default('0600',true)}}"
     backup: yes
   loop:
     - src: '{{pgsql_primary_conf}}'
@@ -15,6 +15,7 @@
       dest: '/etc/profile.d/{{pgsql_app_name}}.sh'
       owner: root 
       group: root
+      mode: "0644"
     #- src: 'pgsql.logrotate'
     #  dest: '/etc/logrotate.d/{{pgsql_app_name}}_for_ansible'
     #  owner: root

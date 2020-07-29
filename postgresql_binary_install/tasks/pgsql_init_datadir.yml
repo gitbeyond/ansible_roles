@@ -5,3 +5,6 @@
   shell:
     cmd: '{{pgsql_base_dir}}/bin/initdb {{pgsql_initdb_args}}'
     creates: '{{pgsql_data_dir}}/global'
+  become: yes
+  become_method: sudo
+  become_user: '{{pgsql_run_user}}'

@@ -1,14 +1,35 @@
 - name: modify about redis core args
-  sysctl: name={{ item.name }} value={{ item.value }} reload=no state=present ignoreerrors=yes
-  with_items:
-    - { name: 'net.ipv4.tcp_timestamps', value: 1}
-    - { name: 'net.ipv4.tcp_tw_recycle', value: 0}
-    - { name: 'net.core.somaxconn', value: 65535}
-    - { name: 'vm.swappiness', value: 0}
-    - { name: 'vm.overcommit_memory', value: 1}
+  sysctl: 
+    name: '{{ item.name }}' 
+    value: '{{ item.value }}' 
+    reload: yes
+    sysctl_set: yes
+    sysctl_file: '/etc/sysctl.d/08{{redis_app_name}}.conf'
+    state: present 
+    ignoreerrors: yes
+  loop:
+    - name: 'net.ipv4.tcp_timestamps' 
+      value: 1
+    - name: 'net.ipv4.tcp_tw_recycle'
+      value: 0
+    - name: 'net.core.somaxconn'
+      value: 65535
+    - name: 'net.ipv4.tcp_max_syn_backlog'
+      value: 262144
+    - name: 'net.core.netdev_max_backlog'
+      value: 262144
+    - name: 'vm.swappiness'
+      value: 0
+    - name: 'vm.overcommit_memory'
+      value: 1
+
 - name: close transparent_hugepage
   shell: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
+
 - name: write close trhansparent_hugepage into rc.local
-  lineinfile: dest={{item.dest}} regexp={{ item.regexp }} line={{ item.line }} backrefs=no
-  with_items:
-    - { dest: /etc/rc.d/rc.local, regexp: "echo never > /sys/kernel/mm/transparent_hugepage/enabled", line: "echo never > /sys/kernel/mm/transparent_hugepage/enabled" }
+  lineinfile: 
+    dest: '/etc/rc.d/rc.local' 
+    regexp: 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' 
+    line: 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' 
+    backrefs: no
+    backup: yes

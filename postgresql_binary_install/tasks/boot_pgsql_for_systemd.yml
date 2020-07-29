@@ -1,7 +1,7 @@
 - name: pgsql copy boot file
   template: 
     src: '{{ pgsql_service_conf }}' 
-    dest: '/usr/lib/systemd/system/{{pgsql_service_name}}.servic' 
+    dest: '/usr/lib/systemd/system/{{pgsql_service_name}}.service' 
     owner: 'root' 
     group: 'root' 
     mode: "0644"

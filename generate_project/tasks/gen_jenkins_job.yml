@@ -3,10 +3,23 @@
     src: '{{project_jenkins_config}}'
     dest: 'files/{{project_jenkins_name}}.xml'
 
-- name: create jenkins job
-  jenkins_job:
-    user: '{{project_jenkins_user}}'
-    password: '{{project_jenkins_password}}'
-    name: '{{project_jenkins_name}}'
-    config: '{{lookup("template", project_jenkins_config)}}'
-    url: '{{project_jenkins_url}}'
+#- include_tasks: gen_jenkins_job_by_token.yml
+- include_tasks: gen_jenkins_job_by_{{project_jenkins_job_auth_method}}.yml
+  name: create_jenkins_job
+#  when:
+#    - project_jenkins_api_token is not none
+#    - project_jenkins_api_token != ''
+
+#- include_tasks: gen_jenkins_job_by_password.yml
+#  name: create_jenkins_job_by_password
+#  when:
+#    - (project_jenkins_api_token is none or project_jenkins_api_token == '' )
+
+#- name: create jenkins job
+#  jenkins_job:
+#    user: '{{project_jenkins_user}}'
+#    #password: '{{project_jenkins_password}}'
+#    token: '{{project_jenkins_api_token}}'
+#    name: '{{project_jenkins_name}}'
+#    config: '{{lookup("template", project_jenkins_config)}}'
+#    url: '{{project_jenkins_url}}'

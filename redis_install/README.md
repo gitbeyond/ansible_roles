@@ -3,6 +3,23 @@
 * role 会创建相关目录，并启动 redis-server，修改 redis 所需要的内核参数并加入开机启动。 
 * 相关的配置文件可以参考 templates 目录下
 
+## redis 的编译示例
+```bash
+[root@docker-182 redis-5.0.8]# pwd
+/data/apps/soft/ansible/redis/redis-5.0.8
+
+[root@docker-182 redis-5.0.8]# make
+
+# 对编译后的二进制进行测试，这个自已视情况要不要执行
+[root@docker-182 redis-5.0.8]# make test 
+
+[root@docker-182 redis-5.0.8]# make PREFIX=/data/apps/opt/redis-5.0.8 install
+
+[root@docker-182 redis-5.0.8]# tar zcf redis-5.0.8_centos7_bin.tgz -C /data/apps/opt/ redis-5.0.8
+
+
+```
+
 ## example:
 ```yaml
 # 多实例部署:

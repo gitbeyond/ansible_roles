@@ -1,0 +1,8 @@
+
+- name: create jenkins job
+  jenkins_job:
+    user: '{{project_jenkins_user}}'
+    token: '{{project_jenkins_api_token}}'
+    name: '{{project_jenkins_name}}'
+    config: '{{lookup("template", project_jenkins_config)}}'
+    url: '{{project_jenkins_url}}'

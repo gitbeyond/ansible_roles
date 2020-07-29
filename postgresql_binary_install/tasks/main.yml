@@ -30,6 +30,10 @@
     - pgsql_boot_for_systemd
     - pgsql_boot
 
+- import_tasks: install_dependence_packet.yml
+  tags:
+    - pgsql_install_dependence_packet
+
 - import_tasks: pgsql_create_repl_user.yml
   tags:
     - pgsql_create_repl_user

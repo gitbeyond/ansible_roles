@@ -12,14 +12,14 @@
 
 # Note: do not use a PGDATA pathname containing spaces, or you will
 # break postgresql-setup.
+#After=syslog.target
 [Unit]
 Description=PostgreSQL database server
 Documentation=https://www.postgresql.org/docs/9.6/static/
-After=syslog.target
 After=network.target
 
 [Service]
-Type=notify
+Type=simple
 
 User={{pgsql_run_user}}
 Group={{pgsql_run_user}}

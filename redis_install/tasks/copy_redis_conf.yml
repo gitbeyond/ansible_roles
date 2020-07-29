@@ -32,7 +32,7 @@
 #    redis_sentinel_name: "{{item.redis_sentinel_name}}"
 #  with_items: '{{redis_instances}}'
 
-- name: copy redis_instances conf file
+- name: copy redis conf file
   template:
     src: '{{ redis_src_conf }}' 
     dest: '{{redis_conf_dir }}/{{redis_service_name}}.conf' 

@@ -1,0 +1,5 @@
+- name: install pgsql dependence packet
+  yum: 
+    name:
+    - python-psycopg2
+    state: present

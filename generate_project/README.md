@@ -132,3 +132,15 @@ projects:
     loop: '{{lookup("file", "vars/main.yml") | from_yaml | json_query("projects")}}'
 
 ```
+
+
+# notice
+## 1. 依赖模块
+这两个包是这里的task所依赖的，这个 role 不会自动安装，请自行使用yum进行安装。
+
+如果使用的不是系统默认的 python, 比如使用了虚拟环境的话, 请使用pip进行安装。
+```bash
+[root@ansible ansible_roles]# yum install python2-jenkins
+
+[root@ansible ansible_roles]# yum install python-lxml
+```

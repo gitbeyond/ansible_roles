@@ -24,6 +24,14 @@
   when: exporter_boot_type == 'systemd' and ansible_service_mgr == 'systemd'
   listen: 
     - common_app_restarted
+    #- common_reload_app_conf
+
+- name: systemctl_restarted
+  systemd:
+    name: "{{exporter_instance_name}}"
+    state: reloaded
+  when: exporter_boot_type == 'systemd' and ansible_service_mgr == 'systemd'
+  listen: 
     - common_reload_app_conf
 
 - name: supervisor_restarted

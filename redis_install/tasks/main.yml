@@ -26,9 +26,9 @@
     - copy_redis_conf
   when: redis_is_multi_instance == false
 
-- import_tasks: redis_system_service.yml
-  tags:
-    - redis_system_service
+#- import_tasks: redis_system_service.yml
+#  tags:
+#    - redis_system_service
 
 #- include_tasks: centos6_service.yml
 #  when: redis_run_method == "system" and ansible_service_mgr == 'upstart'
@@ -40,9 +40,9 @@
 #  tags:
 #    - centos7_service
 
-- name: debug var
-  debug:
-    msg: "num: {{redis_instance_num}} -- length: {{redis_instances_length}} -- redis_sentinel: {{redis_sentinel_statments}}"
+#- name: debug var
+#  debug:
+#    msg: "num: {{redis_instance_num}} -- length: {{redis_instances_length}} -- redis_sentinel: {{redis_sentinel_statments}}"
 
 #- include_tasks: supervisor_service.yml
 - include_tasks: supervisor_service_multi_instance.yml
@@ -57,11 +57,11 @@
 #  tags:
 #    - supervisor_service
 
-- include: redis_core_args.yml
+- import_tasks: redis_core_args.yml
   tags:
     - redis_core_args
 
-- include_tasks: generate_sentinel_conf.yml
+- import_tasks: generate_sentinel_conf.yml
   tags:
     - generate_sentinel_conf
   when: redis_sentinel_conf is not none and redis_sentinel_conf != ""

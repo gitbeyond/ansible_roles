@@ -1,4 +1,4 @@
-project_prog_name:
+project_prog_name: '{{project_name}}'
 project_name:
 
 
@@ -17,12 +17,18 @@ project_source_dir: '{{project_workspace}}'
 # jenkins 相关
 project_jenkins_config:
 project_jenkins_name: '{{project_name}}'
+# 用户和密码用来向 jenkins 提交 xml 文件创建任务使用
+# 也可以不用 password 而只使用 token
 project_jenkins_user:
 project_jenkins_password:
 project_jenkins_url:
 project_old_jenkins_name:
 # jenkins cli
 project_jenkins_cli_jar: 
-java_cmd: '{{lookup("env","JAVA_HOME")}}/bin/java'
+project_java_cmd: '{{lookup("env","JAVA_HOME")}}/bin/java'
+# 这个是指使用 jenkins cli 时的token
+# token 可以在 http://jeinks-url/me/configure 中获得
+# 测试 token 使用 
 project_jenkins_api_token:
+project_jenkins_job_auth_method: '{%if project_jenkins_api_token is not none and project_jenkins_api_token != "" %}token{%else%}password{%endif%}'
 project_jenkins_view:

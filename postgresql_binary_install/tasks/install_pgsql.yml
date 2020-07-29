@@ -2,7 +2,10 @@
 # 2020/05/29
 
 - name: get pgsql packet dir name
-  local_action: shell tar tvf {{pgsql_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tf {{pgsql_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false 
   register: pgsql_dir_name
   run_once: true
 

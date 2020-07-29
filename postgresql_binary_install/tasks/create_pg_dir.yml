@@ -6,14 +6,14 @@
     path: '{{ item.path }}' 
     owner: '{{ item.owner |default(pgsql_run_user, true) }}' 
     group: '{{ item.group |default(pgsql_run_user, true)}}' 
-    mode: "0755" 
+    mode: "{{ item.mode | default('0755', true)}}" 
     state: directory
   loop:
-    - path: '{{ app_base_dir }}' 
+    - path: '{{ pgsql_install_dir }}' 
       owner: root
       group: root
     - path: '{{ pgsql_log_dir }}'
-    - path: '{{ pgsql_binlog_dir }}'
     - path: '{{ pgsql_conf_dir }}'
     - path: '{{ pgsql_data_dir }}'
+      mode: "0700"
     - path: '{{ pgsql_var_dir }}'

@@ -1,5 +1,6 @@
 - name: pgsql create repl user
   postgresql_user:
+    #login_host: '{{pgsql_var_dir}}'
     login_host: '{{pgsql_var_dir}}'
     port: '{{pgsql_run_port | int}}'
     name: '{{item}}'
@@ -8,6 +9,10 @@
     conn_limit: 5
   loop:
     - '{{pgsql_sync_user}}'
+  become: yes
+  become_method: sudo
+  become_user: '{{pgsql_run_user}}'
+
 
 - name: pgsql set hba_conf for repl user
   postgresql_pg_hba:
