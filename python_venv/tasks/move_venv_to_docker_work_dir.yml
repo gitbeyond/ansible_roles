@@ -1,0 +1,24 @@
+
+- name: create project docker work dir
+  file:
+    path: '{{project_docker_work_dir}}'
+    state: directory
+    owner: '{{project_run_user}}'
+    group: '{{project_run_group}}'
+    mode: "0755"
+
+# 这里有一点小问题，在 project_venv_path 是 link 的时候，会引起错误, 比如 /opt/mydjango -> /docker/testimage/mydjango
+# 这时 mv  /opt/mydjango  /docker/mydjango
+# 那么 /docker/mydjango -> /opt/mydjango/mydjango
+# build 镜像的时候，就会报错
+# 这也导致了多个项目无法共享一个 venv
+- name: move venv to docker work dir
+  shell:
+    cmd: /bin/mv {{project_venv_path}} {{project_docker_work_dir}}
+    creates: '{{project_docker_work_dir}}/{{project_venv_path_basename}}'
+  
+- name: create venv link file
+  file:
+    src: '{{project_docker_work_dir}}/{{project_venv_path_basename}}'
+    dest: '{{project_venv_path}}'
+    state: link

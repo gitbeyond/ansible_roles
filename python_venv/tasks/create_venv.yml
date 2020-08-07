@@ -1,0 +1,6 @@
+
+- name: create python venv
+  shell:
+    cmd: '{{project_python_path}} -m venv {{project_venv_args}} {{project_venv_path}}'
+    creates: '{{project_venv_path}}/bin/pip'
+

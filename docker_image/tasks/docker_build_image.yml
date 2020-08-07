@@ -1,0 +1,47 @@
+
+- name: create docker build dir
+  file:
+    path: '{{project_docker_work_dir}}'
+    state: directory
+    owner: '{{project_run_user}}'
+    group: '{{project_run_group}}'
+    mode: "0755"
+
+- name: copy dockerfile to work dir
+  template:
+    src: '{{project_dockerfile}}'
+    dest: '{{project_docker_work_dir}}'
+    owner: '{{project_run_user}}'
+    group: '{{project_run_group}}'
+    mode: "0644"
+    backup: yes
+
+- name: project build docker image
+  docker_image:
+    docker_host: '{{project_docker_host}}'
+    name: '{{project_docker_image_tag}}'
+    source: build
+    push: '{{project_docker_image_push}}'
+    force_tag: '{{project_docker_image_force_tag}}'
+    build:
+      args: '{{project_docker_build_args}}'
+      dockerfile: '{{project_docker_work_dir}}/{{project_dockerfile | basename}}'
+      http_timeout: '{{project_docker_build_timeout}}'
+      nocache: '{{project_docker_build_nocache}}'
+      path: '{{project_docker_work_dir}}'
+      pull: '{{project_docker_build_pull}}'
+      rm: '{{project_docker_build_rm}}'
+      target: '{{project_docker_build_target}}'
+  register: PROJECT_IMAGE 
+
+#- name: debug PROJECT_IMAGE
+#  debug:
+#    msg: '{{PROJECT_IMAGE}}'
+
+# 当没有进行真正的构建时，会报错，比如指定的 tag 已经存在了，就不会进行构建
+#- name: debug PROJECT_IMAGE actions
+#  debug:
+#    #msg: '{%if PROJECT_IMAGE.actions | length >= 0%}{{PROJECT_IMAGE["actions"][0].split()[2] | default("")}}{%else%}""{%endif%}'
+#    #msg: '{%if PROJECT_IMAGE.actions | length >= 0%}{{PROJECT_IMAGE["actions"][0] | default("")}}{%else%}""{%endif%}'
+#    msg: '{%if PROJECT_IMAGE.actions | length >= 0%}{{PROJECT_IMAGE["actions"][0] | default("") }}{%endif%}'
+    #msg: '{%if PROJECT_IMAGE.actions | length >= 0%}{{PROJECT_IMAGE["actions"]}}{%endif%}'

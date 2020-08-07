@@ -1,0 +1,25 @@
+
+#- name: debug var
+#  debug:
+#    #msg: '{{project_venv_path_tmp_basename}}'
+#    #msg: '{{project_venv_packets[0] is mapping}}'
+#    msg: '{{project_venv_real_packets}}'
+    #msg: "{{lookup('file',project_venv_requirement_file).split('\n')}}"
+
+- import_tasks: create_venv.yml
+  tags:
+    - py_venv_create
+
+- import_tasks: venv_install_packet/venv_install_packet.yml
+  tags:
+    - venv_install_packet
+  environment:
+    TMPDIR: '{{project_venv_pip_tmpdir}}'
+
+- import_tasks: move_venv_to_docker_work_dir.yml
+  tags:
+    - move_venv_to_docker_work_dir
+  when: 
+    - project_docker_work_dir is not none
+    - project_docker_work_dir != ''
+    

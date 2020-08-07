@@ -1,0 +1,17 @@
+
+- name: copy requirement_file to venv
+  copy:
+    src: '{{project_venv_requirement_file}}'
+    dest: '{{project_venv_path}}'
+    backup: yes
+
+- name: venv install packets use requirement file
+  pip:
+    #virtualenv_python: '{{project_python_path}}'
+    #name: "{{lookup('file',project_venv_requirement_file).split('\n')}}"
+    virtualenv: '{{project_venv_path}}'
+    extra_args: '{{project_venv_pip_args}}'
+    requirements: '{{project_venv_path}}/{{project_venv_requirement_file | basename}}'
+  when: 
+    - project_venv_requirement_file is not none 
+    - project_venv_requirement_file != ''

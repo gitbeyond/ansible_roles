@@ -1,0 +1,18 @@
+- name: debug vars
+  debug:
+    #msg: "{{ '%Y-%m-%d %H:%M:%S' | strftime(ansible_date_time.epoch) }}"
+    msg: "{{ '%Y%m%d%H%M%S' | strftime(ansible_date_time.epoch) }}"
+
+
+
+- import_tasks: docker_login_registry.yml
+  tags:
+    - docker_login_registry
+  when: 
+    - project_docker_registry_addr is not none
+    - project_docker_registry_addr != ''
+
+- import_tasks: docker_build_image.yml
+  tags:
+    - docker_build_image
+

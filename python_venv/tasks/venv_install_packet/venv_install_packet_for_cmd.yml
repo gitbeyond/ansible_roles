@@ -1,0 +1,30 @@
+
+#- name: venv install packets
+#  pip:
+#    #virtualenv_python: '{{project_python_path}}'
+#    name: '{{item.name}}'
+#    version: '{{item.version}}'
+#    virtualenv: '{{project_venv_path}}'
+#    extra_args: '{{project_venv_pip_args}}'
+#  loop: '{{project_venv_packets}}'
+#  when:
+#    - item.name is defined 
+#    - item.version is defined 
+    #- item.version != '' 
+  #environment:
+  #  TMPDIR: '{{project_venv_pip_tmpdir}}'
+
+- name: venv install packets with out version arg
+  pip:
+    #name: '{{project_venv_packets}}'
+    name: '{{project_venv_real_packets}}'
+    virtualenv: '{{project_venv_path}}'
+    extra_args: '{{project_venv_pip_args}}'
+  when: 
+    - project_venv_real_packets[0] is not none
+    - project_venv_real_packets[0] != ''
+  #when:
+  #  - project_venv_packets[0] is string
+  #environment:
+  #  TMPDIR: '{{project_venv_pip_tmpdir}}'
+

@@ -10,3 +10,6 @@
   # 这里使用了 remote_user 可能会有问题，如果没有重新执行 ssh 连接的话
   # 后续如果发现问题，可以使用 meta 中的强制重新连接来尝试解决
   when: system_admin_user is not none and system_admin_user != ''
+  become: yes
+  become_method: sudo
+  become_user: 'root'

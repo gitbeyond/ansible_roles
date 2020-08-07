@@ -1,0 +1,54 @@
+# deploy_project role vars
+project_k8s_work_dir:
+project_run_user: 'nobody'
+project_run_group: 'nobody'
+
+# this role vars 
+#
+project_python_path: /usr/bin/python3
+project_venv_path: /opt/python_venv_role
+project_venv_path_tmp_basename: '{{ project_venv_path | basename }}'
+#project_venv_path_basename: "{% if project_venv_path_tmp_basename != '/'%}{{project_venv_path_tmp_basename}}{%else%}{{project_venv_path.split('/')[-2] }}{%endif%}"
+project_venv_path_basename: "{{ project_venv_path_tmp_basename if project_venv_path_tmp_basename != '/' else project_venv_path.split('/')[-2] }}"
+project_venv_args:
+
+project_venv_user: '{{project_run_user}}'
+project_venv_group: '{{project_run_group}}'
+
+# pip 相关的变量
+project_venv_pip_tmpdir: '{{ ansible_env.HOME | default("/tmp", true)}}'
+project_venv_pip_args: '-i http://pypi.douban.com/simple --trusted-host pypi.douban.com'
+
+# 会使用 venv 中的 pip 安装此列表中的包
+project_venv_packets: []
+# - name: django
+#   version: 2.0.2
+# or
+# - django==2.0.2
+
+project_venv_real_packets: '[{% for packet in project_venv_packets %}
+{% if packet is mapping%}
+    {% if packet.name is string and packet.name != "" %}
+        {% if packet.version != "" %}
+            {% if "=" in packet.version %}
+                "{{packet.name~packet.version}}",
+            {%else%}
+                "{{packet.name}}=={{packet.version}}",
+            {%endif%}
+        {%else%}
+            "{{packet.name}}"
+        {%endif%}
+    {% endif%}
+{% else %}
+    "{{packet}}",
+{% endif%}
+{% endfor %}]'
+
+# 关于这个文件，可以使用 lookup('file',project_venv_requirement_file).split('\n') 来将文件内容变为列表
+# 哪种方式更好，等测过之后再决定要不要改,现在是直接指定文件的方式
+# 指定文件的方式其中可以添加注释信息
+# 如果自己读取的话，还需要过滤注释信息,所以暂时不用读取文件内容的方式
+project_venv_requirement_file:
+
+# 如果设置了此变量了，会将 venv 移动至此路径下，以便构建镜像
+project_docker_work_dir: '{{project_k8s_work_dir | default("",true)}}'

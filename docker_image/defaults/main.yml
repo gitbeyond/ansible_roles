@@ -1,0 +1,58 @@
+# deploy_project role vars
+project_k8s_work_dir:
+project_run_user: '{{ansible_ssh_user | default(lookup("env", "USER"))}}'
+project_run_group: '{{project_run_user}}'
+project_docker_file:
+
+# vars of registry, 一般来说，可以配置到全局
+project_docker_registry_addr:
+project_docker_registry_user:
+project_docker_registry_email:
+project_docker_registry_pass:
+
+# 关于 image tag, 目前是基于时间的方式来生成
+# 如果选择自己指定的话，需要注意,当指定的 version 已经存在时, 将不会进行构建
+# 所以一般来说，这个 version 须是动态的
+# 除非将这个 tag 删除，但是使用相同的 tag ，如何触发 k8s 更新 pod ，也是一个问题
+# image tag
+ansible_now_time: "{{ '%Y%m%d%H%M%S' | strftime(ansible_date_time.epoch) }}"
+project_docker_image_name:
+project_docker_image_version: 'v{{ansible_now_time}}'
+project_docker_image_repo: 'library'
+project_docker_image_tag: '{%-if project_docker_registry_addr != "" and project_docker_registry_addr is not none -%}
+{{project_docker_registry_addr}}/{{project_docker_image_repo}}/{{project_docker_image_name}}:{{project_docker_image_version}}
+{%-else-%}
+{{project_docker_image_repo}}/{{project_docker_image_name}}:{{project_docker_image_version}}
+{%-endif-%}'
+
+
+# 这个变量其实就是一个别名，两种写法都行的意思
+project_dockerfile: '{{project_docker_file}}'
+
+# docker_login
+project_docker_config_path: '~/.docker/config.json'
+project_docker_host: 'unix://var/run/docker.sock'
+project_docker_login_timeout: 60
+
+# docker_image
+project_docker_build_timeout: 120
+project_docker_build_nocache: false
+project_docker_build_pull: true
+project_docker_build_rm: true
+project_docker_build_target:
+project_docker_build_args:
+project_docker_image_force_tag: false
+project_docker_image_push: '{%- if project_docker_registry_addr != "" and project_docker_registry_addr is not none -%}
+true
+{%-else-%}
+false
+{%-endif-%}'
+# 别名性质的变量
+project_docker_work_dir: '{{project_k8s_work_dir}}'
+#http_addr:
+#http_port:
+#http_url: 
+#http_uri: '{{http_addr}}:{{http_port}}/{{http_url}}'
+
+
+

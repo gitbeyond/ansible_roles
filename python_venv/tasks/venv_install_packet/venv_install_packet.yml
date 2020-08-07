@@ -1,0 +1,16 @@
+
+- import_tasks: venv_install_packet_for_cmd.yml
+  tags:
+    - py_venv_install_packet
+  #environment:
+  #  TMPDIR: '{{project_venv_pip_tmpdir}}'
+
+#- import_tasks: venv_install_packet_for_requirement.yml
+- include_tasks: venv_install_packet_for_requirement.yml
+  name: venv_install_packet_for_requirement
+  tags:
+    - py_venv_install_packet_for_requirement
+  when: project_venv_requirement_file is not none and project_venv_requirement_file != ''
+  #environment:
+  #  TMPDIR: '{{project_venv_pip_tmpdir}}'
+
