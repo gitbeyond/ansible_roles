@@ -3,7 +3,7 @@
   template:
     src: '{{item}}' 
     #dest: '{{project_install_dir}}/{{item.dest}}'
-    dest: '{{project_install_dir}}/{{item | basename}}'
+    dest: '{{project_k8s_work_dir}}/{{item | basename}}'
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'
     mode: "0644"
@@ -16,8 +16,15 @@
     #  dest: '{{project_docker_file | basename}}'
   when: item is not none
 
+# 这里想加一个判断在相关文件，比如说目录 sync changed 的时候才进行构建，可是测试发现
+# directory sync 时总是会changed, 手动单测试那一个任务又没啥问题
+# 因为 git 拉取时会更新文件的时间，导致rsync更新时会更新文件的时间信息，所以就更新了
+# rsync 有个 --no-times 参数意思是不保留文件的修改时间，但是这样目标处的文件总是会更新为最新时间
+# https://stackoverflow.com/questions/17286290/rsync-checksum-only-for-same-size-files/23717165#23717165
 - name: update docker image
-  local_action: shell /bin/bash {{project_install_dir}}/{{project_docker_build_script|basename}} {{project_prog_name}}
+  local_action: 
+    module: shell 
+    cmd: /bin/bash {{project_k8s_work_dir}}/{{project_docker_build_script|basename}} {{project_prog_name}}
   register: PROJECT_IMAGE
   ignore_errors: true
 
@@ -26,7 +33,9 @@
 #    msg: 'project_image: {{PROJECT_IMAGE}}'
 
 - name: get docker image
-  local_action: shell /bin/bash {{project_install_dir}}/{{project_docker_build_script|basename}} {{project_prog_name}} get 
+  local_action: 
+    module: shell 
+    cmd: /bin/bash {{project_k8s_work_dir}}/{{project_docker_build_script|basename}} {{project_prog_name}} get 
   register: PROJECT_IMAGE
   #when: cp_result.changed == false
 

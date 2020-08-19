@@ -40,10 +40,13 @@
   register: cp_result
 
 - name: chmod project dir
-  shell: "{{item}}"
+  shell: 
+    cmd: "{{item}}"
   loop:
     - 'find {{project_install_dir}}/{{packet_dir_name.stdout}} -type d -exec chmod 0755 {} \;'
     - 'find {{project_install_dir}}/{{packet_dir_name.stdout}} -type f -exec chmod 0644 {} \;'
+  when: 
+    - ( project_boot_type == 'nginx' or project_packet_set_mode == true)
 
 #- name: deub
 #  debug:
@@ -52,7 +55,7 @@
 - name: update project packet link file
   file:
     #src: '{{project_install_dir}}/{{packet_dir_name.stdout}}'
-    src: '{{packet_dir_name.stdout}}'
+    src: '{{ project_packet_link_src_name | default(packet_dir_name.stdout, true)}}'
     dest: '{{project_install_dir}}/{{project_packet_link_name}}'
     #dest: '{{project_packet_link_name}}'
     owner: '{{project_run_user}}'
@@ -62,7 +65,14 @@
   #with_items:
   #  - {src: '{{project_install_dir}}/{{packet_dir_name.stdout}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', 
   #     owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
-  when: project_packet_link_name is not none and project_packet_link_name != '' and packet_dir_name.stdout != project_packet_link_name
+  when: 
+    - project_packet_link_name is not none
+    - project_packet_link_name != ''
+    - project_packet_link_name != project_packet_link_src_name
+    #- project_packet_link_name != project_packet_link_src_name | basename 
+    # 
+    - project_install_dir + '/' + project_packet_link_name != project_packet_link_src_name
+    - packet_dir_name.stdout != project_packet_link_name
   #when: project_packet_link_name is none
     #- {src: '{{project_install_dir}}/{{PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{project_install_dir}}/{{project_packet_link_name}}', owner: '{{project_run_user}}', group: '{{project_run_group}}', state: link }
 

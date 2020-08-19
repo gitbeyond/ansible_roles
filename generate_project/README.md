@@ -65,10 +65,13 @@ projects:
     include_role:
       name: generate_project
     vars:
-      project_vars: '{{item}}'
-      project_name: '{{item.project_name}}'
+      project_vars: '{{project_item}}'
+      project_name: '{{project_item.project_name}}'
+      project_prog_name: '{{project_item.project_prog_name | default(project_item.project_name, true)}}'
       project_jenkins_name: '{{project_name}}-pipe'
     loop: '{{lookup("file", "vars/main.yml") | from_yaml | json_query("projects")}}'
+    loop_control:
+      loop_var: project_item
 
 
 # 多子模块的变量配置示例
@@ -127,10 +130,11 @@ projects:
     include_role:
       name: generate_project
     vars:
-      project_vars: '{{item}}'
-      project_prog_name: '{{item.project_prog_name | default(project_name, true)}}' # 这一行是重点
+      project_vars: '{{project_item}}'
+      project_prog_name: '{{project_item.project_prog_name | default(project_name, true)}}' # 这一行是重点
     loop: '{{lookup("file", "vars/main.yml") | from_yaml | json_query("projects")}}'
-
+    loop_control:
+      loop_var: project_item
 ```
 
 

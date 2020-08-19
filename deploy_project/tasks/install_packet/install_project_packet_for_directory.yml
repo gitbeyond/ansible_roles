@@ -9,33 +9,51 @@
 
 - name: rsync project packet to remote
   synchronize: 
-    src: '{{project_source_dir}}/{{project_packet_name}}'
+    #src: '{{project_source_dir}}/{{project_packet_name}}'
+    src: '{{project_source_packet_name}}'
     #dest: '{{project_install_dir}}/{{project_packet_name}}' 
     dest: '{{project_install_dir}}' 
     recursive: true
+    #times: no
     rsync_opts:
       - "--owner={{project_run_user}}"
       - "--group={{project_run_group}}"
       - "--chown={{project_run_user}}:{{project_run_group}}"
+      - "--no-motd"
+      - "--exclude=.git"
+      - "--exclude=.gitignore"
     #owner: '{{project_run_user}}' 
     #group: '{{project_run_group}}' 
     #mode: "push"
   register: cp_result
 
 
+# 针对 directory 类型的包，可能不太适用，即使是 tgz 的也是如此，
+# 因为比如说 python 的项目，需要某个文件具有 755 权限，一并地修改并不合适
 - name: chmod project dir
-  shell: "{{item}}"
+  shell: 
+    cmd: "{{item}}"
   loop:
-    - 'find {{project_install_dir}} -type d -exec chmod 0755 {} \;'
-    - 'find {{project_install_dir}} -type f -exec chmod 0644 {} \;'
+    - 'find {{project_install_dir}}/{{ project_source_packet_name | basename}} -type d -exec chmod 0755 {} \;'
+    - 'find {{project_install_dir}}/{{ project_source_packet_name | basename}} -type f -exec chmod 0644 {} \;'
+  when: 
+    - ( project_boot_type == 'nginx' or project_packet_set_mode == true)
 
 - name: update project packet link file
   file:
-    src: '{{project_install_dir}}'
+    src: '{{ project_packet_link_src_name | default(project_install_dir, true)}}'
     #dest: '{{project_install_dir}}/{{project_packet_link_name}}'
     dest: '{{project_packet_link_name}}'
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'
     state: link
-  when: project_packet_link_name is not none and project_packet_link_name != '' and project_install_dir != project_packet_link_name
+  when: 
+    - project_packet_link_name is not none
+    - project_packet_link_name != ''
+    - project_packet_link_name != project_packet_link_src_name
+    - project_packet_link_name | basename != project_packet_link_src_name
+    - project_install_dir != project_packet_link_name
+    #- (project_packet_link_name | basename != project_packet_link_src_name or 
+    #   project_packet_link_name != project_packet_link_src_name or
+    #   project_install_dir != project_packet_link_name )
 

@@ -1,4 +1,13 @@
 
+#- name: gather proxy server facts
+#  #setup:
+#  #  gather_subset: min
+#  gather_facts:
+#  delegate_to: '{{host_item}}'
+#  delegate_facts: True
+#  remote_user: '{{project_proxy_nginx_remote_user}}'
+  
+
 - name: copy project proxy nginx conf file
   template: 
     src: "{{item}}" 
@@ -9,25 +18,44 @@
     backup: yes
   register: copy_proxy_nginx_file
   loop: '{{project_proxy_nginx_confs}}'
-  when: item is not none and item != ''
+  when: 
+    - item is not none
+    - item != ''
   tags:
     - copy_project_proxy_nginx_conf
   run_once: true
   delegate_to: '{{host_item}}'
+  #delegate_facts: True
   remote_user: '{{project_proxy_nginx_remote_user}}'
+  
   #notify:
   #  - nginx_reload
 
-#- name: gather facts from proxy nginx
-#  setup:
-#  run_once: true
+- name: gather facts from proxy nginx
+  setup:
+    gather_subset: min
+  run_once: true
+  delegate_to: '{{host_item}}'
+  remote_user: '{{project_proxy_nginx_remote_user}}'
+# 完全没体会到 delegate_facts 的作用
+# 设想的是 setup 后的 fact 可以直接使用，但是却不可以，只好注册变量了
+  register: 'host_item_fact'
+
+
+
+#- name: debug ansible_service_mgr
+#  debug:
+#    #msg: 'ansible_service_mgr: {{ hostvars[lookup("vars","host_item")]["ansible_service_mgr"]}}'
+#    msg: 'ansible_service_mgr: {{ host_item_fact["ansible_facts"]["ansible_service_mgr"]}}, host_ip: {{ host_item_fact["ansible_facts"]["ansible_hostname"]}}'
 #  delegate_to: '{{host_item}}'
+#  #delegate_facts: True
 #  remote_user: '{{project_proxy_nginx_remote_user}}'
 
 
 # 这里有一个问题，就是 ansible_service_mgr 这个变量到底是目标机器还是委派的机器的？
 - name: project_proxy_nginx_reload
-  include_tasks: nginx_reload/centos_{{hostvars[host_item]["ansible_service_mgr"]}}_reload_nginx.yml
+  #include_tasks: nginx_reload/centos_{{hostvars[host_item]["ansible_service_mgr"]}}_reload_nginx.yml
+  include_tasks: nginx_reload/centos_{{ host_item_fact["ansible_facts"]["ansible_service_mgr"] }}_reload_nginx.yml
   when:
     - ansible_os_family == "RedHat"
     - copy_proxy_nginx_file.changed == true

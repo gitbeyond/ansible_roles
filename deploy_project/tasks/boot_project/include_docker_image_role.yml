@@ -1,0 +1,21 @@
+
+#- include_tasks: project_packet_build_docker_image.yml
+#  name: project_packet_build_docker_image
+#  when: project_docker_file is not none and project_docker_file != ""
+#  tags:
+#    - project_packet_build_docker_image
+
+- name: include docker_image docker_login_registry
+  #include_role: 
+  import_role: 
+    name: docker_image
+    tasks_from: docker_login_registry.yml
+    #tasks_from: docker_build_image.yml
+  #when: project_docker_file is not none and project_docker_file != ""
+
+- name: include docker_image docker_build_image
+  import_role: 
+    name: docker_image
+    tasks_from: docker_build_image.yml
+    #public: true
+  #when: project_docker_file is not none and project_docker_file != ""

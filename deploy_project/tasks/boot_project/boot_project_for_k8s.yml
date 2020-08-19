@@ -1,14 +1,33 @@
 
-- include_tasks: project_packet_build_docker_image.yml
-  name: project_packet_build_docker_image
+#- include_tasks: project_packet_build_docker_image.yml
+#  name: project_packet_build_docker_image
+#  when: project_docker_file is not none and project_docker_file != ""
+#  tags:
+#    - project_packet_build_docker_image
+
+- name: project_packet_build_docker_image
+  include_tasks: include_docker_image_role.yml
+    #tasks_from: docker_build_image.yml
   when: project_docker_file is not none and project_docker_file != ""
-  tags:
-    - project_packet_build_docker_image
+    
+
+- name: debug docker_image vars
+  debug:
+    #msg: '{{project_docker_image_tag}}'
+    msg: '{{project_image_tag}}'
+
+#- name: playbook stop
+#  meta: end_play
+#  when: PROJECT_IMAGE is not changed
+
+#- name: set project_image var
+#  set_fact:
+#    project_image: '{{PROJECT_IMAGE.stdout}}'
 
 - name: copy project k8s resource file
   template: 
     src: "{{item}}" 
-    dest: "{{project_install_dir}}" 
+    dest: "{{project_k8s_work_dir}}" 
     owner: "{{project_run_user}}" 
     group: "{{project_run_group}}" 
     mode: "0644"
@@ -20,6 +39,9 @@
 - name: submit res file to k8s cluster
   k8s:
     kubeconfig: '{{project_k8s_kubeconfig}}'
-    src: '{{project_install_dir}}/{{item | basename}}'
+    src: '{{project_k8s_work_dir}}/{{item | basename}}'
   loop: '{{project_k8s_res_files}}'
   when: item is not none
+
+#- name: playbook stop
+#  meta: end_play

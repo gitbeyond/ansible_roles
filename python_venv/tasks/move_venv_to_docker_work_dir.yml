@@ -19,6 +19,7 @@
   
 - name: create venv link file
   file:
-    src: '{{project_docker_work_dir}}/{{project_venv_path_basename}}'
+    #src: '{{project_docker_work_dir}}/{{project_venv_path_basename}}'
+    src: '{{project_docker_work_dir if project_docker_work_dir | basename != "" else project_docker_work_dir | dirname}}/{{project_venv_path_basename}}'
     dest: '{{project_venv_path}}'
     state: link

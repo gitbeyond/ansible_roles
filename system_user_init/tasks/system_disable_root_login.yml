@@ -1,4 +1,7 @@
 
+#- name: Reset ssh connection to allow user changes to affect 'current login user'
+#  meta: reset_connection
+
 #- name: debug user
 #  shell: echo ${USER}; env
 

@@ -4,7 +4,7 @@
     dest: '{{project_install_dir}}/'
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'
-    mode: "0644"
+    mode: "{{project_packet_mode}}"
   #copy: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} mode={{item.mode}}
   #with_items:
   #  - {src: '{{ PACKET_NAME.stdout }}', dest: '{{project_install_dir}}/', owner: '{{project_run_user}}', group: '{{project_run_group}}', mode: "0644" }
@@ -14,13 +14,19 @@
 - name: update project packet link file
   file: 
     #src: '{{project_install_dir}}/{{PACKET_NAME.stdout | basename}}'
-    src: '{{PACKET_NAME.stdout | basename}}'
+    src: '{{project_packet_link_src_name | default(PACKET_NAME.stdout | basename, true)}}'
     dest: '{{project_install_dir}}/{{project_packet_link_name}}'
     #dest: '{{project_packet_link_name}}'
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'
     state: link
-  when: project_packet_link_name is not none and project_packet_link_name != '' and PACKET_NAME.stdout | basename != project_packet_link_name
+  when: 
+    - project_packet_link_name is not none
+    - project_packet_link_name != ''
+    - project_packet_link_name != project_packet_link_src_name
+    #- project_packet_link_name != project_packet_link_src_name | basename
+    - project_install_dir + '/' + project_packet_link_name != project_packet_link_src_name
+    - PACKET_NAME.stdout | basename != project_packet_link_name
 
 
 

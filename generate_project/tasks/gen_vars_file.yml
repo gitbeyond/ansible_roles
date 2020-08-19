@@ -1,4 +1,12 @@
 
+#- name: debug project_vars
+#  debug:
+#    msg: '{{project_vars}}'
+
+- name: load project default variable file
+  include_vars:
+    file: project_empty_vars.yml
+
 - name: generate vars file
   #template:
   blockinfile:

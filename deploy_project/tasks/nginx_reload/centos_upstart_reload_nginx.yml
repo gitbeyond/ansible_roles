@@ -3,7 +3,7 @@
   service: 
     name: nginx 
     state: reloaded
-  delegate_facts: True
+  #delegate_facts: True
   run_once: true
   delegate_to: '{{host_item}}'
   remote_user: '{{project_proxy_nginx_remote_user}}'

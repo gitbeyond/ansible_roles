@@ -1,4 +1,10 @@
 
+# 关于 venv_path 的 父目录，还应该预先创建，但是这个路径的用户怎么指定就是一个问题, 所以不指定任何用户
+- name: create python venv parent dir
+  file:
+    path: '{{project_venv_path_dirname}}'
+    state: directory
+
 - name: create python venv
   shell:
     cmd: '{{project_python_path}} -m venv {{project_venv_args}} {{project_venv_path}}'

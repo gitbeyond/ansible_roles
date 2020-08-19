@@ -1,10 +1,22 @@
 
+#- name: debug project_proxy_nginx_server
+#  debug:
+#    msg: 'project_proxy_nginx_server: {{project_proxy_nginx_server}}'
+
 - include_tasks: project_set_proxy_nginx_conf.yml
   name: project_set_proxy_nginx_conf
   #tags:
   #  - project_set_proxy_nginx_conf
-  when: ((project_proxy_nginx_conf is not none and project_proxy_nginx_conf != '') or (project_proxy_nginx_confs | length > 0 )) and inventory_hostname == ansible_play_hosts_all[-1]
+  when: 
+    #- ((project_proxy_nginx_conf is not none and project_proxy_nginx_conf != '') or (project_proxy_nginx_confs | length > 0 ))
+    - ((project_proxy_nginx_conf is not none and project_proxy_nginx_conf != '') or 
+       (project_proxy_nginx_confs[0] is not none and project_proxy_nginx_confs[0] != '' ))
+    - inventory_hostname == ansible_play_hosts_all[-1]
 
+
+- name: stop playbook
+  meta: end_play
+  when: project_boot_type == 'k8s'
 
 - include_tasks: url_health_check.yml
   name: project_url_health_check
@@ -38,6 +50,7 @@
     #- project_monitor_key is not none
     #- project_monitor_key != ''
     - inventory_hostname == ansible_play_hosts_all[-1]
+    - project_boot_type != 'k8s'
 
 
 - include_tasks: project_log/generate_log_data.yml
@@ -50,3 +63,4 @@
     #- project_log_key is not none
     #- project_log_key != ''
     - inventory_hostname == ansible_play_hosts_all[-1]
+    - project_boot_type != 'k8s'

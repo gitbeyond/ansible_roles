@@ -1,4 +1,15 @@
 jenkins_home_dir: /data/apps/data/jenkins
+
+# docker_image role
+#project_docker_image_tag:
+
+# 项目的仓库信息
+project_git_url:
+project_git_tag: '{{ lookup("ENV", "TAG")}}'
+
+# self vars
+project_image: '{{project_image_tag}}'
+
 # 部署前的操作,比如执行 tar 命令
 project_deploy_pre_command:
 project_deploy_pre_command_executable: /bin/bash
@@ -7,15 +18,27 @@ project_run_user:  nobody
 project_run_port: 80
 project_user_is_system: true
 project_run_group: '{{project_run_user}}'
+# 部署的机器, k8s 时，可以指定为 localhost, 然后指定 kubeconfig 来决定提交至哪个集群
 project_hosts:
 # 如果程序是一个 jar 包，使用 supervisor 启动时的进程名称
 project_prog_name: '{{project_name}}'
 # 项目打包后的包名,如果带有版本号那么须使用 myproject*.jar 这样
 project_packet_name:
+# 包的权限，这个不太容易操作，有时候是一个目录，而目录下的存放又不太标准，比如其在 lib 目录下存放了应该可以执行的文件
+# 主要还是用于单个文件的操作吧,目录的话，倒是可以设置顶层目录
+project_packet_mode: "0644"
+project_packet_set_mode: false
 # tgz or jar or directory
 project_packet_type:
 # 为项目包名创建的软链的名字，如果包名发生了版本的变化，那么就需要在 supervisor的配置文件中更新包名，而使用软链接，只需要更新软链接即可
 project_packet_link_name:
+# 当前为包建立软链接的时候都是使用的绝对路径如 /data/apps/opt/app1/app1.jar -> /data/apps/opt/app1/app1-1.0.jar 
+# 如果想为其建立相对路径的软链接就不行了，所以增加此变量来解决这个问题
+# 各个安装方式有其默认值，不指定这个的话，会使用他们各自的默认值
+# 在部署一个 directory 类型的 k8s 应用时，需要在 project_k8s_work_dir 中建立相对路径的软链，
+# 所以添加了此变量
+project_packet_link_src_name: 
+
 # 项目名称，就是 jenkins 的项目名
 #project_name: "{{lookup('env', 'JOB_NAME')}}"
 project_name: "{{lookup('env', 'JOB_BASE_NAME')}}"
@@ -37,6 +60,8 @@ project_proxy_nginx_confs:
 # 默认使用当前目标主机组
 project_proxy_nginx_server: '{{ansible_play_hosts_all}}'
 # delegate_to 的主机的用户，有可能其与目标主机使用的是不同的 remote_user
+#project_proxy_nginx_remote_user: '{{ lookup("vars","project_target_remote_user")}}'
+project_target_remote_user: '{{ansible_ssh_user | default(lookup("env", "USER"))}}'
 project_proxy_nginx_remote_user: '{{project_target_remote_user}}'
 
 
@@ -49,13 +74,24 @@ project_conf_files:
   - '{{project_conf_file}}'
 
 project_source_dir: '{{project_workspace}}'
+# 原来的源文件为 dir + 包名, {{project_source_dir}}/{{project_packet_name}}
+# 现在添加如下变量方便自定义时指定整个包, 在部署 bert 项目时，想指定
+# project_workspace 这个目录如 /data/apps/data/jenkins/workspace/bert-serving，
+# 却指定不成功, 后来想想 ，可以把 project_packet_name 设为 '../{{project_workspace | basename}}'似乎是能实现
+# 测试时 /dir1/. 这样的操作是可以的(结果就是 {{dest_dir}}/dir1)，但是在这里却不行
+# 另外还有一个问题就是当使用 synchronize 模块时，src 带不带 '/' 是不同的意义
+project_source_packet_name: '{{project_source_dir}}/{{project_packet_name}}'
 
-#project_install_dir:
-#project_data_dir:
-#project_log_dir:
+project_install_dir:
+project_data_dir:
+project_log_dir:
+project_var_dir:
+# 由于有些项目可能会需要不止以上的目录，所以增加了 project_dir 变量
+# 将需要创建的目录，都放在这个列表里就好了
 project_dir: []
 project_dirs: '{{project_dir | default([],true)}}'
 
+# 项目归档,将部署后的项目的使用发布号码进行归档，方便回滚操作，目前一般用不到
 project_archive_dir: /data3/apps/data/jenkins_data/{{project_name}}
 project_is_archive: false
 project_deploy_version: "0"
@@ -65,7 +101,16 @@ project_docker_build_script: docker_build.sh
 project_docker_file:
 project_k8s_kubeconfig:
 project_k8s_res_files: []
-  
+# 当 boot_type 为 k8s 时，会把包和Dockerfile copy 至 project_install_dir
+# 构建镜像，但是有时候包是一个 directory,且就是整个项目的目录，这个时候
+# 直接使用 synchronize 同步过去的目录，没有父目录
+# 所以这里添加一个 project_k8s_work_dir 的变量，意思是指 Dockerfile 及
+# k8s 资源文件的目录，默认同 project_install_dir
+# 如果需要单独指定的话，比如指定为 /data/apps/soft/ansible/docker_build/bert-es-search
+# 那么这时 project_install_dir 应该位于此目录下，好方便 Dockerfile 操作
+project_k8s_work_dir: '{{project_install_dir}}'  
+
+# 健康检测
 project_health_url:
 project_health_check_url: 'http://{{ansible_default_ipv4.address}}:{{project_run_port}}{{project_health_url}}'
 project_health_check_url_method: GET
@@ -104,3 +149,4 @@ project_log_conf_dir: '{{filebeat_child_conf_dir}}'
 filebeat_child_conf_dir: '{{filebeat_conf_dir}}/inputs.d'
 # nginx 
 nginx_child_conf_dir: '{{nginx_conf_dir}}/conf.d'
+nginx_run_user: nginx

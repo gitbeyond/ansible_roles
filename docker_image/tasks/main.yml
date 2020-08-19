@@ -1,9 +1,12 @@
-- name: debug vars
-  debug:
-    #msg: "{{ '%Y-%m-%d %H:%M:%S' | strftime(ansible_date_time.epoch) }}"
-    msg: "{{ '%Y%m%d%H%M%S' | strftime(ansible_date_time.epoch) }}"
+#- name: debug vars
+#  debug:
+#    #msg: "{{ '%Y-%m-%d %H:%M:%S' | strftime(ansible_date_time.epoch) }}"
+#    msg: "{{ '%Y%m%d%H%M%S' | strftime(ansible_date_time.epoch) }}"
 
 
+- import_tasks: create_docker_work_dir.yml
+  tags:
+    - create_docker_work_dir
 
 - import_tasks: docker_login_registry.yml
   tags:

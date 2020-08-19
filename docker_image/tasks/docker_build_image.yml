@@ -1,11 +1,20 @@
 
-- name: create docker build dir
-  file:
-    path: '{{project_docker_work_dir}}'
-    state: directory
-    owner: '{{project_run_user}}'
-    group: '{{project_run_group}}'
-    mode: "0755"
+#- name: create docker build dir
+#  file:
+#    path: '{{project_docker_work_dir}}'
+#    state: directory
+#    owner: '{{project_run_user}}'
+#    group: '{{project_run_group}}'
+#    mode: "0755"
+
+# project_docker_image_tag 的值是动态的，每使用一次都是新的，因此使用 fact 将其保存住
+- name: set project_image fact
+  set_fact:
+    project_image_tag: '{{project_docker_image_tag}}'
+
+- name: debug project_image_tag
+  debug:
+    msg: '{{project_image_tag}}'
 
 - name: copy dockerfile to work dir
   template:
@@ -19,7 +28,8 @@
 - name: project build docker image
   docker_image:
     docker_host: '{{project_docker_host}}'
-    name: '{{project_docker_image_tag}}'
+    #name: '{{project_docker_image_tag}}'
+    name: '{{project_image_tag}}'
     source: build
     push: '{{project_docker_image_push}}'
     force_tag: '{{project_docker_image_force_tag}}'

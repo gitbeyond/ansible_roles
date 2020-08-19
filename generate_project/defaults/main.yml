@@ -1,5 +1,5 @@
-project_prog_name: '{{project_name}}'
 project_name:
+project_prog_name: '{{project_name}}'
 
 
 project_src_jenkinsfile:
@@ -8,6 +8,9 @@ project_vars_file: '{{project_prog_name | default(project_name, true)}}.yml'
 # 整个项目的变量的"字符串"
 project_main_vars_file: 'vars/main.yml'
 project_main_var_name: projects
+# 项目的变量内容
+project_vars:
+# 原本打算在 role 内自循环生成 project vars file. 后来改为对 role 进行循环来实现
 project_vars_list: '{{lookup("file", project_main_vars_file) | from_yaml | json_query(project_main_var_name)}}'
 
 # env

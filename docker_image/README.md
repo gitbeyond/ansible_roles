@@ -94,3 +94,4 @@ test-harbor.geotmt.com/library/mydjango                          v20200807111305
 # issue
 
 1. 当前默认使用时间来当作tag, 在没有进行实际的 build 时，会在原来的镜像基础上添加新的 tag, 并且会 push 到 registry 上（如果指定了 registry 的话）。
+2. Dockerfile 中 FROM 的镜像如果带了 registry 的 url, 那么必须已经 push 到 registry 中

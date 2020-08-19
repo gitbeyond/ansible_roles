@@ -3,8 +3,10 @@
 #  debug:
 #    #msg: '{{project_venv_path_tmp_basename}}'
 #    #msg: '{{project_venv_packets[0] is mapping}}'
-#    msg: '{{project_venv_real_packets}}'
+#    #msg: '{{project_venv_real_packets}}'
+#    msg: '{{project_venv_path_basename}} -- {{project_venv_path_dirname}} {{project_docker_work_dir if project_docker_work_dir | basename != "" else project_docker_work_dir | dirname}}'
     #msg: "{{lookup('file',project_venv_requirement_file).split('\n')}}"
+    
 
 - import_tasks: create_venv.yml
   tags:
@@ -22,4 +24,5 @@
   when: 
     - project_docker_work_dir is not none
     - project_docker_work_dir != ''
+    - project_venv_path not in project_docker_work_dir
     

@@ -116,3 +116,24 @@ config-repo  是一个不需要启动的项目，它的配置文件中没有 pro
 所以再增加:
 * `project_log_collect_conf: # 对应filebeat配置文件`
 * `project_log_conf_dir: # 对应filebeat配置文件的目录`
+
+# 2020/08/04 部署 bert on k8s 遇到问题，增加如下变量
+
+* project_k8s_work_dir: '{{project_install_dir}}'
+* project_source_packet_name: '{{project_source_dir}}/{{project_packet_name}}'
+* project_packet_link_src_name:
+* project_packet_mode:
+* project_packet_set_mode
+
+# 2020/08/10 使用 include_role: docker_image 来替代了原先的脚本构建镜像的方式
+
+* docker_image 构建镜像可以实现幂等性,当镜像实际内容没有变化时，其 changed: false,只是添加一个 tag，可以对此进行判断来决定是不是要更新集群中 app 的image,但是有些时候我们希望的是"即使只是更新了tag,也希望其应用到集群当中",所以暂时没有做判断，而是每一次都向集群中提交。
+
+# 2020/08/19 project_set_proxy_nginx_conf 部分的修改
+
+这一块 delegate_to 的 host 没办法使用其上的 fact, 设置了 `delegate_facts: True` 时，反而会报错
+```
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: UnboundLocalError: local variable 'module_style' referenced before assignment
+```
+所以改为 setup 加 register 方式来实现相关的操作。
+

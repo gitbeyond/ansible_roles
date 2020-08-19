@@ -1,0 +1,8 @@
+
+- name: create docker build dir
+  file:
+    path: '{{project_docker_work_dir}}'
+    state: directory
+    owner: '{{project_run_user}}'
+    group: '{{project_run_group}}'
+    mode: "0755"
