@@ -1,0 +1,28 @@
+
+common_run_user: '{{rabbitmq_run_user}}'
+common_base_name: '{{rabbitmq_base_name}}'
+#common_instance_name: '{{rabbitmq_base_name}}{%if rabbitmq_instance_name%}{{"-"~rabbitmq_instance_name}}{% endif %}'
+common_base_dir: '{{rabbitmq_base_dir}}'
+common_log_dir: '{{rabbitmq_log_dir}}'
+common_conf_dir: '{{rabbitmq_conf_dir}}'
+common_var_dir:  '{{rabbitmq_var_dir}}'
+common_data_dir: '{{rabbitmq_data_dir}}'
+#common_child_conf_dir: '{{rabbitmq_child_conf_dir}}'
+common_packet: '{{rabbitmq_packet}}'
+common_packet_creates: '{{rabbitmq_packet_creates}}'
+common_packet_type: '{{rabbitmq_packet_type}}'
+
+#common_bin_scripts: '{{rabbitmq_bin_scripts | default("")}}'
+#common_child_confs: '{{rabbitmq_child_confs}}'
+common_conf_files: '{{rabbitmq_conf_files}}'
+common_env_file: '{{rabbitmq_env_file}}'
+
+common_src_boot_file: '{{rabbitmq_src_boot_file}}'
+common_boot_type: '{{rabbitmq_boot_type}}'
+
+common_restart_on_notify: true
+common_reload_on_notify: false
+
+#common_app_restart: 'common_app_{{common_boot_type}}_restart'
+#common_app_reload: 'common_app_{{common_boot_type}}_reload'
+

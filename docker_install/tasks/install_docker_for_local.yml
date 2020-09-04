@@ -8,7 +8,10 @@
 #    - '{{docker_install_method}}'
 
 - name: get docker packet dir name
-  local_action: shell tar tvf {{docker_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tf {{docker_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false
   register: docker_dir_name
   run_once: true
 

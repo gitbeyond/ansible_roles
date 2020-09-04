@@ -1,0 +1,15 @@
+
+#- name: debug var
+#  debug:
+#    msg: '{{item}}'
+#  loop:
+#    - 'system_dangerous_cmd_dir_attributes: {{system_dangerous_cmd_dir_attributes}}'
+#    - '{{ ansible_mounts | json_query("[?mount==`/`].options") | first }}'
+#    - 'attr in: {{ "attr" in ansible_mounts | json_query("[?mount==`/`].options") | first }}'
+#    - 'empty_attributes is none: {{ empty_attributes is none}}'
+#    - 'system_dangerous_cmd_dir_attributes is none: {{system_dangerous_cmd_dir_attributes is none}}'
+#    - 'system_dangerous_cmd_dir_attributes is \"\": {{system_dangerous_cmd_dir_attributes == "null"}}'
+
+#- include_tasks: modify_cmd_attr_{{ "attr" in ansible_mounts | json_query("[?mount==`/`].options") | first}}.yml
+- include_tasks: modify_cmd_attr_{{ system_file_system_with_attr }}.yml
+  name: modify_cmd_with_protect

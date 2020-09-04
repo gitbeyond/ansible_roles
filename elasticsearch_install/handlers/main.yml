@@ -1,0 +1,7 @@
+- name: supervisor_restart_es
+  supervisorctl:
+    name: '{{es_service_name}}'
+    state: restarted
+    config: '{{supervisor_prim_conf}}'
+  when:
+    - es_restart_on_notify == true  

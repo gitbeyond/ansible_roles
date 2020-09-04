@@ -10,7 +10,10 @@
     backup: yes
   loop: '{{common_conf_files}}'
   when: item is not none
-  notify: common_reload_app_conf
+  #notify: common_reload_app_conf
+  notify: 
+    - '{{common_app_reload}}'
+    - '{{common_app_restart}}'
   #notify:
   #  - test_handler
   #  - supervisor_restarted

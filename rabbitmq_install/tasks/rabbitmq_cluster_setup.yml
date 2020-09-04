@@ -1,0 +1,16 @@
+
+- import_tasks: rabbitmq_vhosts.yml
+  tags:
+    - rabbitmq_vhosts
+  #when: 
+  #  - rabbitmq_cluster_cookie_host == inventory_hostname
+
+- import_tasks: rabbitmq_users.yml
+  tags:
+    - rabbitmq_users
+  #when: 
+  #  - rabbitmq_cluster_cookie_host == inventory_hostname
+
+- import_tasks: rabbitmq_policy.yml
+  tags:
+    - rabbitmq_policy

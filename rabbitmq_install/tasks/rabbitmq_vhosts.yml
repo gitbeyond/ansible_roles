@@ -1,0 +1,12 @@
+
+- name: rabbitmq manage vhost
+  rabbitmq_vhost:
+    name: '{{item.name}}'
+    state: '{{ item.state | default("present", true)}}'
+    node: '{{ "rabbit@"~ansible_fqdn.split(".")[0]}}'
+    tracing: '{{ item.tracing | default(false, true)}}'
+  loop: '{{rabbitmq_vhosts}}'
+  when:
+    - item.name != ''
+    - item.name is not none
+    - item.name != '/'

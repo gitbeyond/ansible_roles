@@ -1,0 +1,16 @@
+
+- import_role:
+    name: common_boot_app
+  tags:
+    - rabbitmq_cluster_cookie_host_boot
+
+- name: get erlang.cookie content
+  slurp:
+    src: '{{rabbitmq_user_home.stdout}}/{{rabbitmq_erlang_cookie}}'
+  register: rabbitmq_erlang_cookie_content
+  #when: 
+  #  - rabbitmq_cluster_cookie_host == inventory_hostname
+ 
+- name: debug var
+  debug:
+    msg: 'rabbitmq_erlang_cookie_content: {{rabbitmq_erlang_cookie_content}}'

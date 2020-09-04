@@ -1,12 +1,17 @@
 # 
 # es_packet:
-# es_
-es_conf_dir: /data/apps/config/elasticsearch
-es_log_dir: /data/apps/log/elasticsearch
-es_var_dir: /data/apps/var/elasticsearch
+app_base_dir: /data/apps/opt
+es_app_name: elasticsearch
+es_install_dir: '{{app_base_dir}}'
+#es_conf_dir: '/data/apps/config/{{es_app_name}}'
+
+# es 的配置文件目录，可以使用 ES_PATH_CONF 来指定，如 ES_PATH_CONF=/path/to/my/config
+es_conf_dir: '{{es_install_dir}}/config'
+es_log_dir: '/data/apps/log/{{es_app_name}}'
+es_var_dir: '/data/apps/var/{{es_app_name}}'
 es_data_dir: 
-  - /data/apps/data/elasticsearch
-es_base_dir: /data/apps/opt/elasticsearch
+  - '/data/apps/data/{{es_app_name}}'
+es_base_dir: '/data/apps/opt/{{es_app_name}}'
 es_run_user: elk
 es_boot_method: supervisor
 es_confs:
@@ -14,4 +19,15 @@ es_confs:
   - elasticsearch.yml
 
 es_src_boot_file: 'elasticsearch.ini'
+es_service_name: '{{es_app_name}}'
 es_env_file: 'es.sh'
+
+# 当配置文件或者服务文件修改后会触发 handler 任务执行重启操作
+# 但是es重启比较敏感，所以设置这个变量
+# 当变量为 false 时，即使触发了 handler，也不会真正的执行
+es_restart_on_notify: false
+
+# supervisor
+supervisor_prog_name: supervisord
+supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

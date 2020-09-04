@@ -13,9 +13,13 @@ docker_src_conf: daemon.json
 docker_src_service_conf: docker.service
 docker_env_file: docker.sh
 
+docker_install_result:
+  changed: False
+
 docker_install_version:
 
 # docker args
 # cgroupfs or systemd
-docker_cgroupdriver: cgroupfs
+#docker_cgroupdriver: cgroupfs
+docker_cgroupdriver: systemd
 

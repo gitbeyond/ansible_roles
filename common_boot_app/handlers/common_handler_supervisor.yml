@@ -1,0 +1,13 @@
+- name: common_supervisor_restart
+  supervisorctl:
+    name: '{{common_svc_name}}'
+    state: restarted
+  when: common_restart_on_notify == true
+  #listen: common_app_restart
+
+- name: common_supervisor_reload
+  shell:
+    cmd: 'echo "{{common_svc_name}} reload"'
+  when: common_reload_on_notify == true
+  #listen: common_app_reload
+

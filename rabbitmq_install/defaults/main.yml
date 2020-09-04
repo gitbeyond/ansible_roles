@@ -1,0 +1,54 @@
+
+rabbitmq_run_user: rabbitmq
+
+rabbitmq_base_name: rabbitmq
+rabbitmq_svc_name: '{{rabbitmq_base_name}}'
+rabbitmq_base_dir: '/data/apps/opt/{{rabbitmq_base_name}}'
+rabbitmq_log_dir: '/data/apps/log/{{rabbitmq_base_name}}'
+rabbitmq_conf_dir: '/data/apps/config/{{rabbitmq_base_name}}'
+rabbitmq_child_conf_dir: ''
+rabbitmq_var_dir: '/data/apps/var/{{rabbitmq_base_name}}'
+rabbitmq_data_dir: '/data/apps/data/{{rabbitmq_base_name}}'
+
+rabbitmq_packet:
+rabbitmq_packet_type: tgz
+rabbitmq_packet_creates:
+
+rabbitmq_env_file: rabbitmq.sh
+rabbitmq_conf_files:
+  - rabbitmq-env.conf
+  - rabbitmq.conf
+
+rabbitmq_child_confs:
+
+rabbitmq_src_boot_file: rabbitmq.service
+rabbitmq_boot_type: systemd
+
+# erlang cookie
+rabbitmq_erlang_cookie: .erlang.cookie
+
+# choice a node to get the rabbitmq_erlang_cookie
+# 默认获取第一个节点的 cookie 当作整个集群的 cookie
+rabbitmq_cluster_hosts: '{{ansible_play_hosts}}'
+rabbitmq_cluster_cookie_host: '{{rabbitmq_cluster_hosts[0]}}'
+rabbitmq_cluster_node_type: disc
+
+# vhosts
+rabbitmq_vhosts:
+  - name: /
+
+# user
+rabbitmq_users:
+  - user: guest
+    password: guest
+
+# plugins
+rabbitmq_plugins:
+  - name: rabbitmq_management
+    
+# policy
+rabbitmq_policies:
+  - name: HA
+    pattern: '.*'
+    tags: 
+      ha-mode: all

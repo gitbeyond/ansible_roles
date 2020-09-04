@@ -1,0 +1,37 @@
+[Unit]
+Description=RabbitMQ broker
+After=syslog.target network.target
+
+[Service]
+#Type=notify
+Type=simple
+User={{rabbitmq_run_user}}
+Group={{rabbitmq_run_user}}
+UMask=0027
+NotifyAccess=all
+TimeoutStartSec=3600
+# Un-comment this setting if you need to increase RabbitMQ's
+# open files limit
+# LimitNOFILE=16384
+#
+# Note: systemd on CentOS 7 complains about in-line comments,
+# so only append them here
+#
+# Restart:
+# The following setting will automatically restart RabbitMQ
+# in the event of a failure. systemd service restarts are not a
+# replacement for service monitoring. Please see
+# http://www.rabbitmq.com/monitoring.html
+#EnvironmentFile=-/etc/profile.d/rabbitmq.sh
+EnvironmentFile=-{{rabbitmq_conf_dir}}/rabbitmq-env.conf
+Environment=RABBITMQ_CONF_ENV_FILE={{rabbitmq_conf_dir}}/rabbitmq-env.conf
+Restart=on-failure
+RestartSec=10
+WorkingDirectory={{rabbitmq_data_dir}}
+ExecStart={{rabbitmq_base_dir}}/sbin/rabbitmq-server
+ExecStop={{rabbitmq_base_dir}}/sbin/rabbitmqctl shutdown
+# See rabbitmq/rabbitmq-server-release#51
+SuccessExitStatus=69
+
+[Install]
+WantedBy=multi-user.target

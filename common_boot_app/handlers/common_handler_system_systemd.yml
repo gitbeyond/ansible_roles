@@ -1,0 +1,14 @@
+
+- name: common_systemd_restart
+  systemd:
+    name: '{{common_svc_name}}'
+    state: restarted
+  when: common_restart_on_notify == true
+  #listen: common_app_restart
+
+- name: common_systemd_reload
+  systemd:
+    name: '{{common_svc_name}}'
+    state: reloaded
+  #listen: common_app_reload
+  when: common_reload_on_notify == true

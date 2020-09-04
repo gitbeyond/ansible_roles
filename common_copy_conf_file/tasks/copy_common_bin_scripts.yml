@@ -10,4 +10,4 @@
   loop: '{{common_bin_scripts}}'
   #when: item is exists
   when: item is not none
-  notify: common_reload_app_conf
+  notify: common_app_reload

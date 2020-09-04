@@ -10,4 +10,4 @@
   #with_items: '{{common_child_confs}}'
   loop: '{{common_child_confs}}'
   when: item is not none
-  notify: common_reload_app_conf
+  notify: common_app_reload

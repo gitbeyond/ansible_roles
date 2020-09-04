@@ -2,7 +2,7 @@
 - name: copy common sysv boot file
   template: 
     src: "{{common_src_boot_file}}" 
-    dest: "/etc/rc.d/init.d/{{common_instance_name}}" 
+    dest: "/etc/rc.d/init.d/{{common_svc_name}}" 
     owner: "root" 
     group: "root" 
     mode: "0755"
@@ -11,10 +11,11 @@
 
 - meta: flush_handlers
 
-- name: boot common for centos6
+- name: boot common for upstart
   service: 
-    name: "{{common_instance_name}}" 
+    name: "{{common_svc_name}}" 
     state: restarted 
     enabled: yes
+  notify: common_app_restarted
   #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
   #when: ansible_service_mgr == 'upstart' and common_instance_name is not none and common_src_boot_file is not none

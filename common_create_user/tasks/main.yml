@@ -1,7 +1,8 @@
-# edirtor: haifeng
+# editor: haifengsss@163.com
 # 2019/11/22
+# update date: 2020/08/25
 
-- include: create_common_user.yml
+- import_tasks: create_common_user.yml
   #tags:
   #  - create_{{commo}}_user
 

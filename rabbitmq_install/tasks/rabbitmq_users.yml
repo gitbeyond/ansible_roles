@@ -1,0 +1,19 @@
+
+- name: rabbitmq manage user 
+  rabbitmq_user:
+    user: '{{item.user}}'
+    node: '{{ "rabbit@"~ansible_fqdn.split(".")[0]}}'
+    tags: '{{item.tags | default(None)}}'
+    password: '{{item.password}}'
+    permissions: '{{item.permissions | default([], true)}}'
+      #- vhost: /
+      #  configure_priv: .*
+      #  read_priv: .*
+      #  write_priv: .*
+    state: '{{item.state | default("present", false)}}'
+    vhost: '/'
+  loop: '{{rabbitmq_users}}'
+  when:
+    - item.user is not none
+    - item.user != ''
+  ignore_errors: true

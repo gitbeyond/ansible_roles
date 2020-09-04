@@ -1,15 +1,30 @@
-# edirtor: haifeng
+# editor: haifengsss@163.com
 # 2019/04/29
+# update date: 2020/08/24
 
-- name: create es user
-  user: 
-    name: '{{ es_run_user }}'
-    state: present
+- name: link /data to /data1 dir
+  file: 
+    src: '/data1' 
+    dest: '/data' 
+    owner: 'root'
+    group: 'root' 
+    mode: "0777" 
+    state: 'link'
+  when:
+    - '"/data1" in ansible_mounts | json_query("[*].mount")'
+  tags:
+    - create_data_soft_link
+  ignore_errors: true
 
-#- name: link /data1 to /data dir
-#  file: src={{ item.src }} dest={{item.dest}} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }}
-#  with_items:
-#    - { src: /data1, dest: /data, owner: root, group: root, mode: "0777", state: link}
+- name: create base dir
+  file: 
+    path: '{{item}}' 
+    state: directory 
+    owner: root 
+    group: root 
+    mode: "0755"
+  loop:
+    - "{{es_install_dir}}"
 
 - name: create es dir
   file:
@@ -19,8 +34,11 @@
     mode: "0755"
     state: directory
   loop:
-    #- { path: "{{app_base_dir}}", owner: root, group: root, mode: "0755", state: directory }
     - "{{es_conf_dir}}"
     - "{{es_log_dir}}"
     - "{{es_var_dir}}"
+    # es_data_dir 是一个列表
     - "{{es_data_dir}}"
+  when:
+    - item != es_base_dir
+    - item | dirname != es_base_dir

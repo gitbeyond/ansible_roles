@@ -1,0 +1,16 @@
+
+- name: rabbitmq cluster set policy
+  rabbitmq_policy:
+    apply_to: '{{item.apply_to | default("all", true)}}'
+    name: '{{item.name}}'
+    node: '{{ "rabbit@"~ansible_fqdn.split(".")[0]}}'
+    pattern: '{{item.pattern | default(".*", true)}}'
+    priority: '{{item.priority |default(0, true)}}'
+    state: '{{item.state | default("present", true)}}'
+    tags: '{{item.tags | default(None)}}'
+    vhost: '{{item.vhost | default("/", true)}}'
+  loop: '{{rabbitmq_policies}}'
+  when:
+    - item.name is defined
+    - item.name is not none
+    - item.name != ''

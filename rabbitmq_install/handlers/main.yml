@@ -1,0 +1,5 @@
+
+- name: rabbitmq_restarted
+  systemd:
+    name: '{{rabbitmq_svc_name}}'
+    state: restarted

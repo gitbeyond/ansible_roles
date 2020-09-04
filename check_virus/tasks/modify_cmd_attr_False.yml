@@ -1,0 +1,46 @@
+
+- name: create tmp cmd dir with out attr
+  file:
+    path: '{{system_dangerous_cmd_dir}}'
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+    attributes: '{{empty_attributes}}'
+  when: '"attr" not in ansible_mounts | json_query("[?mount==`/`].options") | first'
+
+- name: move dangerous cmd to dangerous dir
+  shell:
+    #cmd: /bin/mv /bin/{{item}} {{system_dangerous_cmd_dir}}/.{{item | hash('md5')}}
+    cmd: /bin/mv $(which {{item}}) {{system_dangerous_cmd_dir}}/.{{item | hash('md5')}}
+    creates: "{{system_dangerous_cmd_dir}}/.{{item | hash('md5')}}"
+  loop:
+    - curl
+    - wget
+    - base64
+  ignore_errors: true
+
+- name: copy protect cmd
+  template:
+    src: '{{ item.src | default("protect_cmd.sh")}}'
+    dest: /bin/{{item.dest}}
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - dest: curl
+    - dest: wget
+    - src: protect_cmd_base64.sh
+      dest: base64
+
+- name: modify dangerous cmd attr
+  file:
+    path: "{{system_dangerous_cmd_dir}}/.{{item | hash('md5')}}"
+    mode: "0755"
+    owner: root
+    group: root
+    attributes: '{{empty_attributes}}'
+  loop:
+    - curl
+    - wget
+    - base64

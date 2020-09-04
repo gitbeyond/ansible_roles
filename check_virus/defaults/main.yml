@@ -1,0 +1,20 @@
+
+system_dangerous_cmd_dir: '/usr/local/sbin/.criminal'
+# 有些文件系统没有 attr2 属性，因为需要判断一下
+# 这个null的变量没法同别的变量一起判断使用,这个很难受
+empty_attributes: null
+#system_dangerous_cmd_dir_attributes: '{% if "attr" in ansible_mounts | json_query("[?mount==`/`].options") | first %}a{%else%}{{empty_attributes}}{%endif%}'
+#
+
+#system_dangerous_cmd_dir_attributes: '{% if "attr" in ansible_mounts | json_query("[?mount==`/`].options") | first %}a{%else%}null{%endif%}'
+#system_dangerous_cmd_dir_attributes: '{% if "attr" in ansible_mounts | json_query("[?mount==`/`].options") | first %}a{%endif%}'
+system_file_system_with_attr: '{{ "attr" in ansible_mounts | json_query("[?mount==`/`].options") | first}}'
+system_dangerous_cmd_dir_attributes: 'a'
+#system_dangerous_cmd_attributes: '{% if "attr" in ansible_mounts | json_query("[?mount==`/`].options") | first %}i{%else%}-i{%endif%}'
+system_dangerous_cmd_attributes: 'i'
+# 想配成这样，然后使用 lookup("vars") 来获取 null 也是行不通的
+t_var: '{%- if "attr" in ansible_mounts | json_query("[?mount==`/`].options") | first -%}
+system_dangerous_cmd_dir_attributes
+{%-else-%}
+empty_attributes
+{%-endif-%}'

@@ -1,0 +1,14 @@
+
+- name: common_upstart_restart
+  service:
+    name: '{{common_svc_name}}'
+    state: restarted
+  when: common_restart_on_notify == true
+  listen: common_app_restart
+
+- name: common_upstart_reload
+  service:
+    name: '{{common_svc_name}}'
+    state: reloaded
+  when: common_reload_on_notify == true
+  listen: common_app_reload

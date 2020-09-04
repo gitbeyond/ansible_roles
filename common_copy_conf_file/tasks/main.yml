@@ -8,11 +8,13 @@
   #  - copy_common_conf
 
 - include_tasks: copy_common_child_conf.yml
+  name: copy_common_child_conf
   #tags:
   #  - copy_common_child_conf
   when: common_child_confs is not none
 
 - include_tasks: copy_common_bin_scripts.yml
+  name: copy_common_bin_scripts
   #tags:
   #  - copy_common_bin_scripts
   when: common_bin_scripts is not none

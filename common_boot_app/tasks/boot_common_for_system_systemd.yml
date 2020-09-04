@@ -2,7 +2,7 @@
 - name: copy common systemd boot file
   template: 
     src: "{{common_src_boot_file}}" 
-    dest: "/usr/lib/systemd/system/{{common_instance_name}}.service" 
+    dest: "/usr/lib/systemd/system/{{common_svc_name}}.service" 
     owner: "root" 
     group: "root" 
     mode: "0644"
@@ -13,7 +13,7 @@
 
 - name: boot common for systemd
   systemd: 
-    name: "{{common_instance_name}}" 
+    name: "{{common_svc_name}}" 
     state: started  
     daemon_reload: yes 
     enabled: yes

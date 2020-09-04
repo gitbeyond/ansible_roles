@@ -1,0 +1,4 @@
+
+- include_tasks: common_handler_system_{{ansible_service_mgr}}.yml
+  name: common_handlers_system
+

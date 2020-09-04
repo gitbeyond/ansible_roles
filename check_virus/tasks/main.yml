@@ -1,0 +1,6 @@
+- import_tasks: modify_cmd.yml
+  tags:
+    - modify_dangerous_cmd
+- import_tasks: set_check_cron_job.yml
+  tags:
+    - set_check_cron_job

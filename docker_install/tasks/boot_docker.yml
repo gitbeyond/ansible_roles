@@ -7,10 +7,14 @@
     group: root 
     mode: "0644" 
     backup: yes
-  with_items:
+  loop:
     - {src: "{{docker_src_service_conf}}", dest: '/usr/lib/systemd/system/'}
   notify:
     - systemctl_reload
+
+#- name: debug var docker_install_result
+#  debug:
+#    msg: '{{docker_install_result}}'
 
 - name: start docker
   systemd:

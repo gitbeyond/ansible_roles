@@ -1,0 +1,22 @@
+
+- name: create script dir
+  file:
+    path: '{{script_deploy_dir}}/check_virus'
+    state: directory
+
+- name: copy check virus script
+  copy:
+    src: clean_abnormal_prog_20200902.sh
+    dest: '{{script_deploy_dir}}/check_virus/'
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+
+- name: set cron job of check virus
+  cron:
+    name: "check virus"
+    job: '/bin/bash {{script_deploy_dir}}/check_virus/clean_abnormal_prog_20200902.sh &>> /tmp/.check_virus.out'
+    minute: '*/5'
+    user: root
+    backup: yes

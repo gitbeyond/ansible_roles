@@ -1,0 +1,51 @@
+
+- import_tasks: get_rabbitmq_user_home.yml
+  tags:
+    - get_rabbitmq_user_home
+
+- import_tasks: rabbitmq_get_first_cookie.yml
+  tags:
+    - rabbitmq_get_first_cookie
+  when: 
+    - rabbitmq_cluster_cookie_host == inventory_hostname
+
+#- name: set rabbitmq_erlang_cookie_content fact
+#  set_fact:
+#    rabbitmq_erlang_cookie_str: '{{hostvars[rabbitmq_cluster_cookie_host]["rabbitmq_erlang_cookie_content"]["content"]}}'
+#
+#- name: debug var rabbitmq_erlang_cookie_content
+#  debug:
+#    msg: 'rabbitmq_erlang_cookie_content: {{rabbitmq_erlang_cookie_str}}'
+
+- import_tasks: rabbitmq_sync_cookie.yml
+  tags:
+    - rabbitmq_sync_cookie
+  when: 
+    - rabbitmq_cluster_cookie_host != inventory_hostname
+
+- meta: flush_handlers
+
+- import_tasks: rabbitmq_join_cluster.yml
+  tags:
+    - rabbitmq_join_cluster
+  when: 
+    - rabbitmq_cluster_cookie_host != inventory_hostname
+
+- import_role:
+    name: common_boot_app
+  tags:
+    - rabbitmq_boot
+
+- import_tasks: rabbitmq_plugin.yml
+  tags:
+    - rabbitmq_plugins
+
+- import_tasks: rabbitmq_cluster_setup.yml
+  tags:
+    - rabbitmq_cluster_setup
+  when: 
+    - rabbitmq_cluster_cookie_host == inventory_hostname
+  become_flags: '-i'
+  become: yes
+  become_method: sudo
+  become_user: '{{rabbitmq_run_user}}'

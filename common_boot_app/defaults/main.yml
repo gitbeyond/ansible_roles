@@ -4,6 +4,12 @@ common_run_user: root
 common_run_group: '{{common_run_user}}'
 common_run_user_system: yes
 common_base_name:
+common_svc_name: '{{common_instance_name}}'
+common_restart_on_notify: false
+common_reload_on_notify: true
+
+common_app_restart: 'common_{{common_boot_type}}_restart'
+common_app_reload: 'common_{{common_boot_type}}_reload'
 
 common_packet:
 common_packet_creates:

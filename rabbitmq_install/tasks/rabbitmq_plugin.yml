@@ -1,0 +1,13 @@
+
+# 安装 plugin 的操作暂不实现
+
+- name: rabbitmq manage plugin
+  rabbitmq_plugin:
+    names: '{{item.name}}'
+    prefix: '{{rabbitmq_base_dir}}'
+    state: '{{item.state | default("enabled", true)}}'
+    new_only: 'yes'
+  loop: '{{rabbitmq_plugins}}'
+  when:
+    - item != ''
+    - item is not none

@@ -1,10 +1,23 @@
----
-- include: create_es_dir.yml
+- import_tasks: create_es_user.yml
+  tags:
+    - create_es_user
+
+- import_tasks: create_es_dir.yml
   tags:
     - create_es_dir
-- include: install_es.yml
+
+- import_tasks: install_es.yml
   tags:
     - install_es
-- include: copy_es_conf.yml
+
+- import_tasks: copy_es_conf.yml
   tags:
     - copy_es_conf
+
+- import_tasks: es_core_argument.yml
+  tags:
+    - es_core_argument
+
+- import_tasks: es_supervisor_service.yml
+  tags:
+    - es_boot_service

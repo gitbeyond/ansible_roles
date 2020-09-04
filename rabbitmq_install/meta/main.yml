@@ -1,0 +1,17 @@
+---
+allow_duplicates: true
+
+dependencies:
+  - role: common_create_user
+    name: create_rabbitmq_user
+    tags:
+      - rabbitmq_create_user
+  - role: common_create_dir
+    tags:
+      - rabbitmq_create_dir   
+  - role: common_packet_install
+    tags:
+      - rabbitmq_packet_install
+  - role: common_copy_conf_file
+    tags:
+      - rabbitmq_copy_conf_file

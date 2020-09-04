@@ -1,0 +1,25 @@
+
+#- name: sync cookie of erlang on all rabbitmq hosts
+#  lineinfile:
+#    regexp: '.*'
+#    line: '{{hostvars[rabbitmq_cluster_cookie_host]["rabbitmq_erlang_cookie_content"]["content"] | b64decode}}'
+#    path: '{{rabbitmq_user_home.stdout}}/{{rabbitmq_erlang_cookie}}'
+#    create: yes
+#    owner: '{{rabbitmq_run_user}}'
+#    group: '{{rabbitmq_run_user}}'
+#    mode: "0400"
+#    backup: yes
+  #when: 
+  #  - rabbitmq_cluster_cookie_host != inventory_hostname
+- name: sync cookie of erlang on all rabbitmq hosts
+  copy:
+    content: '{{hostvars[rabbitmq_cluster_cookie_host]["rabbitmq_erlang_cookie_content"]["content"] | b64decode}}'
+    dest: '{{rabbitmq_user_home.stdout}}/{{rabbitmq_erlang_cookie}}'
+    owner: '{{rabbitmq_run_user}}'
+    group: '{{rabbitmq_run_user}}'
+    mode: "0400"
+    backup: yes
+  notify: rabbitmq_restarted
+   
+#- meta: flush_handlers
+

@@ -1,0 +1,7 @@
+
+- name: get user home of rabbitmq
+  shell:
+    cmd: 'grep {{rabbitmq_run_user}} /etc/passwd | cut -d: -f 6'
+  changed_when: rabbitmq_user_home.rc != 0
+  register: rabbitmq_user_home
+

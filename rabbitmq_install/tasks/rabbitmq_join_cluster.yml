@@ -1,0 +1,20 @@
+
+- name: rabbitmq join to cluster
+  script:
+    cmd: rabbitmq_join_cluster.py {{ "rabbit@"~hostvars[rabbitmq_cluster_cookie_host]['ansible_fqdn'].split(".")[0]}} {{rabbitmq_cluster_node_type}}
+    executable: /usr/bin/python
+    #chdir: '{{}}'
+  register: rabbitmq_join_cluster_status
+  changed_when: rabbitmq_join_cluster_status.rc == 10
+  failed_when: rabbitmq_join_cluster_status.rc !=0 and rabbitmq_join_cluster_status.rc != 10
+  become_flags: '-i'
+  become: yes
+  become_method: sudo
+  become_user: '{{rabbitmq_run_user}}'
+  
+
+- name: debug var rabbitmq_join_cluster_status
+  debug:
+    msg: 'rabbitmq_join_cluster_status: {{rabbitmq_join_cluster_status}}'
+
+
