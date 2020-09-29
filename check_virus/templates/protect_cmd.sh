@@ -20,7 +20,10 @@ protect_replacement_args="https://www.baidu.com"
 real_cmd_basename=$(basename ${real_cmd})
 self_basename=$(basename ${0})
 
-check_real_cmd(){
+check_real_cmd_before_operation(){
+    # 运行前检查
+    # 环境变量
+    # 参数等等
     # 判断是否自调用
     if [ $0 == ${real_cmd} ];then
         echo 'exit'
@@ -49,9 +52,29 @@ check_real_cmd(){
         exit 21
     fi
 }
+check_real_cmd(){
+    check_real_cmd_before_operation
+}
 
 
+check_real_cmd_after_operation(){
+    # 运行后检查
+    # 对结果进行检查
+    :
 
+}
+
+check_real_cmd_front_pipe(){
+    # 检查是否在管道前
+    # 检查父命令
+    :
+}
+
+check_real_cmd_behind_pipe(){
+    # 检查是否在管道后
+    # 检查子命令
+    :
+}
 
 protect_cmd_check(){
     check_real_cmd
@@ -66,14 +89,23 @@ protect_cmd_check(){
     # 或者是其它定义好的命令,比如发送邮件通知等等
     for cmd_arg in ${*};do
         #echo ${cmd_arg}
-        arg=${cmd_arg#*//}
-        arg=${arg%%/*}
-        if [ ${#arg} -gt 50 ];then
+        local arg_host_without_proto=${cmd_arg#*//}
+        local arg_host=${arg_host_without_proto%%/*}
+        local arg_file=${cmd_arg##*/}
+        if [ ${#arg_host} -gt 50 ];then
             return 0
         fi
-        if [ ${cmd_arg} == "-m200" ];then
+        if [[ "${arg_file}" =~ ".sh" ]];then
             return 0
-        fi 
+        fi
+        if [[ ${cmd_arg} =~ "-m" ]];then
+            #local m_value=${cmd_arg:2}
+            local m_value=$(echo ${cmd_arg} | grep -o '[0-9]\{1,\}')
+            if [ ${m_value} -gt 50 ];then
+                return 0
+            fi 
+        fi
+        
     done
     return 1
 }
@@ -110,6 +142,6 @@ if protect_cmd_check ${*};then
     protect_cmd_exec
     kill_parent_prog >&3 2>&3
 else
-    ${real_cmd} ${*}
+    ${real_cmd} ${*} |& sed -e "s@${real_cmd}@${0}@" -e "s@${real_cmd_basename}@${self_basename}@"
 fi
 {%endraw%}
