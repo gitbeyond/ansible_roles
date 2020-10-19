@@ -1,3 +1,5 @@
+# 想为此添加一个 headers 参数，但是有的时候，不提供 header, 那么如何在没有 header 时，将其设为 null 就是一个问题了
+# 这个问题在 check_virus 中也遇到了
 # 这里没有加 run_once: true ，是因为有多个 hosts 时，要都进行检测
 - name: check url health
   local_action:
@@ -5,6 +7,9 @@
     url: '{{project_health_check_url}}'
     method: '{{project_health_check_url_method}}'
     status_code: '{{project_health_check_status_code}}'
+    headers: '{{project_health_check_headers}}'
+    body: '{{project_health_check_body}}'
+    body_format: '{{project_health_check_body_format}}'
   register: url_check_result
   until: url_check_result.status == project_health_check_status_code
   retries: 15

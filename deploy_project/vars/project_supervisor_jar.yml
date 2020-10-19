@@ -1,0 +1,50 @@
+### defaults ###
+#project_name: "{{lookup('env', 'JOB_BASE_NAME')}}"
+#project_workspace: "{{lookup('env', 'WORKSPACE') | default('./', true)}}"
+
+### defaults ###
+project_source_dir: '{{project_workspace}}/target'
+
+project_pom_file: '{{project_workspace}}/pom.xml'
+project_prog_name: '{{project_name}}'
+
+project_get_packet_cmd: "/data/apps/opt/maven/bin/mvn -q -f {{project_pom_file}} org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -Dexec.executable=echo -Dexec.args='${project.build.finalName}' |tail -n 1"
+project_packet_name: "{{ lookup('pipe', project_get_packet_cmd) }}.jar"
+project_packet_type: jar
+
+project_run_user:  tomcat
+project_install_dir: '/data/apps/opt/{{project_prog_name}}'
+project_data_dir: '/data/apps/data/{{project_prog_name}}'
+project_log_dir: '/data/apps/log/{{project_prog_name}}'
+project_var_dir: '/data/apps/var/{{project_prog_name}}'
+
+project_dirs:
+  - '{{project_install_dir}}'
+  - '{{project_log_dir}}'
+  - '{{project_var_dir}}'
+
+project_packet_link_name: '{{project_prog_name}}.jar'
+
+project_boot_type: supervisor
+project_run_port: 8080
+
+# list or str
+#project_prog_run_args
+
+project_boot_file: project_common.ini
+project_prog_envs: []
+
+
+### proxy ###
+#project_proxy_nginx_confs:
+#project_proxy_nginx_server:
+
+### health check ###
+#project_health_url:
+
+### monitor ###
+#project_prom_conf:
+#project_prom_file_sd_dir:
+
+### log ###
+#project_filebeat_conf:

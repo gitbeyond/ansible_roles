@@ -9,3 +9,5 @@
     JENKINS_API_TOKEN: '{{project_jenkins_api_token}}'
     JENKINS_USER_ID: '{{project_jenkins_user}}'
 # webSocket 在 2.217 的版本以上才支持,而且需要注意反向代理的问题，如果nginx代理jenkins,nginx 没有配置 websocket,那么不能使用
+# 直接使用 token 来进行操作，而不再使用 password
+# 添加至视图的操作，需要注意 jenkins 的url 及反代影响

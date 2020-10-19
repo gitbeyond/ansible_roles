@@ -11,6 +11,7 @@
   notify:
     - supervisor_update
 
+- meta: flush_handlers
 #- name: supervisor update
 #  shell: supervisorctl update
 #  when: ini_result.results[0].failed == False and ini_result.changed == True

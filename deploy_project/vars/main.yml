@@ -1,2 +1,5 @@
 ---
 project_fact_packet_name: "{{PACKET_NAME.stdout | default(omit)}}"
+
+project_install_dir_last_name: '{{ project_install_dir | last}}'
+project_install_dir_base_name: '{{ project_install_dir | basename if project_install_dir_last_name != "/" else project_install_dir.split("/")[-2]}}'

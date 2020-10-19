@@ -1,9 +1,20 @@
+# 这里想着如何更智能一些，比如使用 find 命令去找出一些不在默认路径下的包, 但是这种方式比较粗糙，具体还得测试一下
+#
+# 目前主要是判断一下包是要用新包还是之前的旧包,而打包这个功能，目前已经几乎不用了, 在k8s上部署的时候，这个功能几乎没用。
 - name: get project packet name
   local_action: 
-    module: shell if [ {{project_deploy_version}} == "0" ];then ls -d {{project_source_dir}}/{{project_packet_name}}; else ls -d {{project_archive_dir}}/{{project_packet_name}}_{{project_deploy_version}};fi
+    module: shell 
+    cmd: |
+      if [ {{project_deploy_version}} == "0" ];then 
+          ls -d {{project_source_dir}}/{{project_packet_name}}
+      else 
+          ls -d {{project_archive_dir}}/{{project_packet_name}}_{{project_deploy_version}}
+      fi
     args:
       chdir: "{{project_source_dir}}"
-  when: project_source_dir is not none and project_packet_name is not none
+  when: 
+    - project_source_dir is not none
+    - project_packet_name is not none
   register: PACKET_NAME
   run_once: true
   #ignore_errors: True

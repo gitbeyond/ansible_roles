@@ -116,6 +116,8 @@ config-repo  是一个不需要启动的项目，它的配置文件中没有 pro
 所以再增加:
 * `project_log_collect_conf: # 对应filebeat配置文件`
 * `project_log_conf_dir: # 对应filebeat配置文件的目录`
+* `project_monitor_conf`: # 对应project_prom_conf
+* `project_monitor_conf_dir`: # 对应project_prom_file_sd_dir
 
 # 2020/08/04 部署 bert on k8s 遇到问题，增加如下变量
 
@@ -136,4 +138,16 @@ config-repo  是一个不需要启动的项目，它的配置文件中没有 pro
 An exception occurred during task execution. To see the full traceback, use -vvv. The error was: UnboundLocalError: local variable 'module_style' referenced before assignment
 ```
 所以改为 setup 加 register 方式来实现相关的操作。
+
+# 2020/10/19 针对 project_packet_type 及 project_boot_type 的值分别编写相关的 var 文件，后续尝试在 tasks 中 include_vars 这些文件
+
+由于变量繁多，直接从零编写一份变量配置，总是会漏掉一些。 
+现在想的是把各个类型的配置总结出来，能引用的话，最好，不能引用，照着这个模板改一下也好，省得总是出错。
+
+目前这个工作只是做了初步，仍然有待修改。
+
+
+
+
+
 

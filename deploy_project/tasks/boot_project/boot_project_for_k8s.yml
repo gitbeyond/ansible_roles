@@ -15,6 +15,7 @@
   debug:
     #msg: '{{project_docker_image_tag}}'
     msg: '{{project_image_tag}}'
+  when: project_docker_file is not none and project_docker_file != ""
 
 #- name: playbook stop
 #  meta: end_play

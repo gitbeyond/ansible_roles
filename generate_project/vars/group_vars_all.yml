@@ -1,0 +1,10 @@
+
+project_jenkins_url: http://jenkins.ops.geotmt.com:8080/
+project_jenkins_user: admin
+project_pipeline_git_url: 'git@git.geotmt.com:sa/qd_ansible.git'
+project_pipeline_git_credentials_id: '15865d01-62a1-45ff-9f55-d95374652f2'
+project_pipeline_git_branch: '*/master'
+project_jenkins_cli_jar: /data/apps/soft/ansible/jenkins/2.222.1/jenkins-cli.jar
+project_jenkins_api_token: 11079e4e9b65f2d030cd3fae241b23
+
+#project_jenkins_password: 'admin_pass'

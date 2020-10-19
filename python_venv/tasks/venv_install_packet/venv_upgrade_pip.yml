@@ -1,0 +1,8 @@
+
+- name: venv upgrade pip
+  pip:
+    #name: '{{project_venv_packets}}'
+    name: 'pip'
+    state: latest
+    virtualenv: '{{project_venv_path}}'
+    extra_args: '{{project_venv_pip_args}}'

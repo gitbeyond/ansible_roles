@@ -41,9 +41,12 @@
 
 - name: update project packet link file
   file:
+    # 这里直接使用 project_install_dir 产生了一个问题，就是目录内外的问题，比如 build 下有 index.html, build/(这里是带 / 的) 安装到 /data/www 下
+    # 那么最终效果是 /data/www/index.html, 这里的 install_dir 是 /data/www ,如果这时仅提供了 project_packet_link_name: app1 的话，
+    # 那么最后的效果成了 /data/www/app1 -> /data/www 了。这显然是不对的
     src: '{{ project_packet_link_src_name | default(project_install_dir, true)}}'
     #dest: '{{project_install_dir}}/{{project_packet_link_name}}'
-    dest: '{{project_packet_link_name}}'
+    dest: '{%if project_packet_link_name | first != "/"%}{{project_install_dir~"/"}}{%endif%}{{project_packet_link_name}}'
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'
     state: link
@@ -52,7 +55,8 @@
     - project_packet_link_name != ''
     - project_packet_link_name != project_packet_link_src_name
     - project_packet_link_name | basename != project_packet_link_src_name
-    - project_install_dir != project_packet_link_name
+    - project_packet_link_name != project_install_dir
+    - project_packet_link_name != project_install_dir_base_name
     #- (project_packet_link_name | basename != project_packet_link_src_name or 
     #   project_packet_link_name != project_packet_link_src_name or
     #   project_install_dir != project_packet_link_name )

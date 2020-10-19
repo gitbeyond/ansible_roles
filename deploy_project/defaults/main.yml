@@ -23,6 +23,9 @@ project_hosts:
 # 如果程序是一个 jar 包，使用 supervisor 启动时的进程名称
 project_prog_name: '{{project_name}}'
 # 项目打包后的包名,如果带有版本号那么须使用 myproject*.jar 这样
+# /data/apps/opt/maven/bin/mvn -f dmp-server/pom.xml   org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.build.finalName
+# /data/apps/opt/maven/bin/mvn -q  org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -Dexec.executable='echo' -Dexec.args='${project.build.finalName}'
+# /data/apps/opt/maven/bin/mvn -f dmp-server/pom.xml -q  org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -Dexec.executable='echo' -Dexec.args='${project.build.finalName}'
 project_packet_name:
 # 包的权限，这个不太容易操作，有时候是一个目录，而目录下的存放又不太标准，比如其在 lib 目录下存放了应该可以执行的文件
 # 主要还是用于单个文件的操作吧,目录的话，倒是可以设置顶层目录
@@ -42,12 +45,13 @@ project_packet_link_src_name:
 # 项目名称，就是 jenkins 的项目名
 #project_name: "{{lookup('env', 'JOB_NAME')}}"
 project_name: "{{lookup('env', 'JOB_BASE_NAME')}}"
-project_workspace: "{{lookup('env', 'WORKSPACE') | default('./', true)}}"
+project_workspace: "{{lookup('env', 'WORKSPACE') | default(jenkins_home_dir + '/workspace/' + project_name, true)}}"
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd, docker, k8s
 project_boot_type: supervisor
 
 # 目前前端项目的（当 project_boot_type 为 nginx 时，project_boot_file 为 nginx 的配置文件，也可以用 project_nginx_conf 来指定）
 project_boot_file:
+project_prog_envs: []
 project_boot_files:
   - '{{project_boot_file}}'
 
@@ -115,6 +119,9 @@ project_health_url:
 project_health_check_url: 'http://{{ansible_default_ipv4.address}}:{{project_run_port}}{{project_health_url}}'
 project_health_check_url_method: GET
 project_health_check_status_code: 200
+project_health_check_headers: null
+project_health_check_body: null
+project_health_check_body_format: raw
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
 #nginx_conf_dir: /data/apps/config/nginx
@@ -133,10 +140,10 @@ project_prom_conf:
 project_prom_file_sd_dir:
 
 project_monitor_data_generate_method: file
-project_monitor_conf:
 # 目前 prometheus 只考虑单台
 project_monitor_server: localhost
 project_monitor_server_port: 9090
+project_monitor_conf:
 project_monitor_conf_dir:
 
 # project log

@@ -1,4 +1,8 @@
 
+- import_tasks: venv_upgrade_pip.yml
+  tags:
+    - venv_upgrade_pip
+
 - import_tasks: venv_install_packet_for_cmd.yml
   tags:
     - py_venv_install_packet

@@ -11,13 +11,15 @@
   local_action: 
     module: shell
     #cmd: tar tvf {{PACKET_NAME.stdout}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
-    cmd: tar tf {{PACKET_NAME.stdout}} |head -n 1 |awk -F'/' '{print $1}'
+    cmd: tar tf {{PACKET_NAME.stdout}} | head -n 1 | awk -F'/' '{print $1}'
     args:
       warn: false
   #when: PACKET_NAME is defined and PACKET_NAME is not skipped
   register: packet_dir_name
   run_once: true
 
+# 1. 包一定要有一个父目录，不能将好多个目录打到一起，这样会有问题
+# 2. 暂时没有考虑删除旧文件的问题，这样时间长了会有好多旧文件
 
 - name: cp project packet to remote
   unarchive: 
@@ -26,12 +28,6 @@
     owner: '{{project_run_user}}' 
     group: '{{project_run_group}}' 
     mode: "0755"
-    #src: '{{item.src}}' 
-    #dest: '{{item.dest}}' 
-    #owner: '{{item.owner}}' 
-    #group: '{{item.group}}' 
-    #mode: '{{item.mode}}'
-  #when: PACKET_NAME is defined and PACKET_NAME is not skipped
   #with_items:
   #  - {src: '{{ PACKET_NAME.stdout }}', dest: '{{project_install_dir}}/', owner: '{{project_run_user}}', 
   #     group: '{{project_run_group}}', mode: "0755" }
@@ -52,11 +48,14 @@
 #  debug:
 #    msg: "cp_result: {{cp_result}}"
 
+# packet_dir_name.stdout 是一个相对路径
 - name: update project packet link file
   file:
     #src: '{{project_install_dir}}/{{packet_dir_name.stdout}}'
     src: '{{ project_packet_link_src_name | default(packet_dir_name.stdout, true)}}'
-    dest: '{{project_install_dir}}/{{project_packet_link_name}}'
+    #dest: '{{project_install_dir}}/{{project_packet_link_name}}'
+    #dest: '{{project_packet_link_name}}'
+    dest: '{%if project_packet_link_name | first != "/"%}{{project_install_dir~"/"}}{%endif%}{{project_packet_link_name}}'
     #dest: '{{project_packet_link_name}}'
     owner: '{{project_run_user}}'
     group: '{{project_run_group}}'

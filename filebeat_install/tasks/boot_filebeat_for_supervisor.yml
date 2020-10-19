@@ -2,21 +2,28 @@
 - name: copy filebeat.ini file
   template: 
     src: '{{ filebeat_src_boot_conf }}' 
-    dest: '{{ supervisor_conf_dir }}' 
+    dest: '{{ supervisor_conf_dir }}/{{filebeat_app_name}}.ini' 
     owner: 'root' 
     group: 'root' 
     mode: "0644"
     backup: yes
   register: ini_result
+  notify:
+    - restart_filebeat_for_supervisor
 
 #- name: test result
 #  shell: echo "{{ini_result}}" > /tmp/test_result
-- name: supervisor update
-  shell: supervisorctl update
-  when: ini_result.results.failed == False and ini_result.changed == True
-  ignore_errors: true
+#- name: supervisor update
+#  shell: supervisorctl update
+#  when: ini_result.results.failed == False and ini_result.changed == True
+#  ignore_errors: true
 
 - name: start filebeat
   supervisorctl: 
     name: '{{ filebeat_app_name }}'
-    state: started
+    config: '{{supervisor_prim_conf}}'
+    supervisorctl_path: '{{supervisor_exe_file}}'
+    state: '{{ item }}'
+  loop:
+    - present
+    - started

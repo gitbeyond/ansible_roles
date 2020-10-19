@@ -1,0 +1,38 @@
+### defaults ###
+#project_name: "{{lookup('env', 'JOB_BASE_NAME')}}"
+#project_workspace: "{{lookup('env', 'WORKSPACE') | default('./', true)}}"
+
+### defaults ###
+project_source_dir: '{{project_workspace}}'
+
+project_prog_name: '{{project_name}}'
+
+project_packet_name: "build.tgz"
+project_packet_type: tgz
+
+project_run_user:  nginx
+project_install_dir: '/data/apps/opt/{{project_prog_name}}'
+project_log_dir: '/data/apps/log/nginx'
+project_var_dir: '/data/apps/var/nginx'
+
+project_dirs:
+  - '{{project_install_dir}}'
+
+project_packet_set_mode: true
+
+# 这里的 link_name 如果是相对路径，那么是相对于 project_install_dir 的
+project_packet_link_name: '{{project_prog_name}}'
+
+project_boot_type: nginx
+project_run_port: 80
+
+# 这个不好弄成默认提供的
+#project_boot_file: 
+
+### proxy ###
+#project_proxy_nginx_confs:
+#project_proxy_nginx_server:
+
+### health check ###
+#project_health_url:
+

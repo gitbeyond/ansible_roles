@@ -6,9 +6,14 @@
   tags:
     - install_lsyncd
 
-- import_tasks: add_key_to_backup_host.yml
+#- import_tasks: add_key_to_backup_host.yml
+- include_tasks: add_key_to_backup_host.yml
+  name: add_key_to_backup_host
   tags:
     - add_key_to_backup_host
+  when: 
+    - backup_remote_host is not none
+    - backup_remote_host != ''
 
 - import_role:
     name: common_copy_conf_file

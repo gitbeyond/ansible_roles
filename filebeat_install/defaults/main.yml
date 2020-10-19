@@ -13,7 +13,6 @@ filebeat_boot_type: systemd
 #filebeat_src_boot_conf: "{%if filebeat_boot_type=='systemd'%}filebeat.systemd{%else%}filebeat.ini{%endif%}" 
 filebeat_src_boot_conf: "filebeat.{{filebeat_boot_type}}" 
 filebeat_env_file: filebeat.sh
-filebeat_run_user: root
 
 # type: list
 filebeat_child_confs: []
@@ -21,3 +20,9 @@ filebeat_old_child_conf:
 filebeat_old_child_confs: [ '{{filebeat_old_child_conf}}' ]
 filebeat_child_conf_dir: '{{filebeat_conf_dir}}/inputs.d'
 filebeat_modules_conf_dir: '{{filebeat_conf_dir}}/modules.d'
+
+# supervisor
+supervisor_prog_name: supervisord
+supervisor_conf_dir: '/data/apps/config/{{supervisor_prog_name}}'
+supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+supervisor_exe_file: /usr/bin/supervisorctl

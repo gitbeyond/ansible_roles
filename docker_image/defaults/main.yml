@@ -4,7 +4,7 @@ project_k8s_work_dir: '{{project_install_dir}}'
 project_run_user: '{{ansible_ssh_user | default(lookup("env", "USER"))}}'
 project_run_group: '{{project_run_user}}'
 project_docker_file:
-project_prog_name:
+project_prog_name: '{{project_name}}'
 project_git_tag: '{{ lookup("ENV", "TAG")}}'
 
 # vars of registry, 一般来说，可以配置到全局
@@ -25,7 +25,7 @@ ansible_now_time: "{{ lookup('pipe','date +%Y%m%d%H%M%S') }}"
 # 默认使用这个 project_prog_name，但是也可以指成别的
 project_docker_image_name: '{{project_prog_name}}'
 project_docker_image_version: '{% if project_git_tag is not none and project_git_tag != "" -%}
-{{project_git_tag}}_v{{ansible_now_time}}
+{{project_git_tag | basename}}_v{{ansible_now_time}}
 {%- else-%}
 v{{ansible_now_time}}
 {%- endif%}'

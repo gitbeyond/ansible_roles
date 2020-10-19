@@ -12,5 +12,12 @@
     name: '{{ filebeat_app_name }}'
     state: restarted
 
-- name: supervisor update
+- name: restart_filebeat_for_supervisor
+  supervisorctl: 
+    name: '{{ filebeat_app_name }}'
+    config: '{{supervisor_prim_conf}}'
+    supervisorctl_path: '{{supervisor_exe_file}}'
+    state: 'restarted'
+
+- name: supervisor_update
   shell: supervisorctl update
