@@ -21,6 +21,25 @@ protect_replacement_args="Don't play small smart"
 real_cmd_basename=$(basename ${real_cmd})
 self_basename=$(basename ${0})
 
+check_real_cmd_behind_pipe(){
+    # 检查是否在管道后
+    # 检查子命令
+    if [ -p /dev/stdout ];then
+        sibling_process=$(ps -ef | awk -v ppid=$PPID -v mypid=$$ '$3 == ppid && $2 != mypid {print $8}')
+        for sibling_exe in ${sibling_process};do
+            if [[ ${s_p_exe} =~ "bash" ]];then
+                echo "exit"
+                exit
+            fi
+        done
+    fi
+}
+check_real_cmd_before_operation(){
+    # 运行前检查
+    # 环境变量
+    # 参数等等
+    :
+}
 check_real_cmd(){
     # 判断是否自调用
     if [ $0 == ${real_cmd} ];then
@@ -49,6 +68,7 @@ check_real_cmd(){
         echo 'exit'
         exit 21
     fi
+    check_real_cmd_behind_pipe
 }
 
 protect_cmd_check(){
@@ -70,11 +90,11 @@ protect_cmd_check(){
         fi
     done
 
-    cmd_result=$(${real_cmd} ${*})
-    if echo "${cmd_result}" | grep -E "echo|curl|xargs|chattr|kill" ;then
+    cmd_result=$(${real_cmd} ${*} |& sed -e "s@${real_cmd}@${0}@" -e "s@${real_cmd_basename}@${self_basename}@")
+    if echo "${cmd_result}" | grep -E "echo|curl|xargs|chattr|kill" &> /dev/null ;then
         return 0
     else
-        echo ${cmd_result}
+        #echo ${cmd_result}
         return 1
     fi
 }
@@ -111,8 +131,9 @@ else
     #${real_cmd} ${*}
     #OLD_IFS=${IFS}
     #export IFS=" "
-    for ret_line in ${cmd_result};do
-        echo ${ret_line}
-    done
+    #for ret_line in ${cmd_result};do
+    #    echo ${ret_line}
+    #done
+    echo "${cmd_result}"
 fi
 {%endraw%}

@@ -6,6 +6,7 @@
   local_action: 
     module: shell
     cmd: tar tf {{item}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false
   #register: {{ item.split('/')[-1].split('-')[0]}}
   #register: "{{packet_name}}"
   register: packet_vars

@@ -8,7 +8,8 @@ ipvs_modules="ip_vs ip_vs_lc ip_vs_wlc ip_vs_rr ip_vs_wrr ip_vs_lblc ip_vs_lblcr
 
 for kernel_module in ${ipvs_modules}; do
     /sbin/modinfo -F filename ${kernel_module} > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
+    #if [ $? -ne 0 ]; then
+    if [ $? -eq 0 ]; then
         /sbin/modprobe ${kernel_module}
     fi
 done

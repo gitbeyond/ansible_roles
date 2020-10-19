@@ -12,6 +12,7 @@
   notify:
     - systemctl_reload
 
+- meta: flush_handlers
 #- name: debug var docker_install_result
 #  debug:
 #    msg: '{{docker_install_result}}'
