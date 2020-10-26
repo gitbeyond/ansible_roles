@@ -1,6 +1,9 @@
 
 - name: get pmm_client packet dir name
-  local_action: shell tar tvf {{pmm_client_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action: 
+    module: shell 
+    cmd: tar tf {{pmm_client_packet}} | head -n 1 |awk -F'/' '{print $1}'
+    warn: false
   register: packet_dir_name
   run_once: true
 

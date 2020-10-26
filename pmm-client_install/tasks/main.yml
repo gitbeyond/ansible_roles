@@ -22,25 +22,26 @@
   debug:
     msg: '{{mysql_pmm_user}}'
 
-#- include_tasks: install_mysql_driver.yml
-#  tags:
-#    - install_mysql_driver
-#  when: mysql_pmm_user is not none
-#
-#- include_tasks: create_mysql_user.yml
-#  tags:
-#    - create_mysql_user
-#  when: mysql_pmm_user != ''
-#
-#- include_tasks: pmm_add_mysql.yml
-#  tags:
-#    - pmm_add_mysql
-#  when: mysql_pmm_user != ''
-
-- include_tasks: pmm_add_mongodb.yml
+- include_tasks: install_mysql_driver.yml
   tags:
-    - pmm_add_mongodb
-  when: pmm_mongo_user != ''
+    - install_mysql_driver
+  when: mysql_pmm_user is not none
+
+- include_tasks: create_mysql_user.yml
+  tags:
+    - create_mysql_user
+  when: mysql_pmm_user != ''
+
+- include_tasks: pmm_add_mysql.yml
+  tags:
+    - pmm_add_mysql
+  when: mysql_pmm_user != ''
+
+#- include_tasks: pmm_add_mongodb.yml
+#  tags:
+#    - pmm_add_mongodb
+#  when: 
+#    - pmm_mongo_user != ''
 
 - import_tasks: copy_pmm_conf.yml
   tags:

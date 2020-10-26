@@ -11,30 +11,24 @@
 
 - name: cp and unarchive etcd_binary_tarball to remote host 
   unarchive: 
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+    src: '{{ etcd_packet }}' 
+    dest: '{{ etcd_install_dir }}' 
     owner: '{{ etcd_run_user }}' 
     group: '{{ etcd_run_user }}' 
-    creates: '{{ item.creates }}'
+    creates: '{{ etcd_install_dir }}/{{etcd_dir_name.stdout }}'
     mode: "0755"
-  loop:
-    - { src: '{{etcd_packet}}', dest: '{{ etcd_install_dir}}/', creates: '{{ etcd_install_dir }}/{{etcd_dir_name.stdout}}' }
 
 - name: create etcd link dir
   file: 
-    src: '{{ item.src }}' 
-    dest: '{{item.dest}}' 
-    state: '{{ item.state }}'
-  with_items:
-    - { src: "{{app_base_dir}}/{{etcd_dir_name.stdout}}", dest: '{{etcd_base_dir}}', state: link}
+    src: '{{ etcd_install_dir}}/{{etcd_dir_name.stdout }}' 
+    dest: '{{etcd_base_dir}}' 
+    state: 'link'
   when: etcd_dir_name.stdout != "etcd"
 
 - name: create etcd conf dir link
   file: 
-    src: '{{ item.src }}' 
-    dest: '{{item.dest}}' 
-    state: '{{ item.state }}'
-  with_items:
-    - { src: "{{etcd_conf_dir}}", dest: '/etc/etcd', state: link}
+    src: '{{ etcd_conf_dir }}' 
+    dest: '/etc/etcd' 
+    state: 'link'
   ignore_errors: true
 

@@ -1,7 +1,8 @@
 - name: install MySQL-python packet
   yum: 
     name:
-    - MySQL-python 
+    #- MySQL-python 
+    - python2-PyMySQL
     state: latest
   when: mysql_user_install_driver == True
 

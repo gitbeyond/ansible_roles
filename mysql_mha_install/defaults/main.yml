@@ -30,7 +30,7 @@ mysql_login_pass:
 mysql_login_user:
 mysql_sock:
 mysql_vip:
-mysql_mha_user:
+mysql_mha_user: mha
 mysql_mha_pass:
 mysql_mha_priv: '*.*:all'
 

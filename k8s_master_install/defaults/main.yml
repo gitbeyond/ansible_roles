@@ -15,7 +15,7 @@ k8s_master_packet:
 #k8s_master_dir_name: "{{lookup('pipe', 'tar tf '+ k8s_master_packet).split('\n')[-1].split(' ')[-1].split('/')| first}}"
 k8s_master_dir_name: "{{lookup('pipe', 'tar tf '+ k8s_master_packet).split('\n')[-1].split('/')| first}}"
 k8s_work_dir: /root/k8s
-k8s_cert_json_dir: certs_json
+k8s_cert_json_dir: ansible_certs_json
 k8s_work_conf_dir: ansible_k8s_confs
 k8s_cert_dir: ansible_k8s_certs
 
@@ -41,7 +41,7 @@ k8s_cert_l: "Beijing"
 k8s_cert_o: "k8s"
 # tech. sa, dev
 k8s_cert_ou: "System"
-k8s_cert_conf_files: '{{q("fileglob", "templates/*.json")}}'
+k8s_cert_conf_files: '{{q("fileglob", "templates/k8s_certs_json/*.json")}}'
 k8s_cert_hosts:
 
 

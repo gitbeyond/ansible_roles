@@ -1,7 +1,8 @@
 - name: install MySQL-python packet
   yum: 
     name:
-      - MySQL-python
+      #- MySQL-python
+      - python2-PyMySQL
     state: latest
 
 - name: rename ~/.my.cnf if exists
