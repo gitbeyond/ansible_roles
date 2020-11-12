@@ -1,3 +1,4 @@
+# 这个变量一般写在 group_vars/all.yml 中，写在这里也是为了方便
 jenkins_home_dir: /data/apps/data/jenkins
 
 # docker_image role
@@ -20,9 +21,10 @@ project_user_is_system: true
 project_run_group: '{{project_run_user}}'
 # 部署的机器, k8s 时，可以指定为 localhost, 然后指定 kubeconfig 来决定提交至哪个集群
 project_hosts:
-# 如果程序是一个 jar 包，使用 supervisor 启动时的进程名称
+# 如果程序是一个 jar 包，使用 supervisor 启动时的进程名称, 有时候会出现一个项目下有多个进程的情况
 project_prog_name: '{{project_name}}'
-# 项目打包后的包名,如果带有版本号那么须使用 myproject*.jar 这样
+
+# 项目打包后的包名,如果带有版本号那么须使用 myproject*.jar 这样,就是可以使用通配符来进行匹配,目前来说只适用于单个包
 # /data/apps/opt/maven/bin/mvn -f dmp-server/pom.xml   org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.build.finalName
 # /data/apps/opt/maven/bin/mvn -q  org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -Dexec.executable='echo' -Dexec.args='${project.build.finalName}'
 # /data/apps/opt/maven/bin/mvn -f dmp-server/pom.xml -q  org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -Dexec.executable='echo' -Dexec.args='${project.build.finalName}'
@@ -31,12 +33,12 @@ project_packet_name:
 # 主要还是用于单个文件的操作吧,目录的话，倒是可以设置顶层目录
 project_packet_mode: "0644"
 project_packet_set_mode: false
-# tgz or jar or directory
+# tgz or jar(binary) or directory
 project_packet_type:
 # 为项目包名创建的软链的名字，如果包名发生了版本的变化，那么就需要在 supervisor的配置文件中更新包名，而使用软链接，只需要更新软链接即可
 project_packet_link_name:
 # 当前为包建立软链接的时候都是使用的绝对路径如 /data/apps/opt/app1/app1.jar -> /data/apps/opt/app1/app1-1.0.jar 
-# 如果想为其建立相对路径的软链接就不行了，所以增加此变量来解决这个问题
+# 如果想为其建立相对路径的软链接就不行了，如 /data/apps/opt/jumpserver -> jumpserver-v2.2.0
 # 各个安装方式有其默认值，不指定这个的话，会使用他们各自的默认值
 # 在部署一个 directory 类型的 k8s 应用时，需要在 project_k8s_work_dir 中建立相对路径的软链，
 # 所以添加了此变量
@@ -45,13 +47,17 @@ project_packet_link_src_name:
 # 项目名称，就是 jenkins 的项目名
 #project_name: "{{lookup('env', 'JOB_NAME')}}"
 project_name: "{{lookup('env', 'JOB_BASE_NAME')}}"
+# 项目的工作目录，通过环境变量获取，如果是自己手动测试的话，需要在 shell 环境中 export 此变量
 project_workspace: "{{lookup('env', 'WORKSPACE') | default(jenkins_home_dir + '/workspace/' + project_name, true)}}"
-# 项目启动的方式, 目前可选择 supervisor, nginx, systemd, docker, k8s
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd, docker, k8s, 目前支持 supervisor, nginx, k8s
 project_boot_type: supervisor
 
 # 目前前端项目的（当 project_boot_type 为 nginx 时，project_boot_file 为 nginx 的配置文件，也可以用 project_nginx_conf 来指定）
 project_boot_file:
-project_prog_envs: []
+# 有些项目需要在 supervisor 或 pod 内配置环境变量，使用这个列表来声明,是一个字典
+project_prog_envs: {}
+
+# 一般情况下，这个是单个文件，但是有些时候，nginx 的配置可能会使用多个配置, 后面前端项目不再使用这个变量
 project_boot_files:
   - '{{project_boot_file}}'
 
@@ -60,7 +66,7 @@ project_proxy_nginx_conf:
 project_proxy_nginx_confs:
   - '{{project_proxy_nginx_conf}}'
 
-# delegate_to 的主机组,即使只有一台，也应该写成列表，因为这里要进行循环
+# delegate_to 的主机组,即使只有一台，也应该写成列表，因为这里要进行循环, 比如可以写成
 # 默认使用当前目标主机组
 project_proxy_nginx_server: '{{ansible_play_hosts_all}}'
 # delegate_to 的主机的用户，有可能其与目标主机使用的是不同的 remote_user
@@ -73,6 +79,7 @@ project_nginx_conf:
 project_nginx_confs:
   - '{{project_nginx_conf}}'
 
+# 应用自身的配置文件
 project_conf_file:
 project_conf_files:
   - '{{project_conf_file}}'
@@ -87,6 +94,7 @@ project_source_dir: '{{project_workspace}}'
 project_source_packet_name: '{{project_source_dir}}/{{project_packet_name}}'
 
 project_install_dir:
+project_conf_dir:
 project_data_dir:
 project_log_dir:
 project_var_dir:
@@ -139,6 +147,10 @@ project_log_data:
 project_prom_conf: 
 project_prom_file_sd_dir:
 
+# 这个保持默认即可，
+# 之前测试过将数据写入 etcd ,然后一个脚本监听 etcd 完成把数据写入文件，进行自动发现，
+# 这种方法不需要知道 prometheus 的服务器
+# 现在还是方便一点，直接写入 prom 的 file_sd 的相关目录即可
 project_monitor_data_generate_method: file
 # 目前 prometheus 只考虑单台
 project_monitor_server: localhost
@@ -147,6 +159,9 @@ project_monitor_conf:
 project_monitor_conf_dir:
 
 # project log
+# 指定一个 filebeat 的input配置文件，会将其复制到 filebeat 的 inputs.d 目录下，然后就自动的开始日志收集。
+# 这依赖于事先部署了 filebeat
+# 当越来越多的项目部署到 k8s 上，健康检测，监控，日志收集等等，这些操作已经没有意义了
 project_log_data_generate_method: file
 project_filebeat_conf: 
 project_log_collect_conf: '{{project_filebeat_conf}}'

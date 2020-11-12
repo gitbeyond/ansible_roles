@@ -26,9 +26,12 @@
 - import_tasks: off_selinux.yml
   tags:
     - off_selinux
+
 #- import_tasks: ntpdate_sync_time.yml
-#  tags:
-#    - ntpdate_sync_time
+- import_tasks: ntp/system_sync_time.yml
+  tags:
+    - system_sync_time
+
 - import_tasks: open_rc-local.yml
   #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7

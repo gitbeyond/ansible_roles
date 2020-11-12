@@ -1,0 +1,20 @@
+---
+allow_duplicates: true
+
+dependencies:
+  - role: common_create_user
+    #name: create_prom_user
+    tags:
+      - common_create_user
+  - role: common_create_dir
+    tags:
+      - common_create_dir   
+  - role: common_packet_install
+    tags:
+      - common_packet_install
+  - role: common_copy_conf_file
+    tags:
+      - common_copy_conf_file
+  - role: common_boot_app
+    tags:
+      -  common_boot_app
