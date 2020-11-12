@@ -2,6 +2,6 @@
 jdk_packet: '{{packet_base_dir}}/jdk-8u151-linux-x64.tar.gz'
 # 这个变量一般取自全局变量 {{app_base_dir}}
 jdk_app_name: java
-jdk_install_dir: '{{app_base_dir}}'
 app_base_dir: /data/apps/opt
-jdk_base_dir: '{{app_base_dir}}/{{jdk_app_name}}'
+jdk_install_dir: '{{app_base_dir}}'
+jdk_base_dir: '{{jdk_install_dir}}/{{jdk_app_name}}'

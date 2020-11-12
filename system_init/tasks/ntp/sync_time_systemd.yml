@@ -8,8 +8,10 @@
   lineinfile:
     line: 'server {{item}}'
     path: '/etc/chrony.conf'
-    backup: '{%if loop.first -%}yes{%else-%}no{%-endif%}'
+    backup: '{%if ansible_loop.first -%}yes{%else-%}no{%-endif%}'
   loop: '{{system_ntp_servers}}'
+  loop_control:
+    extended: yes
 
 - name: start chronyd
   systemd:

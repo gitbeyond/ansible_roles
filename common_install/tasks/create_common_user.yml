@@ -4,4 +4,6 @@
     name: '{{common_run_user}}'
     state: present 
     system: '{{ common_run_user_system }}'
-  when: common_run_user is not none and common_run_user != 'root'
+  when: 
+    - common_run_user is not none
+    - common_run_user != 'root'

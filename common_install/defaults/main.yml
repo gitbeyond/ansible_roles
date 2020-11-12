@@ -21,17 +21,17 @@ common_instance_name: '{{common_base_name}}'
 
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd
 common_boot_type: supervisor
-common_src_boot_file:
+common_src_boot_file: common_app.ini
 common_port:  
 
 # copy to /etc/profile.d/ of env file 
-common_env_file:
+common_env_file: common_app.sh
 
 # type: list
 #common_other_dirs:
-common_conf_files:
-common_child_confs:
-common_bin_scripts:
+common_conf_files: []
+common_child_confs: []
+common_bin_scripts: []
 
 
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}

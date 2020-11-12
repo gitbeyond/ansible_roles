@@ -1,0 +1,3 @@
+
+- name: system_sync_time
+  include_tasks: sync_time_{{ansible_service_mgr}}.yml

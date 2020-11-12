@@ -1,0 +1,18 @@
+# 复制配置文件，默认情况下会触发自动重启
+- name: copy project conf files
+  template: 
+    src: "{{item}}" 
+    dest: "{{project_conf_dir}}" 
+    owner: "{{project_run_user}}" 
+    group: "{{project_run_group}}" 
+    mode: "0644"
+    backup: yes
+  register: copy_proxy_nginx_file
+  loop: '{{project_conf_files}}'
+  when: 
+    - item is not none
+    - item != ''
+  tags:
+    - project_copy_confs
+  notify: supervisorctl_restart_prog
+  

@@ -9,6 +9,10 @@
   tags:
     - install_project_packet
 
+- import_tasks: project_copy_confs.yml
+  tags:
+    - project_copy_confs
+
 - import_tasks: boot_project/boot_project.yml
   tags:
     - boot_project

@@ -6,7 +6,7 @@
     owner: root 
     group: root 
     mode: "0755"
-  with_items:
+  loop:
     - "{{app_base_dir}}"
     - "{{common_install_dir}}"
 
@@ -17,7 +17,7 @@
     owner: '{{common_run_user}}' 
     group: '{{common_run_group}}' 
     mode: "0755"
-  with_items:
+  loop:
     - "{{common_conf_dir}}"
     - "{{common_log_dir}}"
     - "{{common_var_dir}}"

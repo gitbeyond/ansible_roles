@@ -5,6 +5,7 @@
     state: '{{ item.state }}'
   with_items:
     - { name: ntpdate, state: latest}
+
 - name: add sync time cron job
   cron: 
     name: "custom job" 
