@@ -1,0 +1,92 @@
+# Server
+redis_version:2.8.11                                #redis 版本
+redis_git_sha1:00000000 
+redis_git_dirty:0
+redis_build_id:c5d14b5292af31b8
+redis_mode:standalone
+os:Linux 2.6.32-220.el6.x86_64 x86_64               #运行系统内核版本
+arch_bits:64                                        #系统
+multiplexing_api:epoll                              #redis的事件循环机制
+gcc_version:4.4.7                                   #GCC版本号
+process_id:30505                                    #redis当前进程号
+run_id:f7b1bc1010cc228d0475c9a7f727b71ff62f47b2
+tcp_port:6379                                       #redis端口
+uptime_in_seconds:72841                             #运行时间(秒)
+uptime_in_days:0                                    #运行时间(天)
+hz:10
+lru_clock:14802484
+config_file:/usr/local/redis/conf/redis.conf        #配置文件路径
+
+# Clients
+connected_clients:1                                 #客户端连接数
+client_longest_output_list:0                        #当前客户端最大输出列表
+client_biggest_input_buf:0                          #当前客户端最大输入列表
+blocked_clients:0                                   #被阻塞的客户端数
+
+# Memory
+used_memory:1880256                                 #使用内存B
+used_memory_human:1.79M                             #使用内存M
+used_memory_rss:9502720                             #使用内存总量(包括碎片)
+used_memory_peak:2041464                            #使用内存最高峰B
+used_memory_peak_human:1.95M                        #使用内存最高峰M
+used_memory_lua:33792
+mem_fragmentation_ratio:5.05                        #内存碎片比
+mem_allocator:jemalloc-3.2.0
+
+# Persistence
+loading:0
+rdb_changes_since_last_save:652                     #自上次dump后rdb改动次数
+rdb_bgsave_in_progress:0                            #rdb save是否在进行中
+rdb_last_save_time:1407311308                       #上次save的时间戳
+rdb_last_bgsave_status:ok                           #上次save的状态
+rdb_last_bgsave_time_sec:0                          #上次save的时间，单位为秒
+rdb_current_bgsave_time_sec:-1                      #如果rdb save操作正在进行，则是所使用的时间
+aof_enabled:1                                       #是否开启了aof
+aof_rewrite_in_progress:0                           #aof的rewrite操作是否在进行中
+aof_rewrite_scheduled:0                             #是否在rdb save操作完成后执行
+aof_last_rewrite_time_sec:-1                        #上次rewrite操作使用的时间，单位为秒
+aof_current_rewrite_time_sec:-1                     #如果rewrite操作正在进行则记录时间
+aof_last_bgrewrite_status:ok                        #上次rewrite操作的状态
+aof_last_write_status:ok                            #上次wirte的状态
+aof_current_size:8023768                            #aof当前大小
+aof_base_size:0                                     #aof启动或者rewrite大小
+aof_pending_rewrite:0                               #是否在rdb save操作完成后执行
+aof_buffer_length:0                                 #aof buffer大小
+aof_rewrite_buffer_length:0                         #aof rewrite buff大小
+aof_pending_bio_fsync:0                             #后台IO队列中等待fsync的个数
+aof_delayed_fsync:0                                 #延迟fsync计数器
+
+# Stats
+total_connections_received:246259                   #总计连接请求
+total_commands_processed:1180958                    #总结执行命令
+instantaneous_ops_per_sec:49                        #每秒执行个数                     
+rejected_connections:0                              #因最大客户端限制而被拒绝连接的个数
+sync_full:1
+sync_partial_ok:0
+sync_partial_err:0
+expired_keys:0                                      #总过期key数量
+evicted_keys:0                                      #总删除key数量
+keyspace_hits:338581                                #查到key的数量
+keyspace_misses:66475                               #未查到的key数量
+pubsub_channels:0                                   #发布/订阅频道数
+pubsub_patterns:0                                   #发布/订阅模式数
+latest_fork_usec:2805                               #上次的fork操作使用的时间（单位ms）
+
+# Replication
+role:master                                             #角色，这里为master
+connected_slaves:1                                      #有几个连接的slvae
+slave0:ip=192.168.1.50,port=6379,state=online,offset=8087699,lag=0  #slave连接详细信息
+master_repl_offset:8087752
+repl_backlog_active:1
+repl_backlog_size:1048576
+repl_backlog_first_byte_offset:7039177
+repl_backlog_histlen:1048576
+
+# CPU
+used_cpu_sys:94.98                                      #redis server的sys cpu使用率
+used_cpu_user:36.71                                     #redis server的user cpu使用率
+used_cpu_sys_children:0.47                              #后台进程的sys cpu使用率
+used_cpu_user_children:0.04                             #后台进程的user cpu使用率
+
+# Keyspace
+db0:keys=12,expires=0,avg_ttl=0                             #db0数据库，一共有多少个key，过期key，带生存期的key数量
