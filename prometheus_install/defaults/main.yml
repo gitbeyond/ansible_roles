@@ -23,16 +23,16 @@ prom_instance_name: '{{prom_base_name}}'
 # self defined
 prom_conf_ssl_dir: '{{prom_conf_dir}}/ssl'
 prom_conf_rule_dir: '{{prom_conf_dir}}/rules'
-prom_conf_ssl_files:
-prom_conf_rule_files:
+prom_conf_ssl_files: []
+prom_conf_rule_files: []
 
 # 项目启动的方式, 目前可选择 supervisor, nginx, systemd
 prom_boot_type: supervisor
-prom_src_boot_file:
+prom_src_boot_file: prometheus.ini
 prom_port: 9090
 
 # copy to /etc/profile.d/ of env file 
-prom_env_file:
+prom_env_file: prometheus.sh
 
 # type: list
 #prom_other_dirs:

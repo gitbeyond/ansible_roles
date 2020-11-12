@@ -3,8 +3,8 @@
   template:
     src: "{{ item }}" 
     dest: "{{ prom_conf_ssl_dir }}" 
-    owner: "{{ common_run_user }}" 
-    group: "{{ common_run_user }}" 
+    owner: "{{ prom_run_user }}" 
+    group: "{{ prom_run_user }}" 
     mode: "0644" 
     backup: yes
   loop: '{{prom_conf_ssl_files}}'
