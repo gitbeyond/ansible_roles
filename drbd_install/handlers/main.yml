@@ -1,0 +1,26 @@
+- name: restart_keepalived_for_systemd
+  systemd: 
+    name: '{{keepalived_app_name}}'
+    state: restarted
+    daemon_reload: yes
+
+- name: reload_keepalived_for_systemd
+  systemd: 
+    name: '{{keepalived_app_name}}'
+    state: reloaded
+    daemon_reload: yes
+
+- name: systemctl_daemon_reload
+  systemd:
+    daemon_reload: yes
+
+- name: reload_keepalived_for_upstart
+  service: 
+    name: '{{keepalived_app_name}}'
+    state: reloaded
+
+- name: restart_keepalived_for_upstart
+  service: 
+    name: '{{keepalived_app_name}}'
+    state: restarted
+

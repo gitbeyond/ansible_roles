@@ -2,6 +2,16 @@
 * role 的目标是安装一个带流复制的 postgresql 服务
 * 这个 role 暂时写到创建复制用户这里, 而且尚未进行过测试
 
+## example
+```yaml
+- hosts: 10.111.32.91
+  remote_user: root
+  roles:
+    - {role: postgresql_binary_install, pgsql_packet: '{{packet_base_dir}}/postgresql/postgresql-9.6.17.tar.gz',
+       pgsql_primary_conf: '{{ lookup("env","PWD")}}/templates/postgresql.conf',
+       pgsql_hba_conf: '{{ lookup("env","PWD")}}/templates/pg_hba.conf'}
+
+```
 
 ## 计划完成的操作如下
 * `postgresql_binary_install`
@@ -21,6 +31,7 @@
     * 修改 hba 文件使创建的用户可以进行连接
     # 下面的未完成
     * slave 上是否需要 copy master 的原始数据，按照目前的预期是不需要的。需要实际测试
+        * 实际测试时，两边都初始化了实际目录，但是却不能正常通信
     * slave 上生成 recovery.conf 文件
     * slave 重启，开始进行复制
 

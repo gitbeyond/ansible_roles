@@ -1,0 +1,10 @@
+# editor: haifengsss@163.com
+# create date: 2020/12/14
+
+- import_tasks: install_drbd.yml
+  tags:
+    - drbd_install
+
+- import_tasks: install_drbd.yml
+  tags:
+    - drbd_copy_conf_file    

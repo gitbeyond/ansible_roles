@@ -1,0 +1,14 @@
+- name: install epel-release
+  yum: 
+    name: epel-release
+    state: latest
+
+- name: install elrepo-release
+  yum: 
+    name: elrepo-release
+    state: latest
+
+- name: install drbd from elrepo
+  yum: 
+    name: kmod-drbd90
+    state: latest

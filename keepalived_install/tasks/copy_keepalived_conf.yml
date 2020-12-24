@@ -23,6 +23,32 @@
     backup: yes
   loop: '{{keepalived_confs}}'
   tags:
-   - modify_keepalived_conf
+   - copy_keepalived_conf
   notify:
    - reload_keepalived_for_{{ansible_service_mgr}}
+
+- name: copy keepalived_child_conf file
+  template: 
+    src: '{{ item }}'
+    dest: '{{ keepalived_child_conf_dir }}' 
+    owner: '{{keepalived_run_user}}' 
+    group: '{{keepalived_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{keepalived_child_confs}}'
+  tags:
+   - copy_keepalived_child_conf
+  notify:
+   - reload_keepalived_for_{{ansible_service_mgr}}
+
+- name: copy keepalived_app_scripts file
+  template: 
+    src: '{{ item }}'
+    dest: '{{ keepalived_script_dir }}' 
+    owner: '{{keepalived_run_user}}' 
+    group: '{{keepalived_run_user }}' 
+    mode: "0755" 
+    backup: yes
+  loop: '{{keepalived_app_scripts}}'
+  tags:
+   - copy_keepalived_app_scripts

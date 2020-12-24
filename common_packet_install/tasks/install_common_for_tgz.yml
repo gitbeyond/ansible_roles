@@ -2,21 +2,21 @@
 - name: get common packet dir name
   local_action: 
     module: shell 
-<<<<<<< HEAD
+#<<<<<<< HEAD
     #cmd: set -o pipefail;tar tf {{common_packet}} |head -n 1 |awk -F'/' '{print $1}'
-=======
->>>>>>> 991accb049e7f14992cda9f1605041e4208d48f8
+#=======
+#>>>>>>> 991accb049e7f14992cda9f1605041e4208d48f8
     cmd: tar tf {{common_packet}} |head -n 1 |awk -F'/' '{print $1}'
     warn: false
   register: packet_dir_name
   changed_when: packet_dir_name.rc != 0
   run_once: true
-<<<<<<< HEAD
-  when: common_packet is exists
-=======
+#<<<<<<< HEAD
+#  when: common_packet is exists
+#=======
   when:
     - common_packet is exists
->>>>>>> 991accb049e7f14992cda9f1605041e4208d48f8
+#>>>>>>> 991accb049e7f14992cda9f1605041e4208d48f8
 
 
 - name: cp common packet to remote

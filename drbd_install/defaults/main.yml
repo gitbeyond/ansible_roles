@@ -1,0 +1,21 @@
+
+drbd_run_user: root
+app_base_dir: /data/apps/opt
+drbd_install_dir: '{{app_base_dir}}'
+drbd_app_name: drbd
+drbd_base_dir: "{{drbd_install_dir}}/{{drbd_app_name}}"
+drbd_bin_dir: '{{drbd_base_dir}}/sbin'
+drbd_data_dir: /data/apps/data/{{drbd_app_name}}
+drbd_conf_dir: /etc
+drbd_child_conf_dir: /etc/drbd.d
+drbd_log_dir: /data/apps/log/{{drbd_app_name}}
+drbd_var_dir: /data/apps/var/{{drbd_app_name}}
+drbd_install_method: local
+drbd_confs:
+  - drbd.conf
+drbd_child_confs:
+  - global_common.conf
+drbd_env_file: drbd.sh
+drbd_sysconfig_file: drbd.env
+drbd_boot_file: 'drbd.{{ansible_service_mgr |default("systmed", true)}}'
+

@@ -19,6 +19,8 @@ example:
 ## nginx 的编译参数
 这里使用了 tengine 的源码，并且添加了额外的 `/usr/src/nginx-module-vts` 模块
 ```bash
+yum install libevent-devel pcre-devel openssl-devel libxslt-devel libxml2-devel gd-devel GeoIP-devel gperftools-libs gperftools
+
 # /data/apps/opt/nginx/sbin/nginx -V
 Tengine version: Tengine/2.3.2
 nginx version: nginx/1.17.3

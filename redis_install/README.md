@@ -119,5 +119,7 @@ stderr_events_enabled=false
 - `redis_restart_with_notify` redis 的配置文件或者 redis 进程的服务文件发生改变时，是否要重启，默认为不重启
 - `redis_sentinel_conf` 此变量指定的是远程server 上的sentinel 配置文件，如果redis 与 sentinel 部署在同一台上，可以生成redis 的sentinel 配置
 
+
 # 问题
 * 目前只实现了 supervisor 控制redis的操作。
+* redis 使用 sentinel 时，会修改自己的配置文件，所以在部署之后，如果再次同步配置文件，可能会出问题,这里后面可以尝试把本地配置文件，过滤出来相关配置使用 lineinfile 模块进行配置,即使这样慢，好在sentinel的基本配置并不多

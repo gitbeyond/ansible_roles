@@ -1,0 +1,24 @@
+
+- name: copy drbd conf file
+  template: 
+    src: '{{ item }}'
+    dest: '{{ drbd_conf_dir }}' 
+    owner: '{{drbd_run_user}}' 
+    group: '{{drbd_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{drbd_confs}}'
+  tags:
+   - drbd_copy_confs
+
+- name: copy drbd child conf file
+  template: 
+    src: '{{ item }}'
+    dest: '{{ drbd_child_conf_dir }}' 
+    owner: '{{drbd_run_user}}' 
+    group: '{{drbd_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{drbd_child_confs}}'
+  tags:
+   - drbd_copy_child_confs

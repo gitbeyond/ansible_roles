@@ -1,0 +1,4 @@
+
+- include_tasks: keepalived_{{ansible_service_mgr}}_service.yml
+  name: keepalived_service_boot
+  when: ansible_os_family == "RedHat"

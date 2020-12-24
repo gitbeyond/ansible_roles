@@ -30,13 +30,9 @@
     - path: "{{keepalived_install_dir}}"
     - path: "{{keepalived_conf_dir}}"
       owner: '{{keepalived_run_user}}' 
-    - path: "{{keepalived_child_conf_dir}}"
-      owner: '{{keepalived_run_user}}' 
     - path: "{{keepalived_log_dir}}"
       owner: '{{keepalived_run_user}}' 
     - path: "{{keepalived_var_dir}}"
-      owner: '{{keepalived_run_user}}' 
-    - path: "{{keepalived_script_dir}}"
       owner: '{{keepalived_run_user}}' 
    # - { path: "{{keepalived_data_dir}}", owner: '{{ keepalived_data_user }}', group: root, mode: "0755", state: directory }
 

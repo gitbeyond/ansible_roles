@@ -1,0 +1,16 @@
+- name: copy keepalived systemd boot file
+  template: 
+    src: '{{keepalived_boot_file}}'
+    dest: '/usr/lib/systemd/system/{{keepalived_app_name}}.service' 
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  notify:
+    - systemctl_daemon_reload
+
+- name: set keepalived boot and starting up
+  systemd:
+    name: '{{keepalived_app_name}}'
+    enabled: yes
+    state: started

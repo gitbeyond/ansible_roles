@@ -4,17 +4,21 @@ app_base_dir: /data/apps/opt
 keepalived_install_dir: '{{app_base_dir}}'
 keepalived_app_name: keepalived
 keepalived_base_dir: "{{keepalived_install_dir}}/{{keepalived_app_name}}"
+keepalived_bin_dir: '{{keepalived_base_dir}}/sbin'
 keepalived_data_dir: /data/apps/data/{{keepalived_app_name}}
 keepalived_conf_dir: /data/apps/config/{{keepalived_app_name}}
 keepalived_log_dir: /data/apps/log/{{keepalived_app_name}}
 keepalived_var_dir: /data/apps/var/{{keepalived_app_name}}
+keepalived_child_conf_dir: '{{keepalived_conf_dir}}/conf.d'
+keepalived_script_dir: '{{keepalived_conf_dir}}/scripts'
 keepalived_install_method: local
 keepalived_confs:
   - keepalived.conf
 keepalived_env_file: keepalived.sh
 keepalived_sysconfig_file: keepalived.env
 keepalived_boot_file: 'keepalived.{{ansible_service_mgr |default("systmed", true)}}'
-
+keepalived_child_confs: []
+keepalived_app_scripts: []
 keepalived_dependence_packets:
   - net-snmp-agent-libs
   - openssl-libs

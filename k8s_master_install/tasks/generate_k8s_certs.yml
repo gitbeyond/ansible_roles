@@ -6,10 +6,13 @@
     cmd: |
       if [ -e '{{k8s_cert_dir}}/k8s-root-ca-key.pem' ];then
           echo "$PATH"
-          echo 'cfssl gencert -initca -ca-key {{k8s_cert_dir}}/k8s-root-ca-key.pem {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca'
-          cfssl gencert -initca -ca-key {{k8s_cert_dir}}/k8s-root-ca-key.pem {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca
+          echo 'cfssl gencert -initca -ca-key {{k8s_cert_dir}}/k8s-root-ca-key.pem \
+              {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca'
+          cfssl gencert -initca -ca-key {{k8s_cert_dir}}/k8s-root-ca-key.pem \
+              {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca
       else
-          echo 'cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca'
+          echo 'cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | cfssljson \
+              --bare {{k8s_cert_dir}}/k8s-root-ca'
           cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-root-ca-csr.json | cfssljson --bare {{k8s_cert_dir}}/k8s-root-ca
       fi
     args:
@@ -28,11 +31,18 @@
     #cmd: 'cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes {{k8s_cert_json_dir}}/{{item}}-csr.json | cfssljson --bare {{k8s_cert_dir}}/{{item}}'
     cmd: |
       if [ -e '{{ k8s_cert_dir~"/"~item~"-key.pem" }}' ];then
-          csr_strings=$(cfssl gencsr -key {{k8s_cert_dir~"/"~item~"-key.pem"}} {{k8s_cert_json_dir}}/{{item}}-csr.json | awk -F':' '{split($2,A,"\"");print A[2]}')
+          csr_strings=$(cfssl gencsr -key {{k8s_cert_dir~"/"~item~"-key.pem"}} {{k8s_cert_json_dir}}/{{item}}-csr.json \
+              | awk -F':' '{split($2,A,"\"");print A[2]}')
+
           echo -e ${csr_strings} | grep -v '^$' > {{k8s_cert_dir}}/{{item}}.csr
-          cat {{k8s_cert_dir}}/{{item}}.csr | cfssl sign -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes - | cfssljson -bare {{k8s_cert_dir}}/{{item}}
+
+          cat {{k8s_cert_dir}}/{{item}}.csr | cfssl sign -ca={{k8s_cert_dir}}/k8s-root-ca.pem \
+              -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json \
+              -profile=kubernetes - | cfssljson -bare {{k8s_cert_dir}}/{{item}}
       else
-          cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes {{k8s_cert_json_dir}}/{{item}}-csr.json | cfssljson --bare {{k8s_cert_dir}}/{{item}}
+          cfssl gencert -ca={{k8s_cert_dir}}/k8s-root-ca.pem -ca-key={{k8s_cert_dir}}/k8s-root-ca-key.pem \
+              -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes \
+              {{k8s_cert_json_dir}}/{{item}}-csr.json | cfssljson --bare {{k8s_cert_dir}}/{{item}}
       fi
     args:
       chdir: "{{k8s_work_dir}}"
@@ -45,7 +55,9 @@
     - k8s-kube-scheduler
     - k8s-kube-proxy
     - k8s-dashboard
-    - kubernetes
+    #- kubernetes 这个是在整理 k8s-239 时，遇到的一个遗留问题，临时添加的一行，
+    # 但是这里就有一个新的问题，如果是用户自已定义了 k8s_cert_conf_files 变量，那么这里写死肯定是不行的。
+    # 暂时又不太好改，因为光改这里意义不大，底下还有关于 front 相关的，后面整理整理再改
   run_once: true
   environment:
     PATH: '{{k8s_cfssl_cmd_path}}:{{ansible_env.PATH}}'
@@ -54,7 +66,9 @@
 - name: generate k8s-front-proxy-ca
   local_action: 
     module: shell 
-    cmd: '{{k8s_cfssl_cmd_path}}/cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-front-proxy-ca-csr.json | {{k8s_cfssl_cmd_path}}/cfssljson --bare {{k8s_cert_dir}}/k8s-front-proxy-ca'
+    cmd: |
+      cfssl gencert -initca {{k8s_cert_json_dir}}/k8s-front-proxy-ca-csr.json \
+          | cfssljson --bare {{k8s_cert_dir}}/k8s-front-proxy-ca
     args:
       chdir: "{{k8s_work_dir}}"
       creates: "{{k8s_cert_dir}}/k8s-front-proxy-ca.pem"
@@ -65,7 +79,10 @@
 - name: generate k8s-front-proxy-client
   local_action: 
     module: shell
-    cmd: 'cfssl gencert -ca={{k8s_cert_dir}}/k8s-front-proxy-ca.pem -ca-key={{k8s_cert_dir}}/k8s-front-proxy-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json -profile=kubernetes {{k8s_cert_json_dir}}/{{item}}-csr.json | cfssljson --bare {{k8s_cert_dir}}/{{item}}'
+    cmd: |
+      cfssl gencert -ca={{k8s_cert_dir}}/k8s-front-proxy-ca.pem \
+          -ca-key={{k8s_cert_dir}}/k8s-front-proxy-ca-key.pem -config={{k8s_cert_json_dir}}/k8s-gencert.json \
+          -profile=kubernetes {{k8s_cert_json_dir}}/{{item}}-csr.json | cfssljson --bare {{k8s_cert_dir}}/{{item}}
     args:
       chdir: "{{k8s_work_dir}}"
       creates: "{{k8s_cert_dir}}/{{item}}.pem"
