@@ -19,4 +19,6 @@
     name: root
     password: '{{system_root_password}}'
     update_password: always
-  when: system_root_password is not none and system_root_password != ''
+  when: 
+    - system_root_password is not none
+    - system_root_password != ''

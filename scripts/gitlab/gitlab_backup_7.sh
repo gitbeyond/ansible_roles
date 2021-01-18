@@ -13,7 +13,7 @@
 #gitlab_backup_dir=/var/opt/gitlab/backup
 gitlab_backup_dir=/home/backup
 gitlab_repo_data_dir=/var/opt/gitlab/git-data/repositories
-gitlab_backup_remote_dir=/home/bak
+gitlab_backup_remote_dir=/home/bak/gitlab
 gitlab_backup_keep_one_dir=/data/apps/data/backup/gitlab
 gitlab_full_backup_day=0
 backup_file_delete_day=$((gitlab_full_backup_day+1))

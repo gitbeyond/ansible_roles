@@ -1,0 +1,4 @@
+- name: install nano dependence packet
+  yum: 
+    name: '{{nano_dependence_packets}}'
+    state: present

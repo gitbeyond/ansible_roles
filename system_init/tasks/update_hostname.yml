@@ -1,0 +1,35 @@
+#- name: backup old hosts file
+#  shell: test -e /etc/hosts_v0 || /bin/cp /etc/hosts /etc/hosts_v0
+
+- name: copy hosts file
+  copy: 
+    src: '{{system_hosts_file}}' 
+    dest: '{{system_hosts_dest_dir}}/{{system_hosts_dest_name}}' 
+    owner: root 
+    group: root
+    mode: "0644" 
+    backup: yes
+
+# 修改主机名
+#
+- name: get hostname
+  shell: 
+    cmd: grep '{{ ansible_default_ipv4.address }}' {{system_hosts_dest_dir}}/{{system_hosts_dest_name}} | awk "{print \$2}"
+  register: hname
+
+- name: modify hostname
+  hostname: 
+    name: '{{ hname.stdout }}'
+  when:
+    - hname is defined
+    - hname is not none
+    - hname != ''
+
+- name: delete tmp hosts file
+  file:
+    path: '{{system_hosts_dest_dir}}/{{system_hosts_dest_name}}'
+    state: absent
+  when: 
+    - system_hosts_dest_dir != '/etc'
+    - system_hosts_dest_name != 'hosts'
+

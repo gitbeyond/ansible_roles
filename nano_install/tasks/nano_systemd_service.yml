@@ -1,0 +1,16 @@
+- name: copy nano systemd boot file
+  template: 
+    src: '{{nano_boot_file}}'
+    dest: '/usr/lib/systemd/system/{{nano_app_name}}.service' 
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  notify:
+    - systemctl_daemon_reload
+
+- name: set nano boot and starting up
+  systemd:
+    name: '{{nano_app_name}}'
+    enabled: yes
+    state: started

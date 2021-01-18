@@ -1,0 +1,27 @@
+- name: set cell vxlan ip
+  set_fact:
+    nano_cell_vxlan_ip: '{{(iansible_default_ipv4.address.split(".")[-2:] | join(".") |float) * 1000 % 254 }}'
+
+- name: copy nano vxlan script
+  template:
+    src: nano_vxlan.sh
+    dest: '{{ nano_var_dir }}'
+    owner: '{{nano_run_user}}'
+    group: '{{nano_run_user}}'
+    mode: "0644"
+    backup: yes
+
+- name: copy nano conf file
+  template: 
+    src: '{{ nano_conf }}'
+    dest: '{{ nano_conf_dir }}' 
+    owner: '{{nano_run_user}}' 
+    group: '{{nano_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  #loop: '{{nano_conf}}'
+  tags:
+   - copy_nano_conf
+  notify:
+   - reload_nano_for_{{ansible_service_mgr}}
+

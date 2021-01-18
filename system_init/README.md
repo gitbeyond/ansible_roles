@@ -1,12 +1,14 @@
 
 此 role 的用途如下:
+* 同步/etc/hosts 文件，默认以控制节点的为准
+    * 同时根据 /etc/hosts 中的第一个名字，将其置为新的 hostname, 如 192.168.1.1 hadoop1.test.com hadoop1, 那么 192.168.1.1 的hostname 会成为 hadoop1.test.com
 * 安装基础包,如 epel-release, htop, sysstat 等等
 * 修改基础的内核参数
 * 关闭ipv6
 * 修改 limit 参数
 * 添加 profile 
 * 关闭 selinux
-* 添加同步时间的计划任务
+* 添加同步时间的计划任务,改为使用ntp或者 chrony
 * 打开 rc-local service
 * 关闭透明大页
 

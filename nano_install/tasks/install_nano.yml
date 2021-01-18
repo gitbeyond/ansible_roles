@@ -1,0 +1,33 @@
+
+
+- name: get nano packet dir name
+  local_action: 
+    module: shell 
+    cmd: tar tf {{nano_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false
+  register: nano_dir_name
+  run_once: true
+
+- name: cp and unarchive nano to remote host
+  unarchive: 
+    src: '{{ nano_packet }}'
+    dest: '{{ nano_install_dir }}'
+    owner: '{{ nano_run_user }}' 
+    group: '{{ nano_run_user }}' 
+    creates: '{{ nano_install_dir }}/{{nano_dir_name.stdout }}'
+    mode: "0755"
+
+- name: create nano link dir
+  file: 
+    src: '{{ nano_install_dir }}/{{nano_dir_name.stdout }}' 
+    dest: '{{nano_base_dir}}'
+    state: link
+  when: nano_dir_name.stdout != nano_app_name
+
+#- name: create nano conf link dir
+#  file: 
+#    src: '{{ nano_conf_dir }}'
+#    dest: '/etc/{{nano_app_name}}' 
+#    state: link
+#  ignore_errors: true
+

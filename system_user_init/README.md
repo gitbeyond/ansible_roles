@@ -3,6 +3,8 @@
 * 创建一个普通用户,为其配置 sudo 权限
 * 将 ansible 控制节点的公钥添加至用户的 `authorized_keys` 文件中
 * 更新root的默认密码，如果提供新密码的话(这个密码不需要太复杂，比如 e3B1bEeAb0E9Ld8wV2Uf7GfE9Z6FfM1B, 因为 root 会被禁止ssh登录，密码会用来登录控制台)
+	* `ansible all -i localhost, -m debug -a "msg={{ 'mypassword' | password_hash('sha512', 'mysecretsalt') }}"`
+        * `mkpasswd --method=sha-512`
 * ssh 配置中禁止root登录，重启 sshd
 
 
@@ -32,14 +34,15 @@ system_users:
   - user: grafana
     password: 'grafana_encrypted_password'
 
+system_root_password: "The_simple_PASS"
 system_admin_user: admin # 在禁止root用户登录的时候会用到这个用户,默认是 system_users 中的第一个用户
 #system_ansible_pub_key: 'ansible_control_host_public_key'
-system_ansible_pub_key: '{{ lookup('file', '/path/to/id_rsa.pub') }}'
+system_ansible_pub_key: '{{ lookup("file", "/path/to/id_rsa.pub") }}'
 
 
 # playbook
-hosts: myhosts
-roles:
-  - {role: system_user_init}
+- hosts: myhosts
+  roles:
+    - {role: system_user_init}
 
 ```

@@ -1,0 +1,26 @@
+nano_packet:
+nano_run_user: nano
+app_base_dir: /data/apps/opt
+nano_install_dir: '{{app_base_dir}}'
+nano_app_name: 'nano-cell'
+nano_base_dir: "{{nano_install_dir}}/{{nano_app_name}}"
+nano_data_dir: /data/apps/data/{{nano_app_name}}
+nano_conf_dir: /data/apps/config/{{nano_app_name}}
+nano_log_dir: /data/apps/log/{{nano_app_name}}
+nano_var_dir: /data/apps/var/{{nano_app_name}}
+nano_install_method: local
+nano_confs:
+  - domain.cfg
+nano_env_file: nano.sh
+nano_boot_file: '{{nano_app_name}}.{{ansible_service_mgr |default("systmed", true)}}'
+nano_dependence_packets:
+  - libvirt
+  - policycoreutils-python
+  - genisoimage
+  - qemu-system-x86
+  - seabios
+  - seabios-bin
+# 下面这两个包，如果系统是 latest 的话，是需要安装的
+#  - centos-release-qemu-ev
+#  - qemu-kvm-ev
+

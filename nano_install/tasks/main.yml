@@ -1,0 +1,29 @@
+# editor: haifengsss@163.com
+# update date: 2021/01/18
+
+- import_tasks: create_nano_dir.yml
+  tags:
+    - nano_create_dir
+
+- import_tasks: install_nano.yml
+  tags:
+    - nano_install
+
+- import_tasks: copy_nano_conf.yml
+  tags:
+    - nano_copy_conf
+
+- import_tasks: install_nano_dependence_packet.yml
+  tags:
+    - nano_install_dependence_packet
+
+- import_tasks: nano_boot.yml
+  tags:
+    - nano_boot
+
+
+#- include: install_dependence_packet.yml
+#  when: nano_install_method == "net" 
+
+
+#- include: core_argument.yml

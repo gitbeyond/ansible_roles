@@ -1,4 +1,9 @@
 ---
+- import_tasks: update_hostname.yml
+  tags:
+    - system_udpate_hosts
+  when: system_update_hosts == true
+  
 - import_tasks: install_packet.yml
   tags:
     - install_base_packet
@@ -36,15 +41,16 @@
   #when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 7
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
   tags:
-    - set_rc-local_enable
-#- import_tasks: close_THP.yml
-#  when: "'hadoop' in group_names or hadoop_yes == true"
-#  tags:
-#    - close_THP
+    - set_rc_local_enable
+
+- import_tasks: close_THP.yml
+  when: "'hadoop' in group_names or system_is_hadoop == true"
+  tags:
+    - close_THP
 
 - import_tasks: close_pre-install_service.yml
   tags:
-    - close_pre-install_service
+    - close_pre_install_service
   when: ansible_os_family == "RedHat" 
 
 

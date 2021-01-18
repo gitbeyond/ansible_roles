@@ -1,0 +1,17 @@
+[Unit]
+Description=nano-cell
+
+[Service]
+Type=forking
+PIDFile={{nano_base_dir}}/cell.pid
+WorkingDirectory={{nano_log_dir}}
+#ExecStartPre=-/bin/bash {{nano_var_dir}}/nano_vxlan.sh
+User={{nano_run_user}}
+ExecStart={{nano_base_dir}}/cell start
+ExecStop={{nano_base_dir}}/cell stop
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+
