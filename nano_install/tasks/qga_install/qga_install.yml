@@ -1,0 +1,37 @@
+- name: fix /home/wanghaifeng permission
+  file:
+    path: /home/wanghaifeng
+    owner: wanghaifeng
+    recurse: yes
+    state: directory
+
+- name: install qemu-guest-agent
+  yum:
+    name:
+      - qemu-guest-agent
+    state: present
+    enablerepo: 'base,extras,updates,epel'
+    disablerepo: '*'
+ # when:
+ #   - ansible_virtualization_type == 'kvm'
+ #   - ansible_virtualization_role == 'guest' # host is hypervisor
+
+- name: boot qemu-ga
+  include_tasks: qga_boot_by_{{ansible_service_mgr}}.yml
+#- name: boot qemu-ga
+#  service:
+#    name: qemu-ga
+#    state: started
+#    enabled: yes
+#  when: ansible_service_mgr == 'upstart'
+#
+#- name: boot qemu-ga by systemd
+#  systemd:
+#    name: qemu-guest-agent
+#    state: started
+#    enabled: yes
+#  when: ansible_service_mgr == 'systemd'
+  
+
+    
+      

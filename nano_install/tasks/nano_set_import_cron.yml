@@ -1,0 +1,16 @@
+
+- name: copy nano import vm script
+  template:
+    src: libvirt_to_nano.py
+    dest: '{{ nano_var_dir }}'
+    owner: '{{nano_run_user}}'
+    group: '{{nano_run_user}}'
+    mode: "0644"
+    backup: yes
+
+#- name: set nano import vm cron job
+#  cron:
+#    hour: '00'
+#    name: "nano import vm"
+#    minute: '10'
+#    job: "/usr/bin/python {{nano_var_dir}}/libvirt_to_nano.py &>> /var/log/messages"

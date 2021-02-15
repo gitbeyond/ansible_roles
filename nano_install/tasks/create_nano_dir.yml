@@ -11,7 +11,7 @@
 
 - name: set nano sudo privilege
   lineinfile:
-    line: '{{nano_run_user}} ALL=(root) NOPASSWD: /bin/bash'
+    line: '{{nano_run_user}} ALL=(root) NOPASSWD: /bin/bash, /data/apps/opt/nano-cell/cell'
     state: present
     path: /etc/sudoers
     backup: 'yes'
@@ -39,9 +39,9 @@
     mode: "0755" 
     state: 'directory'
   loop:
-    - path: "{{app_base_dir}}"
+    #- path: "{{app_base_dir}}"
     - path: "{{nano_install_dir}}"
-      owner: '{{nano_run_user}}' 
+      #owner: '{{nano_run_user}}' 
     - path: "{{nano_var_dir}}"
       owner: '{{nano_run_user}}' 
 

@@ -49,11 +49,19 @@
   tags:
     - set_etcdctl_env
 
+
+# 下面的判断并不OK，这会导致很多的skip产生，应该再改改，当相关变量不OK时，直接停止playbook
 - import_tasks: add_key_to_backup_host.yml
   tags:
     - add_key_to_backup_host
+  when: 
+    - backup_remote_host is not none
+    - backup_remote_host != ""
 
 - import_tasks: add_etcd_backup_task.yml
   tags:
     - add_etcd_backup_task
+  when: 
+    - backup_remote_host is not none
+    - backup_remote_host != ""
 

@@ -1,0 +1,8 @@
+
+- name: boot qemu-ga by upstart
+  service:
+    name: qemu-ga
+    state: started
+    enabled: yes
+  #when: ansible_service_mgr == 'upstart'
+

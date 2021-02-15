@@ -2,7 +2,7 @@
 - import_tasks: get_remote_host_pub_key.yml
   tags:
     - get_remote_host_pub_key
-  delegate_to: '{{backup_remote_host}}'
+  delegate_to: '{{backup_remote_host | default("localhost")}}'
   run_once: true
   
 - name: generate backup_host_user ssh key

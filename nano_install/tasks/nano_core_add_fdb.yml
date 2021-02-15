@@ -1,0 +1,32 @@
+
+
+# 下面这个操作是在添加 cell 的时候，添加物理网络的路由，这个不仅要写在这里，还要在开机启动中写一份
+- name: core add cell physical route
+  shell: |
+    nano_core_ph_ip={{nano_core_ph_ip}}
+    nano_cell_ph_ip={{nano_cell_ph_ip}}
+    nano_core_ph_link=$(ip a |grep -B 2 ${nano_core_ph_ip} | head -n 1 |awk -F:  '{gsub(" ","",$2); print $2}')
+    ping -I ${nano_core_ph_link} -c 1 -W 2 ${nano_cell_ph_ip} &> /dev/null
+    ping_ret=${?}
+    if [ ${ping_ret} == 0 ];then
+        :
+    else
+        nano_core_ph_gateway=${nano_core_ph_ip%.*}.1
+        nano_cell_ph_network=${nano_cell_ph_ip%.*}.0/24
+        nano_ph_route=$(ip rou sh ${nano_cell_ph_network} dev ${nano_core_ph_link} via ${nano_core_ph_gateway}) 
+        if [ -n "${nano_ph_route}" ];then
+            :
+        else
+            ip rou add ${nano_cell_ph_network} dev ${nano_core_ph_link} \
+                via ${nano_core_ph_gateway}
+        fi
+    fi
+  delegate_to: '{{nano_core_ph_ip}}'
+  delegate_facts: true
+
+- name: core add cell fdb item
+  shell:
+    cmd: bridge fdb append 00:00:00:00:00:00 dst {{nano_cell_ph_ip}} dev nano
+    #cmd: 'echo {{ansible_default_ipv4.address}} > /tmp/t1.txt'
+  delegate_to: '{{nano_core_ph_ip}}'
+  delegate_facts: true

@@ -1,0 +1,16 @@
+[Unit]
+Description=nano-frontend
+
+[Service]
+Type=forking
+PIDFile=/opt/nano/frontend/frontend.pid
+WorkingDirectory=/opt/nano/frontend
+User={{nano_run_user}}
+ExecStart=/opt/nano/frontend/frontend start
+ExecStop=/opt/nano/frontend/frontend stop
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,25 @@
+#- name: copy nano default pool xml
+#  template:
+#    src: nano_local0.xml
+
+- name: create default pool dir
+  file:
+    path: '{{nano_default_storage_pool_path}}'
+    state: directory
+    owner: qemu
+    group: qemu
+    mode: "0744" 
+
+- name: create nano default pool
+  community.libvirt.virt_pool:
+    command: define
+    name: local0
+    xml: '{{ lookup("template", "nano_local0.xml")}}'
+    #autostart: yes
+    #state: active
+    
+- name: active nano default pool
+  community.libvirt.virt_pool:
+    name: local0
+    state: active
+    autostart: yes

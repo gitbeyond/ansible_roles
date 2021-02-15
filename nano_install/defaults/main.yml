@@ -5,8 +5,10 @@ nano_install_dir: '{{app_base_dir}}'
 nano_app_name: 'nano-cell'
 nano_base_dir: "{{nano_install_dir}}/{{nano_app_name}}"
 nano_data_dir: /data/apps/data/{{nano_app_name}}
-nano_conf_dir: /data/apps/config/{{nano_app_name}}
-nano_log_dir: /data/apps/log/{{nano_app_name}}
+#nano_conf_dir: /data/apps/config/{{nano_app_name}}
+nano_conf_dir: '{{nano_base_dir}}/config'
+#nano_log_dir: /data/apps/log/{{nano_app_name}}
+nano_log_dir: '{{nano_base_dir}}/log'
 nano_var_dir: /data/apps/var/{{nano_app_name}}
 nano_install_method: local
 nano_confs:
@@ -20,7 +22,13 @@ nano_dependence_packets:
   - qemu-system-x86
   - seabios
   - seabios-bin
+  # 这个是为了让python操作xml,是调用 virt 定义 pool 时用的
+  - python-lxml 
+  - libvirt-python
+  - mysql-connector-python
+  # python 调用 libguestfs 的依赖包 
+  #- libguestfs-tools-c
 # 下面这两个包，如果系统是 latest 的话，是需要安装的
 #  - centos-release-qemu-ev
 #  - qemu-kvm-ev
-
+nano_default_storage_pool_path: '/data/kvm/local0'

@@ -1,0 +1,11 @@
+
+- name: boot qemu-ga by systemd
+  systemd:
+    name: qemu-guest-agent
+    state: started
+    enabled: yes
+#  when: ansible_service_mgr == 'systemd'
+  
+
+    
+      

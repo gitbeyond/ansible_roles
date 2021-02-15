@@ -1,0 +1,12 @@
+<pool type='dir'>
+  <name>local0</name>
+  <source>
+  </source>
+  <target>
+    <path>{{nano_default_storage_pool_path}}</path>
+    <permissions>
+      <owner>0</owner>
+      <group>0</group>
+    </permissions>
+  </target>
+</pool>

@@ -1,0 +1,27 @@
+- name: copy nano core vxlan script file
+  template: 
+    src: '{{ item }}'
+    dest: '{{ nano_var_dir }}' 
+    owner: '{{nano_run_user}}' 
+    group: '{{nano_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop:
+    - nano_core_vxlan.sh
+  tags:
+   - copy_nano_core_vxlan_script
+
+- name: copy nano core service file
+  template: 
+    src: '{{ item }}'
+    dest: '/usr/lib/systemd/system/{{item}}' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
+  loop:
+    - nano-core.service
+    - nano-frontend.service
+  tags:
+   - copy_nano_core_service_conf
+

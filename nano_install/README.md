@@ -30,3 +30,32 @@ nano_confs:
   - {role: nano_install}
 
 ```
+
+# 问题
+1. 获取包名这里有问题，包名不存在时，不会停止
+2. 使用普通用户启动 nano 报错
+```bash
+[nano@P-111-15 ~]$ /data/apps/opt/nano-cell/cell start
+bridge br0 is ready
+default route ready
+start cell fail: listen on DHCP port fail, please disable dnsmasq or other DHCP service.
+message: listen udp :67: bind: permission denied
+
+```
+3. 被控节点开启了 `Defaults    requiretty`
+    * https://github.com/ansible/ansible/pull/13487 : Make sudo+requiretty and ANSIBLE_PIPELINING work together
+    * https://stackoverflow.com/questions/35597076/ansible-sudo-sorry-you-must-have-a-tty-to-run-sudo
+    * https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ssh_connection.html : ansible.builtin.ssh – connect via ssh client binary
+    * https://docs.ansible.com/ansible/latest/reference_appendices/config.html: Ansible Configuration Settings
+
+# install_qga.yml 是一个单独的playbook，是用来为vm安装 qga 的，使用时单独引用即可
+```yaml
+- name: install qemu-guest-agent
+  hosts: myvm
+  tasks:
+    - name: import qemu-ga tasks
+      include_tasks: /home/wanghaifeng/wanghaifeng/ansible_roles/nano_install/tasks/qga_install/qga_install.yml
+      when: 
+        - ansible_virtualization_type == 'kvm'
+        - ansible_virtualization_role == 'guest'
+```

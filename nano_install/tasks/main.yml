@@ -17,13 +17,31 @@
   tags:
     - nano_install_dependence_packet
 
+- import_tasks: nano_core_add_fdb.yml
+  tags:
+    - nano_core_add_fdb
+
+- import_tasks: nano_create_default_pool.yml
+  tags:
+    - nano_create_default_pool
+
 - import_tasks: nano_boot.yml
   tags:
     - nano_boot
 
+- import_tasks: nano_set_import_cron.yml
+  tags:
+    - nano_set_import_cron
+
+- import_tasks: generate_nano_core_conf.yml
+  tags:
+    - generate_nano_core_conf
+  delegate_to: '{{nano_core_ph_ip}}'
+  run_once: true
 
 #- include: install_dependence_packet.yml
 #  when: nano_install_method == "net" 
 
 
 #- include: core_argument.yml
+#

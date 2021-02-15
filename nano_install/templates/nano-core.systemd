@@ -1,0 +1,17 @@
+[Unit]
+Description=nano-core
+
+[Service]
+Type=forking
+PIDFile=/opt/nano/core/core.pid
+WorkingDirectory=/opt/nano/core
+ExecStartPre=-/bin/sudo -u root /bin/bash {{nano_var_dir}}/nano_core_vxlan.sh
+User={{nano_run_user}}
+ExecStart=/opt/nano/core/core start
+ExecStop=/opt/nano/core/core stop
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+

@@ -29,7 +29,7 @@ etcd_log_dir: /data/apps/log/etcd
 etcd_backup_dir: /data/apps/data/backup/etcd
 etcd_backup_script: 'etcd_backup.sh'
 # local, rpm, net
-etcd_install_method: local
+etcd_install_method: binary
 # etcd ca
 etcd_cert_c: "CN"
 etcd_cert_st: "BeiJing"
@@ -49,9 +49,9 @@ etcd_cert_hosts:
 
 # etcd backup
 
-#backup_remote_host: 
-#backup_remote_user:
-#backup_remote_dir:
+backup_remote_host:
+backup_remote_user:
+backup_remote_dir:
 backup_local_user: '{{etcd_run_user}}'
 
 # per host needed define variables
