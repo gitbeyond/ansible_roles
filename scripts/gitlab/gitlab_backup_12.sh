@@ -1,8 +1,10 @@
 #!/bin/bash
 # editor: wanghaifeng@idstaff.com
 # create date: 2020/12/22
+# update date: 2021/01/21
+#    新部署到 99.94 上，添加了每月一个备份到下不删除的操作
 # 备份gitlab数据
-# gitlab-7.0.12 的版本
+# gitlab-12.2.1 的版本
 
 
 # 两种方式，第一种是指定每月固定时间的进行全备，比如每月10号
@@ -10,13 +12,13 @@
 
 # 示例: 下周三删除本周二的备份
 
-#gitlab_backup_dir=/var/opt/gitlab/backup
-gitlab_backup_dir=/home/backup
+gitlab_backup_dir=/var/opt/gitlab/backups
+#gitlab_backup_dir=/home/backup
 gitlab_repo_data_dir=/var/opt/gitlab/git-data/repositories
-gitlab_backup_remote_dir=/home/bak/gitlab_68
+gitlab_backup_remote_dir=/home/bak/gitlab_94
 gitlab_backup_keep_one_dir=/data/apps/data/backup/gitlab
 # 这个目录下的是不删的,目前(2021/01/21)是定义每月15号一个全备
-gitlab_season_bak_dir=/home/bak/seanson_bak/gitlab_68
+gitlab_season_bak_dir=/home/bak/seanson_bak/gitlab_94
 gitlab_full_backup_day=0
 backup_file_delete_day=$((gitlab_full_backup_day+1))
 # 一周中的第几天
@@ -86,10 +88,11 @@ check_fs_size(){
     # 获取文件或目录的大小
     if [ -e ${file_name} ];then 
         if [ -f ${file_name} ];then
-            local file_size=$(stat -c %s ${file_name})
+            # 添加 -L 参数，以支持链接文件
+            local file_size=$(stat -L -c %s ${file_name})
         fi
         if [ -d ${file_name} ];then
-            local file_size=$(du -bs ${file_name} |awk '{print $1}')
+            local file_size=$(du -bs ${file_name}/ |awk '{print $1}')
         fi
     else
         # ${file_name} 不存在时返回5
@@ -98,18 +101,18 @@ check_fs_size(){
     
     # 获取目标目录的剩余空间
     # 得到目标目标的设备号
-    local fs_dev_num=$(stat -c '%d' ${fs_name})
+    local fs_dev_num=$(stat -L -c '%d' ${fs_name})
     local all_mount_point=$(df |awk '{print $NF}' | tail -n +2)
     for p in ${all_mount_point};do
         # 比如目标目录的设备号与设备的设备号是否一致
-        local p_dev_num=$(stat -c '%d' ${p})
+        local p_dev_num=$(stat -L -c '%d' ${p})
         if [ "${fs_dev_num}" == "${p_dev_num}" ];then
             local fs_mount_dev=${p}
             break
         fi
     done
     # 获取文件系统剩余空间大小 字节
-    local fs_free_space=$(df -B 1 ${fs_mount_dev} | tail -n 1 |awk '{print $4}')
+    local fs_free_space=$(df -B 1 ${fs_mount_dev}/ | tail -n 1 |awk '{print $4}')
     # 把文件大小加上5G
     local file_size=$((file_size+addition_size))
     if [ ${fs_free_space} -gt ${file_size} ];then
@@ -164,7 +167,9 @@ gitlab_backup(){
         # 远程目录上创建以当年第几个周命名的目录
         mkdir -p ${gitlab_backup_remote_dir}/${dt_W}
         # copy 到远程目录
-        cp ${last_backup_file_full_name} ${gitlab_backup_remote_dir}/${dt_W}/
+        #cp ${last_backup_file_full_name} ${gitlab_backup_remote_dir}/${dt_W}/
+        # 这里改成 mv, 是由于其备份是直接备份到远程 nfs 上的
+        mv ${last_backup_file_full_name} ${gitlab_backup_remote_dir}/${dt_W}/
         write_log "cp ${last_backup_file_full_name} ${gitlab_backup_remote_dir}/${dt_W}/ successful."
     else
         write_log "gitlab_backup_remote_dir:${gitlab_backup_remote_dir} is less than last_backup_file_full_name:${last_backup_file_full_name}"
@@ -192,14 +197,14 @@ gitlab_backup(){
         :
     fi
 
-    # 往本地目录保留一个全量备份
-    if check_fs_size ${last_backup_file_full_name} ${gitlab_backup_keep_one_dir};then
-        mkdir -p ${gitlab_backup_keep_one_dir}/${dt_W}
-        mv ${last_backup_file_full_name} ${gitlab_backup_keep_one_dir}/${dt_W}
-        write_log "mv ${last_backup_file_full_name} ${gitlab_backup_keep_one_dir}/${dt_W} successful."
-    else
-        write_log "gitlab_backup_keep_one_dir:${gitlab_backup_keep_one_dir} is less than last_backup_file_full_name:${last_backup_file_full_name}"  
-    fi
+    # 往本地目录保留一个全量备份, 由于其是直接备份至 nfs 上的，往本地保留相当于从nfs上又copy了一份，所以停止此操作
+    #if check_fs_size ${last_backup_file_full_name} ${gitlab_backup_keep_one_dir};then
+    #    mkdir -p ${gitlab_backup_keep_one_dir}/${dt_W}
+    #    mv ${last_backup_file_full_name} ${gitlab_backup_keep_one_dir}/${dt_W}
+    #    write_log "mv ${last_backup_file_full_name} ${gitlab_backup_keep_one_dir}/${dt_W} successful."
+    #else
+    #    write_log "gitlab_backup_keep_one_dir:${gitlab_backup_keep_one_dir} is less than last_backup_file_full_name:${last_backup_file_full_name}"  
+    #fi
 }
 
 gitlab_month_backup(){
