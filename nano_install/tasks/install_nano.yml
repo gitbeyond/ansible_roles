@@ -17,6 +17,23 @@
     creates: '{{ nano_install_dir }}/{{nano_dir_name.stdout }}'
     mode: "0755"
 
+# 这里由于 nano 不能指定单独的数据目录，所以按照目前的更新方法来做，
+# 需要在更新了包之后，把数据文件也复制到新的包中
+- name: copy cell data file
+  copy:
+    src: '{{nano_base_dir}}/data/{{item}}'
+    dest: '{{nano_install_dir}}/{{nano_dir_name.stdout}}/data/{{item}}'
+    owner: root
+    group: root
+    mode: "0600"
+    remote_src: yes
+    backup: yes
+  loop:
+    - instance.data
+    - network.data
+    - storage.data 
+  ignore_errors: true
+
 - name: create nano link dir
   file: 
     src: '{{ nano_install_dir }}/{{nano_dir_name.stdout }}' 

@@ -8,9 +8,9 @@
     mode: "0644"
     backup: yes
 
-#- name: set nano import vm cron job
-#  cron:
-#    hour: '00'
-#    name: "nano import vm"
-#    minute: '10'
-#    job: "/usr/bin/python {{nano_var_dir}}/libvirt_to_nano.py &>> /var/log/messages"
+- name: set nano import vm cron job
+  cron:
+    hour: '00'
+    name: "nano import or update vm info"
+    minute: '10'
+    job: "/usr/bin/python {{nano_var_dir}}/libvirt_to_nano.py &>> /var/log/messages"

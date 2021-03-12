@@ -1,10 +1,12 @@
 
 - name: delete default webapp dir
-  file: path={{item}} state=absent owner=root group=root mode=0755
-  with_items:
-    - "{{tomcat_base_dir}}/webapps/docs"
-    - "{{tomcat_base_dir}}/webapps/examples"
-    - "{{tomcat_base_dir}}/webapps/host-manager"
-    - "{{tomcat_base_dir}}/webapps/manager"
-    - "{{tomcat_base_dir}}/webapps/ROOT"
+  file: 
+    path: '{{tomcat_base_dir}}/webapps/{{item}}' 
+    state: absent 
+  loop:
+    - "docs"
+    - "examples"
+    - "host-manager"
+    - "manager"
+    - "ROOT"
 

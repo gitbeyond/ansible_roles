@@ -1,15 +1,18 @@
-# edirtor: haifeng
+# editor: haifengsss@163.com
 # 2019/04/28
+# update date: 2021/03/02
 
 - name: install epel-release
   yum: 
     name: epel-release 
     state: latest
+
 - name: install dependeies packet
   yum: 
     name:
     - python-pip
     state: latest
+
 - name: pip install supervisor
   pip: 
     name: '{{item.name}}' 

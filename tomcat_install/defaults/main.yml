@@ -1,5 +1,10 @@
+# global
 app_base_dir: /data/apps/opt
-tomcat_run_user: root
+supervisor_conf_dir: /data/apps/config/supervisord
+supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+# tomcat
+tomcat_install_dir: '{{app_base_dir}}'
+tomcat_run_user: 'tomcat'
 tomcat_run_group: '{{tomcat_run_user}}'
 tomcat_base_name: tomcat
 
@@ -10,12 +15,12 @@ tomcat_base_dir: /data/apps/opt/{{tomcat_base_name}}
 tomcat_log_dir: /data/apps/log/{{tomcat_base_name}}
 tomcat_conf_dir: /data/apps/opt/{{tomcat_base_name}}/conf
 
-tomcat_conf_file:
-tomcat_script_file:
+tomcat_conf_files: []
+tomcat_script_files: []
 tomcat_port:  
-# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+# 项目启动的方式, 目前可选择 supervisor
 tomcat_boot_type: supervisor
-tomcat_boot_file:
-
+tomcat_boot_file: 'tomcat.{{tomcat_boot_type}}'
+tomcat_env_vars: {}
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

@@ -2,6 +2,25 @@
 # 2017/01/12
 # update date: 2020/06/29
 
+- include_tasks: install_python_on_{{ansible_distribution}}{{ansible_distribution_major_version}}.yml
+  when:
+    #- ("install_python34_on_" + ansible_distribution + ansible_distribution_major_version + ".yml") is exists
+    #- "'install_python34_on_' + ansible_distribution + ansible_distribution_major_version + '.yml'" is exists
+    #- "install_python34_on_"~ansible_distribution~ansible_distribution_major_version~".yml" is exist
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "6"
+    #- supervisor_os_task_file is exists
+  
+- include_tasks: install_python_on_CentOS7.yml
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
+
+
+#- name: debug var
+#  debug:
+#    msg: '{{supervisor_python_exe}}   {{supervisor_os_task_file}}'
+
 - import_tasks: create_supervisor_user.yml
   tags:
     - supervisor_create_user

@@ -12,6 +12,7 @@
   register: packet_vars
   #with_items: "{{supervisor_packets}}"
   run_once: true
+  become: false
 
 #- name: test vars
 #  local_action: shell echo {{packet_name}} >> /tmp/super_var.txt
@@ -24,8 +25,6 @@
 #  run_once: true
 
 - name: copy supervisor packet
-  #unarchive: src={{ item }} dest={{ source_deploy_dir }} owner=root group=root creates={{ item.creates }}
-  #unarchive: src={{ item }} dest={{ source_deploy_dir }} owner=root group=root creates={{source_deploy_dir}}/{{ item.split('/')[-1].replace('.tar.gz','')}}
   unarchive: 
     src: '{{ item }}' 
     dest: '{{ source_deploy_dir }}' 
@@ -37,8 +36,8 @@
     #- {src: '{{ jdk_packet }}', dest: '{{jdk_install_dir}}/', owner: root, group: root, creates: '{{jdk_install_dir}}/{{jdk_dir_name}}'}
 
 - name: install packet
-  shell: python setup.py install
-  args:
+  shell: 
+    cmd: '{{supervisor_python_exe}} setup.py install'
     #chdir: "{{source_deploy_dir}}/{{item.stdout}}"
     chdir: "{{source_deploy_dir}}/{{packet_vars.stdout}}"
     #creates: "supervisor-3.1.4-py2.7.egg-info"
@@ -46,7 +45,8 @@
     #creates: /usr/lib64/python{{python_version}}/site-packages/{{packet_vars.stdout}}-py{{python_version}}.egg-info || /usr/lib/python{{python_version}}/site-packages/{{packet_vars.stdout}}-py{{python_version}}.egg-info
     #creates: /usr/lib*/python{{python_version}}/site-packages/{{packet_vars.stdout}}-py{{python_version}}.*
     #creates: /usr/lib*/python{{python_version}}/site-packages/{{packet_vars.stdout}}-py*
-    creates: /usr/lib*/python{{python_version}}/site-packages/{{packet_vars.stdout}}*
+    #creates: /usr/lib*/python{{supervisor_python_version}}/site-packages/{{packet_vars.stdout}}*
+    creates: '{{supervisor_python_exe | dirname }}/../lib*/python{{supervisor_python_version}}/site-packages/{{packet_vars.stdout}}*'
   #with_items: "{{packet_vars.results}}"
 
 # pip install:   /usr/lib/python2.7/site-packages/supervisor-4.1.0.dist-info

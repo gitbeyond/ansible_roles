@@ -1,6 +1,7 @@
 #!/bin/bash
 # editor: wanghaifeng@idstaff.com
 # create date: 2020/02/01
+# update date: 2021/02/20
 # 作用：当nano需要跨网段部署时，而物理网络又不支持组播转发，那么为各主机建立 vxlan 的通道
 #      使 core 与 cell 可以正常的用组播进行通信。
 #      目前来看，不需要 cell 与 cell 间通信。
@@ -190,12 +191,5 @@ main(){
 
 main
 
-#for h in ${nano_hosts[@]};do
-#    if ip a |grep ${h} &> /dev/null; then
-#        :
-#    else
-#        bridge fdb append 00:00:00:00:00:00 dst ${h} dev vxlan1
-#    fi
-#done
 
 {%endraw%}

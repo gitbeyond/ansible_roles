@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # editor: wanghaifeng@idstaff.com
 # create date: 2021/01/19
-# update date: 2021/02/22
 # 脚本的作用是获取当前vm的信息，将其写入 cell 的数据文件中
 # 
 """
@@ -30,7 +29,6 @@ import libvirt
 # yum install python-libguestfs libguestfs
 #import guestfs
 from xml.dom.minidom import parseString
-from xml.etree import ElementTree
 import time
 import sys
 import os
@@ -106,85 +104,6 @@ def get_p_name_from_ip(vm_sa_ip):
         return "none"
 
 
-
-
-# 这个类是分析vm的xml，返回其中的一些内容，比如 mac地址信息
-class vm_xml(object):
-
-    def __init__(self, vm_xml_string):
-        # 这个 vm_xml 是 xml 的字符串
-        self.vm_xml_string = vm_xml_string
-        self.vm_xml_obj = ElementTree.fromstring(self.vm_xml_string)
-
-    def get_macs(self):
-        """ 
-        获取所有的mac地址信息
-        {"type": "bridge",
-        "source_bridge": "br0",
-        "target_dev": "vnet2", # 这个暂时不收集
-        "mac_address": "00:16:3e:e2:c9:0f"}
-        """
-        vm_macs = []
-        vm_interfaces = self.vm_xml_obj.findall("devices/interface")
-        for interface in vm_interfaces:
-            if_type = interface.get("type")
-            if_mac_address = interface.find("mac").get("address")
-            if_source_bridge = ''
-            if if_type == 'bridge':
-                if_source_bridge =  interface.find("source").get("bridge")
-            
-            vm_macs.append({"type": if_type, "source_bridge": if_source_bridge,
-                "mac_address": if_mac_address})
-        
-        return vm_macs
-
-    def get_uuid(self):
-        uuid_node = self.vm_xml_obj.find("uuid")
-        if uuid_node:
-            return uuid_node.text
-    def get_name(self):
-        name_node = self.vm_xml_obj.find("name")
-        if name_node:
-            return name_node.text
-
-    def get_disks(self):
-        """
-        获取所有的disk信息
-        {"driver_type": "qcow2", ""}
-        """
-        vm_disks = []
-        vm_disk_nodes = self.vm_xml_obj.findall("devices/disk")
-        for disk in vm_disk_nodes:
-            # 这个有可能为空
-            driver_type = ""
-            source_pool = ""
-            source_file_or_volume = ""
-            disk_type = disk.get("type")
-            # cdrom or disk
-            disk_device = disk.get("device")
-            driver_type = disk.find("driver").get("type")
-            disk_source = disk.find("source")
-            if disk_source is not None:
-                source_pool = disk_source.get("pool")
-                source_file_or_volume = disk_source.get(disk_type)
-
-            target_dev = disk.find("target").get("dev")
-            vm_disks.append({"driver_type": driver_type, "disk_type": disk_type,
-                "disk_device": disk_device, "source_pool": source_pool, 
-                "source_file_or_volume": source_file_or_volume, 
-                "target_dev": target_dev})
-        
-        return vm_disks
-    def get_vnc_info(self):
-        #vnc_info = {}
-        vnc_node = self.vm_xml_obj.find("devices/graphics")
-        graph_vnc_port = vnc_node.get('port')
-        return {"vnc_port": graph_vnc_port} 
-
-
-
-
-
 # 获取 vm 的信息，将其整理成 cell 的数据文件格式，返回一个字典
 #@pysnooper.snoop()
 def get_dom_info(dom):
@@ -193,9 +112,9 @@ def get_dom_info(dom):
     dom_max_memory = dom.maxMemory() * 1024
     dom_uuid = dom.UUIDString()
     # 获取第一块磁盘信息
-    dom_xml_obj = vm_xml(dom.XMLDesc())
-    dom_disks = dom_xml_obj.get_disks()
-    # disk 大小,
+    dom_xml = parseString(dom.XMLDesc())
+    dom_disks = dom_xml.getElementsByTagName("disk")
+    # disk 大小
     try:
         dom_vda_size = dom.blockInfo(path=vm_root_disk_t1)[0]
     except Exception as e:
@@ -204,15 +123,37 @@ def get_dom_info(dom):
 
     dom_vda_volume = "none"
     dom_vnc_port = 5901
-    logging.debug("dom_disks: %s" % dom_disks)
+
+    dom_vda_xml = None
 
     for d in dom_disks:
         # d 是 disk 的节点
         # In [108]: disk1_target.attributes.items()
         # Out[108]: [('dev', 'hda'), ('bus', 'ide')]
-        logging.debug("d[target_dev]: %s" % d['target_dev'])
-        if d['target_dev'] in vm_root_disks:
-            dom_vda_volume = d['source_file_or_volume']
+        
+        for d_item in d.getElementsByTagName("target")[0].attributes.items(): 
+            if d_item[1] in vm_root_disks:
+                dom_vda_xml = d
+                break
+
+    if dom_vda_xml:
+            # 这里获取到的也是一个列表，这个方法会把所有的 source 节点都获取到，即使是孙子节点的也会
+        d_sources = dom_vda_xml.getElementsByTagName("source")
+        # 如果获取到的是多个节点，那么判断一下，找出子节点的即可
+        if len(d_sources) > 1 :
+            # 这里得到的也是一个列表，遍历列表
+            for disk_source in d_sources:
+                # 判断如果其父节点是 d，那么说明其是d的子节点
+                if disk_source.parentNode == dom_vda_xml:
+                    # disk 的 source 发展是一个列表，列表中是元组
+                    for item in disk_source.attributes.items():
+                        if item[0] == "volume":
+                            dom_vda_volume = item[1]
+        else:
+            for item in d_sources[0].attributes.items():
+                if item[0] == "volume" or item[0] == "file":
+                    dom_vda_volume = item[1]          
+                
 
     # 磁盘信息，假设是获取带有 da 字样的磁盘信息, 还需要获取磁盘中的 ip 地址信息
     # 原先，只打算获取第一块网卡的 mac 地址就行了，现在因为要获取 ip 信息，
@@ -220,20 +161,25 @@ def get_dom_info(dom):
     # 在之前的 cloudstack 测试环境中，虚拟机中也有多块的虚拟网卡，所以这里需要判断一下是否有多个网卡
     # 根据目前的实际情况，一般情况下都是最多两个网卡
 
-    dom_macs = dom_xml_obj.get_macs()
     # 为网卡2声明变量
     dom_interface2_mac = ''
     dom_interface2_br = ''
+    # 网卡是获取第一块网卡的信息
+    dom_interface_xml1 = dom_xml.getElementsByTagName("interface")
     # 获取mac地址
-    dom_interface1_mac = dom_macs[0].get("mac_address")
+    dom_interface1_mac = dom_interface_xml1[0].getElementsByTagName("mac")[0].attributes.items()[0][1]
     # 获取桥的名称，这个是物理机上的桥的名称
-    dom_interface1_br = dom_macs[0].get("source_bridge")
-    # 如果有超过一块网卡，就获取第二块网卡的信息，其他的不管
-    if len(dom_macs) > 1:
-        dom_interface2_mac = dom_macs[1].get("mac_address")
-        dom_interface2_br = dom_macs[1].get("source_bridge")
+    dom_interface1_br = dom_interface_xml1[0].getElementsByTagName("source")[0].attributes.items()[0][1]
+    if len(dom_interface_xml1) > 1:
+        dom_interface2_mac = dom_interface_xml1[1].getElementsByTagName("mac")[0].attributes.items()[0][1]
+        dom_interface2_br = dom_interface_xml1[1].getElementsByTagName("source")[0].attributes.items()[0][1]
+
+    # 获取vnc的port
+    dom_vnc_info = dom_xml.getElementsByTagName("graphics")[0].attributes.items()
+    for i in dom_vnc_info:
+        if i[0] == "port":
+            dom_vnc_port = i[1]
     
-    dom_vnc_port = dom_xml_obj.get_vnc_info().get("vnc_port")
     # 从数据库中获取ip信息
     # 当 vm 安装了 qga 之后，其 internal_address 自动生成，虽然在 cell 的数据文件中不显示
     # 如果 vm 没有安装 qga, 即使在数据文件中为其指定了 internal_address 在vm列表中也是不显示这个地址的，
@@ -337,7 +283,6 @@ def get_dom_info(dom):
         "cpu_priority": 1, "template": dom_template}
 
     return dom_info
-
 
 
 # 停止或启动 nano-cell 服务的函数

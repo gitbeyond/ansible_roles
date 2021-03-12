@@ -1,15 +1,16 @@
-# edirtor: haifeng
+# editor: haifengsss@163.com
 # 2017/01/12
+# update date: 2021/02/19
 
-- include: create_tomcat_user.yml
+- import_tasks: create_tomcat_user.yml
   tags:
     - create_tomcat_user
 
-- include: create_tomcat_dir.yml
+- import_tasks: create_tomcat_dir.yml
   tags:
     - create_tomcat_dir
 
-- include: install_tomcat.yml
+- import_tasks: install_tomcat.yml
   tags:
     - install_tomcat
 #  when: tomcat_packet_type == "tgz"
@@ -19,7 +20,7 @@
 #    - install_tomcat_for_jar
 #  when: tomcat_packet_type == "jar"
 
-- include: copy_tomcat_conf.yml
+- import_tasks: copy_tomcat_conf.yml
   tags:
     - copy_tomcat_conf
 

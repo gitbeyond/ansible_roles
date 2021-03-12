@@ -1,5 +1,6 @@
 source_deploy_dir: /data/apps/soft
-python_version: "{{ansible_python_version[0:-2]}}"
+supervisor_python_version: "{{ansible_python_version[0:-2]}}"
+supervisor_python_exe: /usr/bin/python
 supervisor_run_user: root
 supervisor_run_user_is_system: False
 #packet_name: "{{ item.split('/')[-1].split('-')[0]}}"
@@ -14,12 +15,15 @@ supervisor_var_dir: /data/apps/var/{{supervisor_prog_name}}
 supervisor_exe_file: /usr/bin/supervisorctl
 supervisor_install_method: net
 supervisor_packets:
-  - '{{packet_base_dir}}/meld3-1.0.2.tar.gz'
-  - '{{packet_base_dir}}/supervisor-3.3.5.tar.gz'
+  - '{{packet_base_dir}}/supervisor-4.2.1.tar.gz'
 
 supervisor_src_conf: "supervisord.conf"
-supervisor_version: '4.1.10'
-supervisor_http_host: 127.0.0.1
-supervisor_http_port: 9121
+supervisor_version: '4.2.1'
+supervisor_http_host: '127.0.0.1'
+supervisor_http_port: 9100
 supervisor_http_user: pysuper
-supervisor_http_pass: 0Ae6eVbfc7E0F9L8f6KcT8V26B6UfD2c
+supervisor_http_pass: 0Ae6eVbfc7E8F9B8f6FcT8s26B6UfD2c
+
+
+# special system
+#supervisor_os_task_file: "./install_python_on_{{ansible_distribution}}{{ansible_distribution_major_version}}.yml"

@@ -10,8 +10,17 @@ stopsignal=TERM
 stopwaitsecs=10
 redirect_stderr = true
 #environment=CATALINA_BASE="/data/apps/opt/tomcat1"
-stdout_logfile={{tomcat_log_dir}}/catalina.out
+{%if tomcat_env_vars |length >0-%}
+environment=
+    {%-for env in tomcat_env_vars-%}
+{{env}}={{tomcat_env_vars[env]}}
+        {%-if env != tomcat_env_vars[-1]-%}
+,
+        {%-endif-%}
+    {%-endfor-%}
+{%-endif%}
+stdout_logfile={{tomcat_log_dir}}/tomcat_std.log
 stdout_logfile_maxbytes = 300MB
 stdout_logfile_backups= 20
 stdout_events_enabled = 1
-stderr_logfile={{tomcat_log_dir}}/catalina.err
+stderr_logfile={{tomcat_log_dir}}/tomcat_err.log

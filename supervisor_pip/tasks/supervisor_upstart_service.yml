@@ -7,13 +7,10 @@
     mode: "0755"
     backup: yes
 
-- name: add supervisord to service list
-  shell: 
-    cmd: chkconfig --list '{{supervisor_prog_name}}' || chkconfig --add '{{supervisor_prog_name}}'
-
 - name: set supervisord boot and starting up
   service: 
     name: '{{supervisor_prog_name}}'
     state: started 
+    runlevel: '2,3,4,5'
     enabled: yes
 

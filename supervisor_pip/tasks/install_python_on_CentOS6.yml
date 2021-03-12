@@ -1,0 +1,26 @@
+- name: set supervisor vars
+  include_vars:
+    file: 'CentOS6.yml'
+
+
+- name: copy base yum conf file
+  copy:
+    src: '{{item}}'
+    dest: '/etc/yum.repos.d/'
+    owner: root
+    backup: yes
+    mode: "0644"
+  loop:
+    - 'CentOS-Base.repo'
+    - 'epel.repo'
+
+- name: install python34
+  yum:
+    name: 
+      - python34
+      - python34-setuptools
+    state: present
+    enablerepo: 'base,epel'
+    disablerepo: '*'
+    update_cache: yes
+ 

@@ -1,59 +1,34 @@
 
-#- name: get tomcat packet name
-#  local_action: shell if [ {{tomcat_deploy_version}} == "0" ];then ls {{tomcat_source_dir}}/{{tomcat_packet_name}}; else ls {{tomcat_archive_dir}}/{{tomcat_packet_name}}_{{tomcat_deploy_version}};fi
-#  register: EXPORTER_PACKET_NAME
-#  ignore_errors: True
-
-
 - name: get tomcat packet dir name
-  local_action: shell tar tvf {{tomcat_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
+  local_action:
+    module: shell 
+    cmd: tar tf {{tomcat_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false
   register: packet_dir_name
   run_once: true
 
 
 - name: cp tomcat packet to remote
   unarchive: 
-    src: '{{item.src}}' 
-    dest: '{{item.dest}}' 
-    owner: '{{item.owner}}' 
-    group: '{{item.group}}' 
-    mode: '{{item.mode}}'
-  when: tomcat_packet is not none
-  with_items:
-    - src: '{{ tomcat_packet }}'
-      dest: '{{app_base_dir}}/'
-      owner: '{{tomcat_run_user}}' 
-      group: '{{tomcat_run_group}}'
-      mode: "0755" 
-      #creates: "{{tomcat_base_dir}}/bin/catalina.sh"
-      creates: "{{app_base_dir}}/{{packet_dir_name.stdout}}/bin/catalina.sh"
+    src: '{{tomcat_packet}}' 
+    dest: '{{tomcat_install_dir}}' 
+    owner: '{{tomcat_run_user}}' 
+    group: '{{tomcat_run_group}}' 
+    mode: "0755"
+    creates: "{{tomcat_base_dir}}/{{packet_dir_name.stdout}}/bin/catalina.sh"
+  when: 
+    - tomcat_packet is not none
+    - tomcat_packet is exists
   register: cp_result
 
 
-#- name: rename old tomcat version
-#  shell: /bin/mv {{tomcat_base_dir}} {{tomcat_base_dir}}_$(date +%Y%m%d%H%M%S)
-#  args:
-#    chdir: "{{app_base_dir}}"
-#    removes: "{{tomcat_base_dir}}"
-#  when: tomcat_update_version == true
-#
-#- name: rename tomcat dir name
-#  shell: /bin/mv {{packet_dir_name.stdout}} {{tomcat_base_dir}}
-#  args:
-#    chdir: "{{app_base_dir}}"
-#    creates: "{{tomcat_base_dir}}"
-#  when: tomcat_base_dir is not none and packet_dir_name.stdout.split("/")[-1] != tomcat_base_name
-
-
-- name: update tomcat packet link file for tgz
-  file: src={{item.src}} dest={{item.dest}} owner={{item.owner}} group={{item.group}} state={{item.state}}
-  with_items:
-    - src: '{{app_base_dir}}/{{packet_dir_name.stdout}}'
-      dest: '{{tomcat_base_dir}}'
-      owner: '{{tomcat_run_user}}'
-      group: '{{tomcat_run_group}}'
-      state: link 
-  when: tomcat_base_dir is not none and packet_dir_name.stdout.split("/")[-1] != tomcat_base_name
-  #when: tomcat_packet_link_name is none
-    #- {src: '{{tomcat_install_dir}}/{{EXPORTER_PACKET_NAME.stdout.split("/")[-1]}}', dest: '{{tomcat_install_dir}}/{{tomcat_packet_link_name}}', owner: '{{tomcat_run_user}}', group: '{{tomcat_run_group}}', state: link }
-
+- name: create tomcat packet link file for tgz
+  file: 
+    src: '{{tomcat_install_dir}}/{{packet_dir_name.stdout}}'
+    dest: '{{tomcat_base_dir}}'
+    owner: '{{tomcat_run_user}}'
+    group: '{{tomcat_run_group}}'
+    state: link 
+  when: 
+    - tomcat_base_dir is not none
+    - packet_dir_name.stdout.split("/")[-1] != tomcat_base_name

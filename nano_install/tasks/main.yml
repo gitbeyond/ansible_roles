@@ -1,5 +1,5 @@
 # editor: haifengsss@163.com
-# update date: 2021/01/18
+# update date: 2021/03/02
 
 - import_tasks: create_nano_dir.yml
   tags:
@@ -39,9 +39,3 @@
   delegate_to: '{{nano_core_ph_ip}}'
   run_once: true
 
-#- include: install_dependence_packet.yml
-#  when: nano_install_method == "net" 
-
-
-#- include: core_argument.yml
-#

@@ -1,0 +1,42 @@
+- name: get supervisor conf
+  stat:
+    path: '{{supervisor_prim_conf}}'
+  register: supervisor_conf_stat
+
+- name: end host if supervisor_prim_conf is not exist
+  meta: end_host
+  when: supervisor_conf_stat.stat.exists == False
+
+- name: copy zabbix check supervisor script
+  template: 
+    src: '{{item.src}}'
+    dest: '{{item.dest}}' 
+    owner: 'root'
+    group: 'root'
+    mode: "{{item.mode}}"
+  loop:
+   - src: 'zabbix_supervisor_check.py' 
+     dest: '{{ zabbix_agent_script_dir }}/zabbix_supervisor_check.py'
+     mode: "0744"
+
+- name: copy zabbix check supervisor conf
+  template: 
+    src: '{{item.src}}'
+    dest: '{{item.dest}}' 
+    owner: 'root'
+    group: 'root'
+    mode: "{{item.mode}}"
+  loop:
+   - src: 'zabbix_supervisor.conf' 
+     dest: '{{ zabbix_agent_child_conf_dir }}/zabbix_supervisor.conf'
+     mode: "0644"
+  notify:
+    - zabbix_agent_restart_by_{{ansible_service_mgr}}
+
+- name: check item whether is valid
+  shell:
+    cmd: '{{zabbix_agent_bin_file}} -t "supervisor_apps"'
+  register: zabbix_item_check_ret
+  changed_when: '"ZBX_NOTSUPPORTED" in zabbix_item_check_ret.stdout'
+  notify:
+    - zabbix_agent_restart_by_{{ansible_service_mgr}}

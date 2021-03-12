@@ -1,0 +1,10 @@
+
+- name: install python-setuptools
+  yum:
+    name: 
+      - python-setuptools
+    state: present
+    enablerepo: 'base,epel'
+    disablerepo: '*'
+    update_cache: yes
+ 

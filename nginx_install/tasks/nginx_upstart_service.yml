@@ -10,12 +10,13 @@
   - src: '{{nginx_boot_file}}'
     dest: '/etc/rc.d/init.d/{{nginx_app_name}}'
 
-- name: add nginx to service list
-  shell:
-    cmd: chkconfig --list {{nginx_app_name}} || chkconfig --add {{nginx_app_name}}
+#- name: add nginx to service list
+#  shell:
+#    cmd: chkconfig --list {{nginx_app_name}} || chkconfig --add {{nginx_app_name}}
 
 - name: set nginx boot and starting up
   service: 
     name: '{{ nginx_app_name }}' 
     state: 'started' 
+    runlevel: '2,3,4,5'
     enabled: yes

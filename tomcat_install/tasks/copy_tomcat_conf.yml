@@ -7,7 +7,7 @@
     group: "{{tomcat_run_group}}" 
     mode: "0644"
     backup: yes
-  with_items: '{{tomcat_conf_file}}'
+  loop: '{{tomcat_conf_files}}'
   when: item is not none
   #register: copy_conf_file
  
@@ -20,18 +20,6 @@
     group: "{{tomcat_run_group}}" 
     mode: "0755"
     backup: yes
-  with_items: '{{tomcat_script_file}}'
+  loop: '{{tomcat_script_files}}'
   when: item is not none
-
-- name: copy tomcat boot file
-  template: 
-    src: "{{tomcat_boot_file}}" 
-    dest: "{{supervisor_conf_dir}}" 
-    owner: "{{tomcat_run_user}}" 
-    group: "{{tomcat_run_group}}" 
-    backup: yes
-    mode: "0644"
-  when: tomcat_boot_file is not none
-
-
 

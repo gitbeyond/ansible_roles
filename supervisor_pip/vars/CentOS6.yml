@@ -1,0 +1,2 @@
+supervisor_python_version: "3.4"
+supervisor_python_exe: "/usr/bin/python3.4"

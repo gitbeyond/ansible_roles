@@ -1,6 +1,7 @@
 #!/bin/bash
 # editor: wanghaifeng@idstaff.com
 # create date: 2020/01/14
+# update date: 2021/02/20
 # 作用：当nano需要跨网段部署时，而物理网络又不支持组播转发，那么为各主机建立 vxlan 的通道
 #      使 core 与 cell 可以正常的用组播进行通信。
 #      目前来看，不需要 cell 与 cell 间通信。
@@ -30,8 +31,8 @@ nano_multicast_address={{nano_multicast_address}}
 #nano_hosts=(10.8.98.108 10.8.98.109 10.8.104.23)
 
 {%raw%}
-lock_file=/tmp/.nano_vxlan.lock
 nano_vxlan_group_address=239.1.1.1
+lock_file=/tmp/.nano_vxlan.lock
 check_lock(){
     exec 3<> ${lock_file}
     if flock -n 3;then
@@ -80,21 +81,6 @@ check_link_exist(){
         check_ip_exist ${vxlan_ip} ${vxlan_netmask}
     else
         # 如果 link 不存在, 先添加 link
-        # 这里 core 与 cell 在命令参数上稍有不同
-        # 判断 nano 的节点类型，执行不同的命令
-        #if [ "${nano_node_type}" == "cell" ];then
-        #    ip link add ${nano_vxlan_name} type vxlan \
-        #        id ${nano_vxlan_id} remote ${nano_core_ph_ip} \
-        #        dstport ${nano_vxlan_dstport} dev ${nano_cell_ph_link}
-        #    local link_add_ret=$?
-        #elif [ "${nano_node_type}" == "core" ];then
-        #    ip link add ${nano_vxlan_name} type vxlan \
-        #        id ${nano_vxlan_id} local ${nano_core_ph_ip} \
-        #        dstport ${nano_vxlan_dstport} dev ${nano_cell_ph_link}
-        #    local link_add_ret=$?
-        #else
-        #    return 30
-        #fi
         ip link add ${nano_vxlan_name} type vxlan \
             id ${nano_vxlan_id} dstport ${nano_vxlan_dstport} \
             dev ${nano_cell_ph_link} group ${nano_vxlan_group_address}
@@ -108,12 +94,25 @@ check_link_exist(){
         fi
     fi
     ip link set ${nano_vxlan_name} up
-    bridge fdb append 00:00:00:00:00:00 dst ${nano_core_ph_ip} dev ${nano_vxlan_name}
-    # 这里不 ping 一下，跟 nano_core 的 vxlan ip 是无法通信的
-    # 但是却可以收到对端发往组播地址的包
-    ping -c 1 ${nano_core_vxlan_ip}
+    if [ ${nano_node_type} == "cell" ];then
+        bridge fdb append 00:00:00:00:00:00 dst ${nano_core_ph_ip} dev ${nano_vxlan_name}
+        # 这里不 ping 一下，跟 nano_core 的 vxlan ip 是无法通信的
+        # 但是却可以收到对端发往组播地址的包
+        ping -c 1 ${nano_core_vxlan_ip}
+    fi
 }
 
+core_add_fdb_item(){
+    # 遍历 nano_cell_hosts 数组
+    for cell_ip in ${nano_cell_hosts[@]};do
+        if bridge fdb show dev ${nano_vxlan_name} |grep "${cell_ip}" &> /dev/null;then
+            :
+        else
+            bridge fdb append 00:00:00:00:00:00 dst ${cell_ip} dev ${nano_vxlan_name}
+            ping -c 1 ${cell_ip}
+        fi
+    done
+}
 
 check_ip_exist(){
     local vxlan_ip=$1
@@ -178,6 +177,8 @@ main(){
     if ip a |grep ${nano_core_ph_ip} &> /dev/null; then
         # 如果是 core 节点
         check_link_exist ${nano_core_vxlan_ip} ${nano_core_vxlan_netmask} core
+        # 添加 cell 的 fdb 条目
+        core_add_fdb_item
     else
         check_link_exist ${nano_cell_vxlan_ip} ${nano_cell_vxlan_netmask}
     fi
@@ -186,12 +187,5 @@ main(){
 
 main
 
-#for h in ${nano_hosts[@]};do
-#    if ip a |grep ${h} &> /dev/null; then
-#        :
-#    else
-#        bridge fdb append 00:00:00:00:00:00 dst ${h} dev vxlan1
-#    fi
-#done
 
 {%endraw%}

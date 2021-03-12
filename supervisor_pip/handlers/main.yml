@@ -1,5 +1,10 @@
-- name: restart supervisord service
+- name: restart_supervisord_service_by_upstart
   service: 
+    name: '{{supervisor_prog_name}}' 
+    state: restarted
+
+- name: restart_supervisord_service_by_systemd
+  systemd: 
     name: '{{supervisor_prog_name}}' 
     state: restarted
 

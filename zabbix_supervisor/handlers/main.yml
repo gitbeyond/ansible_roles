@@ -1,0 +1,9 @@
+- name: zabbix_agent_restart_by_upstart
+  service: 
+    name: '{{ zabbix_agent_service_name }}' 
+    state: restarted
+
+- name: zabbix_agent_restart_by_systemd
+  systemd: 
+    name: '{{ zabbix_agent_service_name }}' 
+    state: restarted
