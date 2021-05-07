@@ -46,6 +46,7 @@
 #  tags:
 #    - install_supervisor
 
+
 - import_tasks: copy_supervisor_conf.yml
   tags:
     - copy_supervisor_conf

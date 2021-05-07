@@ -1,21 +1,52 @@
 - name: install depended package
-  yum: name={{ item.name }} state={{ item.state }}
-  with_items:
-    - { name: epel-release, state: latest}
+  yum: 
+    name: epel-release 
+    state: latest
+
 - name: install fping package
-  yum: name={{ item.name }} state={{ item.state }}
-  with_items:
-    - { name: fping, state: latest}
-- name: copy iostat discovery script
-  copy: src={{item.src}} dest={{item.dest}} owner=zabbix group=zabbix mode={{item.mode}}
-  with_items:
-    - {src: 'fping.sh', dest: '{{ zabbix_dir }}/script/fping.sh', mode: '0744'}
-    - {src: 'fping_addr_discovery.py', dest: '{{ zabbix_dir }}/script/fping_addr_discovery.py', mode: '0744'}
-    - {src: 'fping.conf', dest: '{{ zabbix_dir }}/etc/userparams/', mode: '0644'}
+  yum: 
+    name: fping
+    state: latest
+
+- name: create zabbix_script dir
+  file:
+    path: '{{zabbix_script_dir}}'
+    state: directory
+    owner: '{{zabbix_run_user}}'
+    group: '{{zabbix_run_user}}'
+    mode: "0755"
+
+- name: copy fping discovery script
+  template: 
+    src: '{{item.src}}' 
+    dest: '{{item.dest}}' 
+    owner: '{{zabbix_run_user}}' 
+    group: '{{zabbix_run_user}}' 
+    mode: '{{item.mode}}'
+  loop:
+    - src: 'fping.sh'
+      dest: '{{ zabbix_script_dir }}/fping.sh'
+      mode: "0744"
+    - src: 'fping_addr_discovery.py'
+      dest: '{{ zabbix_script_dir }}/fping_addr_discovery.py'
+      mode: "0744"
+
+- name: copy fping zabbix conf
+  template: 
+    src: 'fping.conf' 
+    dest: '{{zabbix_child_conf_dir}}' 
+    owner: '{{zabbix_run_user}}' 
+    group: '{{zabbix_run_user}}' 
+    mode: "0644"
   notify:
     - restart zabbix_agentd
-- name: modify zabbix_agentd config file
-  lineinfile: dest='{{ zabbix_dir }}/etc/zabbix_agentd.conf' regexp='Include={{ zabbix_dir }}/etc/userparams/.*\.conf' line='Include={{ zabbix_dir }}/etc/userparams/*.conf' backrefs=yes
-  notify:
-    - restart zabbix_agentd
+
+#- name: modify zabbix_agentd config file
+#  lineinfile: 
+#    dest: '{{ zabbix_dir }}/etc/zabbix_agentd.conf'
+#    regexp: 'Include={{ zabbix_dir }}/etc/userparams/.*\.conf' 
+#    line: 'Include={{ zabbix_dir }}/etc/userparams/*.conf'
+#    backrefs: yes
+#  notify:
+#    - restart zabbix_agentd
 

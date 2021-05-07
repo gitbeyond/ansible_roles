@@ -14,10 +14,12 @@
 #
 
 # source function library
+. /etc/profile
 . /etc/rc.d/init.d/functions
 
 lock_file=/data/apps/var/supervisord/supervisord.lock
 RETVAL=0
+prog=supervisord
 
 start() {
 	echo -n $"Starting supervisord: "
@@ -34,6 +36,14 @@ stop() {
 	[ $RETVAL -eq 0 ] && rm -f ${lock_file}
 }
 
+reload(){
+        echo -n $"Reloading $prog: "
+        /usr/bin/supervisorctl -c {{supervisor_prim_conf}} reload
+        RETVAL=$?
+        echo
+}
+
+
 restart() {
 	stop
 	start
@@ -46,7 +56,10 @@ case "$1" in
   stop) 
 	stop
 	;;
-  restart|force-reload|reload)
+  reload)
+        reload
+        ;;
+  restart|force-reload)
 	restart
 	;;
   condrestart)

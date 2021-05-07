@@ -2,11 +2,16 @@
 export PATH=/usr/lib64/qt-3.3/bin:/usr/jdk1.8.0_91/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/root/bin
 
 ip_addr=$1
-pack_num=$2
-pack_interval=$3
-pack_size=$4
-timeout=$5
-mode=$6
+# min, avg, max
+mode=$2
+pack_num=$3
+pack_num=${pack_num:-15}
+pack_interval=$4
+pack_interval=${pack_interval:-1}
+pack_size=$5
+pack_size=${pack_size:-96}
+timeout=$6
+timeout=${timeout:-2}
 
 
 if [ -n "${mode}" ];then

@@ -23,7 +23,15 @@ supervisor_http_host: '127.0.0.1'
 supervisor_http_port: 9100
 supervisor_http_user: pysuper
 supervisor_http_pass: 0Ae6eVbfc7E8F9B8f6FcT8s26B6UfD2c
-
+supervisor_exclude_envs:
+  - PWD
+  - MAIL
+  - SUDO_COMMAND
+  - SUDO_GID
+  - SUDO_UID
+  - SUDO_USER
+  - TMOUT
+  - _
 
 # special system
 #supervisor_os_task_file: "./install_python_on_{{ansible_distribution}}{{ansible_distribution_major_version}}.yml"
