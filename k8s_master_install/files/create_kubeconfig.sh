@@ -38,8 +38,8 @@ help_info(){
   --kube_root_ca_key: kubernetes root ca key file.
   --kube_new_config: new kubeconfig name.
   --kube_cluster_priv: true or false. clusterrolebinding or rolebinding.
-example: 
-  --kube_cmd '/root/k8s_55/k8s/kubectl --kubeconfig=/root/k8s_55/k8s/admin.kubeconfig' --kube_sa_name dashboard-admin --kube_ns kube-system --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_new_config ./dashboard-admin.kubeconfig --kube_cluster_role cluster-admin 
+examples: 
+  --kube_cmd '/root/k8s_55/k8s/kubectl --kubeconfig=/root/k8s_55/k8s/admin.kubeconfig' --kube_sa_name dashboard-admin --kube_ns kube-system --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./dashboard-admin.kubeconfig --kube_cluster_role cluster-admin 
 
   --kube_cmd '/root/k8s_55/k8s/kubectl --kubeconfig=/root/k8s_55/k8s/admin.kubeconfig' --kube_user_name uc-admin --kube_ns user-center --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./uc-admin.kubeconfig --kube_cluster_role admin 
 
@@ -69,12 +69,12 @@ while [[ $# -ge 1 ]]; do
             #echo "经过b"
             shift 2
             ;;
-        --kube_cluster_role )
+        --kube_cluster_role)
             kube_cluster_role=$2
             #echo "经过b"
             shift 2
             ;;
-        --kube_ns )
+        --kube_ns)
             kube_ns=$2
             #echo "经过c"
             shift
@@ -103,7 +103,7 @@ while [[ $# -ge 1 ]]; do
             kube_new_config=$2
             shift
             ;;
-        --kube_cluster_priv)
+        --kube_cluster_priv )
             kube_cluster_priv=true
             shift
             ;;
@@ -111,7 +111,8 @@ while [[ $# -ge 1 ]]; do
             help_info
             shift
             ;;
-        * )
+        *)
+            help_info
             #echo "please add argument."
             shift
             ;;
@@ -319,7 +320,7 @@ if [ -n "${kube_sa_name}" ];then
     ${kube_cmd} config set-credentials ${kube_sa_name} --token=${sa_token} \
       --kubeconfig=${kube_new_config}
     # 设置 context
-    echo_yellow "{kube_cmd} config set-context ${kube_sa_name} --cluster=${kube_cluster_name} \
+    echo_yellow "${kube_cmd} config set-context ${kube_sa_name} --cluster=${kube_cluster_name} \
       --user=${kube_sa_name} --kubeconfig=${kube_new_config}"
     
     ${kube_cmd} config set-context ${kube_sa_name} --cluster=${kube_cluster_name} \

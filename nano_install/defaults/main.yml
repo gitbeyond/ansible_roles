@@ -16,6 +16,7 @@ nano_confs:
 nano_env_file: nano.sh
 nano_boot_file: '{{nano_app_name}}.{{ansible_service_mgr |default("systmed", true)}}'
 nano_dependence_packets:
+  - iproute
   - libvirt
   - policycoreutils-python
   - genisoimage
@@ -32,3 +33,10 @@ nano_dependence_packets:
 #  - centos-release-qemu-ev
 #  - qemu-kvm-ev
 nano_default_storage_pool_path: '/data/kvm/local0'
+
+cmdb_mysql_host: 127.0.0.1
+cmdb_mysql_port: 3306
+cmdb_mysql_user: cmdb
+cmdb_mysql_pass: cmdb_pass
+cmdb_mysql_db: cmdb
+

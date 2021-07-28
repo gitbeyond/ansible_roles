@@ -18,6 +18,8 @@ nginx_other_confs:
   - other/win-utf
   - other/mime.types
 
+# nginx_confs: "{{ q('fileglob', 'templates/nginx/nginx.conf')}}"
+# nginx_confs: "templates/nginx/nginx.conf"
 nginx_confs:
   - nginx.conf
   #- htpasswd
@@ -27,7 +29,8 @@ nginx_logrotate_file: nginx.logrotate
 nginx_boot_file: 'nginx.{{ansible_service_mgr | default("systmed", true)}}'
 nginx_systemd_file: 'nginx.systemd'
 #type: list
-nginx_child_confs: []
+#nginx_child_confs: []
+nginx_child_confs: "{{ q('fileglob', 'templates/nginx/conf.d/*')}}"
 nginx_dependence_packets:
   - libevent-devel
   - libevent
@@ -39,3 +42,35 @@ nginx_dependence_packets:
   - perl-ExtUtils-Embed
   - GeoIP-devel
   - gperftools-libs
+
+nginx_core_args:
+  - name: vm.swappiness
+    value: 0
+  - name: net.ipv4.ip_local_port_range
+    value: '10240 65535'
+  - name: net.ipv4.tcp_timestamps
+    value: '0'
+  - name: net.ipv4.tcp_tw_recycle
+    value: '0'
+  - name: net.ipv4.tcp_tw_reuse
+    value: '0'
+  - name: net.ipv4.tcp_syncookies
+    value: '1'
+  - name: net.core.somaxconn
+    value: 65535
+  - name: net.core.netdev_max_backlog
+    value: 262144
+  - name: net.ipv4.tcp_max_orphans
+    value: 262144
+  - name: net.ipv4.tcp_max_syn_backlog
+    value: 262144
+  - name: net.ipv4.tcp_synack_retries
+    value: 1
+  - name: net.ipv4.tcp_syn_retries
+    value: 1
+  - name: net.ipv4.tcp_fin_timeout
+    value: 5
+  - name: net.ipv4.tcp_keepalive_time
+    value: 70
+  - name: fs.file-max
+    value: '6553500'

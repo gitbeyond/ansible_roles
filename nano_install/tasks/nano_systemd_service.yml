@@ -9,6 +9,8 @@
   notify:
     - systemctl_daemon_reload
 
+- meta: flush_handlers
+
 - name: set nano boot and starting up
   systemd:
     name: '{{nano_app_name}}'
