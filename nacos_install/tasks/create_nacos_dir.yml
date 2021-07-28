@@ -1,0 +1,44 @@
+# editor: haifengsss@163.com
+# 2021/06/17
+
+- name: link /data to /data1 dir
+  file: 
+    src: '/data1' 
+    dest: '/data' 
+    owner: 'root'
+    group: 'root' 
+    mode: "0777" 
+    state: 'link'
+  when:
+    - '"/data1" in ansible_mounts | json_query("[*].mount")'
+  tags:
+    - create_data_soft_link
+  ignore_errors: true
+
+- name: create base dir
+  file: 
+    path: '{{item}}' 
+    state: directory 
+    owner: root 
+    group: root 
+    mode: "0755"
+  loop:
+    - "{{nacos_install_dir}}"
+
+- name: create nacos dir
+  file:
+    path: "{{ item }}"
+    owner: "{{ nacos_run_user }}"
+    group: "{{ nacos_run_user }}"
+    mode: "0755"
+    state: directory
+  loop:
+    #- "{{nacos_conf_dir}}"
+    - "{{nacos_log_dir}}"
+    - "{{nacos_var_dir}}"
+    - "{{nacos_data_dir}}"
+    #- "{{nacos_install_dir}}/{{nacos_packet_dir_name}}"
+    # nacos_data_dir 是一个列表
+  when:
+    - item != nacos_base_dir
+    - item | dirname != nacos_base_dir

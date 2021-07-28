@@ -1,0 +1,9 @@
+
+- import_tasks: webapp/copy_sw_conf.yml
+  tags:
+    - copy_sw_webapp_conf
+
+- import_tasks: webapp/sw_service.yml
+  tags:
+    - sw_webapp_start_service
+

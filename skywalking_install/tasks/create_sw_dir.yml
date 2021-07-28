@@ -1,0 +1,45 @@
+# editor: haifengsss@163.com
+# 2021/06/09
+# update date: 2020/08/24
+
+- name: link /data to /data1 dir
+  file: 
+    src: '/data1' 
+    dest: '/data' 
+    owner: 'root'
+    group: 'root' 
+    mode: "0777" 
+    state: 'link'
+  when:
+    - '"/data1" in ansible_mounts | json_query("[*].mount")'
+  tags:
+    - create_data_soft_link
+  ignore_errors: true
+
+- name: create base dir
+  file: 
+    path: '{{item}}' 
+    state: directory 
+    owner: root 
+    group: root 
+    mode: "0755"
+  loop:
+    - "{{sw_install_dir}}"
+
+- name: create sw dir
+  file:
+    path: "{{ item }}"
+    owner: "{{ sw_run_user }}"
+    group: "{{ sw_run_user }}"
+    mode: "0755"
+    state: directory
+  loop:
+    - "{{sw_conf_dir}}"
+    - "{{sw_log_dir}}"
+    - "{{sw_var_dir}}"
+    #- "{{sw_install_dir}}/{{sw_packet_dir_name}}"
+    # sw_data_dir 是一个列表
+    #- "{{sw_data_dir}}"
+  when:
+    - item != sw_base_dir
+    - item | dirname != sw_base_dir

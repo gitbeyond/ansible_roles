@@ -1,0 +1,26 @@
+# 可以直接指定一下写好vars的文件
+- name: copy sw env file
+  template: 
+    src: '{{ sw_env_vars_file }}' 
+    dest: '{{ sw_var_dir }}/{{sw_app_name}}.env' 
+    owner: '{{ sw_run_user }}' 
+    group: '{{ sw_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  when: sw_env_vars_file is exists
+  tags:
+    - copy_sw_env_file
+
+- name: copy es env file by content
+  copy: 
+    content: |
+        {%if sw_env_vars |length >0-%}
+        {%for env in sw_env_vars%}
+        {{env}}="{{sw_env_vars[env]}}"
+        {%endfor%}
+        {%-endif%} 
+    dest: '{{ sw_var_dir }}/{{sw_app_name}}.env' 
+    owner: '{{ sw_run_user }}' 
+    group: '{{ sw_run_user }}' 
+    mode: "0644" 
+    backup: yes

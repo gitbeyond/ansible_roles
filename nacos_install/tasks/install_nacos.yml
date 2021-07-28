@@ -1,0 +1,57 @@
+
+- name: get nacos packet dir name
+  local_action: 
+    module: shell 
+    cmd: tar tf {{nacos_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false
+  register: nacos_dir_name
+  run_once: true
+
+- name: install java11
+  yum:
+    name:
+      - java-11-openjdk
+      - java-11-openjdk-devel
+    state: present
+
+#- name: project get file name of packet
+#  local_action:
+#    module: shell
+#    cmd: tar --exclude='*/*/*' -tf {{nacos_packet}} | awk -F'/' '/[^\/]$/{print $NF}' | tail -n 1
+#    warn: false
+#    #chdir: '{{project_package_local_dir}}'
+#  register: nacos_file_name
+#  run_once: true
+#  become: no
+#  changed_when: nacos_file_name is failed
+
+
+- name: cp and unarchive nacos to remote host
+  unarchive: 
+    src: '{{ nacos_packet }}' 
+    dest: '{{ nacos_install_dir }}'
+    owner: '{{ nacos_run_user }}' 
+    group: '{{ nacos_run_user }}'
+    #creates: '{{ nacos_install_dir }}/{{nacos_packet_dir_name}}/{{nacos_file_name.stdout}}'
+    creates: '{{ nacos_install_dir }}/{{nacos_dir_name.stdout}}/{{nacos_tar_creates}}'
+    mode: "0755"
+    #extra_opts:
+    #  - --strip-components
+    #  - "1"
+
+- name: create nacos link dir
+  file: 
+    #src: '{{ nacos_install_dir }}/{{nacos_dir_name.stdout}}' 
+    src: '{{ item.src}}'
+    #src: '{{ nacos_install_dir }}/{{nacos_packet_dir_name}}' 
+    #dest: '{{nacos_base_dir}}' 
+    dest: '{{item.dest}}'
+    state: 'link'
+  loop:
+    - src: '{{ nacos_install_dir }}/{{nacos_dir_name.stdout}}'
+      dest: '{{nacos_base_dir}}'
+    - src: '{{ nacos_log_dir }}'
+      dest: '{{nacos_base_dir}}/logs'
+    - src: '{{ nacos_data_dir }}'
+      dest: '{{nacos_base_dir}}/data'
+

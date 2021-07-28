@@ -1,0 +1,57 @@
+# 
+sw_packet:
+#sw_packet_dir_name: "{{sw_packet.replace('.tar.gz','') |basename}}"
+app_base_dir: /data/apps/opt
+sw_app_name: skywalking
+sw_install_dir: '{{app_base_dir}}'
+
+# sw 的配置文件目录，可以使用 ES_PATH_CONF 来指定，如 ES_PATH_CONF=/path/to/my/config
+#sw_conf_dir: '{{sw_install_dir}}/{{sw_packet_dir_name}}/config'
+sw_conf_dir: '{{sw_base_dir}}/config'
+sw_log_dir: '/data/apps/log/{{sw_app_name}}'
+sw_var_dir: '/data/apps/var/{{sw_app_name}}'
+#sw_data_dir: 
+#  - '/data/apps/data/{{sw_app_name}}'
+sw_base_dir: '/data/apps/opt/{{sw_app_name}}'
+sw_run_user: sw
+sw_boot_method: supervisor
+# skywalking 的配置文件
+sw_confs: []
+#sw_confs:
+#  - application.yml
+sw_child_confs: []
+# - conf_file: self.yaml
+#   conf_path: fetcher-prom-rules
+sw_env_vars: {}
+#sw_env_vars:
+#  SW_JDBC_URL: "jdbc:mysql://10.0.0.213:3307/swtest"
+#  SW_STORAGE: "mysql"
+#  JAVA_OPTS: "-Xms2048M -Xmx2048M"
+sw_env_vars_file: sw_env_vars.config
+
+# supervisor or systemd
+sw_service_type: systemd
+sw_service_name: '{{sw_app_name}}'
+sw_src_boot_file: '{{sw_app_name}}.{{sw_service_type}}'
+#sw_env_file: 'sw.sh'
+sw_tar_creates: 'config/application.yml'
+
+sw_enable_webapp: false
+sw_webapp_conf_dir: '{{sw_base_dir}}/webapp'
+sw_webapp_confs: []
+sw_webapp_service_type: '{{sw_service_type}}'
+sw_webapp_src_boot_file: '{{sw_webapp_service_name}}.{{sw_service_type}}'
+sw_webapp_env_vars: {}
+sw_webapp_env_vars_file: sw_webapp_env_vars.config
+sw_webapp_app_name: '{{sw_app_name}}-webapp'
+sw_webapp_service_name: '{{sw_app_name}}-webapp'
+
+# 当配置文件或者服务文件修改后会触发 handler 任务执行重启操作
+# 但是sw重启比较敏感，所以设置这个变量
+# 当变量为 false 时，即使触发了 handler，也不会真正的执行
+sw_rswtart_on_notify: false
+
+# supervisor
+supervisor_prog_name: supervisord
+supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

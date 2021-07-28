@@ -31,7 +31,11 @@ v{{ansible_now_time}}
 {%- endif%}'
 project_docker_image_repo: 'library'
 project_docker_image_tag: '{%-if project_docker_registry_addr != "" and project_docker_registry_addr is not none -%}
-{{project_docker_registry_addr}}/{{project_docker_image_repo}}/{{project_docker_image_name}}:{{project_docker_image_version}}
+{%- if project_docker_registry_addr | urlsplit("hostname") != "" -%}
+{{project_docker_registry_addr | urlsplit("hostname")}}{{project_docker_image_repo}}/{{project_docker_image_name}}:{{project_docker_image_version}}
+{%-else-%}
+{{project_docker_registry_addr}}{{project_docker_image_repo}}/{{project_docker_image_name}}:{{project_docker_image_version}}
+{%-endif-%}
 {%-else-%}
 {{project_docker_image_repo}}/{{project_docker_image_name}}:{{project_docker_image_version}}
 {%-endif-%}'
@@ -47,7 +51,7 @@ project_docker_login_timeout: 60
 
 # docker_image
 project_docker_build_timeout: 120
-project_docker_build_nocache: false
+project_docker_build_nocache: yes
 project_docker_build_pull: true
 project_docker_build_rm: true
 project_docker_build_target:

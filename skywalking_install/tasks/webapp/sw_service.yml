@@ -1,0 +1,2 @@
+- name: skywalking webapp start the service
+  include_tasks: webapp/sw_{{sw_service_type}}_service.yml

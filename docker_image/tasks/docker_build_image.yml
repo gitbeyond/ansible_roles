@@ -20,13 +20,21 @@
   template:
     src: '{{project_dockerfile}}'
     dest: '{{project_docker_work_dir}}'
-    owner: '{{project_run_user}}'
-    group: '{{project_run_group}}'
+    #owner: '{{project_run_user}}'
+    #group: '{{project_run_group}}'
+    owner: 'root'
+    group: 'root'
     mode: "0644"
     backup: yes
 
+- name: project delete project image tag
+  community.docker.docker_image:
+    docker_host: '{{project_docker_host}}'
+    name: '{{project_image_tag}}'
+    state: absent
+
 - name: project build docker image
-  docker_image:
+  community.docker.docker_image:
     docker_host: '{{project_docker_host}}'
     #name: '{{project_docker_image_tag}}'
     name: '{{project_image_tag}}'
@@ -43,6 +51,7 @@
       rm: '{{project_docker_build_rm}}'
       target: '{{project_docker_build_target}}'
   register: PROJECT_IMAGE 
+
 
 #- name: debug PROJECT_IMAGE
 #  debug:

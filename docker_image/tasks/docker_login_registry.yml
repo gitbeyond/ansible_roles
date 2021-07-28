@@ -1,10 +1,13 @@
 
 - name: docker login registry
-  docker_login:
+  community.docker.docker_login:
     config_path: '{{project_docker_config_path}}'
     docker_host: '{{project_docker_host}}'
-    email: '{{project_docker_registry_email}}'
+    #email: '{{project_docker_registry_email}}'
     username: '{{project_docker_registry_user}}'
     password: '{{project_docker_registry_pass}}'
     registry_url: '{{project_docker_registry_addr}}'
     timeout: '{{project_docker_login_timeout}}'
+    #tls_hostname: '*.tencentcloudcr.com'
+    #validate_certs: true
+    #reauthorize: true

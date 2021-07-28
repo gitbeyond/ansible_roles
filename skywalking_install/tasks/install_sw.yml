@@ -1,0 +1,49 @@
+
+- name: get sw packet dir name
+  local_action: 
+    module: shell 
+    cmd: tar tf {{sw_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false
+  register: sw_dir_name
+  run_once: true
+
+- name: install java11
+  yum:
+    name:
+      - java-11-openjdk
+      - java-11-openjdk-devel
+    state: present
+
+#- name: project get file name of packet
+#  local_action:
+#    module: shell
+#    cmd: tar --exclude='*/*/*' -tf {{sw_packet}} | awk -F'/' '/[^\/]$/{print $NF}' | tail -n 1
+#    warn: false
+#    #chdir: '{{project_package_local_dir}}'
+#  register: sw_file_name
+#  run_once: true
+#  become: no
+#  changed_when: sw_file_name is failed
+
+
+- name: cp and unarchive sw to remote host
+  unarchive: 
+    src: '{{ sw_packet }}' 
+    #dest: '{{ sw_install_dir }}/{{sw_packet_dir_name}}'
+    dest: '{{ sw_install_dir }}'
+    owner: '{{ sw_run_user }}' 
+    group: '{{ sw_run_user }}'
+    #creates: '{{ sw_install_dir }}/{{sw_packet_dir_name}}/{{sw_file_name.stdout}}'
+    creates: '{{ sw_install_dir }}/{{sw_dir_name.stdout}}/{{sw_tar_creates}}'
+    mode: "0755"
+    #extra_opts:
+    #  - --strip-components
+    #  - "1"
+
+- name: create sw link dir
+  file: 
+    src: '{{ sw_install_dir }}/{{sw_dir_name.stdout}}' 
+    #src: '{{ sw_install_dir }}/{{sw_packet_dir_name}}' 
+    dest: '{{sw_base_dir}}' 
+    state: 'link'
+

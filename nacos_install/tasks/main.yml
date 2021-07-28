@@ -1,0 +1,37 @@
+# editor: haifengsss@163.com
+# update date: 2021/07/28
+- import_tasks: create_nacos_user.yml
+  tags:
+    - create_nacos_user
+
+- import_tasks: create_nacos_dir.yml
+  tags:
+    - create_nacos_dir
+
+- import_tasks: install_nacos.yml
+  tags:
+    - install_nacos
+
+- import_tasks: copy_nacos_conf.yml
+  tags:
+    - copy_nacos_conf
+
+- import_tasks: copy_nacos_vars_env_file.yml
+  tags:
+    - copy_nacos_vars_env_file
+
+#- import_tasks: nacos_core_argument.yml
+#  tags:
+#    - nacos_core_argument
+
+- import_tasks: nacos_systemd_service.yml
+  tags:
+    - nacos_start_service
+
+#- import_tasks: nacos_service.yml
+#  tags:
+#    - nacos_start_service
+
+#- import_tasks: nacos_webapp_service.yml
+#  tags:
+#    - nacos_webapp_start_service

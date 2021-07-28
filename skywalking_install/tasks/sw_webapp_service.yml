@@ -1,0 +1,4 @@
+- name: skywalking start the service
+  include_tasks: webapp/sw_webapp.yml
+  when: 
+    - sw_enable_webapp == true

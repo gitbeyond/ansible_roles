@@ -1,0 +1,35 @@
+- import_tasks: create_sw_user.yml
+  tags:
+    - create_sw_user
+
+- import_tasks: create_sw_dir.yml
+  tags:
+    - create_sw_dir
+
+- import_tasks: install_sw.yml
+  tags:
+    - install_sw
+
+- import_tasks: copy_sw_conf.yml
+  tags:
+    - copy_sw_conf
+
+- import_tasks: copy_sw_child_conf.yml
+  tags:
+    - copy_sw_child_conf
+
+#- import_tasks: copy_sw_vars_env_file.yml
+#  tags:
+#    - copy_sw_vars_env_file
+
+#- import_tasks: sw_core_argument.yml
+#  tags:
+#    - sw_core_argument
+
+- import_tasks: sw_service.yml
+  tags:
+    - sw_start_service
+
+- import_tasks: sw_webapp_service.yml
+  tags:
+    - sw_webapp_start_service

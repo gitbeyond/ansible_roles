@@ -1,0 +1,14 @@
+
+- name: copy sw conf file
+  template: 
+    src: '{{ item }}' 
+    dest: '{{ sw_conf_dir }}' 
+    owner: '{{ sw_run_user }}' 
+    group: '{{ sw_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{sw_confs}}'
+  tags:
+   - modify_sw_conf
+  #notify:
+  #  - sw_restart

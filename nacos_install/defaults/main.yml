@@ -1,0 +1,69 @@
+# 
+nacos_packet:
+#nacos_packet_dir_name: "{{nacos_packet.replace('.tar.gz','') |basename}}"
+app_base_dir: /data/apps/opt
+nacos_app_name: nacos
+nacos_install_dir: '{{app_base_dir}}'
+
+# nacos 的配置文件目录，可以使用 ES_PATH_CONF 来指定，如 ES_PATH_CONF=/path/to/my/config
+#nacos_conf_dir: '{{nacos_install_dir}}/{{nacos_packet_dir_name}}/config'
+nacos_conf_dir: '{{nacos_base_dir}}/conf'
+nacos_log_dir: '/data/apps/log/{{nacos_app_name}}'
+nacos_var_dir: '/data/apps/var/{{nacos_app_name}}'
+nacos_data_dir: '/data/apps/data/{{nacos_app_name}}'
+#  - '/data/apps/data/{{nacos_app_name}}'
+nacos_base_dir: '/data/apps/opt/{{nacos_app_name}}'
+nacos_run_user: nacos
+nacos_boot_method: systemd
+# skywalking 的配置文件
+nacos_confs: []
+#nacos_confs:
+#  - application.yml
+nacos_env_vars: {}
+#nacos_env_vars:
+#  SW_JDBC_URL: "jdbc:mysql://10.0.0.213:3307/nacostest"
+#  SW_STORAGE: "mysql"
+#  JAVA_OPTS: "-Xms2048M -Xmx2048M"
+nacos_env_vars_file: nacos_env_vars.config
+# standalone or cluster
+nacos_run_mode: cluster
+# embedded or database
+nacos_data_source: database
+# true or false
+nacos_is_standalone: false
+nacos_use_mysql: true
+nacos_run_cmd: '{{nacos_base_dir}}/bin/startup.sh{%-if nacos_is_standalone%}
+ -m standalone
+{%-else-%}
+{%-if not nacos_use_mysql%}
+ -p embedded
+{%-endif-%}
+{%-endif-%}
+'
+# ExecStart={%raw%}{{nacos_base_dir}}/bin/startup.sh {%if nacos_run_mode == "standalone"%}-m standalone {%endif%}{%if nacos_data_source=="embedded"%}-p embedded{%endif%}{%endraw%}
+# supervisor or systemd
+nacos_service_type: systemd
+nacos_service_name: '{{nacos_app_name}}'
+nacos_src_boot_file: '{{nacos_app_name}}.{{nacos_service_type}}'
+#nacos_env_file: 'nacos.sh'
+nacos_tar_creates: 'target/nacos-server.jar'
+
+nacos_enable_webapp: false
+nacos_webapp_conf_dir: '{{nacos_base_dir}}/webapp'
+nacos_webapp_confs: []
+nacos_webapp_service_type: '{{nacos_service_type}}'
+nacos_webapp_src_boot_file: '{{nacos_webapp_service_name}}.{{nacos_service_type}}'
+nacos_webapp_env_vars: {}
+nacos_webapp_env_vars_file: nacos_webapp_env_vars.config
+nacos_webapp_app_name: '{{nacos_app_name}}-webapp'
+nacos_webapp_service_name: '{{nacos_app_name}}-webapp'
+
+# 当配置文件或者服务文件修改后会触发 handler 任务执行重启操作
+# 但是nacos重启比较敏感，所以设置这个变量
+# 当变量为 false 时，即使触发了 handler，也不会真正的执行
+nacos_rnacostart_on_notify: false
+
+# supervisor
+supervisor_prog_name: supervisord
+supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

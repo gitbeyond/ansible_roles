@@ -1,0 +1,26 @@
+# 可以直接指定一下写好vars的文件
+- name: copy nacos env file
+  template: 
+    src: '{{ nacos_env_vars_file }}' 
+    dest: '{{ nacos_var_dir }}/{{nacos_app_name}}.env' 
+    owner: '{{ nacos_run_user }}' 
+    group: '{{ nacos_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  when: nacos_env_vars_file is exists
+  tags:
+    - copy_nacos_env_file
+
+- name: copy nacos env file by content
+  copy: 
+    content: |
+        {%if nacos_env_vars |length >0-%}
+        {%for env in nacos_env_vars%}
+        {{env}}="{{nacos_env_vars[env]}}"
+        {%endfor%}
+        {%-endif%} 
+    dest: '{{ nacos_var_dir }}/{{nacos_app_name}}.env' 
+    owner: '{{ nacos_run_user }}' 
+    group: '{{ nacos_run_user }}' 
+    mode: "0644" 
+    backup: yes

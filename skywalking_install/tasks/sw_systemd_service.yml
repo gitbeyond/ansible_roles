@@ -1,0 +1,23 @@
+- import_tasks: copy_sw_vars_env_file.yml
+
+
+- name: copy sw service file
+  template: 
+    src: '{{ item }}' 
+    dest: '/usr/lib/systemd/system/{{sw_service_name}}.service' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
+  loop:
+    - '{{sw_src_boot_file}}'
+  #notify:
+  #  - supervisor_restart_es
+
+
+- name: systemctl start sw
+  ansible.builtin.systemd:
+    name: '{{sw_service_name}}' 
+    state: 'started'
+    enabled: yes
+    daemon_reload: yes

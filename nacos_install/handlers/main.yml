@@ -1,0 +1,7 @@
+- name: supervisor_restart_sw
+  supervisorctl:
+    name: '{{sw_service_name}}'
+    state: restarted
+    config: '{{supervisor_prim_conf}}'
+  when:
+    - sw_restart_on_notify == true  

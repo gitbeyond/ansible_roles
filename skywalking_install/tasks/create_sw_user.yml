@@ -1,0 +1,8 @@
+# editor: haifengsss@163.com
+# 2021/06/09
+
+- name: create sw user
+  user: 
+    name: '{{ sw_run_user }}'
+    state: present
+

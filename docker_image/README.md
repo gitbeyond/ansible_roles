@@ -3,7 +3,7 @@
 
 这个 role 是根据 Dockerfile 来构建 docker 镜像的。
 
-bert-serving 项目时创建，之间是用脚本。
+bert-serving 项目时创建，之前是用脚本。
 
 但是这个 role 怎么用，还没有想好,因为在步骤上来说跟 `deploy_project` 是有很多重合之处的。
 
@@ -95,3 +95,11 @@ test-harbor.geotmt.com/library/mydjango                          v20200807111305
 
 1. 当前默认使用时间来当作tag, 在没有进行实际的 build 时，会在原来的镜像基础上添加新的 tag, 并且会 push 到 registry 上（如果指定了 registry 的话）。
 2. Dockerfile 中 FROM 的镜像如果带了 registry 的 url, 那么必须已经 push 到 registry 中
+3. 当镜像的tag存在于本地时，第二次再遇到本tag时，是不会重新进行构建的，即使要复制的文件真的发生了变化
+    * 确实想重新构建镜像,不管文件是否发生变化
+        * 比如基础镜像发生了变化了
+        * docker_file发生了变化
+    * 并不真的需要重构，只是恰好playbook重新执行了,这种就不需要真的执行build操作
+    * 没办法，只好在构建之前之后，尝试删除镜像的tag
+4. 镜像的删除，当镜像有多个tag时，指定`state: absent`只是删除了tag,并不删除镜像
+    * 此时再执行构建，image的sha256值就会发生变化

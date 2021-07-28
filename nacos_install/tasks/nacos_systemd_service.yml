@@ -1,0 +1,23 @@
+#- import_tasks: copy_nacos_vars_env_file.yml
+
+
+- name: copy nacos service file
+  template: 
+    src: '{{ nacos_src_boot_file }}' 
+    dest: '/usr/lib/systemd/system/{{nacos_service_name}}.service' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
+  #loop:
+  #  - '{{nacos_src_boot_file}}'
+  #notify:
+  #  - supervisor_restart_es
+
+
+- name: systemctl start nacos
+  ansible.builtin.systemd:
+    name: '{{nacos_service_name}}' 
+    state: 'started'
+    enabled: yes
+    daemon_reload: yes

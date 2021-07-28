@@ -1,0 +1,18 @@
+[Unit]
+Description=Skywalking webapp service
+Documentation=http://skywalking.apache.org/docs/main/v8.5.0/en/setup/backend/backend-cluster/
+After=network.target
+
+[Service]
+Type=forking
+User={{sw_run_user}}
+WorkingDirectory={{sw_base_dir}}
+EnvironmentFile={{sw_var_dir}}/{{sw_webapp_app_name}}.env
+ExecStart={{sw_base_dir}}/bin/webappService.sh
+KillMode=process
+Restart=on-failure
+SuccessExitStatus=143
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target

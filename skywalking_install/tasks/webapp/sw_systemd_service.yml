@@ -1,0 +1,22 @@
+- import_tasks: webapp/copy_sw_vars_env_file.yml
+
+
+- name: copy sw webapp service file
+  template: 
+    src: '{{ item }}' 
+    dest: '/usr/lib/systemd/system/{{sw_webapp_service_name}}.service' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
+  loop:
+    - '{{sw_webapp_src_boot_file}}'
+  #notify:
+  #  - supervisor_restart_es
+
+- name: systemctl start sw webapp
+  ansible.builtin.systemd:
+    name: '{{sw_webapp_service_name}}' 
+    state: 'started'
+    enabled: yes
+    daemon_reload: yes

@@ -1,0 +1,14 @@
+
+- name: copy nacos conf file
+  template: 
+    src: '{{ item }}' 
+    dest: '{{ nacos_conf_dir }}' 
+    owner: '{{ nacos_run_user }}' 
+    group: '{{ nacos_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{nacos_confs}}'
+  tags:
+   - modify_nacos_conf
+  #notify:
+  #  - nacos_restart

@@ -1,0 +1,2 @@
+- name: skywalking start the service
+  include_tasks: sw_{{sw_service_type}}_service.yml

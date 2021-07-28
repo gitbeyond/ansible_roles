@@ -26,7 +26,7 @@
       }
 ```
   
-`/usr/src/mysql-5.7.23-datadir-initialize.tgz` 这个是在8.209上初始化后并修改了密码的数据目录.
+`/usr/src/mysql-5.7.23-datadir-initialize.tgz` 这个是在8.209上初始化后并修改了密码的数据目录`./mysqld --defaults-file=../my.cnf --initialize`.
 ```bash
 mysql> set sql_log_bin=0;
 Query OK, 0 rows affected (0.00 sec)
