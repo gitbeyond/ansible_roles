@@ -1,5 +1,5 @@
 ---
-- name: copy profile to remote
+- name: copy nodejs profile
   template: 
     src: '{{ item.src }}' 
     dest: '{{ item.dest }}' 
@@ -7,5 +7,5 @@
     group: root 
     mode: "0644"
   loop:
-    - src: 'java.sh'
-      dest: '/etc/profile.d/{{jdk_app_name}}.sh'
+    - src: 'nodejs.sh'
+      dest: '/etc/profile.d/{{nodejs_app_name}}.sh'

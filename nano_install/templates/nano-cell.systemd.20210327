@@ -6,9 +6,9 @@ Type=forking
 PIDFile={{nano_base_dir}}/cell.pid
 WorkingDirectory={{nano_log_dir}}
 ExecStartPre=-/bin/sudo -u root /bin/bash {{nano_var_dir}}/nano_vxlan.sh
-User=root
-ExecStart={{nano_base_dir}}/cell start
-ExecStop={{nano_base_dir}}/cell stop
+User={{nano_run_user}}
+ExecStart=/bin/sudo -u root {{nano_base_dir}}/cell start
+ExecStop=/bin/sudo -u root {{nano_base_dir}}/cell stop
 Restart=on-failure
 LimitNOFILE=65536
 

@@ -176,11 +176,13 @@ gitlab_backup(){
     fi
 
     # 删除nfs上的上一周的备份
-    local prev_week_num=$(date -d'-7day' +%W)
+    #local prev_week_num=$(date -d'-7day' +%W)
+    local prev_week_num=$(date -d'-28day' +%W)
     if [ ${dt_w} == ${backup_file_delete_day} ];then
         if [ -d ${gitlab_backup_remote_dir}/${prev_week_num} ];then
             # 这里先不执行真正的删除操作，先只是记录日志
             write_log "rm -rf ${gitlab_backup_remote_dir}/${prev_week_num}"
+            rm -rf ${gitlab_backup_remote_dir}/${prev_week_num}
         fi
     else
         :

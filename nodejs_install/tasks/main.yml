@@ -1,0 +1,8 @@
+---
+- include: install_nodejs.yml
+  tags:
+    - install_nodejs
+
+- import_tasks: modify_conf.yml
+  tags:
+    - copy_nodejs_env_conf

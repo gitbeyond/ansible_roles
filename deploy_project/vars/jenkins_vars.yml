@@ -1,0 +1,5 @@
+project_name: jenkins
+project_run_port: 8080
+project_run_user: jenkins
+project_packet_name: '{{ansible_soft_dir}}/jenkins/jenkins.war'
+project_prog_jmx_args:
