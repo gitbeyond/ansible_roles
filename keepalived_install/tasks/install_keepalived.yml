@@ -1,33 +1,3 @@
 
-
-- name: get keepalived packet dir name
-  local_action: 
-    module: shell 
-    cmd: tar tf {{keepalived_packet}} |head -n 1 |awk -F'/' '{print $1}'
-    warn: false
-  register: keepalived_dir_name
-  run_once: true
-
-- name: cp and unarchive keepalived to remote host
-  unarchive: 
-    src: '{{ keepalived_packet }}'
-    dest: '{{ keepalived_install_dir }}'
-    owner: '{{ keepalived_run_user }}' 
-    group: '{{ keepalived_run_user }}' 
-    creates: '{{ keepalived_install_dir }}/{{keepalived_dir_name.stdout }}'
-    mode: "0755"
-
-- name: create keepalived link dir
-  file: 
-    src: '{{ keepalived_install_dir }}/{{keepalived_dir_name.stdout }}' 
-    dest: '{{keepalived_base_dir}}'
-    state: link
-  when: keepalived_dir_name.stdout != keepalived_app_name
-
-- name: create keepalived conf link dir
-  file: 
-    src: '{{ keepalived_conf_dir }}'
-    dest: '/etc/{{keepalived_app_name}}' 
-    state: link
-  ignore_errors: true
-
+- name: install keepalived
+  include_tasks: install_keepalived_by_{{keepalived_install_method}}.yml

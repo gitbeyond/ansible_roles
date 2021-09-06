@@ -7,5 +7,6 @@
     mode: "0644" 
     backup: yes
   loop:
-    - { src: 'system_init.sh', dest: '/etc/profile.d/' }
+    - src: '{{ansible_os_family}}/system_init_{{ansible_distribution_major_version}}.sh'
+      dest: '/etc/profile.d/system_init.sh'
 

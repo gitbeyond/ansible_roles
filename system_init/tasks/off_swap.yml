@@ -1,0 +1,16 @@
+
+- name: swapoff
+  #ansible.posix.mount:
+  shell:
+    cmd: swapoff -a
+
+- name: delete swap item in fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: "([^#].*swap.*swap.*)"
+    backrefs: yes
+    line: '#\1'
+    owner: root
+    group: root
+    mode: "0644"
+ 

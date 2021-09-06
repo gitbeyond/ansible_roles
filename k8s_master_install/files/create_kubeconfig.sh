@@ -77,39 +77,39 @@ while [[ $# -ge 1 ]]; do
         --kube_ns)
             kube_ns=$2
             #echo "经过c"
-            shift
+            shift 2
             ;;
         --kube_rolebinding_name )
             kube_rb_name=$2
-            shift
+            shift 2
             ;;
         --kube_cluster_name )
             kube_cluster_name=$2
-            shift
+            shift 2
             ;;
         --kube_api_server )
             kube_api_server=$2
-            shift
+            shift 2
             ;;
         --kube_root_ca )
             kube_root_ca=$2
-            shift
+            shift 2
             ;;
         --kube_root_ca_key )
             kube_root_ca_key=$2
-            shift
+            shift 2
             ;;
         --kube_new_config )
             kube_new_config=$2
-            shift
+            shift 2
             ;;
         --kube_cluster_priv )
             kube_cluster_priv=true
-            shift
+            shift 2
             ;;
         -h|--help)
             help_info
-            shift
+            shift 
             ;;
         *)
             help_info

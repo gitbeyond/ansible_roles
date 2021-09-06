@@ -1,21 +1,21 @@
 # editor: haifengsss@163.com
 # 2017/01/12
-# update date: 2020/06/29
+# update date: 2021/08/18
 
-- include_tasks: install_python_on_{{ansible_distribution}}{{ansible_distribution_major_version}}.yml
-  when:
-    #- ("install_python34_on_" + ansible_distribution + ansible_distribution_major_version + ".yml") is exists
-    #- "'install_python34_on_' + ansible_distribution + ansible_distribution_major_version + '.yml'" is exists
-    #- "install_python34_on_"~ansible_distribution~ansible_distribution_major_version~".yml" is exist
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
+#- include_tasks: install_python_on_{{ansible_distribution}}{{ansible_distribution_major_version}}.yml
+#  when:
+#    #- ("install_python34_on_" + ansible_distribution + ansible_distribution_major_version + ".yml") is exists
+#    #- "'install_python34_on_' + ansible_distribution + ansible_distribution_major_version + '.yml'" is exists
+#    #- "install_python34_on_"~ansible_distribution~ansible_distribution_major_version~".yml" is exist
+#    - ansible_distribution == "CentOS"
+#    - ansible_distribution_major_version == "6"
     #- supervisor_os_task_file is exists
   
-- include_tasks: install_python_on_CentOS7.yml
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
-
+- include_tasks: '{{ansible_os_family}}/install_python_on_{{system_family_and_version}}.yml'
+  #when:
+    #- ansible_distribution == "CentOS"
+  #  - ansible_os_family == "RedHat"
+  #  - ansible_distribution_major_version == "7"
 
 #- name: debug var
 #  debug:

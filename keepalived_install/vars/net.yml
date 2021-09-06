@@ -1,0 +1,3 @@
+
+keepalived_bin_dir: '/usr/sbin'
+keepalived_conf_dir: '/etc/{{keepalived_app_name}}'

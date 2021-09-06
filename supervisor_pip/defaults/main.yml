@@ -12,6 +12,7 @@ supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
 supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
 supervisor_log_dir: /data/apps/log/{{supervisor_prog_name}}
 supervisor_var_dir: /data/apps/var/{{supervisor_prog_name}}
+supervisord_exe_file: /usr/bin/supervisord
 supervisor_exe_file: /usr/bin/supervisorctl
 supervisor_install_method: net
 supervisor_packets:
@@ -32,6 +33,8 @@ supervisor_exclude_envs:
   - SUDO_USER
   - TMOUT
   - _
+
+system_family_and_version: '{{ansible_os_family}}_{{ansible_distribution_major_version}}'
 
 # special system
 #supervisor_os_task_file: "./install_python_on_{{ansible_distribution}}{{ansible_distribution_major_version}}.yml"

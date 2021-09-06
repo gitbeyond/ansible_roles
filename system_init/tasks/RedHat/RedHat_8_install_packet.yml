@@ -1,0 +1,19 @@
+
+- name: load RedHat 8 vars
+  include_vars:
+    file: '{{system_family_and_version}}.yml'
+
+- name: install libselinux
+  yum: 
+    name: 
+      - python3-libselinux
+    state: "latest"
+    update_only: yes
+  #loop:
+  #  - name: epel-release
+  #  - name: libselinux
+
+- name: install base packet
+  yum:
+    name: '{{system_base_packets}}'
+    state: latest

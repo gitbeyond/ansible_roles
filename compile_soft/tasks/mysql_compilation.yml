@@ -1,0 +1,31 @@
+
+- name: create soft_base_dir
+  file:
+    path: '{{soft_base_dir}}'
+    state: directory
+    user: root
+    group: root
+
+- name: project get file name of package
+  local_action:
+    module: shell
+    cmd: tar --exclude='*/*/*' -tf {{app_source_package}} | awk -F'/' '{if($2!=""){print $2; exit}}'
+    warn: false
+  register: app_package_file_name
+  run_once: true
+  become: no
+  changed_when: app_package_file_name is failed
+
+- name: project copy package to work dir
+  unarchive:
+    src: '{{app_source_package}}'
+    dest: '{{soft_base_dir}}'
+    owner: '{{app_compilation_user}}'
+    group: '{{app_compilation_user}}'
+    creates: '{{soft_base_dir}}/{{app_package_file_name.stdout}}'
+    #extra_opts:
+    #  - --strip-components
+    #  - "1"
+
+- name: install app_package_file_name
+  file:

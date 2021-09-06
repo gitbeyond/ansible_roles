@@ -49,8 +49,8 @@ etcd_cert_hosts:
 
 # etcd backup
 
-backup_remote_host:
-backup_remote_user:
+backup_remote_host: ''
+backup_remote_user: ''
 backup_remote_dir:
 backup_local_user: '{{etcd_run_user}}'
 

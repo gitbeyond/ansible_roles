@@ -7,6 +7,9 @@
     group: 'root'
     mode: "0755"
 
+- name: load extra vars
+  include_vars: '{{system_family_and_version}}.yml'
+
 - include_tasks: supervisor_local_packet_install.yml
   name: supervisor_local_packet_install
   loop: '{{supervisor_packets}}'

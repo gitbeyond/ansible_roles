@@ -1,0 +1,12 @@
+system_base_packets:
+  #- libselinux-python
+  - libselinux-utils
+  - htop
+  - dstat
+  - glances
+  - lrzsz
+  - sysstat
+  - jq
+  - tree
+  - redhat-lsb-core
+

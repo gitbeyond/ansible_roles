@@ -43,7 +43,7 @@ nginx_dependence_packets:
   - GeoIP-devel
   - gperftools-libs
 
-nginx_core_args:
+nginx_kernel_args:
   - name: vm.swappiness
     value: 0
   - name: net.ipv4.ip_local_port_range

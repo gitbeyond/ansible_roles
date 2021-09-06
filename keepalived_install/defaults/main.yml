@@ -11,6 +11,7 @@ keepalived_log_dir: /data/apps/log/{{keepalived_app_name}}
 keepalived_var_dir: /data/apps/var/{{keepalived_app_name}}
 keepalived_child_conf_dir: '{{keepalived_conf_dir}}/conf.d'
 keepalived_script_dir: '{{keepalived_conf_dir}}/scripts'
+# local or net(yum)
 keepalived_install_method: local
 keepalived_confs:
   - keepalived.conf
@@ -22,3 +23,4 @@ keepalived_app_scripts: []
 keepalived_dependence_packets:
   - net-snmp-agent-libs
   - openssl-libs
+  - ipvsadm

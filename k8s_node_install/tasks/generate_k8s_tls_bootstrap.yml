@@ -1,21 +1,24 @@
 - name: create k8s bootstrap token
-  local_action: script generate_token.sh {{k8s_cert_dir}}/k8s-bootstrap-token
-  args:
+  local_action: 
+    module: script 
+    cmd: generate_token.sh {{k8s_cert_dir}}/k8s-bootstrap-token
     chdir: "{{k8s_work_dir | realpath}}"
     creates: "{{k8s_work_dir | realpath}}/{{k8s_cert_dir}}/k8s-bootstrap-token"
   run_once: true
 
 - name: register token var
-  local_action: shell cat k8s-bootstrap-token
-  args:
+  local_action: 
+    module: shell 
+    cmd: cat k8s-bootstrap-token
     chdir: "{{k8s_work_dir | realpath}}/{{k8s_cert_dir}}"
   register: k8s_bootstrap_token
   run_once: true
 
 
 - name: create k8s bootstrap kubeconfig
-  local_action: script generate_bootstrap_kubeconfig.sh {{k8s_work_conf_dir}}/bootstrap.kubeconfig kubernetes {{k8s_cert_dir}}/k8s-root-ca.pem {{k8s_master_ha_vip}} {{k8s_master_ha_port}} kubelet-bootstrap {{k8s_bootstrap_token.stdout}} {{k8s_kubectl_cmd}}
-  args:
+  local_action: 
+    module: script 
+    cmd: generate_bootstrap_kubeconfig.sh {{k8s_work_conf_dir}}/bootstrap.kubeconfig kubernetes {{k8s_cert_dir}}/k8s-root-ca.pem {{k8s_master_ha_vip}} {{k8s_master_ha_port}} kubelet-bootstrap {{k8s_bootstrap_token.stdout}} {{k8s_kubectl_cmd}}
     chdir: "{{k8s_work_dir | realpath}}"
     creates: "{{k8s_work_dir| realpath }}/{{k8s_work_conf_dir}}/bootstrap.kubeconfig"
   run_once: true

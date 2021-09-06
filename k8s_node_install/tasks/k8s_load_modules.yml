@@ -1,5 +1,6 @@
-# editor: haifeng
-# 2020/01/09
+# editor: haifengsss@163.com
+# 2019/12/11
+# update date: 2020/02/09
 
 - name: modify core arguments for kube-proxy
   sysctl: 
@@ -9,13 +10,7 @@
     state: present 
     sysctl_file: '{{k8s_sysctl_file}}'
     sysctl_set: yes
-  loop:
-    - name: 'vm.swappiness'
-      value: 0
-    - name: 'net.ipv4.ip_forward'
-      value: 1
-    - name: 'net.bridge.bridge-nf-call-iptables'
-      value: 1
+  loop: '{{k8s_node_kernel_args}}'
   ignore_errors: true
 
 - name: load ipvs modules

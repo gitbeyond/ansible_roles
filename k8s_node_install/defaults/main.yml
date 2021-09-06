@@ -38,3 +38,14 @@ k8s_node_certs:
     mode: "0644"
   - src: k8s-kube-proxy-key.pem
     mode: "0600"
+# core args
+k8s_node_kernel_args:
+  - name: 'vm.swappiness'
+    value: 0
+  - name: 'net.ipv4.ip_forward'
+    value: 1
+  - name: 'net.bridge.bridge-nf-call-iptables'
+    value: 1
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1441737
+  - name: 'fs.may_detach_mounts'
+    value: 1

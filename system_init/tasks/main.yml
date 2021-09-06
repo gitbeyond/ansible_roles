@@ -61,3 +61,7 @@
 - import_tasks: create_data_to_data1_link.yml
   tags:
     - create_data_to_data1_link
+
+- import_tasks: off_swap.yml
+  tags:
+    - swapoff

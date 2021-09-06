@@ -6,8 +6,8 @@ After=rc-local.service nss-user-lookup.target
 Type=forking
 ExecStartPre=/bin/bash -c "source /etc/profile; env |grep -v -E '^(USER|_|PWD|LOGNAME|HOME)\>' > {{supervisor_var_dir}}/supervisord.env"
 EnvironmentFile=-{{supervisor_var_dir}}/supervisord.env
-ExecStart=/usr/bin/supervisord -c {{supervisor_prim_conf}}
-#ExecReload=/usr/bin/supervisorctl -c {{supervisor_prim_conf}} reload
+ExecStart={{supervisord_exe_file}} -c {{supervisor_prim_conf}}
+#ExecReload={{supervisor_exe_file}} -c {{supervisor_prim_conf}} reload
 
 [Install]
 WantedBy=multi-user.target

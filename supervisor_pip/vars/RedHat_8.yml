@@ -1,0 +1,5 @@
+
+supervisor_python_exe: /usr/bin/python3
+supervisord_exe_file: /usr/local/bin/supervisord
+supervisor_exe_file: /usr/local/bin/supervisorctl
+

@@ -6,27 +6,6 @@
       #- libselinux
     state: "latest"
 
-- name: install libselinux
-  yum: 
-    name: 
-      - libselinux
-    state: "latest"
-    update_only: yes
-  #loop:
-  #  - name: epel-release
-  #  - name: libselinux
-
-- name: install base packet
-  yum:
-    name:
-      - libselinux-python
-      - libselinux-utils
-      - htop
-      - dstat
-      - glances
-      - lrzsz
-      - sysstat
-      - jq
-      - tree
-      - redhat-lsb-core
-    state: latest
+- name: include other packets
+  #include_tasks: '{{ansible_distribution_file_variety}}/{{system_family_and_version}}_install_packet.yml'
+  include_tasks: '{{ansible_os_family}}/{{system_family_and_version}}_install_packet.yml'

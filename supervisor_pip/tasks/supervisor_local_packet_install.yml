@@ -51,3 +51,20 @@
 
 # pip install:   /usr/lib/python2.7/site-packages/supervisor-4.1.0.dist-info
 # local install: /usr/lib/python2.7/site-packages/supervisor-4.1.0-py2.7.egg
+
+- name: create soft link for supervisord
+  file:
+    src: '{{supervisord_exe_file}}'
+    dest: '/usr/bin/supervisord'
+    state: link
+  when:
+    - supervisord_exe_file != '/usr/bin/supervisord'
+
+- name: create soft link for supervisorctl
+  file:
+    src: '{{supervisor_exe_file}}'
+    dest: '/usr/bin/supervisorctl'
+    state: link
+  when:
+    - supervisor_exe_file != '/usr/bin/supervisorctl'
+

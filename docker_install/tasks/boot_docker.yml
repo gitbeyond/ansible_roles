@@ -21,4 +21,5 @@
   systemd:
     name: docker
     state: started
+    enabled: true
   when: docker_install_result.changed != True

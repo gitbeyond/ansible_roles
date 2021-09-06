@@ -1,0 +1,15 @@
+
+- name: install libselinux
+  yum: 
+    name: 
+      - libselinux
+    state: "latest"
+    update_only: yes
+  #loop:
+  #  - name: epel-release
+  #  - name: libselinux
+
+- name: install base packet
+  yum:
+    name: '{{system_base_packets}}'
+    state: latest

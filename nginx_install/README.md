@@ -59,3 +59,4 @@ drwxr-xr-x 2 nginx nginx   39 Dec 19 14:16 conf.d
 * 将这些文件都写在 `nginx_confs` 变量中复制过去，最简单的做法，但是一般情况下变化的只有 nginx.conf 这一个文件而已,而其他的文件在copy时也会浪费时间。
 * 增加了 `nginx_other_confs` 的变量，包含了一些辅助的配置文件.可以自己指定这个变量
 
+sysctl文件生效的问题。当各子配中都会修改同一个值的时候，生效顺序如何确定？

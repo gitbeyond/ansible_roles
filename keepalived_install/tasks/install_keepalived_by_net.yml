@@ -1,0 +1,7 @@
+
+- name: install keepalived by yum
+  yum: 
+    name: '{{keepalived_app_name}}'
+    state: latest
+
+- include_vars: net.yml
