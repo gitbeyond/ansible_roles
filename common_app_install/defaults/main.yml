@@ -1,0 +1,63 @@
+all_app_base_dir: /data/apps/opt
+app_install_dir: '{{all_app_base_dir}}'
+app_run_user: root
+app_run_group: '{{app_run_user}}'
+app_run_user_is_system: yes
+app_base_name: ""
+
+app_packet: ""
+app_packet_creates: "bin/{{app_base_name}}"
+# tgz or jar
+app_packet_type: tgz
+app_base_dir: /data/apps/opt/{{app_base_name}}
+app_log_dir: /data/apps/log/{{app_base_name}}
+app_conf_dir: /data/apps/config/{{app_base_name}}
+app_var_dir: /data/apps/var/{{app_base_name}}
+app_data_dir: /data/apps/data/{{app_base_name}}
+app_child_conf_dir: ""
+
+app_dirs:
+  - '{{app_log_dir}}'
+  - '{{app_conf_dir}}'
+  - '{{app_var_dir}}'
+  - '{{app_data_dir}}'
+
+app_bin_dir: '{{app_base_dir}}/bin'
+# 这个的作用是同一个服务启动多个时指定的名字，比如 app_base_name 为 redis是指软件名称，而 app_instance_name 可以叫做 redis_6379
+app_instance_name: '{{app_base_name}}'
+
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+app_boot_type: supervisor
+# 这里有一个问题，app_boot_type只有supervisor和systemd两个值，对于那些是sysv的init脚本的，就没办法了，只能自己定义了。
+app_src_boot_file: "{{app_base_name}}/{{app_base_name}}.{{app_boot_type}}"
+app_run_port: 0
+app_svc_name: '{{app_instance_name}}'
+
+# copy to /etc/profile.d/ of env file 
+app_env_file: "{{app_base_name}}.sh"
+
+# type: list
+#app_other_dirs:
+app_conf_files: []
+app_child_confs: []
+app_bin_scripts: []
+
+### app special tasks
+app_self_tasks_file: '{{role_path}}/tasks/apps/{{app_base_name}}/{{app_base_name}}.yml'
+
+### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
+# app的script脚本发生变更时调用的handler
+app_bin_script_file_handler: []
+# app的子配置文件发生变更时调用的handler
+app_child_conf_handler: []
+# app的配置文件发生变更时调用的handler
+app_conf_file_handler: []
+# app的service配置文件发生变更时调用的handler
+app_svc_file_handler: []
+
+
+### global vars
+#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+#nginx_conf_dir: /data/apps/config/nginx
+#nginx_run_user: nginx

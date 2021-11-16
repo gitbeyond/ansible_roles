@@ -1,4 +1,6 @@
-hosts_file:
+hosts_file: ""
 hosts_dest_dir: '/tmp'
 hosts_dest_name: '{{hosts_file | basename}}'
-hostname:
+hostname: ""
+# 是否将主机名更新到远端的 /etc/hosts 文件中，使用 blockinfile形式，所以不会破坏原有的条目
+hosts_file_is_update: false

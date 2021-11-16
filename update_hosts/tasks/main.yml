@@ -11,3 +11,7 @@
   tags:
     - update_hostname_use_variable
   when: hostname is not none
+
+- import_tasks: update_hosts_file/update_hosts_file_by_block.yml
+  tags:
+    - update_hosts_file

@@ -1,6 +1,6 @@
 # editor: haifengsss@163.com
 # 2019/04/29
-# update date: 2020/08/24
+# update date: 2021/11/15
 
 - name: link /data to /data1 dir
   file: 
@@ -18,13 +18,11 @@
 
 - name: create base dir
   file: 
-    path: '{{item}}' 
+    path: '{{es_install_dir}}' 
     state: directory 
     owner: root 
     group: root 
     mode: "0755"
-  loop:
-    - "{{es_install_dir}}"
 
 - name: create es dir
   file:
@@ -33,12 +31,12 @@
     group: "{{ es_run_user }}"
     mode: "0755"
     state: directory
-  loop:
-    - "{{es_conf_dir}}"
-    - "{{es_log_dir}}"
-    - "{{es_var_dir}}"
-    # es_data_dir 是一个列表
-    - "{{es_data_dir}}"
+  loop: '{{es_dirs}}'
+    #- "{{es_conf_dir}}"
+    #- "{{es_log_dir}}"
+    #- "{{es_var_dir}}"
+    ## es_data_dir 是一个列表
+    #- "{{es_data_dir[0]}}"
   when:
     - item != es_base_dir
     - item | dirname != es_base_dir

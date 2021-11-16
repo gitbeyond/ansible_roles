@@ -1,0 +1,4 @@
+
+- include_tasks: boot_app_for_system_{{ansible_service_mgr}}.yml
+  name: app_boot_app_for_system
+  #when: app_instance_name is not none and app_src_boot_file is not none

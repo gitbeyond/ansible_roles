@@ -1,0 +1,18 @@
+
+- name: copy app child conf file
+  template:
+    src: "{{ item }}" 
+    dest: "{{ app_child_conf_dir }}" 
+    owner: "{{ app_run_user }}" 
+    group: "{{ app_run_user }}" 
+    mode: "0644" 
+    backup: yes
+  #with_items: '{{app_child_confs}}'
+  loop: '{{app_child_confs}}'
+  when: 
+    - item is not none
+    - item != ""
+    - item is exists
+  notify: '{{app_child_conf_handler}}'
+  tags:
+    - copy_app_child_conf

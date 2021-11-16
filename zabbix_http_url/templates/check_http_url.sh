@@ -19,18 +19,15 @@ link() {
         touch ${log_dir}/${log_file}
     fi
 }
-#link "http://172.16.9.45:8070/civp/getview/testExceptionCatch/test1" "civp_web.log"
-link "http://{{ansible_default_ipv4['address']}}:8070/civp/getview/restdemo/execute" "civp_web.log"
 
-# 下面的一些数据源无法使用 zabbix 自带的 key 进行监控，所以在这里受用了 curl 的方式
-urls=(
-"http://api.bd.ctyun.cn:18080"
-)
-data_source=($(grep -E -v "^#|^$" {{ zabbix_script_dir }}/http_url.txt | awk '{print $2}'))
+#data_source=($(grep -E -v "^#|^$" {{ zabbix_script_dir }}/http_url.txt | awk -F',' '{print $2}'))
+IFSBAK=${IFS}
+export IFS=,
 #echo ${data_source[@]}
-for addr in ${data_source[@]};do
+#for addr in ${data_source[@]};do
+grep -E -v "^#|^$" {{ zabbix_script_dir }}/http_url.txt  | while read desc addr method in ${data_source[@]};do
     addr_log=${addr#*//}
     addr_log=${addr_log%%/*}
-    link "${addr}" "${addr_log}.log" &
+    link "${addr}" "${desc}_${addr_log}.log" &
 done
 

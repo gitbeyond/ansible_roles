@@ -1,0 +1,3 @@
+
+- include_tasks: es_{{es_boot_method}}_service.yml
+  name: es_boot_service

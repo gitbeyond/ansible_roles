@@ -1,0 +1,17 @@
+# editor: haifeng
+# 2019/11/25
+
+#- include_tasks: boot_app_for_supervisor.yml
+#  #tags:
+#  #  - boot_app_for_supervisor
+#  when: app_boot_type == 'supervisor' and app_src_boot_file is not none and app_src_boot_file != ''
+#
+#- include_tasks: boot_app_for_systemd.yml
+#  when: app_boot_type == 'systemd' 
+
+- include_tasks: boot_app_for_{{app_boot_type}}.yml
+  name: app_app_boot
+  when:
+    - app_src_boot_file != ""
+    - app_src_boot_file is not none
+  #when: app_boot_type == 'systemd' 

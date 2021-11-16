@@ -2,7 +2,7 @@
 - name: get es packet dir name
   local_action: 
     module: shell 
-    cmd: tar tf {{es_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    cmd: tar tf {{es_packet}} | head -n 1 | awk -F'/' '{print $1}'
     warn: false
   register: es_dir_name
   run_once: true

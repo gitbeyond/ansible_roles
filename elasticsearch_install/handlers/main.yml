@@ -5,3 +5,11 @@
     config: '{{supervisor_prim_conf}}'
   when:
     - es_restart_on_notify == true  
+
+- name: systemd_restart_es
+  systemd:
+    name: '{{es_service_name}}'
+    state: restarted
+    daemon_reload: yes
+  when:
+    - es_restart_on_notify == true  

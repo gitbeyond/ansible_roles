@@ -1,0 +1,8 @@
+# editor: haifengsss@163.com
+# 2019/11/22
+# update date: 2020/08/25
+
+- import_tasks: create_app_user.yml
+  #tags:
+  #  - create_{{commo}}_user
+

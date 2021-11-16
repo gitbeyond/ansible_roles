@@ -1,0 +1,8 @@
+# editor: haifengsss@163.com
+# update date: 2021/11/16
+
+#- include: create_common_dir.yml
+- import_tasks: create_app_dirs.yml
+  #tags:
+  #  - create_common_dir
+  #  - create_{{common_base_name}}_dir

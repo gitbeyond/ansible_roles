@@ -1,0 +1,63 @@
+- name: systemctl_daemon_reload
+  systemd:
+    daemon_reload: yes
+  listen: app_reload_app_conf
+
+# 这种写法似乎是行不通
+#- include_tasks: app_handler_{{app_boot_type}}.yml
+#  name: app_app_handlers
+  
+
+- import_tasks: app_handler_supervisor.yml
+  #when: app_boot_type == 'supervisor'
+
+- import_tasks: app_handler_system_systemd.yml
+  #when: 
+  #  - app_boot_type == 'systemd'
+  #  - ansible_service_mgr == 'systemd' 
+#- import_tasks: app_handler_system_upstart.yml
+#  when: 
+#    - app_boot_type == 'systemd'
+#    - ansible_service_mgr == 'upstart' 
+
+# handlers 中好像不能使用 include_tasks 关键字，下面的文件中有这个关键字
+#- import_tasks: app_handler_systemd.yml
+
+
+# 占位，暂不实现功能
+- name: common_app_restarted
+  shell: 
+    cmd: 'echo common_app_restarted'
+  
+# 还得增加一个 reload 的操作, 用于 systemctl reload 这种操作
+#- name: app_supervisor_restarted
+#  supervisorctl:
+#    name: '{{app_svc_name}}'
+#    state: restarted
+#  when: app_restart_on_notify == true
+#  listen: app_app_restarted
+#
+#- name: app_systemd_restarted
+#  systemd:
+#    name: '{{app_svc_name}}'
+#    state: restarted
+#  when: app_restart_on_notify == true
+#  listen: app_app_restarted
+#
+#- name: app_upstart_restarted
+#  service:
+#    name: '{{app_svc_name}}'
+#    state: restarted
+#  when: app_restart_on_notify == true
+#  listen: app_app_restarted
+
+
+
+- name: chkconfig_add_service
+  shell:
+    cmd: chkconfig --list {{app_instance_name}} || chkconfig --add {{app_instance_name}}
+
+
+#- name: supervisor_restarted
+#  shell: "echo 'app_boot_app test_handler'"
+

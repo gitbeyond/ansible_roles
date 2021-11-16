@@ -1,8 +1,0 @@
-# editor: haifeng
-# 2019/11/27
-
-#- include: create_common_dir.yml
-- import_tasks: create_common_dir.yml
-  #tags:
-  #  - create_common_dir
-  #  - create_{{common_base_name}}_dir

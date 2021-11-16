@@ -1,0 +1,22 @@
+
+- name: copy app systemd boot file
+  template: 
+    src: "{{app_src_boot_file}}" 
+    dest: "/usr/lib/systemd/system/{{app_svc_name}}.service" 
+    owner: "root" 
+    group: "root" 
+    mode: "0644"
+  #register: copy_systemd_file
+  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
+  #when: ansible_service_mgr == 'systemd' and app_src_boot_file is not none
+  notify: '{{app_svc_file_handler}}'
+
+- name: boot app for systemd
+  systemd: 
+    name: "{{app_svc_name}}" 
+    state: started  
+    daemon_reload: yes 
+    enabled: yes
+  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7 and copy_systemd_file.changed == true
+  #when: ansible_service_mgr == 'systemd' and app_instance_name is not none and app_src_boot_file is not none
+

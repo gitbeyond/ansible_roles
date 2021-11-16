@@ -1,0 +1,22 @@
+# editor: haifengsss@163.com
+# 2019/11/25
+# update date: 2021/11/15
+
+#- import_tasks: install_app_for_tgz.yml
+#- include_tasks: install_app_for_tgz.yml
+#  when: app_packet_type == "tgz" and app_packet is not none
+
+- include_tasks: install_app_for_{{app_packet_type}}.yml
+  name: app_install_packet
+  when: 
+    - app_packet is not none
+    - app_packet != ""
+  #tags:
+  #  - install_app_for_tgz
+
+#- import_tasks: install_app_for_jar.yml
+#- include_tasks: install_app_for_jar.yml
+#  when: (app_packet_type == "jar" or app_packet_type == "binary") and app_packet is not none
+  #tags:
+  #  - install_app_for_jar
+

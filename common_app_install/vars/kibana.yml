@@ -1,0 +1,9 @@
+app_run_user: '{{kibana_run_user | default("kibana", true)}}'
+app_base_name: '{{ kibana_base_name | default("kibana", true) }}'
+app_boot_type: '{{kibana_boot_type | default("systemd", true) }}'
+app_conf_files: '{{kibana_conf_files | default([], true)}}'
+app_packet: '{{kibana_packet | default("", true)}}'
+app_src_boot_file: '{{kibana_src_boot_file | default("", true)}}'
+# handler
+app_conf_file_handler: '{{kibana_conf_file_handler | default([], true)}}'
+app_svc_file_handler: '{{kibana_svc_file_handler | default([], true)}}'

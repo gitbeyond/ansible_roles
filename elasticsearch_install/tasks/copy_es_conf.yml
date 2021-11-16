@@ -12,7 +12,7 @@
 - name: copy es conf file
   template: 
     src: '{{ item }}' 
-    dest: '{{ es_base_dir }}/config' 
+    dest: '{{ es_conf_dir}}'
     owner: '{{ es_run_user }}' 
     group: '{{ es_run_user }}' 
     mode: "0644" 

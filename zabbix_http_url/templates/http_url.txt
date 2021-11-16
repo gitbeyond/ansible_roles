@@ -1,0 +1,3 @@
+{%for url in http_urls%}
+{{url['http_desc']}},{{url['http_url']}},{{url['http_method']}}
+{%endfor%}

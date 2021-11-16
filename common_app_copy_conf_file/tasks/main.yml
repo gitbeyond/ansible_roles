@@ -1,0 +1,21 @@
+# editor: haifengsss@163.com
+# update date: 2021/11/16
+
+
+#- include: copy_app_conf.yml
+- import_tasks: copy_app_conf.yml
+  tags:
+    - app_copy_conf
+
+#- include_tasks: copy_app_child_conf.yml
+- import_tasks: copy_app_child_conf.yml
+  name: copy_app_child_conf
+  when: 
+    - app_child_confs | length  > 0
+
+#- include_tasks: copy_app_bin_scripts.yml
+- import_tasks: copy_app_bin_scripts.yml
+  name: copy_app_bin_scripts
+  when: 
+    - app_bin_scripts | length > 0
+

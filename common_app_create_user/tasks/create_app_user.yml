@@ -1,0 +1,10 @@
+# 不支持更多的参数，如果有特殊需求可以重新写一个 task
+- name: app create user 
+  user: 
+    name: '{{app_run_user}}'
+    state: present 
+    system: '{{ app_run_user_is_system }}'
+  when: 
+    - app_run_user is not none
+    - app_run_user != ""
+    - app_run_user != "root"

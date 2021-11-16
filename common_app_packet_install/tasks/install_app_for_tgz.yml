@@ -1,0 +1,43 @@
+
+- name: get app packet dir name
+  local_action: 
+    module: shell 
+    #cmd: set -o pipefail;tar tf {{app_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    cmd: tar tf {{app_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    warn: false
+  register: packet_dir_name
+  changed_when: packet_dir_name.rc != 0
+  run_once: true
+  when:
+    - app_packet is exists
+
+- name: cp app packet to remote
+  unarchive: 
+    src: '{{ app_packet }}'
+    creates: '{{app_install_dir}}/{{packet_dir_name.stdout}}/{{app_packet_creates}}'
+    dest: '{{app_install_dir}}/'
+    owner: '{{app_run_user}}' 
+    group: '{{app_run_group}}'
+    mode: "0755" 
+  register: CP_RET
+  #when: 
+  #  - packet_dir_name.stdout is not none
+
+#- name: chmod app dir
+#  shell: "{{item}}"
+#  with_items:
+#    - 'find {{app_install_dir}}/{{packet_dir_name.stdout}} -type d -exec chmod 0755 {} \;'
+#    - 'find {{app_install_dir}}/{{packet_dir_name.stdout}} -type f -exec chmod 0644 {} \;'
+
+- name: update app packet link file for tgz
+  file: 
+    src: '{{packet_dir_name.stdout}}'
+    dest: '{{app_base_dir}}'
+    owner: '{{app_run_user}}'
+    group: '{{app_run_group}}'
+    state: link 
+    #- src: '{{app_install_dir}}/{{packet_dir_name.stdout}}'
+  when: 
+    - app_base_dir is not none 
+    - packet_dir_name.stdout != "" 
+    - packet_dir_name.stdout | basename != app_base_name

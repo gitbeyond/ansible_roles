@@ -14,8 +14,8 @@
 #
 
 # source function library
-. /etc/profile
 . /etc/rc.d/init.d/functions
+. /etc/profile
 
 lock_file=/data/apps/var/supervisord/supervisord.lock
 RETVAL=0

@@ -1,0 +1,35 @@
+# editor: haifengsss@163.com
+# update date:2021/11/16
+
+- include_vars: '{{app_base_name}}.yml'
+  name: include app vars
+
+- import_role:
+    name: common_app_create_user
+  tags:
+    - app_create_user
+
+- import_role:
+    name: common_app_create_dir
+  tags:
+    - app_create_dir
+
+- import_role:
+    name: common_app_packet_install
+  tags:
+    - app_packet_install
+
+- import_role:
+    name: common_app_copy_conf_file
+  tags:
+    - app_copy_file
+
+- include_tasks: apps/{{app_base_name}}/{{app_base_name}}.yml
+  name: include app special tasks
+  when:
+    - app_self_tasks_file is exists
+
+- import_role: 
+    name: common_app_boot
+  tags:
+    - app_boot

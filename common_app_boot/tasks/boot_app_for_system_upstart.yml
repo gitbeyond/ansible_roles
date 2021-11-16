@@ -1,0 +1,21 @@
+
+- name: copy app sysv boot file
+  template: 
+    src: "{{app_src_boot_file}}" 
+    dest: "/etc/rc.d/init.d/{{app_svc_name}}" 
+    owner: "root" 
+    group: "root" 
+    mode: "0755"
+  #when: ansible_service_mgr == 'upstart' and app_src_boot_file is not none
+  notify:  '{{app_svc_file_handler}}'
+
+- meta: flush_handlers
+
+- name: boot app for upstart
+  service: 
+    name: "{{app_svc_name}}" 
+    state: started 
+    enabled: yes
+  #notify: app_app_restarted
+  #when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  #when: ansible_service_mgr == 'upstart' and app_instance_name is not none and app_src_boot_file is not none

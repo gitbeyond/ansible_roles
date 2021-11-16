@@ -6,19 +6,27 @@ es_install_dir: '{{app_base_dir}}'
 #es_conf_dir: '/data/apps/config/{{es_app_name}}'
 
 # es 的配置文件目录，可以使用 ES_PATH_CONF 来指定，如 ES_PATH_CONF=/path/to/my/config
-es_conf_dir: '{{es_install_dir}}/config'
+#es_conf_dir: '{{es_install_dir}}/config'
+es_conf_dir: '/data/apps/config/{{es_app_name}}'
 es_log_dir: '/data/apps/log/{{es_app_name}}'
 es_var_dir: '/data/apps/var/{{es_app_name}}'
 es_data_dir: 
   - '/data/apps/data/{{es_app_name}}'
+es_other_dirs:
+  - '{{es_conf_dir}}'
+  - '{{es_log_dir}}'
+  - '{{es_var_dir}}'
+es_dirs: '{{ es_other_dirs + es_data_dir }}'
+
 es_base_dir: '/data/apps/opt/{{es_app_name}}'
-es_run_user: elk
+es_run_user: elasticsearch
+# supervisor or systemd
 es_boot_method: supervisor
 es_confs:
   - jvm.options
   - elasticsearch.yml
 
-es_src_boot_file: 'elasticsearch.ini'
+es_src_boot_file: 'elasticsearch.{{es_boot_method}}'
 es_service_name: '{{es_app_name}}'
 es_env_file: 'es.sh'
 

@@ -1,0 +1,46 @@
+- name: create dir
+  file: 
+    dest: '{{mtr_out_dir}}' 
+    owner: 'root'
+    group: 'root' 
+    mode: "0755" 
+    state: 'directory'
+
+- name: add mtr cron task
+  cron:
+    name: 'mtr monitor log' 
+    minute: '*/1' 
+    job: '/bin/bash {{zabbix_agent_script_dir}}/mtr_check.sh'
+
+- name: copy mtr_check script
+  template: 
+    src: '{{item.src}}' 
+    dest: '{{item.dest}}' 
+    owner: '{{zabbix_run_user}}'
+    group: '{{zabbix_run_user}}' 
+    mode: '{{item.mode}}' 
+    backup: yes
+  loop:
+    - src: 'mtr_hosts.txt'
+      dest: '{{ zabbix_agent_script_dir }}/mtr_hosts.txt'
+      mode: "0644"
+    - src: 'mtr_check.sh'
+      dest: '{{ zabbix_agent_script_dir }}/'
+      mode: '0744'
+    - src: 'mtr_log.py'
+      dest: '{{ zabbix_agent_script_dir }}/'
+      mode: '0744'
+    - src: 'mtr_log_discovery.py'
+      dest: '{{ zabbix_agent_script_dir }}/'
+      mode: '0744'
+
+- name: copy mtr conf file
+  template: 
+    src: 'mtr_log.conf' 
+    dest: '{{zabbix_child_conf_dir}}' 
+    owner: '{{zabbix_run_user}}'
+    group: '{{zabbix_run_user}}' 
+    mode: "0755" 
+    backup: yes
+  notify:
+    - restart zabbix_agentd

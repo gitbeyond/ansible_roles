@@ -1,0 +1,9 @@
+
+- name: update hosts file
+  blockinfile:
+    path: /etc/hosts
+    block: '{{lookup("file", hosts_file)}}'
+    backup: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK skywalking-es"
+  when:
+    - hosts_file_is_update == true

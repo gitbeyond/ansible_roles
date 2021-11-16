@@ -1,0 +1,36 @@
+
+- name: copy app conf file
+  template: 
+    src: "{{item}}" 
+    dest: "{{app_conf_dir}}/"
+    #dest: "{{app_conf_dir}}/{{app_instance_name | default(item.split('.')[0])}}.{{item.split('.')[-1]}}" 
+    owner: "{{app_run_user}}" 
+    group: "{{app_run_group}}" 
+    mode: "0644"
+    backup: yes
+  loop: '{{app_conf_files}}'
+  when: 
+    - item is not none
+    - item != ""
+    #- item is exists
+  notify: '{{app_conf_file_handler}}'
+  #notify: 
+  #  - '{{app_app_reload}}'
+  #  - '{{app_app_restart}}'
+  #notify:
+  #  - test_handler
+  #  - supervisor_restarted
+  register: COPY_CONF_FILE_RET
+
+- name: copy app env file
+  template: 
+    src: '{{ app_env_file }}'
+    dest: '/etc/profile.d/{{app_base_name}}.sh'
+    owner: root
+    group: root 
+    mode: "0644"
+  when: 
+    - app_env_file is not none
+    - app_env_file != ""
+    - app_env_file is exists
+

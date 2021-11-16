@@ -1,0 +1,9 @@
+
+- name: set limits conf
+  blockinfile:
+    path: /etc/security/limits.conf
+    block: |
+      {{es_run_user}} soft memlock unlimited
+      {{es_run_user}} hard memlock unlimited
+    backup: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK elasticsearch" 

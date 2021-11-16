@@ -1,0 +1,17 @@
+
+
+- name: cp app packet to remote
+  copy: 
+    src: '{{ app_packet }}'
+    dest: '{{app_install_dir}}/'
+    owner: '{{app_run_user}}' 
+    group: '{{app_run_group}}'
+    mode: "0644" 
+  when: 
+    - app_packet is not none
+    - app_packet != ""
+  register: cp_packet_result
+
+- name: debug val
+  debug:
+    msg: "{{app_base_dir}}/{{app_packet|basename}} ==== {{app_base_dir}}/{{app_base_name}}"

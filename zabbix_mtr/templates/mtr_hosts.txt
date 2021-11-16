@@ -1,0 +1,3 @@
+{%for host in mtr_hosts%}
+{{host['mtr_desc']}},{{host['mtr_host']}},{{host['mtr_type']}},{{host['mtr_port']| default(80)}}
+{%endfor%}

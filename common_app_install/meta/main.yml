@@ -1,0 +1,21 @@
+---
+allow_duplicates: true
+
+# dependencies 在最开始执行，导致无法在这之前执行一些操作，比如`include_vars`。所以改为使用`import_role`来进行。
+#dependencies:
+#  - role: common_app_create_user
+#    #name: create_prom_user
+#    tags:
+#      - app_create_user
+#  - role: common_app_create_dir
+#    tags:
+#      - app_create_dir   
+#  - role: common_app_packet_install
+#    tags:
+#      - app_packet_install
+#  - role: common_app_copy_conf_file
+#    tags:
+#      - app_copy_conf_file
+  #- role: common_boot_app
+  #  tags:
+  #    -  common_boot_app

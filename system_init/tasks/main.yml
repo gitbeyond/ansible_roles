@@ -4,6 +4,10 @@
     - system_udpate_hosts
   when: system_update_hosts == true
   
+- import_tasks: swapoff.yml
+  tags:
+    - swapoff
+
 - import_tasks: install_packet.yml
   tags:
     - install_base_packet

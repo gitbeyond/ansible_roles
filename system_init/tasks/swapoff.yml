@@ -1,0 +1,12 @@
+- name: swapoff
+  shell:
+    cmd: swapoff -a
+
+- name: close this item in fstab file
+  lineinfile:
+  #replace:
+    path: /etc/fstab
+    regexp: '([^#].*swap.*defaults.*)'
+    #replace: '#\1'
+    line: '#\1'
+    backrefs: yes

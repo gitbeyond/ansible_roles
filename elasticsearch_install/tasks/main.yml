@@ -6,6 +6,10 @@
   tags:
     - create_es_dir
 
+- import_tasks: set_limits_conf.yml
+  tags:
+    - set_limits_conf
+
 - import_tasks: install_es.yml
   tags:
     - install_es
@@ -18,6 +22,6 @@
   tags:
     - es_core_argument
 
-- import_tasks: es_supervisor_service.yml
+- import_tasks: es_boot/es_service.yml
   tags:
     - es_boot_service

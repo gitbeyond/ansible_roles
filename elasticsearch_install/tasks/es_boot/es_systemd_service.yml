@@ -1,0 +1,16 @@
+- name: copy es service file
+  template: 
+    src: '{{ es_src_boot_file }}' 
+    dest: '/usr/lib/systemd/system/{{es_service_name}}.service' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
+  notify:
+    - systemd_restart_es
+
+- name: systemd start es
+  systemd: 
+    name: '{{es_service_name}}' 
+    state: 'started'
+    daemon_reload: yes

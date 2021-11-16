@@ -1,0 +1,21 @@
+- name: systemctl_daemon_reload
+  shell: 
+    cmd: "systemctl daemon-reload"
+
+- name: app_supervisor_restarted
+  supervisorctl:
+    name: "{{app_svc_name}}"
+    state: restarted
+    supervisorctl_path: "/usr/bin/supervisorctl"
+
+- name: app_systemd_restarted
+  systemd:
+    name: '{{app_svc_name}}'
+    state: restarted
+    daemon_reload: yes
+
+- name: app_systemd_reloaded
+  systemd:
+    name: '{{app_svc_name}}'
+    state: reloaded
+    daemon_reload: yes

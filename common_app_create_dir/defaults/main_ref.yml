@@ -1,0 +1,24 @@
+app_base_dir: /data/apps/opt
+app_install_dir: '{{app_base_dir}}'
+app_run_user: root
+app_run_group: '{{app_run_user}}'
+app_run_user_is_system: yes
+app_base_name: ""
+
+# tgz or jar
+app_base_dir: /data/apps/opt/{{app_base_name}}
+app_log_dir: /data/apps/log/{{app_base_name}}
+app_conf_dir: /data/apps/config/{{app_base_name}}
+app_var_dir: /data/apps/var/{{app_base_name}}
+app_data_dir: /data/apps/var/{{app_base_name}}
+app_child_conf_dir: ""
+app_dirs:
+  - '{{app_log_dir}}'
+  - '{{app_conf_dir}}'
+  - '{{app_var_dir}}'
+  - '{{app_data_dir}}'
+
+app_bin_dir: '{{app_base_dir}}/bin'
+# 这个的作用是同一个服务启动多个时指定的名字，比如 app_base_name 为 redis是指软件名称，而 app_instance_name 可以叫做 redis_6379
+app_instance_name: '{{app_base_name}}'
+
