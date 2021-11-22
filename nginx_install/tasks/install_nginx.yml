@@ -10,25 +10,19 @@
 
 - name: cp and unarchive nginx to remote host
   unarchive: 
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+    src: '{{ nginx_packet }}' 
+    dest: '{{ nginx_install_dir }}' 
     owner: '{{ nginx_run_user }}' 
     group: '{{ nginx_run_user }}' 
-    creates: '{{ item.creates }}'
-  loop:
-  - src: '{{nginx_packet}}'
-    dest: '{{ nginx_install_dir}}/'
     creates: '{{ nginx_install_dir }}/{{nginx_dir_name.stdout}}/sbin'
 
 - name: create nginx link dir
   file: 
-    src: '{{ item.src }}' 
-    dest: '{{item.dest}}' 
+    src: '{{nginx_install_dir}}/{{nginx_dir_name.stdout}}'
+    dest: '{{nginx_base_dir}}' 
     state: 'link'
-  loop:
-  - src: "{{nginx_install_dir}}/{{nginx_dir_name.stdout}}"
-    dest: "{{nginx_base_dir}}"
-  when: nginx_dir_name.stdout != nginx_app_name
+  when: 
+    - nginx_dir_name.stdout != nginx_app_name
 
 - name: create nginx link dir
   file: 

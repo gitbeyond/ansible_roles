@@ -1,7 +1,7 @@
 
 nginx_run_user: nginx
 nginx_app_name: nginx
-nginx_packet:
+nginx_packet: ""
 app_base_dir: /data/apps/opt
 nginx_install_dir: '{{app_base_dir}}'
 nginx_base_dir: "{{nginx_install_dir}}/{{nginx_app_name}}"
@@ -10,7 +10,7 @@ nginx_conf_dir: '/data/apps/config/{{nginx_app_name}}'
 nginx_log_dir: '/data/apps/log/{{nginx_app_name}}'
 nginx_var_dir: '/data/apps/var/{{nginx_app_name}}'
 nginx_child_conf_dir: '{{nginx_conf_dir}}/conf.d'
-nginx_install_method: net
+nginx_install_method: local
 # type: list
 nginx_other_confs:
   - other/koi-utf
@@ -23,6 +23,9 @@ nginx_other_confs:
 nginx_confs:
   - nginx.conf
   #- htpasswd
+
+
+nginx_svc_name: '{{nginx_app_name}}'
 
 nginx_env_file: nginx.sh
 nginx_logrotate_file: nginx.logrotate
@@ -42,6 +45,7 @@ nginx_dependence_packets:
   - perl-ExtUtils-Embed
   - GeoIP-devel
   - gperftools-libs
+  - gperftools-devel
 
 nginx_kernel_args:
   - name: vm.swappiness

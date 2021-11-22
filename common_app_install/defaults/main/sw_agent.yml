@@ -1,0 +1,47 @@
+all_app_base_dir: /data/apps/opt
+sw_agent_install_dir: '{{all_app_base_dir}}'
+sw_agent_run_user: root
+sw_agent_run_group: '{{sw_agent_run_user}}'
+sw_agent_run_user_is_system: yes
+
+# 应用的基本名称，安装时的路径，都是以此来作为参照的，虽然这些路径也可以单独指定
+# 如kibana, jmx_expoter 等等
+sw_agent_base_name: "sw-agent"
+
+sw_agent_packet: ""
+sw_agent_packet_creates: "plugins"
+# tgz or jar
+sw_agent_packet_type: tgz
+sw_agent_base_dir: /data/apps/opt/{{sw_agent_base_name}}
+sw_agent_log_dir: /data/apps/log/{{sw_agent_base_name}}
+sw_agent_conf_dir: /data/apps/config/{{sw_agent_base_name}}
+sw_agent_var_dir: /data/apps/var/{{sw_agent_base_name}}
+sw_agent_data_dir: /data/apps/data/{{sw_agent_base_name}}
+sw_agent_child_conf_dir: ""
+
+sw_agent_dirs:
+  - '{{sw_agent_log_dir}}'
+  - '{{sw_agent_conf_dir}}'
+  - '{{sw_agent_var_dir}}'
+  - '{{sw_agent_data_dir}}'
+
+# copy to /etc/profile.d/ of env file 
+sw_agent_env_file: "{{sw_agent_base_name}}.sh"
+sw_agent_src_boot_file: ""
+
+# type: list
+#sw_agent_other_dirs:
+sw_agent_conf_files: []
+sw_agent_child_confs: []
+sw_agent_bin_scripts: []
+
+### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
+# sw_agent的script脚本发生变更时调用的handler
+sw_agent_bin_script_file_handler: []
+# sw_agent的子配置文件发生变更时调用的handler
+sw_agent_child_conf_handler: []
+# sw_agent的配置文件发生变更时调用的handler
+sw_agent_conf_file_handler: []
+# sw_agent的service配置文件发生变更时调用的handler
+sw_agent_svc_file_handler: []
+

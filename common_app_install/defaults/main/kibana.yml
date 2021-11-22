@@ -1,0 +1,56 @@
+all_kibana_base_dir: /data/apps/opt
+kibana_install_dir: '{{all_app_base_dir}}'
+kibana_run_user: kibana
+kibana_run_group: '{{kibana_run_user}}'
+kibana_run_user_is_system: yes
+
+# 应用的基本名称，安装时的路径，都是以此来作为参照的，虽然这些路径也可以单独指定
+# 如kibana, jmx_expoter 等等
+kibana_base_name: "kibana"
+
+kibana_packet: ""
+kibana_packet_creates: "bin/{{kibana_base_name}}"
+# tgz or jar
+kibana_packet_type: tgz
+kibana_base_dir: /data/apps/opt/{{kibana_base_name}}
+kibana_log_dir: /data/apps/log/{{kibana_base_name}}
+kibana_conf_dir: /data/apps/config/{{kibana_base_name}}
+kibana_var_dir: /data/apps/var/{{kibana_base_name}}
+kibana_data_dir: /data/apps/data/{{kibana_base_name}}
+kibana_child_conf_dir: ""
+
+kibana_dirs:
+  - '{{kibana_log_dir}}'
+  - '{{kibana_conf_dir}}'
+  - '{{kibana_var_dir}}'
+  - '{{kibana_data_dir}}'
+
+kibana_bin_dir: '{{kibana_base_dir}}/bin'
+# 这个的作用是同一个服务启动多个时指定的名字，比如 kibana_base_name 为 redis是指软件名称，而 app_instance_name 可以叫做 redis_6379
+kibana_instance_name: '{{kibana_base_name}}'
+
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+kibana_boot_type: supervisor
+# 这里有一个问题，kibana_boot_type只有supervisor和systemd两个值，对于那些是sysv的init脚本的，就没办法了，只能自己定义了。
+kibana_src_boot_file: "{{kibana_base_name}}/{{kibana_base_name}}.{{app_boot_type}}"
+kibana_run_port: 5161
+kibana_svc_name: '{{kibana_instance_name}}'
+
+# copy to /etc/profile.d/ of env file 
+kibana_env_file: "{{kibana_base_name}}/{{kibana_base_name}}.sh"
+
+# type: list
+#kibana_other_dirs:
+kibana_conf_files: []
+kibana_child_confs: []
+kibana_bin_scripts: []
+
+### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
+# kibana的script脚本发生变更时调用的handler
+kibana_bin_script_file_handler: []
+# kibana的子配置文件发生变更时调用的handler
+kibana_child_conf_handler: []
+# kibana的配置文件发生变更时调用的handler
+kibana_conf_file_handler: []
+# kibana的service配置文件发生变更时调用的handler
+kibana_svc_file_handler: []

@@ -37,6 +37,11 @@
  
 比如对于`kibana`, 定义一个 `kibana_install` 的`role`,引用当前的`role`, 在`kibana_install`中将这些变量覆盖，好像软链一样。
 
+### 方案三
+
+在default中定义各app开头的命名的变量(如`kibana_app_name`)，再将其转换成app_开头的变量，从而使task正常运行。
+
+当前采用这种方案。
 
 # examples
 
@@ -60,5 +65,40 @@ kibana_conf_file_handler: app_systemd_restarted
   roles:
     - role: common_app_install
       vars:
-        app_base_name: kibana 
+        app_type_name: kibana 
+```
+## jmx_exporter
+```yaml
+# group_vars
+jmx_exporter_packet: '{{packet_base_dir}}/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar'
+jmx_exporter_conf_files:
+  - jmx_exporter/tomcat_jmx.yml
+jmx_exporter_run_user: biyao
+
+
+# playbook
+- hosts: tomcat
+  roles:
+    - role: common_app_install
+      vars:
+        app_type_name: jmx_exporter
+```
+
+## sw_agent skywalking-java-agent
+
+```yaml
+# group_vars
+sw_agent_packet: '{{packet_base_dir}}/skywalking/skywalking-agent-8.8.0.tgz'
+sw_agent_run_user: biyao
+sw_agent_conf_files:
+  - sw_agent/agent.config
+sw_agent_base_name: sw-agent
+
+
+# playbook
+- hosts: tomcat
+  roles:
+    - role: common_app_install
+      vars:
+        app_type_name: sw_agent
 ```

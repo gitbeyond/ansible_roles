@@ -1,0 +1,14 @@
+app_run_user: '{{sw_agent_run_user | default("sw_agent", true)}}'
+app_base_name: '{{ sw_agent_base_name | default("sw_agent", true) }}'
+app_boot_type: '{{sw_agent_boot_type | default("systemd", true) }}'
+app_conf_files: '{{sw_agent_conf_files | default([], true)}}'
+app_packet: '{{sw_agent_packet | default("", true)}}'
+app_src_boot_file: '{{sw_agent_src_boot_file | default("", true)}}'
+# handler
+app_conf_file_handler: '{{sw_agent_conf_file_handler | default([], true)}}'
+app_svc_file_handler: '{{sw_agent_svc_file_handler | default([], true)}}'
+# dir, 这里有问题，在未进行下面的显式定义时，想引用这个 sw_agent_log_dir 的变量是引用不到的
+# 虽然可以使用 app_log_dir的变量，但是那样又背离了初衷了，如何让这些变量，可以方便的引用呢？
+sw_agent_log_dir: '{{app_log_dir}}'
+app_packet_type: "tgz"
+app_install_dir: '{{all_app_base_dir}}'

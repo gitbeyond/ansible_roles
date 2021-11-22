@@ -1,8 +1,8 @@
 
 - include_tasks: nginx_{{ansible_service_mgr}}_service.yml
   name: nginx_service_boot
-  tags:
-    - nginx_boot
+  #tags:
+  #  - nginx_boot
   when: ansible_os_family == "RedHat"
 
 #- include_tasks: cent6_service.yml

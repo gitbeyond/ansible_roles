@@ -1,0 +1,43 @@
+jmx_exporter_run_user: root
+jmx_exporter_run_group: '{{jmx_exporter_run_user}}'
+jmx_exporter_run_user_is_system: yes
+
+# 应用的基本名称，安装时的路径，都是以此来作为参照的，虽然这些路径也可以单独指定
+# 如kibana, jmx_exporter 等等
+jmx_exporter_base_name: "jmx_exporter"
+
+jmx_exporter_packet: ""
+jmx_exporter_install_dir: '{{all_app_base_dir}}/{{jmx_exporter_base_name}}'
+# tgz or jar
+jmx_exporter_packet_type: jar
+jmx_exporter_base_dir: /data/apps/opt/{{jmx_exporter_base_name}}
+jmx_exporter_log_dir: /data/apps/log/{{jmx_exporter_base_name}}
+jmx_exporter_conf_dir: /data/apps/config/{{jmx_exporter_base_name}}
+jmx_exporter_var_dir: /data/apps/var/{{jmx_exporter_base_name}}
+jmx_exporter_data_dir: /data/apps/data/{{jmx_exporter_base_name}}
+jmx_exporter_child_conf_dir: ""
+
+jmx_exporter_dirs:
+  - '{{jmx_exporter_log_dir}}'
+  - '{{jmx_exporter_conf_dir}}'
+  - '{{jmx_exporter_var_dir}}'
+  - '{{jmx_exporter_data_dir}}'
+
+jmx_exporter_run_port: 18080
+
+# type: list
+jmx_exporter_conf_files: []
+jmx_exporter_src_boot_file: ""
+
+
+### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
+# jmx_exporter的script脚本发生变更时调用的handler
+jmx_exporter_bin_script_file_handler: []
+# jmx_exporter的子配置文件发生变更时调用的handler
+jmx_exporter_child_conf_handler: []
+# jmx_exporter的配置文件发生变更时调用的handler
+jmx_exporter_conf_file_handler: []
+# jmx_exporter的service配置文件发生变更时调用的handler
+jmx_exporter_svc_file_handler: []
+
+

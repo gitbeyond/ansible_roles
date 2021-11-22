@@ -8,12 +8,12 @@
     backup: yes
   loop:
     - src: '{{nginx_boot_file}}'
-      dest: '/usr/lib/systemd/system/{{nginx_app_name}}.service'
+      dest: '/usr/lib/systemd/system/{{nginx_svc_name}}.service'
   notify:
     - systemctl_daemon_reload
 
 - name: set nginx boot and starting up
   systemd:
-    name: '{{nginx_app_name}}'
+    name: '{{nginx_svc_name}}'
     enabled: yes
     state: started

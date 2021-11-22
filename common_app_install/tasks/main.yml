@@ -1,8 +1,8 @@
 # editor: haifengsss@163.com
-# update date:2021/11/16
+# update date:2021/11/17
 
-- include_vars: '{{app_base_name}}.yml'
-  name: include app vars
+#- include_vars: '{{app_type_name}}.yml'
+#  name: include app vars
 
 - import_role:
     name: common_app_create_user
@@ -24,7 +24,7 @@
   tags:
     - app_copy_file
 
-- include_tasks: apps/{{app_base_name}}/{{app_base_name}}.yml
+- include_tasks: apps/{{app_type_name}}/{{app_type_name}}.yml
   name: include app special tasks
   when:
     - app_self_tasks_file is exists

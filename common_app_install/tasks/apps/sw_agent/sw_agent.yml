@@ -1,0 +1,7 @@
+
+- name: create link for sw_agent
+  file:
+    src: '{{app_base_dir}}'
+    dest: '/opt/{{app_base_name}}'
+    state: link
+

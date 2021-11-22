@@ -3,6 +3,19 @@ app_install_dir: '{{all_app_base_dir}}'
 app_run_user: root
 app_run_group: '{{app_run_user}}'
 app_run_user_is_system: yes
+
+# 应用的类型名称，这个名字是用来加载应用的变量和应用的独有任务所用的，应该在playbook中予以指定
+# 其实就是 app_name， 但是app_name这个变量感觉太短了，担心会有冲突，所以叫作app_type_name
+# 比如
+#   app_type_name: kibana
+#   app_base_name: kibana11
+# 或者
+#   app_type_name: sw_agent # skywalking-java-agent
+#   app_base_name: sw-agent # 注意 ansible的变量是不允许使用横线的
+#   
+app_type_name: ""
+# 应用的基本名称，安装时的路径，都是以此来作为参照的，虽然这些路径也可以单独指定
+# 如kibana, jmx_expoter 等等
 app_base_name: ""
 
 app_packet: ""
@@ -43,7 +56,7 @@ app_child_confs: []
 app_bin_scripts: []
 
 ### app special tasks
-app_self_tasks_file: '{{role_path}}/tasks/apps/{{app_base_name}}/{{app_base_name}}.yml'
+app_self_tasks_file: '{{role_path}}/tasks/apps/{{app_type_name}}/{{app_type_name}}.yml'
 
 ### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
 # app的script脚本发生变更时调用的handler

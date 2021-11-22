@@ -18,7 +18,8 @@
     - present
     - started
   #when: app_instance_name is not none and app_src_boot_file is not none
-  when: app_instance_name is not none 
+  when: 
+    - app_svc_name is not none 
 
 #- name: restart app prog
 #  supervisorctl: 

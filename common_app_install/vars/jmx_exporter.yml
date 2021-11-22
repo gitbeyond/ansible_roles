@@ -1,0 +1,14 @@
+app_run_user: '{{jmx_exporter_run_user | default("jmx_exporter", true)}}'
+app_base_name: '{{ jmx_exporter_base_name | default("jmx_exporter", true) }}'
+app_boot_type: '{{jmx_exporter_boot_type | default("systemd", true) }}'
+app_conf_files: '{{jmx_exporter_conf_files | default([], true)}}'
+app_packet: '{{jmx_exporter_packet | default("", true)}}'
+app_src_boot_file: '{{jmx_exporter_src_boot_file | default("", true)}}'
+# handler
+app_conf_file_handler: '{{jmx_exporter_conf_file_handler | default([], true)}}'
+app_svc_file_handler: '{{jmx_exporter_svc_file_handler | default([], true)}}'
+# 这里有一个问题, 当 jmx_expoter和别的应用一起使用时，就造成了这个变量超过了默认变量值,后面的变量自动就成了jar类型了
+# 等于他这里设置一次，就会让所有的应用都设置一次,内卷~~
+# 当然可以弄一个空变量文件，在末尾include_var一下，把所有变量置为空,不过不优雅
+app_packet_type: "jar"
+app_install_dir: '{{all_app_base_dir}}/{{app_base_name}}'

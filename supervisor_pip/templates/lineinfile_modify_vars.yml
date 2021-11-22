@@ -1,0 +1,12 @@
+
+# 修改变量的示例，变量写在同一行中时，正则匹配比较麻烦,下面这个也需要额外做一层判断，否则每次都会添加
+- name: test regexp
+  local_action:
+    module: lineinfile
+    path: /tmp/dstat.ini
+    regexp: '^environment=(.*)CATALINA_OPTS="([^haha].*[^haha]?)",?(.*)'
+    line: 'environment=\1CATALINA_OPTS="\2 haha",\3'
+    backup: yes
+    backrefs: yes
+  run_once: true
+

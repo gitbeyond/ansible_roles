@@ -1,0 +1,7 @@
+
+- name: create link for jmx_exporter
+  file:
+    src: '{{app_install_dir}}/{{app_packet | basename}}'
+    dest: '/opt/{{app_base_name}}.jar'
+    state: link
+
