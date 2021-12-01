@@ -2,7 +2,7 @@ all_app_base_dir: /data/apps/opt
 
 app_default_install_dir: '{{all_app_base_dir}}'
 app_default_run_user: root
-app_default_run_group: '{{app_run_user}}'
+app_default_run_group: '{{app_default_run_user}}'
 app_default_run_user_is_system: yes
 
 # 应用的类型名称，这个名字是用来加载应用的变量和应用的独有任务所用的，应该在playbook中予以指定
@@ -57,7 +57,7 @@ app_default_child_confs: []
 app_default_bin_scripts: []
 
 ### app special tasks
-app_default_self_tasks_file: '{{role_path}}/tasks/apps/{{app_type_name}}/{{app_type_name}}.yml'
+#app_default_self_tasks_file: '{{role_path}}/tasks/apps/{{app_type_name}}/{{app_type_name}}.yml'
 
 ### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
 # app的script脚本发生变更时调用的handler

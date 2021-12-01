@@ -32,3 +32,8 @@ es_cluster_name: zxw_es
   roles:
     - { role: elasticsearch_install}
 ```
+
+# es集群的监控
+
+* https://www.elastic.co/guide/en/elasticsearch/reference/7.15/collecting-monitoring-data.html : 旧的监控方式
+* https://www.elastic.co/guide/en/elasticsearch/reference/7.15/monitoring-production.html : 使用metricbeat监控，集群中至少有一个ingest节点 

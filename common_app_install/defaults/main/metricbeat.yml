@@ -1,0 +1,55 @@
+metricbeat_install_dir: '{{all_app_base_dir}}'
+metricbeat_run_user: metricbeat
+metricbeat_run_group: '{{metricbeat_run_user}}'
+metricbeat_run_user_is_system: yes
+
+# 应用的基本名称，安装时的路径，都是以此来作为参照的，虽然这些路径也可以单独指定
+# 如metricbeat, jmx_expoter 等等
+metricbeat_base_name: "metricbeat"
+
+metricbeat_packet: ""
+metricbeat_packet_creates: "{{metricbeat_base_name}}"
+# tgz or jar
+metricbeat_packet_type: tgz
+metricbeat_base_dir: /data/apps/opt/{{metricbeat_base_name}}
+metricbeat_log_dir: /data/apps/log/{{metricbeat_base_name}}
+metricbeat_conf_dir: /data/apps/config/{{metricbeat_base_name}}
+metricbeat_var_dir: /data/apps/var/{{metricbeat_base_name}}
+metricbeat_data_dir: /data/apps/data/{{metricbeat_base_name}}
+metricbeat_child_conf_dir: "{{metricbeat_conf_dir}}/modules.d"
+
+metricbeat_dirs:
+  - '{{metricbeat_log_dir}}'
+  - '{{metricbeat_conf_dir}}'
+  - '{{metricbeat_var_dir}}'
+  - '{{metricbeat_data_dir}}'
+
+metricbeat_bin_dir: '{{metricbeat_base_dir}}'
+# 这个的作用是同一个服务启动多个时指定的名字，比如 metricbeat_base_name 为 redis是指软件名称，而 app_instance_name 可以叫做 redis_6379
+metricbeat_instance_name: '{{metricbeat_base_name}}'
+
+# 项目启动的方式, 目前可选择 supervisor, nginx, systemd
+metricbeat_boot_type: systemd
+# 这里有一个问题，metricbeat_boot_type只有supervisor和systemd两个值，对于那些是sysv的init脚本的，就没办法了，只能自己定义了。
+metricbeat_src_boot_file: "{{metricbeat_base_name}}/{{metricbeat_base_name}}.{{app_boot_type}}"
+metricbeat_run_port: 5161
+metricbeat_svc_name: '{{metricbeat_instance_name}}'
+
+# copy to /etc/profile.d/ of env file 
+metricbeat_env_file: "{{metricbeat_base_name}}/{{metricbeat_base_name}}.sh"
+
+# type: list
+#metricbeat_other_dirs:
+metricbeat_conf_files: []
+metricbeat_child_confs: []
+metricbeat_bin_scripts: []
+
+### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
+# metricbeat的script脚本发生变更时调用的handler
+metricbeat_bin_script_file_handler: []
+# metricbeat的子配置文件发生变更时调用的handler
+metricbeat_child_conf_handler: []
+# metricbeat的配置文件发生变更时调用的handler
+metricbeat_conf_file_handler: []
+# metricbeat的service配置文件发生变更时调用的handler
+metricbeat_svc_file_handler: []

@@ -64,8 +64,7 @@ kibana_conf_file_handler: app_systemd_restarted
 - hosts: sw_es_kibana
   roles:
     - role: common_app_install
-      vars:
-        app_type_name: kibana 
+      app_type_name: kibana 
 ```
 ## jmx_exporter
 ```yaml
@@ -80,8 +79,7 @@ jmx_exporter_run_user: biyao
 - hosts: tomcat
   roles:
     - role: common_app_install
-      vars:
-        app_type_name: jmx_exporter
+      app_type_name: jmx_exporter
 ```
 
 ## sw_agent skywalking-java-agent
@@ -99,6 +97,66 @@ sw_agent_base_name: sw-agent
 - hosts: tomcat
   roles:
     - role: common_app_install
+      app_type_name: sw_agent
+```
+
+## metricbeat
+```yaml
+# group_vars
+metricbeat_packet: '{{packet_base_dir}}/elasticsearch/metricbeat-7.15.2-linux-x86_64.tar.gz'
+metricbeat_conf_files:
+  - metricbeat/metricbeat.yml
+metricbeat_child_confs:
+  - metricbeat/elasticsearch-xpack.yml
+metricbeat_conf_file_handler:
+  - app_systemd_restarted
+
+
+# playbook
+- hosts: sw_es
+  roles:
+    - role: common_app_install
+      app_type_name: metricbeat
+```
+* https://www.elastic.co/guide/en/beats/devguide/current/creating-metricbeat-module.html : 自定义一个metricbeat的module
+
+# 注意
+
+## 多个role时的变量写法
+
+错误的示例，这种情况下，变量`app_type_name`的值总是`sw_agent`。
+```yaml
+- hosts: 10.9.98.201
+  roles:
+    - role: common_app_install
+      vars:
+        app_type_name: jmx_exporter
+      tags:
+        - install_jmx_exporter
+    - role: common_app_install
       vars:
         app_type_name: sw_agent
+      tags:
+        - install_sw_agent
 ```
+
+正确的写法:
+```yaml
+- hosts: 10.9.98.201
+  roles:
+    - role: common_app_install
+      app_type_name: jmx_exporter
+      tags:
+        - install_jmx_exporter
+    - role: common_app_install
+      app_type_name: sw_agent
+      tags:
+        - install_sw_agent
+```
+
+## special_tasks 的执行时机问题
+
+在部署`metricbeat`的时候，需要在复制配置文件之前，把安装目录下的modules.d复制到conf目录下。
+
+但是这个任务在配置文件复制之后才引入，所以就出问题了。
+

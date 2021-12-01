@@ -1,0 +1,5 @@
+
+- name: copy modules to conf dir
+  shell:
+    cmd: /bin/cp -r {{metricbeat_base_dir}}/modules.d {{metricbeat_conf_dir}}/
+    creates: '{{metricbeat_conf_dir}}/modules.d/system.yml'

@@ -12,7 +12,7 @@
   when: 
     - item is not none
     - item != ""
-    - item is exists
+    #- item is exists
   notify: '{{app_child_conf_handler}}'
   tags:
     - copy_app_child_conf

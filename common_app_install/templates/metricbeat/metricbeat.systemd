@@ -1,0 +1,18 @@
+[Unit]
+Description=Metricbeat is a lightweight shipper for metrics.
+Documentation=https://www.elastic.co/beats/metricbeat
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+
+User={{metricbeat_run_user}}
+Environment="GODEBUG='madvdontneed=1'"
+Environment="BEAT_LOG_OPTS="
+Environment="BEAT_CONFIG_OPTS=-c {{metricbeat_conf_dir}}/metricbeat.yml"
+Environment="BEAT_PATH_OPTS=--path.home {{metricbeat_base_dir}} --path.config {{metricbeat_conf_dir}} --path.data {{metricbeat_data_dir}} --path.logs {{metricbeat_log_dir}}"
+ExecStart={{metricbeat_bin_dir}}/metricbeat --environment systemd $BEAT_LOG_OPTS $BEAT_CONFIG_OPTS $BEAT_PATH_OPTS
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
