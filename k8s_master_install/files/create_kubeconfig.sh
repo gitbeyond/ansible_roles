@@ -26,6 +26,7 @@ echo_yellow(){
 help_info(){
             echo_green "please add argument.
   --kube_cmd: kubectl position.
+  --kubeconfig: the kubeconig for admission.
   --kube_sa_name: serviceAccount.
   --kube_user_name: user name.
   --kube_group_name: group name.
@@ -39,9 +40,9 @@ help_info(){
   --kube_new_config: new kubeconfig name.
   --kube_cluster_priv: true or false. clusterrolebinding or rolebinding.
 examples: 
-  --kube_cmd '/root/k8s_55/k8s/kubectl --kubeconfig=/root/k8s_55/k8s/admin.kubeconfig' --kube_sa_name dashboard-admin --kube_ns kube-system --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./dashboard-admin.kubeconfig --kube_cluster_role cluster-admin 
+  --kube_cmd /root/k8s_55/k8s/kubectl --kubeconfig /root/k8s_55/k8s/admin.kubeconfig --kube_sa_name dashboard-admin --kube_ns kube-system --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./dashboard-admin.kubeconfig --kube_cluster_role cluster-admin 
 
-  --kube_cmd '/root/k8s_55/k8s/kubectl --kubeconfig=/root/k8s_55/k8s/admin.kubeconfig' --kube_user_name uc-admin --kube_ns user-center --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./uc-admin.kubeconfig --kube_cluster_role admin 
+  --kube_cmd /root/k8s_55/k8s/kubectl --kubeconfig /root/k8s_55/k8s/admin.kubeconfig --kube_user_name uc-admin --kube_ns user-center --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./uc-admin.kubeconfig --kube_cluster_role admin 
 
 "
     exit 0
@@ -52,6 +53,10 @@ while [[ $# -ge 1 ]]; do
         --kube_cmd )
             kube_cmd=$2
             #echo "经过a"
+            shift 2
+            ;;
+        --kubeconfig)
+            kube_old_config=$2
             shift 2
             ;;
         --kube_sa_name )
@@ -104,12 +109,12 @@ while [[ $# -ge 1 ]]; do
             shift 2
             ;;
         --kube_cluster_priv )
-            kube_cluster_priv=true
+            kube_cluster_priv=$2
             shift 2
             ;;
         -h|--help)
             help_info
-            shift 
+            shift
             ;;
         *)
             help_info
@@ -122,6 +127,7 @@ done
 
 args=(
 kube_cmd
+kube_old_config
 kube_sa_name
 kube_user_name
 kube_group_name
@@ -140,6 +146,8 @@ kube_cmd=${kube_cmd:-/usr/bin/kubectl}
 kube_rb_name=${kube_rb_name:-${kube_sa_name}}
 kube_cluster_name=${kube_cluster_name:-kubernetes}
 kube_cluster_priv=${kube_cluster_priv:-true}
+# 已有的与k8s集群通信的kubeconfig
+kube_old_config=${kube_old_config:-~/.kube/config}
 
 kube_group_name=${kube_group_name:-kubernetes}
 
@@ -243,11 +251,11 @@ create_cert(){
 }
 
 create_sa(){
-    echo_yellow "$kube_cmd create serviceaccount ${kube_sa_name} -n ${kube_ns}"
-    $kube_cmd create serviceaccount ${kube_sa_name} -n ${kube_ns} 
+    echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} create serviceaccount ${kube_sa_name} -n ${kube_ns}"
+    $kube_cmd --kubeconfig ${kube_old_config} create serviceaccount ${kube_sa_name} -n ${kube_ns} 
     
-    echo_yellow "$kube_cmd create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --serviceaccount=${kube_ns}:${kube_sa_name}"
-    $kube_cmd -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} \
+    echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --serviceaccount=${kube_ns}:${kube_sa_name}"
+    $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} \
       --serviceaccount=${kube_ns}:${kube_sa_name}
 }
 
@@ -282,7 +290,7 @@ error_exit(){
     fi
 }
 
-$kube_cmd -n ${kube_ns} get ${role_type} ${kube_rb_name}
+$kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get ${role_type} ${kube_rb_name}
 rb_result=$?
 #if [ "${sa_result}" == "0" ] && [ "${rb_result}" == "0" ];then
 if [ "${rb_result}" == "0" ];then
@@ -300,7 +308,7 @@ $kube_cmd config set-cluster ${kube_cluster_name} --embed-certs=true --server=${
   --certificate-authority=${kube_root_ca} --kubeconfig=${kube_new_config}
 # 如果 sa 的对象存在，则退出，不存在则创建
 if [ -n "${kube_sa_name}" ];then
-    $kube_cmd -n ${kube_ns} get sa ${kube_sa_name}
+    $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get sa ${kube_sa_name}
     error_exit 0 16
     #sa_result=$?
     #if [ ${sa_result} == 0 ];then
@@ -310,8 +318,8 @@ if [ -n "${kube_sa_name}" ];then
     create_sa
     # 设置 sa token
     #sa_secret=$($kube_cmd -n ${kube_ns} get secret | awk "/^${kube_sa_name}\-token\-[^token]/{print $1}")
-    sa_secret=$($kube_cmd -n ${kube_ns} get sa ${kube_sa_name} -o jsonpath={.secrets[0].name})
-    sa_token=$(${kube_cmd} -n ${kube_ns} get secret ${sa_secret} -o jsonpath={.data.token} | base64 -d)
+    sa_secret=$($kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get sa ${kube_sa_name} -o jsonpath={.secrets[0].name})
+    sa_token=$(${kube_cmd} --kubeconfig ${kube_old_config} -n ${kube_ns} get secret ${sa_secret} -o jsonpath={.data.token} | base64 -d)
     
     set -e
     echo_yellow "${kube_cmd} config set-credentials ${kube_sa_name} --token=${sa_token} \
@@ -336,10 +344,11 @@ if [ -n "${kube_user_name}" ];then
     create_cert
     cd ${cert_dir}
     set -e
-    $kube_cmd -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --user=${kube_user_name}
+    $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --user=${kube_user_name}
     $kube_cmd config set-credentials ${kube_user_name} --embed-certs=true \
       --client-certificate=${kube_user_name}.crt \
-      --client-key=${kube_user_name}.key
+      --client-key=${kube_user_name}.key \
+      --kubeconfig ${kube_new_config}
     ${kube_cmd} config set-context ${kube_user_name}@${kube_cluster_name} --cluster=${kube_cluster_name} \
       --user=${kube_user_name} --kubeconfig=${kube_new_config}
     ${kube_cmd} config use-context ${kube_user_name}@${kube_cluster_name} --kubeconfig=${kube_new_config}
