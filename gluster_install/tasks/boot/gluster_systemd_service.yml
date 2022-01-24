@@ -1,0 +1,19 @@
+#- name: copy gluster boot file
+#  template: 
+#    src: '{{ item.src }}' 
+#    dest: '{{ item.dest }}' 
+#    owner: 'root' 
+#    group: 'root' 
+#    mode: "0644" 
+#    backup: yes
+#  loop:
+#    - src: '{{gluster_boot_file}}'
+#      dest: '/usr/lib/systemd/system/{{gluster_svc_name}}.service'
+#  notify:
+#    - systemctl_daemon_reload
+
+- name: set gluster boot and starting up
+  systemd:
+    name: '{{gluster_svc_name}}'
+    enabled: yes
+    state: started

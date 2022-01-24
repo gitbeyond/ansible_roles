@@ -1,0 +1,32 @@
+
+- name: link /data to /data1 dir
+  file: 
+    src: '/data1' 
+    dest: '/data' 
+    owner: 'root'
+    group: 'root' 
+    mode: "0777" 
+    state: 'link'
+  when:
+    - '"/data1" in ansible_mounts | json_query("[*].mount")'
+  tags:
+    - create_data_soft_link
+
+- name: create gluster dir
+  file: 
+    path: '{{ item }}' 
+    owner: '{{ gluster_run_user}}' 
+    group: '{{ gluster_run_user}}' 
+    mode: "0755" 
+    state: 'directory'
+  loop: '{{gluster_data_dirs}}'
+  #- path: "{{gluster_install_dir}}" 
+  #  owner: root
+  #  group: root
+  #- path: "{{gluster_conf_dir}}" 
+  #  owner: root
+  #  group: root
+  #- path: "{{gluster_child_conf_dir}}"
+  #- path: "{{gluster_log_dir}}"
+  #- path: "{{gluster_var_dir}}"
+

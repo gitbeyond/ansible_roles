@@ -1,0 +1,19 @@
+
+- include_tasks: boot/gluster_{{ansible_service_mgr}}_service.yml
+  name: gluster_service_boot
+  #tags:
+  #  - gluster_boot
+  when: ansible_os_family == "RedHat"
+
+#- include_tasks: cent6_service.yml
+#  name: gluster_sysv_boot
+#  #tags:
+#  #  - gluster_boot
+#  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'upstart'
+#
+#- include_tasks: cent7_service.yml
+#  name: gluster_systemd_boot
+#  #tags:
+#  #  - gluster_boot
+#  when: ansible_os_family == "RedHat" and ansible_service_mgr == 'systemd'
+

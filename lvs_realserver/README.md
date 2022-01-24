@@ -1,4 +1,4 @@
-```bash
+```yaml
 - hosts: 10.111.111.110
   remote_user: root
   roles:
@@ -7,7 +7,7 @@
 
 or 
 
-```bash
+```yaml
 - hosts: 10.111.111.110
   remote_user: root
   roles:

@@ -7,7 +7,6 @@ LABEL name="CentOS7 with JDK8"
 #RUN yum -y install wget  \ 
         #&& wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo  \
 COPY java8 /usr/local/java8
-#COPY bashrc /root/.bashrc
 RUN  rm -rf  /etc/localtime \
      && ln -sv /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
      && yum -y install fontpackages-filesystem iproute \

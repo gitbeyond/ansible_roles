@@ -1,0 +1,15 @@
+
+- name: copy nginx child conf file
+  template: 
+    src: '{{ item }}' 
+    dest: '{{ nginx_child_conf_dir }}' 
+    owner: '{{nginx_run_user}}' 
+    group: '{{nginx_run_user }}' 
+    mode: "0644" 
+    backup: yes
+  loop: '{{nginx_child_confs}}'
+  #when: nginx_child_confs is defined and item is not none and itme != ''
+  when: item is not none and item != ''
+  #when: nginx_child_confs is not none
+  notify:
+   - reload_nginx_service

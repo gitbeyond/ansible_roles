@@ -1,0 +1,13 @@
+
+# 定义安装哪个版本的gluster
+gluster_repo_package: 'centos-release-gluster9'
+gluster_repo_name: 'centos-gluster9'
+gluster_run_user: root
+gluster_run_group: root
+
+gluster_svc_name: 'glusterd'
+
+gluster_peer_nodes: '{{ansible_play_hosts_all}}'
+
+gluster_data_dirs:
+  - /data/apps/data/gluster

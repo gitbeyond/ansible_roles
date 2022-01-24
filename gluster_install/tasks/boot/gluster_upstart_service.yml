@@ -1,0 +1,22 @@
+#- name: copy gluster boot file
+#  template: 
+#    src: '{{ item.src }}' 
+#    dest: '{{ item.dest }}' 
+#    owner: 'root' 
+#    group: 'root' 
+#    mode: "0755" 
+#    backup: yes
+#  loop:
+#  - src: '{{gluster_boot_file}}'
+#    dest: '/etc/rc.d/init.d/{{gluster_app_name}}'
+
+#- name: add gluster to service list
+#  shell:
+#    cmd: chkconfig --list {{gluster_app_name}} || chkconfig --add {{gluster_app_name}}
+
+- name: set gluster boot and starting up
+  service: 
+    name: '{{ gluster_svc_name }}' 
+    state: 'started' 
+    runlevel: '2,3,4,5'
+    enabled: yes

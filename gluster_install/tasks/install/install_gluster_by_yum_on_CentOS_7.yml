@@ -1,0 +1,22 @@
+# 此文件被 include_tasks 包含时，这里不能使用 import_tasks
+#- import_tasks: install/install_dependence_packet.yml
+
+- name: install gluster repo packet
+  yum: 
+    name: '{{gluster_repo_package}}'
+    state: latest
+
+- name: install gluster packet
+  yum: 
+    name: 'glusterfs-server'
+    state: latest
+    enablerepo: '{{gluster_repo_name}}'
+    disablerepo: '*'
+    update_cache: yes
+
+# libglusterfs0-9.4-1.el7.x86_64
+# glusterfs-cli-9.4-1.el7.x86_64
+# glusterfs-server-9.4-1.el7.x86_64
+# glusterfs-client-xlators-9.4-1.el7.x86_64
+# glusterfs-fuse-9.4-1.el7.x86_64
+# glusterfs-9.4-1.el7.x86_64

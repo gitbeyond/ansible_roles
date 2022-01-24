@@ -1,0 +1,12 @@
+- name: reload_nginx_service
+  systemd: 
+    name: '{{nginx_svc_name}}'
+    state: reloaded
+
+- name: systemctl_daemon_reload
+  systemd:
+    daemon_reload: yes
+
+- name: add to service list
+  shell:
+    cmd: systemctl daemon-reload

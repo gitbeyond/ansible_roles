@@ -1,0 +1,4 @@
+- import_tasks: create_gluster_dir.yml
+#- import_tasks: install/install_dependence_packet.yml
+
+- include_tasks: install/install_gluster_by_yum_on_{{ansible_distribution}}_{{ansible_distribution_major_version}}.yml

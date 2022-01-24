@@ -68,3 +68,8 @@ drwxrwxr-x 11 jenkins jenkins      4096 Jun  9 15:32 apache-skywalking-apm-bin-e
 1. 默认的启动脚本只能运行在后台，这个就不能使用supervisor来管理，所以为其编写了systemd的配置文件；
 2. 同时尝试性地为skywalking提交了pr,在其启动脚本中添加了`start-daemon`和`start-foreground`参数；
     * 如果其合并了，那么还要修改现在的supervisor和systemd的配置文件；
+
+# agent设置oap服务器地址问题
+
+* https://github.com/apache/skywalking/issues/3159 : about OAP cluster setup #3159
+

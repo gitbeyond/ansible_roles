@@ -1,0 +1,4 @@
+- name: install gluster repo packet
+  yum: 
+    name: '{{gluster_repo_package}}'
+    state: latest
