@@ -1,0 +1,22 @@
+{{sw_log_dir}}/skywalking-oap-server-*.log {
+    daily
+    missingok
+    nocreate
+    notifempty
+    sharedscripts
+    prerotate
+        if [ -d {{sw_log_dir}} ];then
+            cd {{sw_log_dir}}
+        else
+            exit 0
+        fi
+        for i in {1..100};do
+            dt=$(date -d '-1 month -${i} day' +'%Y-%m-%d')
+            old_logs=$(ls sw-oap-server-${dt}-{1..30}.log)
+            if [ -n "${old_logs}" ];then
+                /bin/rm ${old_logs}
+            fi
+        done
+    endscript
+}
+

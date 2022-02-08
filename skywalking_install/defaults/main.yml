@@ -29,6 +29,11 @@ sw_env_vars: {}
 #  JAVA_OPTS: "-Xms2048M -Xmx2048M"
 sw_env_vars_file: sw_env_vars.config
 
+# skywalking logrotate file
+sw_logrotate_file: skywalking.logrotate
+sw_logrotate_script: sw_rm_old_logs.sh
+
+
 # supervisor or systemd
 sw_service_type: systemd
 sw_service_name: '{{sw_app_name}}'

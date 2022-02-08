@@ -1,0 +1,29 @@
+{{sw_log_dir}}/webapp.log 
+{{sw_log_dir}}/webapp-console.log {
+    prerotate
+        cd {{sw_log_dir}}
+        dt=$(date +%Y%m%d%H%M%S)
+        max_size=104857600
+        webapp_log_size=$(du -bs webapp.log |awk '{print $1}')
+        console_log_size=$(du -bs webapp-console.log |awk '{print $1}')
+        if [ ${webapp_log_size} -gt ${max_size} ];then
+            mv webapp.log webapp.log.${dt}
+            touch webapp.log
+        fi
+        if [ ${console_log_size} -gt ${max_size} ];then
+            mv webapp-console.log webapp-console.log.${dt}
+            touch webapp-console.log
+        fi
+    endscript
+    daily
+    size 100M
+    #rotate 10
+    missingok
+    nocreate
+    notifempty
+    #sharedscripts
+    postrotate
+        systemctl restart skywalking-webapp
+    endscript
+}
+

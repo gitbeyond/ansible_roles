@@ -10,6 +10,6 @@
         /bin/kill -USR1 $(cat {{nginx_var_dir}}/nginx.pid 2>/dev/null) 2>/dev/null || :
         dt=$(date -d "8 day ago" +%Y%m%d)
         test -e {{nginx_log_dir}}/${dt} || mkdir -p {{nginx_log_dir}}/${dt}
-        mv /data/apps/log/nginx/*.log-${dt}* {{nginx_log_dir}}/${dt} 
+        mv {{nginx_log_dir}}/*.log-${dt}* {{nginx_log_dir}}/${dt} 
     endscript
 }

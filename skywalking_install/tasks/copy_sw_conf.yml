@@ -12,3 +12,35 @@
    - modify_sw_conf
   #notify:
   #  - sw_restart
+  
+- name: copy sw logrotate conf file
+  template: 
+    src: '{{ sw_logrotate_file }}' 
+    dest: '/etc/logrotate.d/{{sw_app_name}}' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    #backup: yes
+  tags:
+   - modify_sw_conf
+
+- name: copy sw logrotate script file
+  template: 
+    src: '{{ sw_logrotate_script }}' 
+    dest: '{{sw_var_dir}}' 
+    owner: '{{sw_run_user}}' 
+    group: '{{sw_run_user}}' 
+    mode: "0644" 
+    backup: yes
+  tags:
+   - modify_sw_conf
+
+- name: set logrotate cron job
+  ansible.builtin.cron:
+    name: 'skywalking logrotate'
+    minute: "0"
+    hour: "3"
+    user: '{{sw_run_user}}'
+    job: "/bin/bash {{sw_var_dir}}/{{sw_logrotate_script}} &>> /tmp/.sw_logrotate.out"
+    backup: yes
+    

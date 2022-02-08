@@ -219,6 +219,13 @@ fi
 if [ -e ${kube_new_config} ];then
     echo_red "the ${kube_new_config} already exist."
     exit 6
+else
+    if [[ "${kube_new_config}" =~ ^/ ]];then
+        :
+    else
+        kube_new_config_base_name=$(basename ${kube_new_config})
+        kube_new_config=${PWD}/${kube_new_config_base_name}
+    fi
 fi
 
 
@@ -251,12 +258,26 @@ create_cert(){
 }
 
 create_sa(){
-    echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} create serviceaccount ${kube_sa_name} -n ${kube_ns}"
-    $kube_cmd --kubeconfig ${kube_old_config} create serviceaccount ${kube_sa_name} -n ${kube_ns} 
+    echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} get serviceaccount ${kube_sa_name} -n ${kube_ns}"
+    $kube_cmd --kubeconfig ${kube_old_config} get serviceaccount ${kube_sa_name} -n ${kube_ns} 
+    local get_ret=$?
+    if [ ${get_ret} == 0 ];then
+        :
+    else
+        echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} create serviceaccount ${kube_sa_name} -n ${kube_ns}"
+        $kube_cmd --kubeconfig ${kube_old_config} create serviceaccount ${kube_sa_name} -n ${kube_ns} 
+    fi
     
-    echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --serviceaccount=${kube_ns}:${kube_sa_name}"
-    $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} \
-      --serviceaccount=${kube_ns}:${kube_sa_name}
+    echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} get ${role_type} ${kube_rb_name}"
+    $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get ${role_type} ${kube_rb_name}
+    local get_rb_ret=$?
+    if [ ${get_rb_ret} == 0 ];then
+        :
+    else
+        echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --serviceaccount=${kube_ns}:${kube_sa_name}"
+        $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} \
+          --serviceaccount=${kube_ns}:${kube_sa_name}
+    fi
 }
 
 error_exit(){
@@ -306,6 +327,7 @@ echo_yellow "$kube_cmd config set-cluster ${kube_cluster_name} --embed-certs=tru
 
 $kube_cmd config set-cluster ${kube_cluster_name} --embed-certs=true --server=${kube_api_server} \
   --certificate-authority=${kube_root_ca} --kubeconfig=${kube_new_config}
+
 # 如果 sa 的对象存在，则退出，不存在则创建
 if [ -n "${kube_sa_name}" ];then
     $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get sa ${kube_sa_name}
@@ -344,7 +366,15 @@ if [ -n "${kube_user_name}" ];then
     create_cert
     cd ${cert_dir}
     set -e
-    $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --user=${kube_user_name}
+    echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get ${role_type} ${kube_rb_name}"
+    $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get ${role_type} ${kube_rb_name}
+    get_rb_ret=$?
+    if [ ${get_rb_ret} == 0 ];then
+        :
+    else
+        echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --user=${kube_user_name}"
+        $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --user=${kube_user_name}
+    fi
     $kube_cmd config set-credentials ${kube_user_name} --embed-certs=true \
       --client-certificate=${kube_user_name}.crt \
       --client-key=${kube_user_name}.key \

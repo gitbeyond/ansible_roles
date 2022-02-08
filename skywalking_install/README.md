@@ -69,7 +69,26 @@ drwxrwxr-x 11 jenkins jenkins      4096 Jun  9 15:32 apache-skywalking-apm-bin-e
 2. 同时尝试性地为skywalking提交了pr,在其启动脚本中添加了`start-daemon`和`start-foreground`参数；
     * 如果其合并了，那么还要修改现在的supervisor和systemd的配置文件；
 
-# agent设置oap服务器地址问题
+## agent设置oap服务器地址问题
 
 * https://github.com/apache/skywalking/issues/3159 : about OAP cluster setup #3159
+
+## 日志滚动问题
+
+### oap
+* /data/apps/log/skywalking/oap.log , 不滚动, 量不大
+* /data/apps/log/skywalking/skywalking-oap-server.log , 这个是主要增长
+* /home/sw/logs/nacos/config.log， 量不大，只在某些情况下才会滚动，配置文件中没有相应的配置条目
+    * config.log.2022-01-25.1
+    * config.log.2021-12-02.1
+* /home/sw/logs/nacos/naming.log
+    * naming.log.2021-12-25.1
+    * naming.log.2022-01-03.1
+
+### webapp
+这两个都是在脚本中指定的，并没有明确的参数可以配置其滚动，目前其量不大，可以暂时就这样。后面可以修改脚本，为日志文件加上时间信息，定期重启实现滚动操作。
+
+* /data/apps/log/skywalking/webapp-console.log
+* /data/apps/log/skywalking/webapp.log 
+
 
