@@ -1,0 +1,14 @@
+
+- import_tasks: secure/set_login_defs_file.yml
+  tags:
+    - set_login_defs_file
+- import_tasks: secure/set_pwquality_file.yml
+  tags:
+    - set_pwquality_file
+#- import_tasks: secure/set_sshd_pam.yml
+#  tags:
+#    - set_sshd_pam
+
+- import_tasks: secure/set_system_auth_pam.yml
+  tags:
+    - set_system_auth

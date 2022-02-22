@@ -1,0 +1,30 @@
+
+# libpwquality
+- name: install libpwquality
+  yum:
+    name: libpwquality
+    state: latest
+
+- name: set pwquality.conf file
+  ansible.builtin.lineinfile:
+    path: /etc/security/pwquality.conf
+    #regexp: '^PASS_MAX_DAYS.*'
+    #line: 'PASS_MAX_DAYS 90'
+    regexp: '{{item.regexp}}'
+    line: '{{item.line}}'
+    backup: '{{ ansible_loop.last }}'
+  loop:
+    - regexp: 'minlen.*'
+      line: 'minlen 8'
+    - regexp: 'maxclassrepeat.*'
+      line: 'maxclassrepeat 3'
+    - regexp: 'lcredit.*'
+      line: 'lcredit -1'
+    - regexp: 'ucredit.*'
+      line: 'ucredit -1'
+    - regexp: 'dcredit.*'
+      line: 'dcredit -1'
+    - regexp: 'ocredit.*'
+      line: 'ocredit -1'
+  loop_control:
+    extended: yes

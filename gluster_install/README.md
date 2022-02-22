@@ -6,3 +6,20 @@
 
 
 
+
+# examples
+
+```ini
+[k8s_56_gluster]
+10.6.56.162
+10.6.56.163
+10.6.56.164
+
+```
+
+```yaml
+- name: install gluster
+  hosts: k8s_56_gluster
+  roles:
+    - role: gluster_install
+```

@@ -1,0 +1,32 @@
+
+#- name: get a line from pam_sshd
+#  ansible.builtin.slurp:
+#    src: '/etc/pam.d/sshd'
+#  register: pam_sshd
+- name: get a line from pam_sshd
+  ansible.builtin.shell:
+    cmd: sed -n '2p' /etc/pam.d/sshd
+  register: pam_sshd
+  changed_when: pam_sshd.rc != 0
+
+#- name: debug msg
+#  debug:
+#    #msg: '{{(pam_sshd.content | b64decode).split("\n")}}, {{(pam_sshd.content | b64decode).split("\n")[1]}}'
+#    #msg: '{{pam_sshd.stdout | b64decode | split("\n")}}'
+#    msg: '{{pam_sshd }}'
+
+- name: set pam.d/sshd file
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/sshd
+    #regexp: '^PASS_MAX_DAYS.*'
+    #line: 'PASS_MAX_DAYS 90'
+    regexp: '{{item.regexp}}'
+    line: '{{item.line}}'
+    backup: '{{ ansible_loop.last }}'
+    #insertbefore: '{{(pam_sshd.content | b64decode).split("\n")[1]}}'
+    insertbefore: '{{pam_sshd.stdout}}'
+  loop:
+    - regexp: '^auth.*required.*pam_tally2.so.*'
+      line: 'auth required pam_tally2.so onerr=fail deny=3 unlock_time=3600 even_deny_root root_unlock_time=3600'
+  loop_control:
+    extended: yes

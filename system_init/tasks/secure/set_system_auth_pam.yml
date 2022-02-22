@@ -1,0 +1,16 @@
+
+# https://zhuanlan.zhihu.com/p/127109500
+- name: set system-auth file
+  #ansible.builtin.template:
+  ansible.builtin.copy:
+    src: '{{ansible_os_family}}/{{ansible_distribution_major_version}}/{{item}}'
+    dest: '/etc/pam.d/'
+    owner: 'root'
+    group: 'root'
+    mode: "0644"
+    backup: True
+  loop:
+    - system-auth-ac
+    - password-auth-ac
+  loop_control:
+    extended: yes

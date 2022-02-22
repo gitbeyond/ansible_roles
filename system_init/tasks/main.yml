@@ -69,3 +69,7 @@
 - import_tasks: off_swap.yml
   tags:
     - swapoff
+
+- import_tasks: secure/secure_policy.yml
+  tags:
+    - secure_policy

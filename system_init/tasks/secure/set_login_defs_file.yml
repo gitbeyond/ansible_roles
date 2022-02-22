@@ -1,0 +1,20 @@
+
+- name: set login.defs file
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    #regexp: '^PASS_MAX_DAYS.*'
+    #line: 'PASS_MAX_DAYS 90'
+    regexp: '{{item.regexp}}'
+    line: '{{item.line}}'
+    backup: '{{ ansible_loop.last }}'
+  loop:
+    - regexp: '^PASS_MAX_DAYS.*'
+      line: 'PASS_MAX_DAYS 90'
+    - regexp: '^PASS_MIN_DAYS.*'
+      line: 'PASS_MIN_DAYS 0'
+    - regexp: '^PASS_MIN_LEN.*'
+      line: 'PASS_MIN_LEN 8'
+    - regexp: '^PASS_WARN_AGE.*'
+      line: 'PASS_WARN_AGE 7'
+  loop_control:
+    extended: yes
