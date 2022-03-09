@@ -32,7 +32,8 @@ sw_env_vars_file: sw_env_vars.config
 # skywalking logrotate file
 sw_logrotate_file: skywalking.logrotate
 sw_logrotate_script: sw_rm_old_logs.sh
-
+sw_delete_old_index_script: sw_delete_old_index.sh
+es_master_hosts: ""
 
 # supervisor or systemd
 sw_service_type: systemd

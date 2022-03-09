@@ -33,3 +33,7 @@
 - import_tasks: sw_webapp_service.yml
   tags:
     - sw_webapp_start_service
+
+- import_tasks: other/delete_old_index.yml
+  tags:
+    - copy_sw_conf
