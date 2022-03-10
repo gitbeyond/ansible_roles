@@ -12,10 +12,10 @@ es_index_out_file=/tmp/.${es_host}.out
 get_all_index(){
     local es_hosts="${es_master_hosts//,/ }"
     # clean the content of file
-    > ${es_index_out_file}
     for h in ${es_hosts};do
-        local es_url="http://${h}"
-        local es_index_out_file=/tmp/.${h}_index.out
+        es_url="http://${h}"
+        es_index_out_file=/tmp/.${h}_index.out
+        > ${es_index_out_file}
         curl -i --connect-timeout 5 ${es_url}/_cat/indices?v > ${es_index_out_file}
         if head -n 1 ${es_index_out_file} |grep "\<200\>" > /dev/null; then
             break
