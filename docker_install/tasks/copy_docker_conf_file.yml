@@ -6,7 +6,7 @@
     group: root 
     mode: "0644" 
     backup: yes
-  with_items:
+  loop:
     - {src: "{{docker_src_conf}}", dest: '{{docker_conf_dir}}'}
     - {src: "{{docker_env_file}}", dest: '/etc/profile.d/'}
   notify:

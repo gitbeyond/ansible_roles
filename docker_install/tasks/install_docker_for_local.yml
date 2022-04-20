@@ -10,7 +10,9 @@
 - name: get docker packet dir name
   local_action: 
     module: shell 
-    cmd: tar tf {{docker_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    cmd: |
+      set -o pipefail
+      tar tf {{docker_packet}} |head -n 1 |awk -F'/' '{print $1}'
     warn: false
   register: docker_dir_name
   run_once: true
@@ -22,7 +24,7 @@
     owner: '{{ item.owner }}' 
     group: '{{ item.group }}' 
     creates: '{{ item.creates }}'
-  with_items:
+  loop:
     - src: '{{ docker_packet }}'
       dest: '{{app_base_dir}}/'
       owner: root
@@ -35,7 +37,7 @@
     src: '{{ item.src }}' 
     dest: '{{item.dest}}' 
     state: '{{ item.state }}'
-  with_items:
+  loop:
     - src: "{{docker_install_dir}}/{{docker_dir_name.stdout}}"
       dest: "{{docker_base_dir}}"
       state: link

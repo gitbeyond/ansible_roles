@@ -1,6 +1,12 @@
 - name: copy docker conf file for suse
-  template: src={{item.src}} dest={{item.dest}} owner=root group=root mode=0644 backup=yes
-  with_items:
+  template: 
+    src: '{{item.src}}' 
+    dest: '{{item.dest}}' 
+    owner: 'root'
+    group: 'root'
+    mode: "0644" 
+    backup: yes
+  loop:
     - {src: "daemon.json_for_suse", dest: '{{docker_conf_dir}}/daemon.json'}
     - {src: "docker.service_for_suse", dest: '/usr/lib/systemd/system/docker.service'}
     - {src: "docker.sh", dest: '/etc/profile.d/'}

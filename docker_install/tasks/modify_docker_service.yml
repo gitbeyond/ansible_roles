@@ -1,3 +1,7 @@
 - name: modify docker service conf file
-  lineinfile: line='ExecStartPost=/usr/sbin/iptables -P FORWARD ACCEPT' path=/usr/lib/systemd/system/docker.service state=present backup=yes
+  lineinfile: 
+    line: 'ExecStartPost=/usr/sbin/iptables -P FORWARD ACCEPT'
+    path: '/usr/lib/systemd/system/docker.service'
+    state: present 
+    backup: yes
 
