@@ -1,0 +1,38 @@
+
+[
+        {
+            "ad_domain": "",
+            "applications_amount": 0,
+            "assets_amount": 2,
+            "auto_push": false,
+            "cmd_filters": [],
+            "comment": "密钥为2022/04/07 添加",
+            "created_by": "Administrator",
+            "date_created": "2022/04/07 18:39:20 +0800",
+            "date_updated": "2022/04/07 18:39:20 +0800",
+            "home": "",
+            "id": "0b79cebc-8b00-46f8-887b-767668719703",
+            "is_asset_protocol": true,
+            "login_mode": "auto",
+            "login_mode_display": "托管密码",
+            "name": "biyao",
+            "nodes": [
+                "090a27e7-4c0d-4470-806f-992bf6537ef0"
+            ],
+            "org_id": "00000000-0000-0000-0000-000000000002",
+            "org_name": "Default",
+            "priority": 81,
+            "protocol": "ssh",
+            "sftp_root": "tmp",
+            "shell": "/bin/bash",
+            "ssh_key_fingerprint": "MD5:b8:de:0c:0f:e8:dd:0e:fe:6d:50:46:29:41:3b:25:c0",
+            "su_enabled": false,
+            "su_from": null,
+            "sudo": "/bin/whoami",
+            "system_groups": "",
+            "type": "admin",
+            "type_display": "特权用户",
+            "username": "biyao",
+            "username_same_with_user": false
+        }
+    ]

@@ -1,0 +1,3 @@
+- hosts: 10.6.36.13
+  roles:
+  - role: openldap_deploy

@@ -7,6 +7,8 @@
       warn: false
   register: etcd_dir_name
   run_once: true
+  failed_when: etcd_dir_name.stdout == ""
+  changed_when: etcd_dir_name.rc != 0
 
 
 - name: cp and unarchive etcd_binary_tarball to remote host 

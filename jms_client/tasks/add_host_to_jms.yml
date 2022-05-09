@@ -1,0 +1,126 @@
+#- hosts: k8s_56
+- hosts: 10.6.56.161
+  vars:
+    jms_url: 'https://jms-ops.biyao.com'
+    jms_token: '6d83611afe1aa8823a76f421fc878a02d1035476'
+    jms_admin_user: 'biyao'
+    jms_login_user: ''
+  tasks:
+  - name: get the host info
+    register: host_info
+    # 即使没有查到，也不会报错, 但是
+    local_action:
+      module: uri
+      url: '{{jms_url}}/api/v1/assets/assets/?ip={{ansible_default_ipv4.address}}'
+      #url: '{{jms_url}}/api/v1/assets/assets/?ip=10.6.56.162'
+      method: GET
+      body_format: json
+      return_content: yes
+      status_code: [200, 201]
+      headers:
+        Content-Type: 'application/json'
+        X-JMS-ORG: '00000000-0000-0000-0000-000000000002'
+        Authorization: 'Token {{jms_token}}'
+    
+  - name: debug info
+    local_action:
+      module: debug
+      msg: '{{host_info}}'
+    when:
+      - host_info.json != []
+  - name: debug info
+    local_action:
+      module: debug
+      msg: '{{ host_info.json == [] }}'
+  - name: get admin user info
+    register: admin_user
+    local_action:
+      module: uri
+      #url: '{{jms_url}}/api/v1/assets/accounts/?username={{jms_admin_user}}'
+      #url: '{{jms_url}}/api/v1/assets/accounts/{{jms_admin_user}}/'
+      url: '{{jms_url}}/api/v1/assets/system-users/?name={{jms_admin_user}}'
+      method: GET
+      body_format: json
+      return_content: yes
+      status_code: [200, 201]
+      headers:
+        Content-Type: 'application/json'
+        X-JMS-ORG: '00000000-0000-0000-0000-000000000002'
+        Authorization: 'Token {{jms_token}}'
+    
+  - name: add host to jms
+    # 已经存在的机器会报错
+    #"json": {
+    #    "hostname": [
+    #        "字段必须唯一"
+    #    ]
+    #},
+    #"msg": "Status code was 400 and not [200aaassssslsllsq 201]: HTTP Error 400: Bad Request",
+    # admin_user 是uuid, 需要先获取相关的用户信息，不能选择系统用户
+    register: host_create_ret
+    local_action:
+      module: uri
+      url: '{{jms_url}}/api/v1/assets/assets/'
+      method: POST
+      body_format: json
+      return_content: yes
+      status_code: [200, 201]
+      headers:
+        Content-Type: 'application/json'
+        X-JMS-ORG: '00000000-0000-0000-0000-000000000002'
+        Authorization: 'Token {{jms_token}}'
+      body: |
+        {
+          "hostname": "{{ansible_hostname}}",
+          "ip": "{{ansible_default_ipv4.address}}",
+          "platform": "{{ansible_system}}",
+          "admin_user": "{{admin_user.json[0].id}}"
+        }
+    when:
+      - host_info.json == []
+      - admin_user.json != []
+  - name: update the host info
+    local_action:
+      module: uri
+      url: '{{jms_url}}/api/v1/assets/assets/{{host_info.json[0].id}}/'
+      method: PATCH
+      body_format: json
+      return_content: yes
+      follow_redirects: yes
+      status_code: [200]
+      headers:
+        Content-Type: 'application/json'
+        X-JMS-ORG: '00000000-0000-0000-0000-000000000002'
+        Authorization: 'Token {{jms_token}}'
+      body: |
+        {
+          "hostname": "{{ansible_hostname}}",
+          "ip": "{{ansible_default_ipv4.address}}",
+          "platform": "{{ansible_system}}",
+          "admin_user": "{{admin_user.json[0].id}}"
+        }
+    when:
+      - host_info.json != []
+      - admin_user.json != []
+  - name: refresh host info
+    # 201 {"task":"3f631b20-b98f-4b81-98a4-75bdc74cca36"}
+    local_action:
+      module: uri
+      url: '{{jms_url}}/api/v1/assets/assets/{{host_info.json[0].id}}/tasks/'
+      method: POST
+      body_format: json
+      return_content: yes
+      follow_redirects: yes
+      status_code: [200, 201]
+      headers:
+        Content-Type: 'application/json'
+        X-JMS-ORG: '00000000-0000-0000-0000-000000000002'
+        Authorization: 'Token {{jms_token}}'
+      body: |
+        {
+          "action": "refresh"
+        }
+    when:
+      - host_info.json != []
+      #- host_info.json[0].hardware_info is defined
+      - host_info.json[0].hardware_info == ""

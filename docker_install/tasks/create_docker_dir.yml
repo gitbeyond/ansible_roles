@@ -6,7 +6,7 @@
 
 - name: create docker dir
   file:
-    path: '{{ item.path }}' 
+    path: '{{ item }}' 
     owner: 'root' 
     group: 'root' 
     mode: "0755" 

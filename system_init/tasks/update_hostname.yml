@@ -14,7 +14,7 @@
 #
 - name: get hostname
   shell: 
-    cmd: grep '{{ ansible_default_ipv4.address }}' {{system_hosts_dest_dir}}/{{system_hosts_dest_name}} | awk "{print \$2}"
+    cmd: grep '^{{ ansible_default_ipv4.address }}\>' {{system_hosts_dest_dir}}/{{system_hosts_dest_name}} | awk "{print \$2}"
   register: hname
 
 - name: modify hostname

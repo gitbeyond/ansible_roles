@@ -1,11 +1,9 @@
 ---
 - name: copy nodejs profile
   template: 
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+    src: '{{ nodejs_profile }}' 
+    dest: '/etc/profile.d/{{nodejs_app_name}}.sh'
+    backup: yes
     owner: root 
     group: root 
     mode: "0644"
-  loop:
-    - src: 'nodejs.sh'
-      dest: '/etc/profile.d/{{nodejs_app_name}}.sh'

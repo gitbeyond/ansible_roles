@@ -27,8 +27,8 @@ k8s_run_user: kube
 
 k8s_sysctl_file: /etc/sysctl.d/36-kube-proxy.conf
 # type: list
-k8s_node_confs:
-k8s_node_service_confs:
+k8s_node_confs: []
+k8s_node_service_confs: []
 k8s_node_certs:
   - src: k8s-root-ca.pem
     mode: "0644"
@@ -38,8 +38,11 @@ k8s_node_certs:
     mode: "0644"
   - src: k8s-kube-proxy-key.pem
     mode: "0600"
+
 # core args
-k8s_node_kernel_args:
+k8s_node_kernel_args: '{{lookup("vars","k8s_system_"~ansible_os_family~"_"~ansible_distribution_major_version~"_kernel_args")}}'
+
+k8s_system_RedHat_7_kernel_args:
   - name: 'vm.swappiness'
     value: 0
   - name: 'net.ipv4.ip_forward'
@@ -49,3 +52,5 @@ k8s_node_kernel_args:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1441737
   - name: 'fs.may_detach_mounts'
     value: 1
+
+k8s_system_RedHat_8_kernel_args: '{{k8s_system_RedHat_7_kernel_args[:3]}}'

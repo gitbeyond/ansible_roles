@@ -1,5 +1,5 @@
 ---
-- include: install_jdk.yml
+- import_tasks: install_jdk.yml
 #- import_tasks: install_jdk_new.yml
   tags:
     - install_jdk
@@ -8,3 +8,7 @@
   tags:
     #- modify_java_conf
     - copy_java_env_conf
+
+- import_tasks: jre_import_certs.yml
+  tags:
+    - jre_import_certs

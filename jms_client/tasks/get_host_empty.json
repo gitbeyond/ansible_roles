@@ -1,0 +1,97 @@
+
+ {
+        "allow": "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS",
+        "changed": false,
+        "connection": "close",
+        "content": "[]",
+        "content_language": "zh-hans",
+        "content_length": "2",
+        "content_type": "application/json",
+        "cookies": {},
+        "cookies_string": "",
+        "date": "Tue, 19 Apr 2022 09:33:59 GMT",
+        "elapsed": 0,
+        "failed": false,
+        "json": [],
+        "msg": "OK (2 bytes)",
+        "redirected": false,
+        "referrer_policy": "same-origin",
+        "server": "nginx",
+        "status": 200,
+        "url": "https://jms-ops.biyao.com/api/v1/assets/assets/?ip=10.6.56.162",
+        "vary": "Accept, Accept-Language, Cookie",
+        "x_content_type_options": "nosniff",
+        "x_frame_options": "DENY"
+    }
+
+{
+        "allow": "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS",
+        "changed": false,
+        "connection": "close",
+        "content": "[{\"id\":\"37ae7a6d-14bb-4231-a8ab-59cae210be8d\",\"hostname\":\"k8s-node-56-161\",\"ip\":\"10.6.56.161\",\"platform\":\"Linux\",\"protocols\":[\"ssh/22\"],\"is_active\":true,\"public_ip\":null,\"number\":null,\"comment\":\"\",\"vendor\":null,\"model\":null,\"sn\":null,\"cpu_model\":null,\"cpu_count\":null,\"cpu_cores\":null,\"cpu_vcpus\":null,\"memory\":null,\"disk_total\":null,\"disk_info\":null,\"os\":null,\"os_version\":null,\"os_arch\":null,\"hostname_raw\":null,\"cpu_info\":\"\",\"hardware_info\":\"\",\"domain\":null,\"admin_user\":null,\"admin_user_display\":\"\",\"nodes\":[\"777e35af-92f7-4498-a63b-a9cfe12fdae4\"],\"nodes_display\":[\"/Default\"],\"labels\":[],\"labels_display\":[],\"connectivity\":\"failed\",\"date_verified\":\"2022/04/19 16:43:52 +0800\",\"created_by\":\"Administrator\",\"date_created\":\"2022/04/19 16:43:51 +0800\",\"org_id\":\"00000000-0000-0000-0000-000000000002\",\"org_name\":\"Default\"}]",
+        "content_language": "zh-hans",
+        "content_length": "823",
+        "content_type": "application/json",
+        "cookies": {},
+        "cookies_string": "",
+        "date": "Tue, 19 Apr 2022 09:32:55 GMT",
+        "elapsed": 0,
+        "failed": false,
+        "json": [
+            {
+                "admin_user": null,
+                "admin_user_display": "",
+                "comment": "",
+                "connectivity": "failed",
+                "cpu_cores": null,
+                "cpu_count": null,
+                "cpu_info": "",
+                "cpu_model": null,
+                "cpu_vcpus": null,
+                "created_by": "Administrator",
+                "date_created": "2022/04/19 16:43:51 +0800",
+                "date_verified": "2022/04/19 16:43:52 +0800",
+                "disk_info": null,
+                "disk_total": null,
+                "domain": null,
+                "hardware_info": "",
+                "hostname": "k8s-node-56-161",
+                "hostname_raw": null,
+                "id": "37ae7a6d-14bb-4231-a8ab-59cae210be8d",
+                "ip": "10.6.56.161",
+                "is_active": true,
+                "labels": [],
+                "labels_display": [],
+                "memory": null,
+                "model": null,
+                "nodes": [
+                    "777e35af-92f7-4498-a63b-a9cfe12fdae4"
+                ],
+                "nodes_display": [
+                    "/Default"
+                ],
+                "number": null,
+                "org_id": "00000000-0000-0000-0000-000000000002",
+                "org_name": "Default",
+                "os": null,
+                "os_arch": null,
+                "os_version": null,
+                "platform": "Linux",
+                "protocols": [
+                    "ssh/22"
+                ],
+                "public_ip": null,
+                "sn": null,
+                "vendor": null
+            }
+        ],
+        "msg": "OK (823 bytes)",
+        "redirected": false,
+        "referrer_policy": "same-origin",
+        "server": "nginx",
+        "status": 200,
+        "url": "https://jms-ops.biyao.com/api/v1/assets/assets/?ip=10.6.56.161",
+        "vary": "Accept, Accept-Language, Cookie",
+        "x_content_type_options": "nosniff",
+        "x_frame_options": "DENY"
+    }

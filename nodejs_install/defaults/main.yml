@@ -1,7 +1,9 @@
 # nodejs_packet 须是 tar.gz 的格式
-nodejs_packet: '{{packet_base_dir}}/nodejs-8u151-linux-x64.tar.gz'
+# nodejs_packet: '{{packet_base_dir}}/node-v14.15.1-linux-x64.tar.xz'
+nodejs_packet: ''
 # 这个变量一般取自全局变量 {{app_base_dir}}
 nodejs_app_name: nodejs
 app_base_dir: /data/apps/opt
 nodejs_install_dir: '{{app_base_dir}}'
 nodejs_base_dir: '{{nodejs_install_dir}}/{{nodejs_app_name}}'
+nodejs_profile: 'nodejs.sh'

@@ -8,6 +8,8 @@
     warn: false
   register: k8s_node_dir_name
   run_once: true
+  failed_when: k8s_node_dir_name.stdout == ""
+  changed_when: k8s_node_dir_name.rc != 0
 
 - name: cp and unarchive k8s_node to remote host
   unarchive: 

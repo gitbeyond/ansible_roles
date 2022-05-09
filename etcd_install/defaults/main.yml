@@ -44,14 +44,15 @@ etcd_cert_member_ca_cn: '{{etcd_cert_server_ca_cn}}'
 etcd_cert_client_ca_cn: 'etcd-client-ca'
 etcd_cert_conf_files: '{{q("fileglob", "templates/*.json")}}'
 etcd_certs: '{{q("fileglob", etcd_work_dir+"/"+etcd_cert_dir+"/*.pem")}}'
-etcd_cert_hosts:
+etcd_cert_hosts: []
+etcd_cert_client_hosts: []
 
 
 # etcd backup
 
 backup_remote_host: ''
 backup_remote_user: ''
-backup_remote_dir:
+backup_remote_dir: ''
 backup_local_user: '{{etcd_run_user}}'
 
 # per host needed define variables

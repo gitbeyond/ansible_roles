@@ -145,6 +145,12 @@ k8s_cert_hosts:
     - { role: k8s_master_install }
 ```
 
+# 待补充
+1. 为k8s master节点设置label及taint;
+```bash
+kubectl get node |awk '/master/{print $1}' |while read line; do kubectl label node ${line} node-role.kubernetes.io/master=; kubectl taint nodes ${line} node-role.kubernetes.io/master=:NoSchedule;done
+```
+
 # curl debug k8s
 Bearer is the token of secret.
 ```bash

@@ -1,0 +1,24 @@
+# 此模块会改变原先文件中的间隔，且会在其中添加ansible的更新信息
+- name: laod the pam_access module
+  community.general.pamd:
+    name: sshd
+    new_type: account
+    new_control: required
+    new_module_path: pam_access.so
+    type: account
+    control: required
+    module_path: pam_sepermit.so
+    state: before
+    #state: args_present
+    backup: yes
+    # new_control: sufficient
+
+# 设置ssh访问规则
+- name: set the access rule
+  ansible.builtin.blockinfile:
+    block: "{{ lookup('template', system_access_rule_template) }}"
+    path: '/etc/security/access.conf'
+    backup: yes
+    marker: '# {mark} ansible init user'
+  when: 
+    - system_permit_ssh_hosts != ""

@@ -10,12 +10,12 @@
 - name: get docker packet dir name
   local_action: 
     module: shell 
-    cmd: |
-      set -o pipefail
-      tar tf {{docker_packet}} |head -n 1 |awk -F'/' '{print $1}'
+    cmd: tar tf {{docker_packet}} |awk -F'/' '{print $1; exit}'
     warn: false
   register: docker_dir_name
   run_once: true
+  failed_when:
+    - docker_dir_name.stdout == ""
 
 - name: install docker packet
   unarchive: 

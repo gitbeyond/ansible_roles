@@ -1,11 +1,8 @@
 ---
 - name: copy profile to remote
   template: 
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+    src: '{{jdk_profile}}' 
+    dest: '/etc/profile.d/{{jdk_app_name}}.sh' 
     owner: root 
     group: root 
     mode: "0644"
-  loop:
-    - src: 'java.sh'
-      dest: '/etc/profile.d/{{jdk_app_name}}.sh'

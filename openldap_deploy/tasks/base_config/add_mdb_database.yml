@@ -1,0 +1,22 @@
+- name: add mdb database
+  community.general.ldap_attrs:
+    dn: 'olcDatabase=mdb,cn=config'
+    attributes:
+      objectClass: olcDatabaseConfig
+      objectClass: olcMdbConfig
+      olcDatabase: mdb
+      olcSuffix: '{{ldap_base_dn}}'
+      olcDbDirectory: /var/lib/ldap
+      olcRootDN: '{{ldap_root_dn}}'
+      olcRootPW: '{{ldap_root_password}}'
+      olcDbIndex: objectClass eq
+      olcLastMod: TRUE
+      olcMonitoring: TRUE
+      olcDbEnvFlags: writemap
+      olcDBNoSync: TRUE
+      olcAccess: to attrs=userPassword by dn="{{ldap_root_dn}}" write by anonymous auth by self write by * none
+      olcAccess: to attrs=shadowLastChange by self write by * read
+      olcAccess: to dn.base="" by * read
+      olcAccess: to * by dn="{{ldap_root_dn}}" write by * read
+    # state: exact
+    state: present

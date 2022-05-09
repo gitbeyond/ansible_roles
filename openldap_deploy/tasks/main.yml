@@ -1,0 +1,14 @@
+# editor: haifengsss@163.com
+# create date: 2022/04/20
+
+- import_tasks: ldap_install.yml
+  tags:
+  - ldap_install
+
+- import_tasks: base_config/modify_root_dn.yml
+  tags:
+  - ldap_modify_root_dn
+
+# - import_tasks: base_config/add_mdb_database.yml
+#   tags:
+#   - ldap_add_mdb

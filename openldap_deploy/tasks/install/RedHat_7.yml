@@ -1,0 +1,4 @@
+- name: install openldap by yum
+  yum:
+    name: '{{ldap_rpm_packages}}'
+    state: latest

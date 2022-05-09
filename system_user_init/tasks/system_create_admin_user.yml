@@ -11,22 +11,49 @@
 
 - name: set user sudo privilege
   lineinfile:
+    # name: '{{item.user}}_ansible'
+    # user: '{{item.user}}'
+    # commands: ANY
     line: '{{item.sudo_priv}}'
     state: present
-    path: /etc/sudoers
-    backup: '{%if ansible_loop.first -%}yes{%else-%}no{%-endif%}'
+    path: /etc/sudoers.d/{{item.user}}_ansible
+    # backup: '{%if ansible_loop.first -%}yes{%else-%}no{%-endif%}'
+    backup: 'yes'
+    create: yes
     validate: '/usr/sbin/visudo -cf %s'
   when: item.sudo_priv is not none
 
+# - name: copy public key to user
+#   lineinfile:
+#     line: '{{system_ansible_pub_key}}'
+#     path: '{{user_info.home}}/.ssh/authorized_keys'
+#     mode: "0600"
+#     create: yes
+#     backup: yes
+#     owner: '{{item.user}}'
+#     group: '{{item.user}}'
+#   when: item.sudo_priv is not defined or item.copy_pub_key == True 
+
+- name: copy user public key to user
+  ansible.posix.authorized_key:
+    user: '{{item.user}}'
+    state: present
+    key: '{%if item.user_pub_key is exist%}{{lookup("file", item.user_pub_key)}}{%else%}{{item.user_pub_key}}{%endif%}'
+    manage_dir: yes
+    #key_options: 'no-port-forwarding,from="10.6.36.11"'
+    # from 的作用，表示仅验证相关的主机的私钥，其他主机不允许使用此密钥
+  when: 
+    - item.user_pub_key is defined
+    - item.user_pub_key != ''
+
 - name: copy public key to user
-  lineinfile:
-    line: '{{system_ansible_pub_key}}'
-    path: '{{user_info.home}}/.ssh/authorized_keys'
-    mode: "0600"
-    create: yes
-    backup: yes
-    owner: '{{item.user}}'
-    group: '{{item.user}}'
+  ansible.posix.authorized_key:
+    user: '{{item.user}}'
+    state: present
+    key: '{{system_ansible_pub_key}}'
+    manage_dir: yes
+    #key_options: 'no-port-forwarding,from="10.6.36.11"'
+    # from 的作用，表示仅验证相关的主机的私钥，其他主机不允许使用此密钥
   when: item.sudo_priv is not defined or item.copy_pub_key == True 
 
 #- name: debug user info

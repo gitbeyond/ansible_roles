@@ -1,8 +1,6 @@
 {
   "CN": "{{etcd_cert_client_ca_cn}}",
-  "hosts": [
-    ""
-  ],
+  "hosts": {{etcd_cert_client_hosts | to_nice_json}},
   "key": {
     "algo": "rsa",
     "size": 2048

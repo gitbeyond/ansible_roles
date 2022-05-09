@@ -1,0 +1,4 @@
+{%for user in system_users%}
++: {{user.user}}: {{system_permit_ssh_hosts}}
+-: {{user.user}}: ALL 
+{%endfor%}

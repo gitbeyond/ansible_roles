@@ -1,0 +1,5 @@
+- include_tasks: jre_import_cert_base.yml
+  name: jre_import_certs
+  loop: '{{jdk_certs}}'
+  loop_control:
+    extended: yes

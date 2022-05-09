@@ -1,0 +1,50 @@
+# editor: haifengsss@163.com
+# 2019/12/11
+# update date: 2020/02/09
+
+# - name: modify core arguments for kube-proxy
+#   sysctl: 
+#     name: '{{ item.name }}' 
+#     value: '{{ item.value }}' 
+#     reload: yes 
+#     state: present 
+#     sysctl_file: '{{k8s_sysctl_file}}'
+#     sysctl_set: yes
+#   loop: '{{k8s_node_kernel_args}}'
+#   ignore_errors: true
+
+- name: load ipvs modules
+  modprobe:
+    name: '{{item}}' 
+    state: present
+  loop:
+    - ip_vs
+    - ip_vs_lc
+    - ip_vs_wlc
+    - ip_vs_rr
+    - ip_vs_wrr
+    - ip_vs_lblc
+    - ip_vs_lblcr
+    - ip_vs_dh
+    - ip_vs_sh
+    #- ip_vs_fo
+    - ip_vs_nq
+    - ip_vs_sed
+    - ip_vs_ftp
+    - nf_conntrack_ipv4
+    - ipt_rpfilter
+    - ipt_set
+    - sctp
+    - xt_sctp
+    # - xt_set
+    - xt_u32
+    - ipip
+
+# - name: cp modules load file
+#   copy:
+#     src: k8s-ipvs.modules
+#     dest: /etc/sysconfig/modules/
+#     owner: root
+#     group: root
+#     mode: "0755"
+#     backup: yes

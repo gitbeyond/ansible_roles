@@ -1,0 +1,10 @@
+#############常量类
+
+
+
+#############可设置类
+jms_url: "https://jms.yourdomain.dom"
+jms_token: "your_token"
+# 目前仅支持添加一个特权用户
+jms_admin_user: 'admin'
+jms_login_user: 'user1'

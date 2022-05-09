@@ -1,0 +1,8 @@
+- name: modify root dn
+  community.general.ldap_attrs:
+    dn: '{{ldap_hdb_config_cn}}'
+    attributes:
+      olcSuffix: '{{ldap_base_dn}}'
+      olcRootDN: '{{ldap_root_dn}}'
+      olcRootPW: "{{ldap_root_password}}"
+    state: exact

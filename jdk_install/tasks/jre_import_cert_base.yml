@@ -1,0 +1,53 @@
+- name: copy cert to the target
+  copy:
+    src: '{{item.cert_path | default(None)}}'
+    dest: '/tmp/'
+  when:
+    - item.cert_path is defined
+    - item.cert_path is exists
+
+# https://docs.ansible.com/ansible/devel/reference_appendices/faq.html#argsplat-unsafe 
+# 这种写法会产生warning信息
+#- name: get cert info from a host
+#  community.general.java_cert: '{{java_cert_task}}'
+
+# 使用omit之后，不再使用此 task
+# - name: import a cert to cacerts from a file
+#   community.general.java_cert:
+#     cert_path: '/tmp/{{item.cert_path | basename}}'
+#     cert_alias: '{{item.cert_alias}}'
+#     keystore_path: '{{jdk_base_dir}}/jre/lib/security/cacerts'
+#     state: present
+#     executable: '{{jdk_base_dir}}/jre/bin/keytool'
+#     trust_cacert: True
+#     keystore_pass: 'changeit'
+#   when:
+#     - item.cert_path is defined
+#     - item.cert_path is exists
+
+- name: import a cert to cacerts from a host or a file
+  community.general.java_cert:
+    cert_url: '{{item.cert_url | default(omit, true)}}'
+    cert_port: '{{item.cert_port | default(omit, true)}}'
+    cert_alias: '{{item.cert_alias}}'
+    # cert_path: '{%if item.get("cert_path") != "" %} /tmp/{{item.cert_path | basename}}{%else%}{{None}}{%endif%}'
+    # 虽然将这个变量写在这里，不写任何值，也是 null, 但是也是无法正常执行的。
+    # 当不加这个变量时，在模块中显示的结果这个值也是 null
+    # cert_path:
+    # 下面这种写法不能产生null, 而是 ''
+    # cert_path: '{{None}}'
+    # 这种写法直接是 字符串 None
+    # cert_path: None
+    # 下面这样就行了
+    cert_path: '{{item.cert_path | default(omit)}}'
+    keystore_path: '{{jdk_base_dir}}/jre/lib/security/cacerts'
+    state: present
+    executable: '{{jdk_base_dir}}/jre/bin/keytool'
+    trust_cacert: True
+    keystore_pass: 'changeit'
+  # when:
+  #   - item.cert_path is undefined
+  #   - item.cert_url is defined
+  #   - item.cert_url != ''
+
+

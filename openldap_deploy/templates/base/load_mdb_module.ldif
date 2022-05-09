@@ -1,0 +1,6 @@
+# 在CentOS-7上没找到这个模块，猜测是内置了
+dn: cn=module,cn=config
+objectClass: olcModuleList
+cn: module
+olcModulePath: /usr/lib/ldap
+olcModuleLoad: back_mdb

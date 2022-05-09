@@ -1,0 +1,20 @@
+##############常量类
+ldap_rpm_packages:
+  - openldap
+  - openldap-servers
+  - openldap-clients
+  - openldap-devel
+  - python-ldap
+  # - compat-openldap
+
+ldap_root_dn: 'cn={{ldap_root_name}},{{ldap_base_dn}}'
+ldap_hdb_config_cn: 'olcDatabase={2}hdb,cn=config'
+##############可配置类
+
+
+ldap_base_dn: 'dc=hf,dc=com'
+ldap_root_name: 'admin'
+# slappasswd -s "skjaoerwlhbfidsgati3"
+# {SSHA}KZgPHFxKCcA+HhJp8JhuqEeCH+Vszhh/
+# 加密后的密码，使用明文是有问题的，明文的话，每次都不一样，那么总会引起 change, 虽然变了也没啥问题
+ldap_root_password: 'admin_Pass'

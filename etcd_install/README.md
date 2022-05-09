@@ -15,10 +15,20 @@
 * 设置 etcdctl 的环境变量
 * 添加备份的计划任务
 
-```bash
+```yaml
+# vars
+
+
+
 ---
+# playbook
 - hosts: k8s_125_master
   remote_user: root
   roles:
     - { role: etcd_install}
 ```
+
+
+# 参考
+
+* https://etcd.io/docs/v3.5/op-guide/configuration/ ： Configuration flags
