@@ -56,8 +56,6 @@ app_default_conf_files: []
 app_default_child_confs: []
 app_default_bin_scripts: []
 
-### app special tasks
-#app_default_self_tasks_file: '{{role_path}}/tasks/apps/{{app_type_name}}/{{app_type_name}}.yml'
 
 ### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
 # app的script脚本发生变更时调用的handler

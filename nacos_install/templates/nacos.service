@@ -1,1 +1,23 @@
-nacos.systemd
+[Unit]
+Description=Nacos service
+Documentation=https://nacos.io/zh-cn/docs/what-is-nacos.html
+After=network.target
+
+[Service]
+Type=forking
+User={{nacos_run_user}}
+EnvironmentFile=-{{nacos_var_dir}}/{{nacos_app_name}}.env
+ExecStart={{nacos_run_cmd}}
+ExecStartPost=/bin/echo "nacos server is running..."
+ExecStop=/bin/kill -s TERM $MAINPID
+GuessMainPID=yes
+KillMode=process
+TimeoutStopSec=15
+KillSignal=SIGTERM
+Restart=on-failure
+SuccessExitStatus=143
+RestartSec=50s
+
+[Install]
+WantedBy=multi-user.target
+

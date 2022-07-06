@@ -1,1 +1,16 @@
-filebeat.ini
+[program:{{filebeat_app_name}}]
+command = {{filebeat_base_dir}}/filebeat -c {{filebeat_conf_dir}}/{{filebeat_src_conf |basename }} -e
+autostart = true
+autorestart = true
+startsecs = 5
+startretries = 3
+user = root
+redirect_stderr = true
+stdout_logfile={{filebeat_log_dir}}/%(program_name)s_std.log
+stderr_logfile={{filebeat_log_dir}}/%(program_name)s_err.log
+stdout_logfile_maxbytes=200MB
+stdout_logfile_backups= 5
+stdout_events_enabled = 1
+stderr_logfile_maxbytes=200MB
+stderr_logfile_backups= 5
+stderr_events_enabled = 1
