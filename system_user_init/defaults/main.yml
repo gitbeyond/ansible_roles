@@ -3,15 +3,19 @@ system_users: []
 #  - user:
 #    password: ''
 #    sudo_priv: ''
-#    user_pub_key: '' 
+#    user_pub_key: ''
 #    copy_pub_key: ''
 
 system_admin_user: '{{system_users[0]["user"]}}'
 # 可以仅定义一个key的文件，也可以直接使用下面的字符串变量
-system_ansible_pub_key_file: '~/.ssh/id_rsa.pub'
+system_ansible_pub_key_file: "~/.ssh/id_rsa.pub"
 system_ansible_pub_key: '{{ lookup("file", system_ansible_pub_key_file) }}'
 # 加密后的密码
-system_root_password: ''
+system_root_password: ""
 # 允许ssh到目标机器的hosts字符串, 空格分割, 此规则与hosts.deny相比，可以限制到用户级别
-system_permit_ssh_hosts: ''
-system_access_rule_template: 'access_rule.j2'
+system_permit_ssh_hosts: ""
+system_access_rule_template: "access_rule.j2"
+# 是否禁止root ssh登录,默认为true，特殊情况下，可以仍然需要开启此特性
+system_ssh_permit_root_login: False
+# 根据上面的变量作一个到字符串的转换
+system_ssh_permit_root_login_str: "{%if system_ssh_permit_root_login==True%}yes{%else%}no{%endif%}"

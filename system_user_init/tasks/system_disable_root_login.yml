@@ -1,4 +1,3 @@
-
 #- name: Reset ssh connection to allow user changes to affect 'current login user'
 #  meta: reset_connection
 
@@ -7,18 +6,19 @@
 
 - name: set root don't remote login
   lineinfile:
-    line: 'PermitRootLogin no'
+    line: "PermitRootLogin {{system_ssh_permit_root_login_str}}"
     path: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin .*"
     backup: yes
-    insertafter: '#PermitRootLogin yes'
-    validate: '/usr/sbin/sshd -t -f %s'
+    insertafter: "#PermitRootLogin yes"
+    validate: "/usr/sbin/sshd -t -f %s"
   notify: restart_sshd_for_{{ansible_service_mgr}}
 
 - name: update root default password
   user:
     name: root
-    password: '{{system_root_password}}'
+    password: "{{system_root_password}}"
     update_password: always
-  when: 
+  when:
     - system_root_password is not none
     - system_root_password != ''

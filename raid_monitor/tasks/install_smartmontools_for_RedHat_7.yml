@@ -1,0 +1,5 @@
+- name: install smartmontools
+  yum: 
+    name: 'smartmontools'
+    state: present
+    enablerepo: base

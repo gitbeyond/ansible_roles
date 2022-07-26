@@ -1,0 +1,7 @@
+raid_script_base_dir: '/data/apps/opt/scripts/raid'
+
+raid_megacli_rpm_package: ''
+# 目录
+raid_expoter_textfile_directory: '/data/apps/data/node_exporter/textfile'
+# 如果是非root用户，需要有sudo权限
+raid_monitor_task_user: 'root'

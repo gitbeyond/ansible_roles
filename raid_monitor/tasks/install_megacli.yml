@@ -1,0 +1,11 @@
+# megacli 根据之前的安装经验，是下载一个 rpm 包之后，进行安装
+
+- name: copy the megacli rpm package
+  copy:
+    src: '{{raid_megacli_rpm_package}}'
+    dest: '/tmp/'
+
+- name: install megacli by yum
+  yum:
+    name: "/tmp/{{raid_megacli_rpm_package | basename}}"
+    state: present

@@ -1,0 +1,17 @@
+- name: create script base dir
+  file:
+    path: '{{raid_script_base_dir}}'
+    state: directory
+    owner: "{{raid_monitor_task_user}}"
+    group: "{{raid_monitor_task_user}}"
+    mode: "0755"
+
+- name: copy scripts
+  template:
+    src: "{{item}}"
+    dest: "{{raid_script_base_dir}}"
+    owner: "{{raid_monitor_task_user}}"
+    group: "{{raid_monitor_task_user}}"
+    mode: "0644"
+  loop:
+    - raid_smartctl.sh

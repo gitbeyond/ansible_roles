@@ -1,0 +1,14 @@
+- import_tasks: install_smartmontools.yml
+  tags:
+    - install_smartontools
+    - install_software
+
+- import_tasks: install_megacli.yml
+  tags:
+    - install_megacli
+    - install_software
+
+- import_tasks: copy_scripts.yml
+  tags:
+    - copy_scripts
+    - set_raid_cron_job

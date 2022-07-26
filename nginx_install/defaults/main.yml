@@ -78,3 +78,11 @@ nginx_kernel_args:
     value: 70
   - name: fs.file-max
     value: '6553500'
+  - name: net.core.wmem_default
+    value: 8388608
+  - name: net.core.wmem_max
+    value: 8388608
+  - name: net.core.rmem_default
+    value: 8388608
+  - name: net.core.rmem_max
+    value: 8388608
