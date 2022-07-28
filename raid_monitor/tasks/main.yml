@@ -1,3 +1,11 @@
+
+- name: End the play for hosts that not run CentOS 7 or 8
+  ansible.builtin.meta: end_host
+  when:
+    #- ansible_distribution == 'CentOS'
+    - (ansible_os_family != 'RedHat' and ansible_distribution_major_version not in ["7", "8"]) or ansible_virtualization_role != "host"
+    #- ansible_os_family != 'RedHat' and ansible_distribution_major_version not in ["7", "8"]
+
 - import_tasks: install_smartmontools.yml
   tags:
     - install_smartontools

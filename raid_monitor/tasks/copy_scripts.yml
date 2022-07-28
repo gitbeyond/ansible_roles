@@ -15,3 +15,21 @@
     mode: "0644"
   loop:
     - raid_smartctl.sh
+    - raid_megacli.sh
+
+- name: add a cron job for smartctl
+  ansible.builtin.cron:
+    name: 'generate raid smart health data'
+    minute: "*/1"
+    job: "/bin/bash {{raid_script_base_dir}}/raid_smartctl.sh &> /tmp/.raid_smartctl.out"
+    user: "{{raid_monitor_task_user}}"
+    state: present
+
+
+- name: add a cron job for megacli
+  ansible.builtin.cron:
+    name: 'generate raid physical driver health data by megacli'
+    minute: "*/1"
+    job: "/bin/bash {{raid_script_base_dir}}/raid_megacli.sh &> /tmp/.raid_megacli.out"
+    user: "{{raid_monitor_task_user}}"
+    state: present

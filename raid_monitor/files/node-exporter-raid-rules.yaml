@@ -1,0 +1,32 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/name: node-exporter
+    prometheus: k8s
+    role: alert-rules
+  name: node-exporter-raid-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: node-exporter-raid
+    rules:
+    - alert: NodeRaidDevicePhysicalDiskSmartInfoIsError
+      annotations:
+        description: Physical disk on {{ $labels.instance }} {{ $labels.raid_dev_name }} at {{ $labels.device_num }}
+          has damaged. The value is {{ $value }}.
+        summary: Physical disk has damaged.
+      expr: node_raid_disk_smart_health_status != 1
+      for: 1m
+      labels:
+        severity: critical
+    - alert: NodeRaidDevicePhysicalDiskMegacliFirmwareStateIsError
+      annotations:
+        description: Physical disk on {{ $labels.instance }} at {{ $labels.slot_number }}
+          has damaged. The value is {{ $value }}.
+        summary: Physical disk has damaged.
+      expr: node_megacli_raid_firmware_state != 1
+      for: 1m
+      labels:
+        severity: critical

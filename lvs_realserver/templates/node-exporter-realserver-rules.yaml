@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/name: node-exporter
+    prometheus: k8s
+    role: alert-rules
+  name: node-exporter-raid-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: node-exporter-realserver
+    rules:
+    - alert: NodeRaidDevicePhysicalDiskSmartInfoIsError
+      annotations:
+        description: The lvs realserver service on {{ $labels.instance }} is error.
+          The value is {{ $value }}.
+        summary: Lvs realserver service is error.
+      expr: node_ipvs_realserver_status != 1
+      for: 1m
+      labels:
+        severity: critical
+    

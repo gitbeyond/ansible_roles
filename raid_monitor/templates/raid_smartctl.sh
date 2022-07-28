@@ -5,7 +5,7 @@
 # 此脚本需要root权限来运行
 
 set -euo pipefail
-
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 metric_textfile_base_dir="{{raid_expoter_textfile_directory}}"
 # {%raw%}
 # metric_textfile_base_dir="/data/apps/data/node_exporter/textfile"
@@ -14,15 +14,34 @@ metric_name=node_raid_disk_smart_health_status
 metric_file_name="smartctl.prom"
 metric_file_full_path="${metric_textfile_base_dir}/${metric_file_name}"
 lock_file="${metric_textfile_base_dir}/.smartctl.lock"
+smart_cmd="$(which smartctl)"
 
+
+check_lock(){
+    if [ -d "${metric_textfile_base_dir}" ];then
+        :
+    else
+        echo "The ${metric_textfile_base_dir} isn't exist."
+        exit 6
+    fi
+    exec 3<> ${lock_file}
+    if flock -n 3;then
+        #echo "get ${lock_file} lock file."
+        :
+    else
+        echo "get lock file failed. now exit."
+        exit 5
+    fi    
+}
+check_lock
 
 
 # 获取磁盘信息
 get_disk_info(){
     if [[ ${smart_use_json_format} == 1 ]];then
-        smartctl --scan -j
+        ${smart_cmd} --scan -j
     else
-        smartctl --scan
+        ${smart_cmd} --scan
     fi
 }
 
@@ -51,31 +70,24 @@ generate_monitor_file(){
     raid_dev_name="$(echo "${smart_scan_info}" | awk '{if(NF==7){print $1}}')"
     #echo "${raid_dev_name}"
     raid_dev_types="$(echo "${smart_scan_info}" | awk '{if(NF==8){print $3}}')"
-    local health_value=1
-    metric_help_info
+    local health_value=1 tmp_metric_file="${metric_file_full_path}_01"
+    
+    metric_help_info >> ${tmp_metric_file}
     for num in ${raid_dev_types};do
-        health_str="$(smartctl -d "${num}" -H "${raid_dev_name}" | awk '/^SMART Health Status/{print $4}')"
+        health_str="$(${smart_cmd} -d "${num}" -H "${raid_dev_name}" | awk '/^SMART Health Status/{print $4}')"
         if [[ "${health_str}" = "OK" ]];then
             :
         else
             health_value=0
         fi
-        generate_monitor_data ${raid_dev_name} ${num} ${health_value} >> ${metric_file_full_path}_01 
+        generate_monitor_data ${raid_dev_name} ${num} ${health_value} >> ${tmp_metric_file}
     done
-    [ -e ${metric_file_full_path}_01 ] && /bin/mv ${metric_file_full_path}_01 ${metric_file_full_path}
+    [ -e ${tmp_metric_file} ] && /bin/mv ${tmp_metric_file} ${metric_file_full_path}
 }
 
 main(){
-    exec 3<> ${lock_file}
-    if flock -n 3;then
-        #echo "get ${lock_file} lock file."
-        :
-    else
-        echo "get lock file failed. now exit."
-        exit 5
-    fi
-    generate_monitor_file
-    
+    generate_monitor_file    
 }
 main
 # {%endraw%}
+

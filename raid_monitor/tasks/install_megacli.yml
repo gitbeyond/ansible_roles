@@ -9,3 +9,4 @@
   yum:
     name: "/tmp/{{raid_megacli_rpm_package | basename}}"
     state: present
+    disable_gpg_check: yes
