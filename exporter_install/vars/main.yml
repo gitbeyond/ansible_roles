@@ -1,11 +1,11 @@
 
-common_run_user: '{{exporter_run_user}}'
+app_run_user: '{{exporter_run_user}}'
 
 common_base_name: '{{exporter_base_name}}'
 common_instance_name: '{{exporter_instance_name}}'
 
 common_base_dir: '{{exporter_base_dir}}'
-common_install_dir: '{{exporter_install_dir}}'
+app_install_dir: '{{exporter_install_dir}}'
 common_log_dir: '{{exporter_log_dir}}'
 common_conf_dir: '{{exporter_conf_dir}}'
 common_var_dir:  '{{exporter_var_dir}}'

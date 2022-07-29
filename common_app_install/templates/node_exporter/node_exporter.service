@@ -3,7 +3,7 @@ Description=Node Exporter
 
 [Service]
 User={{app_run_user}}
-EnvironmentFile={{node_exporter_conf_dir}}/{{node_exporter_base_name}}
+EnvironmentFile={{node_exporter_conf_dir}}/{{node_exporter_base_name}}.conf
 ExecStart={{node_exporter_base_dir}}/{{node_exporter_base_name}} $OPTIONS
 Restart=always
 

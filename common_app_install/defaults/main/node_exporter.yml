@@ -1,0 +1,46 @@
+node_exporter_run_user: root
+node_exporter_run_group: '{{node_exporter_run_user}}'
+node_exporter_run_user_is_system: yes
+
+# 应用的基本名称，安装时的路径，都是以此来作为参照的，虽然这些路径也可以单独指定
+# 如kibana, node_exporter 等等
+node_exporter_base_name: "node_exporter"
+
+node_exporter_packet: ""
+node_exporter_packet_creates: "{{node_exporter_base_name}}"
+node_exporter_install_dir: '{{all_app_base_dir}}'
+# tgz or jar
+node_exporter_packet_type: tgz
+node_exporter_base_dir: /data/apps/opt/{{node_exporter_base_name}}
+node_exporter_log_dir: /data/apps/log/{{node_exporter_base_name}}
+node_exporter_conf_dir: /data/apps/config/{{node_exporter_base_name}}
+node_exporter_var_dir: /data/apps/var/{{node_exporter_base_name}}
+node_exporter_data_dir: /data/apps/data/{{node_exporter_base_name}}
+node_exporter_child_conf_dir: ""
+
+node_exporter_dirs:
+  - '{{node_exporter_log_dir}}'
+  - '{{node_exporter_conf_dir}}'
+  - '{{node_exporter_var_dir}}'
+  - '{{node_exporter_data_dir}}'
+
+node_exporter_run_port: 9100
+
+# type: list
+node_exporter_conf_files:
+  - node_exporter/node_exporter.conf
+node_exporter_src_boot_file: "node_exporter/node_exporter.service"
+node_exporter_boot_type: systemd
+node_exporter_svc_name: 'node_exporter'
+
+### handler的名字, 主要是针对配置文件和service的文件更改时的操作。
+# node_exporter的script脚本发生变更时调用的handler
+node_exporter_bin_script_file_handler: []
+# node_exporter的子配置文件发生变更时调用的handler
+node_exporter_child_conf_handler: []
+# node_exporter的配置文件发生变更时调用的handler
+node_exporter_conf_file_handler: []
+# node_exporter的service配置文件发生变更时调用的handler
+node_exporter_svc_file_handler: []
+
+node_exporter_boot_args: "--web.listen-address=:9100"

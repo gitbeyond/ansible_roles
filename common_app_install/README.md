@@ -120,6 +120,22 @@ metricbeat_conf_file_handler:
 ```
 * https://www.elastic.co/guide/en/beats/devguide/current/creating-metricbeat-module.html : 自定义一个metricbeat的module
 
+
+## node_exporter
+使用这个时，遇到了`group_vars`中的变量，覆盖了默认`app_base_dir`导致的错误。
+
+`role`中的`app_base_dir`,指的是应用的基本目录, 在`role`中，此变量为`all_app_base_dir`。
+```yml
+
+- hosts: 192.168.1.2
+  #remote_user: root
+  roles:
+    - role: common_app_install
+      vars:
+        app_type_name: node_exporter
+        node_exporter_packet: /data/apps/soft/ansible/prometheus/node_exporter-1.3.1.linux-amd64.tar.gz
+```
+
 # 注意
 
 ## 多个role时的变量写法

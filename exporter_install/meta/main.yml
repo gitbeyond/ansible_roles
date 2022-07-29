@@ -2,19 +2,19 @@
 allow_duplicates: true
 
 dependencies:
-  - role: common_create_user
+  - role: common_app_create_user
     name: create_exporter_user
     tags:
       - exporter_create_user
-  - role: common_create_dir
+  - role: common_app_create_dir
     tags:
       - exporter_create_dir   
-  - role: common_packet_install
+  - role: common_app_packet_install
     tags:
       - exporter_packet_install
-  - role: common_copy_conf_file
+  - role: common_app_copy_conf_file
     tags:
       - exporter_copy_conf_file
-  - role: common_boot_app
+  - role: common_app_boot
     tags:
       - exporter_boot_app

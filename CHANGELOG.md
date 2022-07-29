@@ -21,7 +21,13 @@ nginx ALL=NOPASSWD: ANY
 
 ```
 
-## added raid_monitor
+# 2022/07/28 added raid_monitor
 
 * 初步只完成了收集硬件raid物理磁盘的状态信息;
 * 编写了一个prometheusrules文件，可以在拥有`kube-prometheus`的`k8s`集群上直接使用;
+
+
+# 2022/07/29 common_app_install 添加了对 node_exporter的支持
+
+* 删除 `exporter_install`的`role`
+

@@ -1,4 +1,4 @@
-app_base_dir: /data/apps/opt
+all_app_base_dir: /data/apps/opt
 app_install_dir: '{{app_base_dir}}'
 app_run_user: root
 app_run_group: '{{app_run_user}}'
