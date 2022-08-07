@@ -367,9 +367,10 @@ if [ -n "${kube_user_name}" ];then
     cd ${cert_dir}
     set -e
     echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get ${role_type} ${kube_rb_name}"
-    $kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get ${role_type} ${kube_rb_name}
-    get_rb_ret=$?
-    if [ ${get_rb_ret} == 0 ];then
+    rolebinding_info=$($kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} get ${role_type} ${kube_rb_name} || /bin/true)
+    #get_rb_ret=$?
+    #if [ ${get_rb_ret} == 0 ];then
+    if [ -n "${rolebinding_info}" ];then
         :
     else
         echo_yellow "$kube_cmd --kubeconfig ${kube_old_config} -n ${kube_ns} create ${role_type} ${kube_rb_name} --clusterrole=${kube_cluster_role} --user=${kube_user_name}"
@@ -385,6 +386,4 @@ if [ -n "${kube_user_name}" ];then
 fi
 
 #set -e
-
-
 
