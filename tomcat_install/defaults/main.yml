@@ -8,7 +8,7 @@ tomcat_run_user: 'tomcat'
 tomcat_run_group: '{{tomcat_run_user}}'
 tomcat_base_name: tomcat
 
-tomcat_packet:
+tomcat_packet: ""
 # tgz or jar
 tomcat_packet_type: tgz
 tomcat_base_dir: /data/apps/opt/{{tomcat_base_name}}
@@ -17,7 +17,7 @@ tomcat_conf_dir: /data/apps/opt/{{tomcat_base_name}}/conf
 
 tomcat_conf_files: []
 tomcat_script_files: []
-tomcat_port:  
+tomcat_port: 8080
 # 项目启动的方式, 目前可选择 supervisor
 tomcat_boot_type: supervisor
 tomcat_boot_file: 'tomcat.{{tomcat_boot_type}}'

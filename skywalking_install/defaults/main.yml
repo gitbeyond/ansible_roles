@@ -1,5 +1,5 @@
 # 
-sw_packet:
+sw_packet: ""
 #sw_packet_dir_name: "{{sw_packet.replace('.tar.gz','') |basename}}"
 app_base_dir: /data/apps/opt
 sw_app_name: skywalking

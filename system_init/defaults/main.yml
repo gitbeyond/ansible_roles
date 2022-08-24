@@ -1,6 +1,6 @@
 
 system_dns_conf: resolv.conf
-system_dns_servers:
+system_dns_servers: ""
 
 system_is_hadoop: false
 system_ntp_servers: []

@@ -1,5 +1,5 @@
 
-docker_insecure_registry: 
+docker_insecure_registry: ""
 docker_data_dir: /data/apps/data/docker
 docker_install_method: local
 
@@ -16,7 +16,7 @@ docker_env_file: docker.sh
 docker_install_result:
   changed: False
 
-docker_install_version:
+docker_install_version: ""
 
 # docker args
 # cgroupfs or systemd

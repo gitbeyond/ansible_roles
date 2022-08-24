@@ -1,9 +1,9 @@
 # deploy_project role vars
-project_install_dir:
+project_install_dir: ""
 project_k8s_work_dir: '{{project_install_dir}}'
 project_run_user: 'nobody'
 project_run_group: '{{project_run_user}}'
-project_prog_name:
+project_prog_name: ""
 project_workspace: "{{lookup('env', 'WORKSPACE') | default('./', true)}}"
 
 # this role vars 
@@ -26,7 +26,7 @@ project_venv_path_basename: "{{ project_venv_path_tmp_basename if project_venv_p
 # 当 project_venv_path 为 /opt/venv/mydjango/ 这种带 / 结尾的目录时, dirname 的结果是 /opt/venv/mydjango ,这不符合要求，需要进行再次 dirname
 
 project_venv_path_dirname: "{{ project_venv_path | dirname if project_venv_path_tmp_basename != '' else project_venv_path | dirname | dirname }}"
-project_venv_args:
+project_venv_args: ""
 
 # project_docker_work_dir 也得判断去 / ,要不软连接文件会有两个  /
 

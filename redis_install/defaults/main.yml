@@ -3,7 +3,7 @@ app_base_dir: /data/apps/opt
 supervisor_prim_conf: /data/apps/config/supervisord/supervisord.conf
 
 
-redis_packet:
+redis_packet: ""
 
 redis_app_name: redis
 redis_install_dir: '{{app_base_dir}}'
@@ -20,7 +20,7 @@ redis_env_file: redis.sh
 redis_run_method: supervisor
 
 # sentinel
-redis_sentinel_conf:
+redis_sentinel_conf: ""
 
 redis_is_multi_instance: true
 redis_restart_with_notify: false

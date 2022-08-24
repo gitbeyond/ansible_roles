@@ -1,6 +1,6 @@
 app_base_dir: /data/apps/opt
 filebeat_run_user: root
-filebeat_packet:
+filebeat_packet: ""
 filebeat_install_dir: '{{app_base_dir}}'
 filebeat_app_name: filebeat
 filebeat_conf_dir: /data/apps/config/{{filebeat_app_name}}
@@ -16,7 +16,7 @@ filebeat_env_file: filebeat.sh
 
 # type: list
 filebeat_child_confs: []
-filebeat_old_child_conf:
+filebeat_old_child_conf: ""
 filebeat_old_child_confs: [ '{{filebeat_old_child_conf}}' ]
 filebeat_child_conf_dir: '{{filebeat_conf_dir}}/inputs.d'
 filebeat_modules_conf_dir: '{{filebeat_conf_dir}}/modules.d'

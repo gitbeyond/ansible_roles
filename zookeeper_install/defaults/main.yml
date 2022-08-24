@@ -3,7 +3,7 @@ zookeeper_run_user: zookeeper
 zookeeper_run_group: '{{zookeeper_run_user}}'
 zookeeper_base_name: zookeeper
 zookeeper_app_name: zookeeper
-zookeeper_packet:
+zookeeper_packet: ""
 
 # tgz or jar
 zookeeper_packet_type: tgz
@@ -14,7 +14,7 @@ zookeeper_log_dir: /data/apps/log/{{zookeeper_base_name}}
 zookeeper_conf_dir: /data/apps/config/{{zookeeper_base_name}}
 zookeeper_data_dir: '/data/apps/data/{{zookeeper_base_name}}'
 
-zookeeper_conf_file:
+zookeeper_conf_file: ""
 zookeeper_conf_files:
   - 'java.env'
   - 'zoo.cfg'

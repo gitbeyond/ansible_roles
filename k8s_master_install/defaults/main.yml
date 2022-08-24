@@ -5,13 +5,13 @@ k8s_conf_dir: /etc/kubernetes
 k8s_kubectl_cmd: '{{k8s_work_dir}}/kubectl'
 k8s_cfssl_cmd_path: '/usr/bin'
 # 这个变量是 k8s 加上 k8s 的版本指定的 如:/data/apps/opt/k8s_1.11.10, 暂时手动指定这个变量
-k8s_install_dir:
+k8s_install_dir: ""
 k8s_audit_log_dir: "/data/apps/log/kube-audit"
 k8s_apiserver_log_dir: "/data/apps/log/kube-apiserver" 
 k8s_controller_log_dir: "/data/apps/log/kube-controller-manager"
 k8s_scheduler_log_dir: "/data/apps/log/kube-scheduler"
 
-k8s_master_packet:
+k8s_master_packet: ""
 #k8s_master_dir_name: "{{lookup('pipe', 'tar tf '+ k8s_master_packet).split('\n')[-1].split(' ')[-1].split('/')| first}}"
 k8s_master_dir_name: "{{lookup('pipe', 'tar tf '+ k8s_master_packet).split('\n')[-1].split('/')| first}}"
 k8s_work_dir: /root/k8s
@@ -42,7 +42,9 @@ k8s_cert_o: "k8s"
 # tech. sa, dev
 k8s_cert_ou: "System"
 k8s_cert_conf_files: '{{q("fileglob", "templates/k8s_certs_json/*.json")}}'
-k8s_cert_hosts:
+k8s_cert_hosts: []
+# - 10.6.56.99
+# - 10.6.56.100
 
 
 k8s_master_confs:

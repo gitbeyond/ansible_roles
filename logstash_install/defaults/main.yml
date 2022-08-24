@@ -12,7 +12,7 @@ logstash_install_dir: /data/apps/opt
 #logstash_install_dir: '{{app_base_dir}}'
 logstash_env_file: logstash.sh
 # type: list
-logstash_src_confs:
+logstash_src_confs: []
   #- 'jvm.options'
   #- 'logstash.yml'
   #- 'log4j2.properties'
@@ -21,7 +21,7 @@ logstash_boot_type: supervisor
 logstash_src_boot_conf: "{%if logstash_boot_type=='systemd'%}{{logstash_app_name}}.systemd{%else%}{{logstash_app_name}}.ini{%endif%}"
 
 # type: list
-logstash_src_pipeline_confs:
+logstash_src_pipeline_confs: []
 
 #logstash_src_pipeline_conf: 
 
@@ -30,6 +30,6 @@ logstash_is_multiple_pipeline: true
 
 # 下面这种数据的定义是不成立的，原因同 redis_install 中的一样,如果想在同一台机器上启动多个 logstash 进程，只能写多个 role ,每个role定义不同的变量来实现
 logstash_pipeline_instances:
-  - logstash_pipeline_conf:
-    logstash_pipeline_boot_conf:
-    logstash_pipeline_name: 
+  - logstash_pipeline_conf: ""
+    logstash_pipeline_boot_conf: ""
+    logstash_pipeline_name: ""

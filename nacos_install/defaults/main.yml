@@ -1,5 +1,5 @@
 # 
-nacos_packet:
+nacos_packet: ""
 #nacos_packet_dir_name: "{{nacos_packet.replace('.tar.gz','') |basename}}"
 app_base_dir: /data/apps/opt
 nacos_app_name: nacos
@@ -32,14 +32,14 @@ nacos_data_source: database
 # true or false
 nacos_is_standalone: false
 nacos_use_mysql: true
-nacos_run_cmd: '{{nacos_base_dir}}/bin/startup.sh{%-if nacos_is_standalone%}
+nacos_run_cmd: "{{nacos_base_dir}}/bin/startup.sh{%-if nacos_is_standalone%}
  -m standalone
 {%-else-%}
 {%-if not nacos_use_mysql%}
  -p embedded
 {%-endif-%}
-{%-endif-%}
-'
+{%-endif-%}"
+
 # ExecStart={%raw%}{{nacos_base_dir}}/bin/startup.sh {%if nacos_run_mode == "standalone"%}-m standalone {%endif%}{%if nacos_data_source=="embedded"%}-p embedded{%endif%}{%endraw%}
 # supervisor or systemd
 nacos_service_type: systemd
