@@ -10,7 +10,7 @@ rabbitmq_child_conf_dir: ''
 rabbitmq_var_dir: '/data/apps/var/{{rabbitmq_base_name}}'
 rabbitmq_data_dir: '/data/apps/data/{{rabbitmq_base_name}}'
 
-rabbitmq_packet:
+rabbitmq_packet: ""
 rabbitmq_packet_type: tgz
 rabbitmq_packet_creates:
 
@@ -19,7 +19,7 @@ rabbitmq_conf_files:
   - rabbitmq-env.conf
   - rabbitmq.conf
 
-rabbitmq_child_confs:
+rabbitmq_child_confs: ""
 
 rabbitmq_src_boot_file: rabbitmq.service
 rabbitmq_boot_type: systemd

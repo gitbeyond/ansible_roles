@@ -54,3 +54,10 @@ k8s_system_RedHat_7_kernel_args:
     value: 1
 
 k8s_system_RedHat_8_kernel_args: '{{k8s_system_RedHat_7_kernel_args[:3]}}'
+
+k8s_node_dependence_packets:
+  - conntrack-tools
+  - ipset
+  - ipvsadm
+  - socat
+

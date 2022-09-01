@@ -1,0 +1,65 @@
+groups:
+- name: traefik-27-rules-code-error
+  interval: 60s
+  rules:
+  # 这个看不到是哪个 ingressroute资源的错误
+  - alert: TraefikEntrypointRequestCode4xxError
+    # expr: rate(traefik_entrypoint_request_duration_seconds_count{code=~"4.."}[2m]) > 0
+    expr: rate(traefik_entrypoint_requests_total{code=~"4.."}[2m]) > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Traefik entrypoint has a 4xx errors."
+      description: "Traefik entrypoint has 4xx errors on {{ $labels.instance }}. The value: {{ $value }}, entrypoint: {{ $labels.entrypoint }}, namespace: {{ $labels.namespace }}, pod: {{ $labels.pod }}, protocol: {{ $labels.protocol }}, code: {{ $labels.code }}, method: {{ $labels.method }} "
+  - alert: TraefikEntrypointRequestCode5xxError
+    # expr: rate(traefik_entrypoint_request_duration_seconds_count{code=~"4.."}[2m]) > 0
+    expr: rate(traefik_entrypoint_requests_total{code=~"5.."}[2m]) > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Traefik entrypoint has a 5xx errors."
+      description: "Traefik entrypoint has 5xx errors on {{ $labels.instance }}. The value: {{ $value }}, entrypoint: {{ $labels.entrypoint }}, namespace: {{ $labels.namespace }}, pod: {{ $labels.pod }}, protocol: {{ $labels.protocol }}, code: {{ $labels.code }}, method: {{ $labels.method }} "
+  - alert: TraefikServiceRequestCode4xxError
+    expr: rate(traefik_service_requests_total{code=~"4.."}[2m]) > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Traefik service has a 4xx errors."
+      description: "Traefik service has 4xx errors on {{ $labels.instance }}. The value: {{ $value }}, service: {{ $labels.exported_service }}, namespace: {{ $labels.namespace }}, pod: {{ $labels.pod }}, protocol: {{ $labels.protocol }}, code: {{ $labels.code }}, method: {{ $labels.method }}. "
+  - alert: TraefikServiceRequestCode5xxError
+    expr: rate(traefik_service_requests_total{code=~"5.."}[2m]) > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Traefik service has a 5xx errors."
+      description: "Traefik service has 5xx errors on {{ $labels.instance }}. The value: {{ $value }}, service: {{ $labels.exported_service }}, namespace: {{ $labels.namespace }}, pod: {{ $labels.pod }}, protocol: {{ $labels.protocol }}, code: {{ $labels.code }}, method: {{ $labels.method }}. "
+  - alert: TraefikConfigReloadsFailure
+    expr: increase(traefik_config_reloads_failure_total[1m]) > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Traefik config reload has an error."
+      description: "Traefik config reload has an error on {{ $labels.instance }}. The value: {{ $value }}, namespace: {{ $labels.namespace }}. "
+- name: traefik-27-rules-latency
+  interval: 60s
+  rules:
+  - alert: p95_latency
+    expr: |
+        label_replace(
+            histogram_quantile(
+                0.95,
+                sum(
+                    rate(traefik_service_request_duration_seconds_bucket{protocol="http"}[5m])
+                ) by (service, le)
+            ),
+            "service", "$1", "service", "(.*)@.*"
+        ) > 0.9
+    for: 5m
+    annotations:
+      summary: "{{ $labels.service }}"
+      description: "p95 latency for {{ $labels.short_label }} is at {{ $value }}s"
