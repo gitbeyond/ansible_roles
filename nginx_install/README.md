@@ -30,6 +30,32 @@ TLS SNI support enabled
 configure arguments: --add-module=modules/ngx_http_upstream_check_module --add-module=modules/ngx_http_upstream_dynamic_module --add-module=modules/ngx_http_upstream_consistent_hash_module --add-module=modules/ngx_http_upstream_keepalive_module --add-module=modules/ngx_multi_upstream_module --add-module=modules/ngx_http_upstream_vnswrr_module --add-module=modules/ngx_http_reqstat_module --add-module=/usr/src/nginx-module-vts --prefix=/data/apps/opt/tengine-2.3.2 --conf-path=/data/apps/config/nginx/nginx.conf --user=nginx --group=nginx --with-compat --with-file-aio --with-threads --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-http_slice_module --with-pcre --with-pcre-jit --with-google_perftools_module --with-cc-opt='-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -m64 -mtune=generic' --with-ld-opt='-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-E' --without-http_upstream_keepalive_module
 ```
 
+## 原生nginx编译示例
+```bash
+# ./configure --prefix=/data/apps/opt/nginx-1.23.1 --conf-path=/data/apps/config/nginx/nginx.conf --user=nginx --group=nginx --with-compat --with-file-aio --with-threads --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-http_slice_module --with-pcre --with-pcre-jit --with-google_perftools_module --with-cc-opt='-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -m64 -mtune=generic' --with-ld-opt='-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-E'
+
+Configuration summary
+  + using threads
+  + using system PCRE library
+  + using system OpenSSL library
+  + using system zlib library
+
+  nginx path prefix: "/data/apps/opt/nginx-1.23.1"
+  nginx binary file: "/data/apps/opt/nginx-1.23.1/sbin/nginx"
+  nginx modules path: "/data/apps/opt/nginx-1.23.1/modules"
+  nginx configuration prefix: "/data/apps/config/nginx"
+  nginx configuration file: "/data/apps/config/nginx/nginx.conf"
+  nginx pid file: "/data/apps/opt/nginx-1.23.1/logs/nginx.pid"
+  nginx error log file: "/data/apps/opt/nginx-1.23.1/logs/error.log"
+  nginx http access log file: "/data/apps/opt/nginx-1.23.1/logs/access.log"
+  nginx http client request body temporary files: "client_body_temp"
+  nginx http proxy temporary files: "proxy_temp"
+  nginx http fastcgi temporary files: "fastcgi_temp"
+  nginx http uwsgi temporary files: "uwsgi_temp"
+  nginx http scgi temporary files: "scgi_temp"
+
+
+```
 
 ## 问题
 nginx 编译好之后，默认的conf目录下会有如下文件

@@ -65,11 +65,24 @@ help_info(){
 examples: 
   Created a serviceAccount in kubeconfig:
     $0 --kube_cmd /root/k8s_55/k8s/kubectl --kubeconfig /root/k8s_55/k8s/admin.kubeconfig --kube_sa_name dashboard-admin --kube_ns kube-system --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./dashboard-admin.kubeconfig --kube_cluster_role cluster-admin 
+ 
+  创建一个拥有集群管理权限的kubeconfig
+   $0 --kube_cmd /root/k8s_55/k8s/kubectl --kubeconfig /root/k8s_55/k8s/admin.kubeconfig --kube_user_name uc-admin --kube_ns user-center --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./uc-admin.kubeconfig --kube_cluster_role admin --kube_rb_name uc-admin
 
-  --kube_cmd /root/k8s_55/k8s/kubectl --kubeconfig /root/k8s_55/k8s/admin.kubeconfig --kube_user_name uc-admin --kube_ns user-center --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./uc-admin.kubeconfig --kube_cluster_role admin
+  创建一个拥有名称空间级别管理权限的kubeconfig
+   $0 --kube_cmd /root/k8s_55/k8s/kubectl --kubeconfig /root/k8s_55/k8s/admin.kubeconfig --kube_user_name uc-admin --kube_ns user-center --kube_api_server https://10.111.36.70:7443 --kube_root_ca ./ansible_k8s_certs/k8s-root-ca.pem --kube_root_ca_key ./ansible_k8s_certs/k8s-root-ca-key.pem --kube_new_config ./uc-admin.kubeconfig --kube_cluster_role admin --kube_rb_name uc-admin --kube_cluster_priv false
 
   Create a user certificate in kubeconfig:
     $0 --kube_user_name ns1-admin --kube_ns ns1 --kube_api_server https://10.111.36.70:7443 --kube_root_ca /tmp/k8s/k8s-root-ca.pem --kube_root_ca_key /tmp/k8s/k8s-root-ca-key.pem --kube_new_config ns1-admin.kubeconfig --kube_cluster_role admin --kube_rb_name ns1-admin
+
+  创建一个全局只读，同时可以exec pod的kubeconfig:
+    $0 --kube_cmd /usr/bin/kubectl --kubeconfig=${KUBECONFIG} --kube_sa_name dashboard-view-exec --kube_ns kube-system --kube_api_server https://10.6.56.10:7443 --kube_root_ca /tmp/kubernetes/ca.crt --kube_root_ca_key /tmp/kubernetes/ca.key --kube_new_config /tmp/dashboard-view-exec.kubeconfig --kube_cluster_role view-with-exec
+
+生成文件:
+  ansible_k8s_certs dir
+  clusterrolebinding 或者 rolebinding，取决于是否指定了 --kube_cluster_priv 
+  新的kubeconfig文件
+  serviceAccount，取决于是否指定了--kube_sa_name
 
 "
     exit 0

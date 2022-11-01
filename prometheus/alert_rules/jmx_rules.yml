@@ -1,24 +1,24 @@
 groups:
 - name: jvm_status
   rules:
-  - alert: JvmMemoryFillingUp_to_70%
-    expr: jvm_memory_bytes_used / jvm_memory_bytes_max{area="heap"} > 0.7
-    for: 5m
+  - alert: JvmMemoryFillingUpTo80%
+    expr: jvm_memory_bytes_used / jvm_memory_bytes_max{area="heap"} > 0.8
+    for: 15m
     labels:
       severity: warning
     annotations:
       summary: "JVM heap memory filling up (instance {{ $labels.instance }})"
-      description: "JVM heap memory is filling up (> 70%)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-  - alert: JvmMemoryFillingUp_to_90%
+      description: "JVM heap memory is filling up (> 80%)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  - alert: JvmMemoryFillingUpTo90%
     expr: jvm_memory_bytes_used / jvm_memory_bytes_max{area="heap"} > 0.9
-    for: 5m
+    for: 15m
     labels:
-      severity: High
+      severity: high
     annotations:
       summary: "JVM heap memory filling up (instance {{ $labels.instance }})"
       description: "JVM heap memory is filling up (> 90%)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
-  - alert: jmx Opened File over than 70%
+  - alert: jmxOpenedFileOverThan70%
     expr: java_lang_operatingsystem_openfiledescriptorcount > java_lang_operatingsystem_maxfiledescriptorcount * 0.7
     for: 5m
     labels:
@@ -27,31 +27,31 @@ groups:
       summary: "jmx Opened File over than 70% (instance {{ $labels.instance }})"
       description: "jmx Opened File over than 70%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
-  - alert: java_lang_operatingsystem_processcpuload over than 70%
+  - alert: javaLangOperatingsystemProcesscpuloadOverThan70%
     expr: java_lang_operatingsystem_processcpuload * 100 > 70
     for: 3m
     labels:
-      severity: Disaster
+      severity: disaster
     annotations:
       summary: "java_lang_operatingsystem_processcpuload over than 70% (instance {{ $labels.instance }})"
       description: "java_lang_operatingsystem_processcpuload over than 70%, \n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
 #  - alert: mem Non-Heap Memory fully committed
 #    expr: 
-  - alert: jmx port not reachable
+  - alert: jmxPortNotReachable
     expr: jmx_scrape_error == 1
     for: 2m
     labels:
-      severity: Disaster
+      severity: disaster
     annotations:
       summary: "jmx_scrape_error (instance {{ $labels.instance }})"
       description: "java_lang_operatingsystem_processcpuload over than 70%, \n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
-  - alert: jmx LastGcInfo.duration over than 8 second 
+  - alert: jmxLastGcInfoDurationOverThan8Seconds
     expr: max_over_time(java_lang_garbagecollector_lastgcinfo_duration[5m]) > 8000
     for: 1m
     labels:
-      severity: Disaster
+      severity: disaster
     annotations:
       summary: "jmx LastGcInfo.duration {{$labels.app_name}} {{ $labels.name}} {{$labels.name}} over than 8 seconds"
       description: "jmx LastGcInfo.duration over than 8 seconds.\n value: {{$value}}'"

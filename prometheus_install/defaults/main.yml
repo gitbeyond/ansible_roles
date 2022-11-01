@@ -6,7 +6,7 @@ prom_run_user_system: yes
 prom_base_name: prometheus
 
 
-prom_packet:
+prom_packet: ""
 prom_packet_creates: 'prometheus'
 # tgz or jar
 prom_packet_type: tgz
