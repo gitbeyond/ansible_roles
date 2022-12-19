@@ -1,0 +1,16 @@
+- name: copy jenkins backup script
+  template:
+    scr: "{{jenkins_backup_script}}"
+    dest: "{{jenkins_backup_script_dir}}"
+    mode: "0644"
+    backup: yes
+
+- name: set jenkins backup cron job
+  cron:
+    name: "{{jenkins_project_name}} jenkins backup"
+    minute: "0"
+    hour: "1"
+    weekday: "6"
+    user: "root"
+    job: "/bin/bash {{jenkins_backup_script_dir}}/{{jenkins_backup_script | basename}} &> /tmp/.jenkins_backup_$(date +'\\%w').out"
+    backup: yes

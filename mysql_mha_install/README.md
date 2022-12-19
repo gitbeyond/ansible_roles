@@ -48,3 +48,17 @@ mha_mail_to:
   - root@localhost
 ```
 2. 对于manager 及 node 的用户默认都是 root,这里暂时没有实现为其指定用户的操作,如果 node 的ssh用户不是root,需要配置sudo
+
+# vip切换问题
+
+arping -c 1 -U -I bond0  172.16.16.200
+
+master_ip_failover这个脚本里加, 172.16.16.200是vip
+
+
+```perl
+sub start_vip() {  
+`ssh $ssh_user\@$new_master_host \"  $ifctrl $ssh_start_vip \"`;  
+`ssh $ssh_user\@$new_master_host \"  arping -c 1 -U -I bond0  172.16.16.200  \"`;  
+} 
+```

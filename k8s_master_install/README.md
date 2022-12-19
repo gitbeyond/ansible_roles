@@ -163,3 +163,9 @@ Bearer is the token of secret.
 ```bash
 bash -x create_kubeconfig.sh --kube_cmd '/usr/bin/kubectl' --kubeconfig /tmp/.config --kube_user_name test-admin --kube_ns test --kube_api_server https://10.0.0.2:7443 --kube_root_ca /tmp/kubernetes/ca.crt --kube_root_ca_key /tmp/kubernetes/ca.key --kube_new_config /tmp/test-admin.kubeconfig --kube_cluster_role admin --kube_rolebinding_name test-admin
 ```
+
+# k8s预编译包下载地址
+
+```
+wget https://dl.k8s.io/v1.22.7/kubernetes-server-linux-amd64.tar.gz
+```

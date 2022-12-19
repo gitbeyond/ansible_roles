@@ -1,6 +1,12 @@
 
 # role 的作用 
 
+## download zk
+
+```bash
+wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.11/zookeeper-3.4.11.tar.gz
+```
+
 ## 这个 role 的作用是安装一个 zk 集群.
 * 创建用户
 * 创建目录

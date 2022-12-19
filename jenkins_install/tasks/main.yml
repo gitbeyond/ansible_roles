@@ -1,0 +1,8 @@
+- import_tasks: create_jenkins_dir.yml
+
+- import_tasks: install_jenkins_war.yml
+  tags:
+    - install_jenkins
+- import_tasks: jenkins_backup.yml
+  tags:
+    - set_jenkins_backup_job

@@ -1,9 +1,16 @@
 ---
 - name: copy nodejs profile
-  template: 
-    src: '{{ nodejs_profile }}' 
-    dest: '/etc/profile.d/{{nodejs_app_name}}.sh'
+  template:
+    src: "{{ nodejs_profile }}"
+    dest: "/etc/profile.d/{{nodejs_app_name}}.sh"
     backup: yes
-    owner: root 
-    group: root 
+    owner: root
+    group: root
     mode: "0644"
+
+- name: copy npmrc file
+  copy:
+    src: "{{nodejs_npmrc_file}}"
+    # ansible_env["HOME"]
+    dest: "\\${HOME}/.npmrc"
+    backup: yes

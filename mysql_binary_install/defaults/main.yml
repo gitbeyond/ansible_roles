@@ -24,3 +24,7 @@ mysql_service_conf: 'mysql.systemd'
 #mysql_master_sync_pass
 #mysql_slave_sync_user
 #mysql_slave_sync_pass
+# ubuntu system
+# ubuntu-22.04.1
+mysql_ubuntu_dependent_package:
+  - libaio1

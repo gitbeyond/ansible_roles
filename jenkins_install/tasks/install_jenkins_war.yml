@@ -1,0 +1,25 @@
+- name: install jenkins war
+  copy:
+    src: "{{jenkins_war_file}}"
+    dest: "{{jenkins_install_dir}}"
+    owner: "{{jenkins_run_user}}"
+    group: "{{jenkins_run_user}}"
+    backup: yes
+    mode: "0644"
+# 创建软链
+- name: create jenkins war link file
+  file:
+    src: "{{jenkins_war_file | basename }}"
+    dest: "{{jenkins_install_dir}}/{{jenkins_war_file_link_name}}"
+    state: link
+  when:
+    - jenkins_war_file_link_name != jenkins_war_file | basename
+
+- name: copy jenkins boot script
+  copy:
+    src: "{{jenkins_boot_script}}"
+    dest: "{{jenkins_install_dir}}"
+    owner: "{{jenkins_run_user}}"
+    group: "{{jenkins_run_user}}"
+    backup: yes
+    mode: "0755"
