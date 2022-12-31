@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+# 这个是用作zabbix自动发现redis的脚本
 import json
 
 logs = [ '172.16.9.39', '172.16.9.40' ,'172.16.9.79' ,'172.16.9.80' ]
@@ -10,4 +10,4 @@ for i in logs:
 d1 = {'data':l2}
 #print d1
 data = json.dumps(d1)
-print data
+print(data)

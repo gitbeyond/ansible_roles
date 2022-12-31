@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
-
+# -*- coding:utf-8 -*-
+# zabbix用来获取redis参数
 import redis
 import sys
 
@@ -9,10 +9,9 @@ r = redis.Redis(host='172.16.8.161',port=6379,db=0)
 pool = redis.ConnectionPool(max_connections=1,host='127.0.0.1',port=6379)
 r = redis.Redis(connection_pool=pool)
 
-
 data=r.info()
 arg1=sys.argv[1]
-print data[arg1]
+print(data[arg1])
 #print pool.get_connection('info')
 #print pool.release(r)
 

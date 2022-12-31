@@ -1,6 +1,6 @@
 - name: copy jenkins backup script
   template:
-    scr: "{{jenkins_backup_script}}"
+    src: "{{jenkins_backup_script}}"
     dest: "{{jenkins_backup_script_dir}}"
     mode: "0644"
     backup: yes

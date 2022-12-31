@@ -11,6 +11,6 @@
 - name: copy npmrc file
   copy:
     src: "{{nodejs_npmrc_file}}"
-    # ansible_env["HOME"]
+    # ansible_env["HOME"], 考虑不收集fact时的写法
     dest: "\\${HOME}/.npmrc"
     backup: yes

@@ -1,0 +1,5 @@
+{
+    "ansible.ansible.path": "/data/apps/opt/ansible/bin/ansible",
+    "ansible.executionEnvironment.enabled": true,
+    "ansible.python.interpreterPath": "/data/apps/opt/ansible/bin/python3"
+}

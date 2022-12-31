@@ -1,4 +1,3 @@
-
 system_dns_conf: resolv.conf
 system_dns_servers: ""
 
@@ -23,4 +22,41 @@ system_base_packets:
   - redhat-lsb-core
 
 #system_family_and_version: '{{ansible_distribution_file_variety}}_{{ansible_distribution_major_version}}'
-system_family_and_version: '{{ansible_os_family}}_{{ansible_distribution_major_version}}'
+system_family_and_version: "{{ansible_os_family}}_{{ansible_distribution_major_version}}"
+
+# 内核参数
+system_kernel_threads_max: "2059246"
+system_kernel_args:
+  - name: "vm.swappiness"
+    value: 0
+  - name: "net.ipv4.tcp_timestamps"
+    value: "1"
+  # centos8已经没有此参数了
+  - name: "net.ipv4.tcp_tw_recycle"
+    value: "0"
+  - name: "net.ipv4.tcp_tw_reuse"
+    value: "0"
+  - name: "net.core.somaxconn"
+    value: "65535"
+  - name: "net.core.netdev_max_backlog"
+    value: "262144"
+  - name: "net.ipv4.tcp_max_syn_backlog"
+    value: "262144"
+  - name: "fs.file-max"
+    value: "65535000"
+  - name: "net.ipv4.tcp_syncookies"
+    value: "1"
+  - name: "net.ipv4.tcp_fin_timeout"
+    value: "30"
+  - name: "net.core.rmem_max"
+    value: "16777216"
+  - name: "net.core.wmem_max"
+    value: "16777216"
+  - name: "vm.max_map_count"
+    value: "6553360"
+  - name: "vm.max_map_count"
+    value: "6553360"
+  - name: "kernel.pid_max"
+    value: "204800"
+  - name: "kernel.threads-max"
+    value: "{{system_kernel_threads_max}}"

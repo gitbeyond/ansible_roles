@@ -8,18 +8,19 @@ from email.utils import parseaddr, formataddr
 import smtplib
 import sys
 
+from_addr = 'zabbix@mydomain.com'
+password = ''
+to_addr = ''
+smtp_server = 'smtp.263.net'
+
+
 def _format_addr(s):
     name, addr = parseaddr(s)
     return formataddr((
         Header(name, 'utf-8').encode(),
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
-from_addr = 'zabbix@geotmt.com'
-password = ''
-#to_addr = 'wanghaifeng@geotmt.com'
-to_addr = ''
-#smtp_server = 'smtpcom.263xmail.com'
-smtp_server = 'smtp.263.net'
+
 
 #msg_text="""
 #%s civp log put to hdfs already succeed.
@@ -38,4 +39,3 @@ server = smtplib.SMTP(smtp_server, 25)
 server.login(from_addr, password)
 server.sendmail(from_addr, [to_addr], msg.as_string())
 server.quit()
-

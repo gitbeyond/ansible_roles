@@ -50,3 +50,28 @@ role 的操作步骤如下:
 * tomcat_conf_files: 列表，指定tomcat 需要配置的文件，使用template 模块复制到 conf 目录下
 * tomcat_script_files: 列表，指定tomcat 需要配置的脚本文件，使用template 模块复制到 bin 目录下
 * tomcat_boot_file: path 路径，tomcat 的 supervisor 启动配置
+
+
+# rpm包的tomcat的启动方式
+
+在`/usr/libexec/tomcat/functions`脚本中有如下函数，默认情况下就是使用`run_java`来运行的，其内就是`exec`开头的`java`命令。
+
+另外在`run_jsvc`函数中，其在命令的开头处也有`exec`命令。
+`/usr/bin/jsvc`命令在`tomcat-jsvc`包中。
+
+```bash
+run() {
+    if [ "${USE_JSVC}" = "true" ] ; then
+        run_jsvc $@
+    else
+        run_java $@
+    fi
+}
+```
+
+当设置了`USE_JSVC`的变量后，相关的命令为
+```bash
+exec /usr/bin/jsvc -nodetach -pidfile /var/run/jsvc-tomcat.pid -user tomcat -outfile /usr/share/tomcat/logs/catalina.out -errfile /usr/share/tomcat/logs/catalina.out -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory -classpath .:/export/java/jdk/lib/dt.jar:/export/java/jdk/lib/tools.jar:/usr/share/tomcat/bin/bootstrap.jar:/usr/share/tomcat/bin/tomcat-juli.jar:/usr/share/java/commons-daemon.jar -Dcatalina.base=/usr/share/tomcat -Dcatalina.home=/usr/share/tomcat -Djava.endorsed.dirs= -Djava.io.tmpdir=/var/cache/tomcat/temp -Djava.util.logging.config.file=/usr/share/tomcat/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager org.apache.catalina.startup.Bootstrap start
+```
+
+实际启动后，仍然是两个进程，但是实际的工作进程是运行在前台的。

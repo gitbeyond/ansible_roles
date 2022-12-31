@@ -1,0 +1,72 @@
+# 这个是使用docker-compose 启动etcd-cluster的配置示例
+version: "3"
+services:
+  etcd01:
+    image: "bitnami/etcd:3-debian-10"
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_NAME=etcd01
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd01.prod.test.com:2379
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd01.prod.test.com:2380
+      - ETCD_INITIAL_CLUSTER=etcd01=http://etcd01.prod.test.com:2380,etcd02=http://etcd02.prod.test.com:12380,etcd03=http://etcd03.prod.test.com:22380
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+      - ETCD_INITIAL_CLUSTER_STATE=new
+      - ETCDCTL_API=3
+      - ETCD_AUTO_COMPACTION_RETENTION=1
+    ports:
+      - 2379:2379
+      - 2380:2380
+    volumes:
+      - /data/docker-vol/etcd/etcd01:/bitnami/etcd/data
+    external_links:
+      - etcd01:etcd01.prod.test.com
+      - etcd02:etcd02.prod.test.com
+      - etcd03:etcd03.prod.test.com
+  etcd02:
+    image: "bitnami/etcd:3-debian-10"
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_NAME=etcd02
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:12380
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:12379
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd02.prod.test.com:12379
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd02.prod.test.com:12380
+      - ETCD_INITIAL_CLUSTER=etcd01=http://etcd01.prod.test.com:2380,etcd02=http://etcd02.prod.test.com:12380,etcd03=http://etcd03.prod.test.com:22380
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+      - ETCD_INITIAL_CLUSTER_STATE=new
+      - ETCDCTL_API=3
+      - ETCD_AUTO_COMPACTION_RETENTION=1
+    ports:
+      - 12379:12379
+      - 12380:12380
+    volumes:
+      - /data/docker-vol/etcd/etcd02:/bitnami/etcd/data
+    external_links:
+      - etcd01:etcd01.prod.test.com
+      - etcd02:etcd02.prod.test.com
+      - etcd03:etcd03.prod.test.com
+  etcd03:
+    image: "bitnami/etcd:3-debian-10"
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_NAME=etcd03
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:22380
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:22379
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd03.prod.test.com:22379
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd03.prod.test.com:22380
+      - ETCD_INITIAL_CLUSTER=etcd01=http://etcd01.prod.test.com:2380,etcd02=http://etcd02.prod.test.com:12380,etcd03=http://etcd03.prod.test.com:22380
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+      - ETCD_INITIAL_CLUSTER_STATE=new
+      - ETCDCTL_API=3
+      - ETCD_AUTO_COMPACTION_RETENTION=1
+    ports:
+      - 22379:22379
+      - 22380:22380
+    volumes:
+      - /data/docker-vol/etcd/etcd03:/bitnami/etcd/data
+    external_links:
+      - etcd01:etcd01.prod.test.com
+      - etcd02:etcd02.prod.test.com
+      - etcd03:etcd03.prod.test.com
