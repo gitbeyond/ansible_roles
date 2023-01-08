@@ -1,0 +1,37 @@
+# 这个是描述 源码中的 Dockerfile的步骤
+- name: install epel-release
+  ansible.builtin.yum:
+    name:
+      - epel-release
+    state: present
+
+- name: install dependent packages
+  ansible.builtin.yum:
+    name:
+      - wget
+      - unzip
+      - pexpect
+      - bubblewrap
+      - gcc
+      - bzip2
+    state: present
+
+- name: update pip and setuptools
+  ansible.builtin.pip:
+    name:
+      - pip==22.0.4
+      - setuptools==59.6.0
+    executable: "{{pip_executable}}"
+    extra_args: "{{pip_extra_args}}"
+  environment:
+    LANG: en_US.UTF-8
+
+# 默认的pip会报错
+# ModuleNotFoundError: No module named 'setuptools_rust'
+- name: Install bottle python package
+  ansible.builtin.pip:
+    name: "{{runner_service_pip_packages}}"
+    executable: "{{pip_executable}}"
+    extra_args: "{{pip_extra_args}}"
+  environment:
+    LANG: en_US.UTF-8

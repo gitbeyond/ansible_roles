@@ -1,0 +1,71 @@
+# 这个是描述 源码中的 Dockerfile的步骤
+- name: install epel-release
+  ansible.builtin.yum:
+    name:
+      - epel-release
+    state: present
+
+- name: install dependent packages
+  ansible.builtin.yum:
+    name:
+      - bash
+      - wget
+      - unzip
+      - pexpect
+      - python-daemon
+      - bubblewrap
+      - gcc
+      - bzip2
+      - openssh
+      - openssh-clients
+      - python2-psutil
+      - python36
+      - python36-devel
+      - python36-setuptools
+      # - nginx
+      # - supervisor
+    state: present
+- name: set locale
+  shell:
+    cmd: localedef -c -i en_US -f UTF-8 en_US.UTF-8
+
+- name: update pip and setuptools
+  ansible.builtin.pip:
+    name:
+      - pip==21.3.1
+      - setuptools==59.6.0
+    executable: pip3
+    extra_args: -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn
+  environment:
+    LANG: en_US.UTF-8
+
+- name: copy requirements file
+  copy:
+    src: CentOS7_requirements.txt
+    dest: /tmp
+
+# 默认的pip会报错
+# ModuleNotFoundError: No module named 'setuptools_rust'
+- name: Install bottle python package
+  ansible.builtin.pip:
+    requirements: /tmp/CentOS7_requirements.txt
+    executable: pip3
+    extra_args: -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn
+  environment:
+    LANG: en_US.UTF-8
+# 不设置LANG这个变量，会报错
+# UnicodeEncodeError: 'ascii' codec can't encode character '\xe9' in position 117: ordinal not in range(128)
+# export LANG=en_US.UTF-8
+
+- name: create dir
+  file:
+    path: "{{item}}"
+    state: directory
+  loop:
+    - /etc/ansible-runner-service
+    - /usr/share/ansible-runner-service/artifacts
+    - /usr/share/ansible-runner-service/env
+    - /usr/share/ansible-runner-service/project
+    - /usr/share/ansible-runner-service/inventory
+    - /usr/share/ansible-runner-service/client_cert
+    - /root/.ssh

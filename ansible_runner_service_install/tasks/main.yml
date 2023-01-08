@@ -1,0 +1,14 @@
+- import_tasks: install_dependent_package.yml
+  tags:
+    - install_dependent_package
+- import_tasks: install_runner_service.yml
+  tags:
+    - install_runner_service
+
+- import_tasks: copy_runner_service_conf.yml
+  tags:
+    - copy_runner_service_conf
+
+- import_tasks: boot_runner_service.yml
+  tags:
+    - boot_runner_service

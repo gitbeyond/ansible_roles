@@ -1,0 +1,31 @@
+- name: copy runner service var conf
+  template:
+    src: "{{item}}"
+    dest: "{{runner_service_var_dir}}"
+    backup: yes
+  loop:
+    - ansible-runner-service_env.sh
+
+- name: copy runner service boot script
+  template:
+    src: "ansible-runner-service.sh"
+    dest: "{{runner_service_install_dir}}"
+    mode: "0755"
+    backup: yes
+
+- name: copy runner service supervisor conf file
+  template:
+    src: "ansible-runner-service.ini"
+    dest: "{{supervisor_conf_dir}}"
+    mode: "0644"
+    backup: yes
+
+- name: boot runner service
+  community.general.supervisorctl:
+    name: "{{runner_service_app_name}}"
+    state: "{{item}}"
+    supervisorctl_path: "{{supervisor_exe_file}}"
+    config: "{{supervisor_prim_conf}}"
+  loop:
+    - present
+    - started

@@ -1,0 +1,21 @@
+---
+version: 1
+
+playbooks_root_dir: "{{ansible_work_base_dir}}"
+logging_conf: "{{runner_service_conf_dir}}/logging.yaml"
+log_path: "{{runner_service_log_dir}}"
+#config_file: ''
+config_dir: "{{runner_service_conf_dir}}"
+event_cache_size: 5
+runner_cache_size: 5
+debug: False
+ssh_private_key: ""
+artifacts_remove_age: 7
+artifacts_remove_frequency: 1
+cert_expiration: 3
+ssh_timeout: 2
+event_threads: 10
+port: 5001
+ip_address: "0.0.0.0"
+#loglevel:
+target_user: root

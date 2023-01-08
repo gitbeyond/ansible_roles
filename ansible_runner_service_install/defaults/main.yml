@@ -1,0 +1,35 @@
+# 如果提供了此变量，则表示，在一个已经存在的ansible环境中安装相关库
+ansible_venv: ""
+ansible_venv_base_python: ""
+ansible_work_base_dir: ""
+# pip 相关的变量
+pip_executable: "{% if ansible_venv != '' %}{{ansible_venv}}/bin/pip{%else%}pip3{%endif%}"
+pip_extra_args: "-i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn"
+################# runner service 相关的变量
+runner_service_app_name: "ansible-runner-service"
+runner_service_install_dir: "/data/apps/opt/{{runner_service_app_name}}"
+runner_service_conf_dir: "/data/apps/config/{{runner_service_app_name}}"
+runner_service_log_dir: "/data/apps/log/{{runner_service_app_name}}"
+runner_service_var_dir: "/data/apps/var/{{runner_service_app_name}}"
+# 源码包， tar.gz 格式
+runner_service_package: ""
+# runner_service_package_dir_name: "{{ runner_service_package | basename | split('.') | first}}"
+runner_service_package_dir_name: "{{ runner_service_package | basename | replace('.tar.gz', '')}}"
+runner_service_pip_packages:
+  - flask
+  - flask-restful
+  - gunicorn
+  - psutil
+  - docutils
+  - pyOpenSSL
+# supervisor相关的变量
+supervisor_conf_dir: "/data/apps/config/supervisord"
+supervisor_exe_file: /usr/bin/supervisorctl
+supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+runner_service_run_env_vars:
+  - name: logging_conf
+    value: "{{runner_service_conf_dir}}/logging.yaml"
+  - name: config_file
+    value: "{{runner_service_conf_dir}}/config.yaml"
+  - name: playbooks_root_dir
+    value: "{{ansible_work_base_dir}}"

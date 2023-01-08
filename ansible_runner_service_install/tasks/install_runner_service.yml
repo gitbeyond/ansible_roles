@@ -1,0 +1,21 @@
+- name: create runner service dir
+  ansible.builtin.file:
+    path: "{{item}}"
+    state: directory
+  loop:
+    - "{{runner_service_install_dir}}"
+    - "{{runner_service_conf_dir}}"
+    - "{{runner_service_log_dir}}"
+    - "{{runner_service_var_dir}}"
+- name: install runner service
+  ansible.builtin.unarchive:
+    src: "{{runner_service_package}}"
+    dest: "{{runner_service_install_dir}}"
+    creates: "{{runner_service_install_dir}}/{{runner_service_package_dir_name}}/runner-service"
+- name: create soft link
+  ansible.builtin.file:
+    src: "{{runner_service_package_dir_name}}"
+    path: "{{runner_service_install_dir}}/{{runner_service_app_name}}"
+    state: link
+  when:
+    - runner_service_package_dir_name != runner_service_app_name

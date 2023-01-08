@@ -1,0 +1,9 @@
+- name: copy runner service conf
+  template:
+    src: "{{item}}"
+    dest: "{{runner_service_conf_dir}}"
+    backup: yes
+  loop:
+    - config.yaml
+    - logging.yaml
+    - gunicorn.py
