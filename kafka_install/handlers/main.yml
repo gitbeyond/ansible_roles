@@ -1,0 +1,8 @@
+- name: restart nginx service
+  service:
+    name: "{{kafka_app_name}}"
+    state: restarted
+
+- name: add to service list
+  shell:
+    cmd: systemctl daemon-reload

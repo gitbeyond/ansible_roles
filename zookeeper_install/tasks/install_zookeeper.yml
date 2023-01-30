@@ -1,36 +1,34 @@
-
 - name: get zookeeper packet dir name
-  local_action: 
-    module: shell 
+  local_action:
+    module: ansible.builtin.shell
     cmd: tar tf {{zookeeper_packet}} |tail -n 1 |awk -F'/' '{print $1}'
-    warn: false
+    # TODO: 2023/10/1 后删除
+    # warn: false
   register: packet_dir_name
   run_once: true
   changed_when: packet_dir_name.rc != 0
   failed_when: packet_dir_name.stderr != "" and packet_dir_name.stdout == ""
 
-
 - name: cp zookeeper packet to remote
-  unarchive: 
-    src: '{{ zookeeper_packet }}' 
-    dest: '{{ zookeeper_install_dir }}' 
-    owner: '{{zookeeper_run_user}}' 
-    group: '{{zookeeper_run_group}}'
+  unarchive:
+    src: "{{ zookeeper_packet }}"
+    dest: "{{ zookeeper_install_dir }}"
+    owner: "{{zookeeper_run_user}}"
+    group: "{{zookeeper_run_group}}"
     mode: "0755"
     #creates: "{{zookeeper_base_dir}}/bin/zkServer.sh"
     creates: "{{packet_dir_name.stdout}}/bin/zkServer.sh"
   when: zookeeper_packet is not none
   register: cp_result
 
-
 - name: update zookeeper packet link file for tgz
-  file: 
-    src: '{{zookeeper_install_dir}}/{{packet_dir_name.stdout}}'
-    dest: '{{zookeeper_base_dir}}'
-    owner: '{{zookeeper_run_user}}'
-    group: '{{zookeeper_run_group}}'
-    state: link 
-  when: 
-  - zookeeper_base_dir is not none 
-  - packet_dir_name.stdout != ""
-  - packet_dir_name.stdout | basename != zookeeper_base_name 
+  file:
+    src: "{{zookeeper_install_dir}}/{{packet_dir_name.stdout}}"
+    dest: "{{zookeeper_base_dir}}"
+    owner: "{{zookeeper_run_user}}"
+    group: "{{zookeeper_run_group}}"
+    state: link
+  when:
+    - zookeeper_base_dir is not none
+    - packet_dir_name.stdout != ""
+    - packet_dir_name.stdout | basename != zookeeper_base_name

@@ -1,34 +1,35 @@
 app_base_dir: /data/apps/opt
 zookeeper_run_user: zookeeper
-zookeeper_run_group: '{{zookeeper_run_user}}'
+zookeeper_run_group: "{{zookeeper_run_user}}"
 zookeeper_base_name: zookeeper
 zookeeper_app_name: zookeeper
 zookeeper_packet: ""
 
 # tgz or jar
 zookeeper_packet_type: tgz
-zookeeper_install_dir: '{{app_base_dir}}'
+zookeeper_install_dir: "{{app_base_dir}}"
 zookeeper_base_dir: /data/apps/opt/{{zookeeper_base_name}}
 zookeeper_log_dir: /data/apps/log/{{zookeeper_base_name}}
 #zookeeper_conf_dir: /data/apps/opt/{{zookeeper_base_name}}/conf
 zookeeper_conf_dir: /data/apps/config/{{zookeeper_base_name}}
-zookeeper_data_dir: '/data/apps/data/{{zookeeper_base_name}}'
+zookeeper_data_dir: "/data/apps/data/{{zookeeper_base_name}}"
 
 zookeeper_conf_file: ""
 zookeeper_conf_files:
-  - 'java.env'
-  - 'zoo.cfg'
-  - 'zookeeper_jmx.yml'
-  - 'log4j.properties'
+  - "java.env"
+  - "zoo.cfg"
+  - "zookeeper_jmx.yml"
+  - "log4j.properties"
 
 zookeeper_run_port: 2181
 zookeeper_jmx_port: 12181
 zk_jmx_exporter_port: 22181
 # 项目启动的方式, 目前可选择 supervisor, systemd
 zookeeper_boot_type: supervisor
-zookeeper_boot_file: 'zookeeper.{{zookeeper_boot_type}}'
+zookeeper_boot_file: "zookeeper.{{zookeeper_boot_type}}"
 
-jmx_exporter_base_dir: '/data/apps/opt/{{jmx_exporter}}'
+jmx_exporter_base_dir: "/data/apps/opt/{{jmx_exporter}}"
 
-#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+systemd_conf_dir: "/usr/lib/systemd/system"
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

@@ -1,0 +1,18 @@
+[Unit]
+Description=Apache zookeeper service
+After=rc-local.service
+
+[Service]
+Type=simple
+ExecStart={{zookeeper_base_dir}}/bin/zkServer.sh start-foreground
+User={{zookeeper_run_user}}
+Group={{zookeeper_run_user}}
+KillMode=control-group
+SuccessExitStatus=143
+Restart=always
+RestartSec=3s
+OOMScoreAdjust=-1000
+LimitNOFILE=102400
+
+[Install]
+WantedBy=multi-user.target

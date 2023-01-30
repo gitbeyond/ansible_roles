@@ -1,0 +1,6 @@
+- name: create kafka user
+  user:
+    name: "{{ kafka_run_user }}"
+    state: present
+    system: "no"
+  when: kafka_run_user is not none and kafka_run_user != 'root'

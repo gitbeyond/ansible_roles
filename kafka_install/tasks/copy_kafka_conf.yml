@@ -1,0 +1,21 @@
+- name: copy kafka conf file
+  template:
+    src: "{{kafka_conf_file}}"
+    dest: "{{kafka_conf_dir}}"
+    owner: "{{kafka_run_user}}"
+    group: "{{kafka_run_group}}"
+    mode: "0644"
+    backup: yes
+  when: kafka_conf_file is not none and kafka_conf_file != ''
+
+- name: copy kafka conf files
+  template:
+    src: "{{item}}"
+    dest: "{{kafka_conf_dir}}"
+    owner: "{{kafka_run_user}}"
+    group: "{{kafka_run_group}}"
+    mode: "0644"
+    backup: yes
+  loop: "{{kafka_conf_files}}"
+  when: item is not none
+  #register: copy_conf_file

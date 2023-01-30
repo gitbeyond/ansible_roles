@@ -1,0 +1,14 @@
+- name: copy zookeeper boot file
+  template:
+    src: "{{zookeeper_boot_file}}"
+    dest: "{{systemd_conf_dir}}/{{zookeeper_base_name}}.service"
+    owner: "root"
+    group: "root"
+    backup: yes
+    mode: "0644"
+
+- name: start zookeeper prog
+  systemd:
+    name: "{{zookeeper_base_name}}"
+    state: "started"
+    daemon_reload: yes

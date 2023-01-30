@@ -1,0 +1,20 @@
+- name: mkdir base dir
+  file:
+    path: "{{kafka_install_dir}}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: mkdir kafka dir
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: "{{kafka_run_user}}"
+    group: "{{kafka_run_group}}"
+    mode: "0755"
+  loop:
+    - "{{kafka_conf_dir}}"
+    - "{{kafka_log_dir}}"
+    - "{{kafka_data_dir}}"
+  when: item is not none and item | dirname != kafka_base_dir

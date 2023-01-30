@@ -1,0 +1,32 @@
+app_base_dir: /data/apps/opt
+kafka_run_user: kafka
+kafka_run_group: "{{kafka_run_user}}"
+kafka_base_name: kafka
+kafka_app_name: kafka
+kafka_packet: ""
+
+# tgz or jar
+kafka_packet_type: tgz
+kafka_install_dir: "{{app_base_dir}}"
+kafka_base_dir: /data/apps/opt/{{kafka_base_name}}
+kafka_log_dir: /data/apps/log/{{kafka_base_name}}
+#kafka_conf_dir: /data/apps/opt/{{kafka_base_name}}/conf
+kafka_conf_dir: /data/apps/config/{{kafka_base_name}}
+kafka_data_dir: "/data/apps/data/{{kafka_base_name}}"
+
+kafka_conf_file: ""
+kafka_conf_files:
+  - "java.env"
+  - "zoo.cfg"
+  - "kafka_jmx.yml"
+  - "log4j.properties"
+
+kafka_run_port: 2181
+kafka_jmx_port: 12181
+# 项目启动的方式, 目前可选择 supervisor, systemd
+kafka_boot_type: supervisor
+kafka_boot_file: "kafka.{{kafka_boot_type}}"
+
+jmx_exporter_base_dir: "/data/apps/opt/{{jmx_exporter}}"
+#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+#supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
