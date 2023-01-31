@@ -1,25 +1,22 @@
 # editor: haifengsss@163.com
-# 2017/01/12
-# update date: 2020/06/29
+# 2023/01/30
 
-- import_tasks: create_zookeeper_user.yml
+- import_tasks: create_kafka_user.yml
   tags:
-    - create_zookeeper_user
+    - create_kafka_user
 
-- import_tasks: create_zookeeper_dir.yml
+- import_tasks: create_kafka_dir.yml
   tags:
-    - create_zookeeper_dir
+    - create_kafka_dir
 
-- import_tasks: install_zookeeper.yml
+- import_tasks: install_kafka.yml
   tags:
-    - install_zookeeper
+    - install_kafka
 
-- import_tasks: copy_zookeeper_conf.yml
+- import_tasks: copy_kafka_conf.yml
   tags:
-    - copy_zookeeper_conf
+    - copy_kafka_conf
 
-- import_tasks: boot_zookeeper.yml
+- import_tasks: boot_kafka.yml
   tags:
-    - boot_zookeeper
-#  when: zookeeper_packet_type == "tgz"
-
+    - boot_kafka

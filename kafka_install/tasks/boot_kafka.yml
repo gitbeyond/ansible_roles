@@ -1,4 +1,4 @@
 
-- include_tasks: boot_zookeeper_for_{{zookeeper_boot_type}}.yml
-  name: boot_zookeeper
-  when: zookeeper_boot_file is not none
+- include_tasks: boot_kafka_for_{{kafka_boot_type}}.yml
+  name: boot_kafka
+  when: kafka_boot_file is not none

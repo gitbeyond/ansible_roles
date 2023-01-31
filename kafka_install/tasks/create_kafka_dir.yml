@@ -17,4 +17,20 @@
     - "{{kafka_conf_dir}}"
     - "{{kafka_log_dir}}"
     - "{{kafka_data_dir}}"
-  when: item is not none and item | dirname != kafka_base_dir
+  when: 
+    - item is not none
+    - item | dirname != kafka_base_dir
+    - item != ""
+
+- name: mkdir kafka data dir
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: "{{kafka_run_user}}"
+    group: "{{kafka_run_group}}"
+    mode: "0755"
+  loop: "{{kafka_data_dirs}}"
+  when: 
+    - item is not none
+    - item | dirname != kafka_base_dir
+    - item != ""

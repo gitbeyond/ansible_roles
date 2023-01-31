@@ -1,36 +1,36 @@
 
-- name: get zookeeper packet dir name
+- name: get kafka packet dir name
   local_action: 
     module: shell 
-    cmd: tar tf {{zookeeper_packet}} |tail -n 1 |awk -F'/' '{print $1}'
-    warn: false
-  register: packet_dir_name
+    cmd: tar tf {{kafka_packet}} | tail -n 1 | awk -F'/' '{print $1}'
+  register: kafka_packet_dir_name
   run_once: true
-  changed_when: packet_dir_name.rc != 0
-  failed_when: packet_dir_name.stderr != "" and packet_dir_name.stdout == ""
+  changed_when: kafka_packet_dir_name.rc != 0
+  failed_when: kafka_packet_dir_name.stderr != "" and kafka_packet_dir_name.stdout == ""
 
 
-- name: cp zookeeper packet to remote
+- name: cp kafka packet to remote
   unarchive: 
-    src: '{{ zookeeper_packet }}' 
-    dest: '{{ zookeeper_install_dir }}' 
-    owner: '{{zookeeper_run_user}}' 
-    group: '{{zookeeper_run_group}}'
+    src: '{{ kafka_packet }}' 
+    dest: '{{ kafka_install_dir }}' 
+    owner: '{{kafka_run_user}}' 
+    group: '{{kafka_run_group}}'
     mode: "0755"
-    #creates: "{{zookeeper_base_dir}}/bin/zkServer.sh"
-    creates: "{{packet_dir_name.stdout}}/bin/zkServer.sh"
-  when: zookeeper_packet is not none
+    creates: "{{kafka_base_dir}}/bin/kafka-run-class.sh"
+  when: 
+    - kafka_packet is not none
+    - kafka_packet != ''
   register: cp_result
 
 
-- name: update zookeeper packet link file for tgz
+- name: update kafka packet link file for tgz
   file: 
-    src: '{{zookeeper_install_dir}}/{{packet_dir_name.stdout}}'
-    dest: '{{zookeeper_base_dir}}'
-    owner: '{{zookeeper_run_user}}'
-    group: '{{zookeeper_run_group}}'
+    src: '{{kafka_install_dir}}/{{kafka_packet_dir_name.stdout}}'
+    dest: '{{kafka_base_dir}}'
+    owner: '{{kafka_run_user}}'
+    group: '{{kafka_run_group}}'
     state: link 
   when: 
-  - zookeeper_base_dir is not none 
-  - packet_dir_name.stdout != ""
-  - packet_dir_name.stdout | basename != zookeeper_base_name 
+  - kafka_base_dir is not none 
+  - kafka_packet_dir_name.stdout != ""
+  - kafka_packet_dir_name.stdout | basename != kafka_base_name 

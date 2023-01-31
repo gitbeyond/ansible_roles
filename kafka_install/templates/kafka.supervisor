@@ -1,16 +1,1 @@
-[program:{{zookeeper_base_name}}]
-command = {{zookeeper_base_dir}}/bin/kafka-server-start.sh {{zookeeper_conf_dir}}/server.properties
-autostart = true
-autorestart = true
-priority = 30
-startsecs = 5
-startretries = 3
-user = {{zookeeper_run_user}}
-redirect_stderr = false
-#environment=KAFKA_HEAP_OPTS="-Xmx1G -Xms1G"
-stdout_logfile={{zookeeper_log_dir}}/%(program_name)s_std.log
-stderr_logfile={{zookeeper_log_dir}}/%(program_name)s_err.log
-stdout_logfile_backups= 5
-stdout_events_enabled = 1
-stderr_logfile_backups= 5
-stderr_events_enabled = 1
+kafka.ini

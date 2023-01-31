@@ -19,3 +19,12 @@
   loop: "{{kafka_conf_files}}"
   when: item is not none
   #register: copy_conf_file
+
+- name: generate kafka vars file
+  ansible.builtin.copy:
+    content: '{{kafka_env_vars_str}}'
+    dest: '{{kafka_conf_dir}}/kafka_env_var.sh'
+    owner: "{{kafka_run_user}}"
+    group: "{{kafka_run_group}}"
+    mode: "0644"
+    backup: yes

@@ -1,7 +1,7 @@
-- name: restart nginx service
-  service: name=nginx state=reloaded
 
-- name: add to service list
-  shell: '{{ item }}'
-  with_items:
-    - systemctl daemon-reload
+- name: restart_zookeeper_by_supervisor
+  supervisorctl: 
+    config: "{{supervisor_prim_conf}}" 
+    name: "{{zookeeper_base_name}}" 
+    state: "restarted"
+    supervisorctl_path: "/usr/bin/supervisorctl"

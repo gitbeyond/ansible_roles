@@ -1,0 +1,20 @@
+[Unit]
+Description=Apache kafka service
+After=rc-local.service
+
+[Service]
+Type=simple
+WorkingDirectory={{kafka_conf_dir}}
+EnvironmentFile={{kafka_conf_dir}}/kafka_env_var.sh
+ExecStart={{kafka_base_dir}}/bin/kafka-server-start.sh server.properties
+User={{kafka_run_user}}
+Group={{kafka_run_user}}
+KillMode=control-group
+SuccessExitStatus=143
+Restart=always
+RestartSec=3s
+OOMScoreAdjust=-1000
+LimitNOFILE=102400
+
+[Install]
+WantedBy=multi-user.target

@@ -5,28 +5,44 @@ kafka_base_name: kafka
 kafka_app_name: kafka
 kafka_packet: ""
 
-# tgz or jar
-kafka_packet_type: tgz
+# 目录
 kafka_install_dir: "{{app_base_dir}}"
 kafka_base_dir: /data/apps/opt/{{kafka_base_name}}
 kafka_log_dir: /data/apps/log/{{kafka_base_name}}
 #kafka_conf_dir: /data/apps/opt/{{kafka_base_name}}/conf
 kafka_conf_dir: /data/apps/config/{{kafka_base_name}}
+# 如果只有一个数据目录，就用这个变量
 kafka_data_dir: "/data/apps/data/{{kafka_base_name}}"
+# 如果有多个目录就用这个变量
+kafka_data_dirs: []
 
+# 配置文件
 kafka_conf_file: ""
 kafka_conf_files:
-  - "java.env"
-  - "zoo.cfg"
-  - "kafka_jmx.yml"
-  - "log4j.properties"
+  - "server.properties"
 
-kafka_run_port: 2181
-kafka_jmx_port: 12181
+kafka_env_vars: []
+  #- name:
+  #  value: 
+
+kafka_run_port: 9092
+kafka_jmx_port: 19092
 # 项目启动的方式, 目前可选择 supervisor, systemd
-kafka_boot_type: supervisor
+kafka_boot_type: systemd
 kafka_boot_file: "kafka.{{kafka_boot_type}}"
 
 jmx_exporter_base_dir: "/data/apps/opt/{{jmx_exporter}}"
-#supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+supervisor_prog_name: supervisord
+supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
+systemd_conf_dir: "/usr/lib/systemd/system"
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
+
+# 空行用于生成换行符, 不要修改
+kafka_env_vars_str: '{%for var in kafka_env_vars %}{{var.name}}="{{var.value}}"
+
+{%endfor%}'
+# 不要修改
+kafka_data_dir_str: '{%-if kafka_data_dir != "" -%}
+{%- set _ = kafka_data_dirs.append(kafka_data_dir) -%}
+{%-endif-%}
+{{",".join(kafka_data_dirs)}}'

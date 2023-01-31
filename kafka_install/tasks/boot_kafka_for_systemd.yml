@@ -1,0 +1,14 @@
+- name: copy kafka boot file
+  template:
+    src: "{{kafka_boot_file}}"
+    dest: "{{systemd_conf_dir}}/{{kafka_base_name}}.service"
+    owner: "root"
+    group: "root"
+    backup: yes
+    mode: "0644"
+
+- name: start kafka prog
+  systemd:
+    name: "{{kafka_base_name}}"
+    state: "started"
+    daemon_reload: yes

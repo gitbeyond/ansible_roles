@@ -14,7 +14,7 @@ wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.11/zookeeper-3.4.11
 * 复制配置文件
     * 默认的配置文件使用 templates 之内的，启动时会指定 ZOOCFGDIR 变量，并且配置了 java.env, 会监听jmx 端口。
     * 依赖 `jmx_exporter` 需要先安装这个 `jmx_exporter`，也可以自定义配置文件，不使用这个组件
-* 启动 zookeeper, 目前只支持 supervisor 的启动方式
+* 启动 zookeeper, supervisor或systemd
 
 
 ```yaml
