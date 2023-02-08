@@ -62,12 +62,21 @@ kafka_conf_files:
 * KAFKA_HEAP_OPTS, 指定kafka堆内存配置的变量, 默认值为 `-Xmx1G -Xms1G`
 * EXTRA_ARGS , 其他的变量，默认值为 `-name kafkaServer -loggc`, 传给`kafka-run-class.sh`的变量
 
+
 `kafka-run-class.sh`中的变量
-* KAFKA_JMX_OPTS
+* JMX_PORT 指定 jmx的端口
+* KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false "
+  * 用来添加`JMX`相关的变量
 * LOG_DIR , 默认值: `$base_dir/logs`
-* 
+* KAFKA_OPTS , 另外一个变量，默认为空
 
 
+# 日志的删除
+
+关于kafka本身的日志的定时删除，本来想配置其`config/log4j.properties`文件，实现文件的自动滚动，
+但是其自身使用的`DailyRollingFileAppender`默认似乎是不支持设置最大文件数的，所以还是使用了`cron`的方式。
+
+* https://www.cnblogs.com/rembau/p/5201001.html : 
 
 # kafka的高可用测试
 
@@ -137,7 +146,7 @@ Topic:test_topic1	PartitionCount:2	ReplicationFactor:2	Configs:min.insync.replic
 生产者warn信息
 ```bash
 # a=1; while true; do echo test${a}; a=$((a+1)); sleep 0.1; done | ./kafka-console-producer.sh --broker-list ${kafka_broker_list} --topic test_topic1
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>[2023-01-31 14:16:56,616] WARN [Producer clientId=console-producer] Connection to node 1 (/192.168.10.100:9092) could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)
+>>[2023-01-31 14:16:56,616] WARN [Producer clientId=console-producer] Connection to node 1 (/192.168.10.100:9092) could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)
 
 ```
 

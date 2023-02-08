@@ -6,3 +6,6 @@
     owner: root 
     group: root 
     mode: "0644"
+  # 有些场景下，不希望生成环境变量文件
+  when:
+    - jdk_cp_profiles == true

@@ -28,3 +28,12 @@
     group: "{{kafka_run_group}}"
     mode: "0644"
     backup: yes
+
+- name: copy kafka logrotate conf file
+  template:
+    src: "{{kafka_logrotate_conf}}"
+    dest: "/etc/cron.daily/{{kafka_base_name}}_clean_log"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+    backup: no

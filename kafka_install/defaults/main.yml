@@ -20,6 +20,7 @@ kafka_data_dirs: []
 kafka_conf_file: ""
 kafka_conf_files:
   - "server.properties"
+kafka_logrotate_conf: kafka_clean_log.sh
 
 kafka_env_vars: []
   #- name:

@@ -82,6 +82,24 @@ jmx_exporter_run_user: biyao
       app_type_name: jmx_exporter
 ```
 
+example 2
+```yaml
+- hosts: kafka
+  roles:
+  - role: common_app_install
+    app_type_name: jmx_exporter
+    jmx_exporter_packet: '{{packet_base_dir}}/jmx_exporter/jmx_prometheus_javaagent-0.17.2.jar'
+    jmx_exporter_base_dir: '/opt/server/jmx_exporter'
+    jmx_exporter_install_dir: '/opt/server/jmx_exporter'
+    jmx_exporter_conf_dir: '/opt/conf/jmx_exporter'
+    jmx_exporter_log_dir: '/opt/log/jmx_exporter'
+    jmx_exporter_var_dir: ''
+    jmx_exporter_data_dir: ''
+    jmx_exporter_conf_files:
+      - kafka_javaagent_jmx.yml
+```
+
+
 ## sw_agent skywalking-java-agent
 
 ```yaml
@@ -175,4 +193,3 @@ metricbeat_conf_file_handler:
 在部署`metricbeat`的时候，需要在复制配置文件之前，把安装目录下的modules.d复制到conf目录下。
 
 但是这个任务在配置文件复制之后才引入，所以就出问题了。
-

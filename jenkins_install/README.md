@@ -2,7 +2,7 @@
 
 安装jenkins的role。
 
-代码还没有实现。
+尚有待完善之处。
 
 ## plugins
 * https://www.jenkins.io/zh/blog/2019/10/28/introducing-new-folder-authorization-plugin/ : 介绍新的文件夹授权插件

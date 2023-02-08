@@ -5,6 +5,7 @@ jdk_app_name: 'java'
 app_base_dir: '/data/apps/opt'
 jdk_install_dir: '{{app_base_dir}}'
 jdk_base_dir: '{{jdk_install_dir}}/{{jdk_app_name}}'
+jdk_cp_profiles: true
 jdk_profile: 'java.sh'
 
 jdk_certs: []
@@ -13,4 +14,3 @@ jdk_certs: []
 #   cert_port: 443
 # - cert_alias: def.domain.com
 #   cert_path: '/var/certs/def.cert'
-
