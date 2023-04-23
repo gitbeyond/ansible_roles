@@ -15,13 +15,15 @@
     - backup_remote_host is not none
     - backup_remote_host != ''
 
-- import_role:
-    name: common_copy_conf_file
+#- import_role:
+#    name: common_app_copy_conf_file
+- import_tasks: copy_lsyncd_confs.yml
   tags:
     - copy_lsyncd_conf
 
-- import_role:
-    name: common_boot_app
+#- import_role:
+#    name: common_app_boot
+- import_tasks: lsyncd_boot.yml
   tags:
     - lsyncd_boot
 

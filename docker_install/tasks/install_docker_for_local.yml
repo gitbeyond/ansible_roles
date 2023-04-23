@@ -11,7 +11,8 @@
   local_action: 
     module: shell 
     cmd: tar tf {{docker_packet}} |awk -F'/' '{print $1; exit}'
-    warn: false
+    # 7.1.0 remove this arg
+    #warn: false
   register: docker_dir_name
   run_once: true
   failed_when:

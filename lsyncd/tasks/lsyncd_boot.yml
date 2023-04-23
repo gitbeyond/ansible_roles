@@ -1,0 +1,7 @@
+- name: boot lsyncd for systemd
+  systemd: 
+    name: "{{lsyncd_service_name}}" 
+    state: started  
+    daemon_reload: yes 
+    enabled: yes
+

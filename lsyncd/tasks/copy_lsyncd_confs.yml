@@ -1,0 +1,14 @@
+- name: copy lsyncd conf file
+  template:
+    src: "{{item}}"
+    dest: "{{lsyncd_conf_dir}}/"
+    owner: "{{lsyncd_run_user}}"
+    group: "{{lsyncd_run_group}}"
+    mode: "0644"
+    backup: yes
+  loop: '{{lsyncd_conf_files}}'
+  when:
+    - item is not none
+    - item != ""
+  #notify: '{{lsyncd_conf_file_handler}}'
+

@@ -11,4 +11,5 @@
   systemd:
     name: "{{kafka_base_name}}"
     state: "started"
+    enabled: true
     daemon_reload: yes

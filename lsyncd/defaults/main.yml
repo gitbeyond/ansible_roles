@@ -1,13 +1,16 @@
+lsyncd_run_user: root
+lsyncd_run_group: root
 lsyncd_conf_dir: /etc
 lsyncd_log_dir: /var/log/lsyncd
 
-lsyncd_conf_files:
+lsyncd_conf_files: []
 lsyncd_boot_type: systemd
 #lsyncd_src_boot_file:
 
+lsyncd_service_name: 'lsyncd'
 lsyncd_instance_name: lsyncd
 
 backup_local_user: root
-backup_remote_host:
+backup_remote_host: ""
 backup_remote_user: root
 backup_remote_dir: /data/apps/data/backup
