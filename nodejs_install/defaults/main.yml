@@ -6,5 +6,8 @@ nodejs_app_name: nodejs
 app_base_dir: /data/apps/opt
 nodejs_install_dir: "{{app_base_dir}}"
 nodejs_base_dir: "{{nodejs_install_dir}}/{{nodejs_app_name}}"
+nodejs_raw_base_dir: ""
 nodejs_profile: "nodejs.sh"
 nodejs_npmrc_file: "npmrc"
+# 是否复制环境变量文件
+nodejs_cp_profiles: true

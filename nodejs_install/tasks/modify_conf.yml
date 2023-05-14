@@ -1,4 +1,3 @@
----
 - name: copy nodejs profile
   template:
     src: "{{ nodejs_profile }}"
@@ -7,6 +6,7 @@
     owner: root
     group: root
     mode: "0644"
+  when: nodejs_cp_profiles == true
 
 - name: copy npmrc file
   copy:

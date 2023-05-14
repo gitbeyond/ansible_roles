@@ -1,3 +1,8 @@
+download node package:
+```bash
+# wget https://nodejs.org/download/release/v14.17.6/node-v14.17.6-linux-x64.tar.gz
+```
+
 example:
 ```yaml
 - hosts: 10.111.111.110
