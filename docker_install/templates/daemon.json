@@ -10,7 +10,7 @@
   "hosts": [
     "unix:///var/run/docker.sock"
   ],
-  "graph": "{{docker_data_dir}}",
+  "data-root": "{{docker_data_dir}}",
   "exec-opts": [
      "native.cgroupdriver={{docker_cgroupdriver}}"
   ],

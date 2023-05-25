@@ -1,1 +1,1 @@
-export PATH=/data/apps/opt/docker:${PATH}
+export PATH={{docker_base_dir}}:${PATH}

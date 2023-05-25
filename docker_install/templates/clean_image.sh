@@ -2,6 +2,7 @@
 # create date: 2022/11/29
 # desc: 删除20天前的构建的本地镜像
 # author: haifengsss@163.com
+set -euo pipefail
 
 old_day=20
 lock_file=/tmp/.delete_old_img.lock

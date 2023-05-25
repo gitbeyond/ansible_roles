@@ -1,14 +1,12 @@
 
 - name: copy docker service conf file
   template: 
-    src: '{{item.src}}'
-    dest: '{{item.dest}}' 
+    src: '{{docker_src_service_conf}}'
+    dest: '/usr/lib/systemd/system/docker.service' 
     owner: root 
     group: root 
     mode: "0644" 
     backup: yes
-  loop:
-    - {src: "{{docker_src_service_conf}}", dest: '/usr/lib/systemd/system/'}
   notify:
     - systemctl_reload
 

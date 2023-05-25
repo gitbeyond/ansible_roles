@@ -9,7 +9,7 @@ Type=notify
 # the default is not to use systemd for cgroups because the delegate issues still
 # exists and systemd currently does not support the cgroup feature set required
 # for containers run by docker
-Environment=PATH={% if "/data/apps/opt/docker" in ansible_env.PATH %}{{ansible_env.PATH}}{%else%}{{ansible_env.PATH}}:/data/apps/opt/docker{%endif%}
+Environment=PATH={% if docker_base_dir in ansible_env.PATH %}{{ansible_env.PATH}}{%else%}{{ansible_env.PATH}}:{{docker_base_dir}}{%endif%}
 
 ExecStart={{docker_base_dir}}/dockerd --config-file {{docker_conf_dir}}/daemon.json
 ExecReload=/bin/kill -s HUP $MAINPID
