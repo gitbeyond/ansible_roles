@@ -3,6 +3,7 @@
 # desc: 删除20天前的构建的本地镜像
 # author: haifengsss@163.com
 set -euo pipefail
+# TODO: 添加删除 tag 为 <none>的image
 
 old_day=20
 lock_file=/tmp/.delete_old_img.lock

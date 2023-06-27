@@ -1,0 +1,12 @@
+[Unit]
+Description=jenkins service
+After=rc-local.service nss-user-lookup.target
+
+[Service]
+Type=simple
+User={{jenkins_run_user}}
+ExecStart={{jenkins_base_dir}}/jenkins.sh
+
+[Install]
+WantedBy=multi-user.target
+

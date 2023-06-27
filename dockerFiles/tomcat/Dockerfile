@@ -20,8 +20,10 @@ RUN  rm -rf  /etc/localtime \
 #     && ln -s /dev/stdout /var/log/tomcat/tomcat_access.log \
 #     && ln -s /dev/stderr /var/log/tomcat/tomcat_error.log 
 
+USER tomcat
 ENV JAVA_HOME /usr/local/java8
 ENV PATH /usr/local/tomcat8/bin:/usr/local/java8/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV LANG en_US.UTF-8
+ENV CATALINA_TMPDIR /tmp
 #ENV CATALINA_OUT /var/log/tomcat/tomcat_error.log
 ENTRYPOINT ["/usr/local/tomcat8/bin/catalina.sh", "run"]

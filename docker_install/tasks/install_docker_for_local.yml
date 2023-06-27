@@ -35,4 +35,3 @@
     state: 'link'
   when: docker_dir_name.stdout != "docker"
 
-

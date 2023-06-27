@@ -20,6 +20,7 @@ example:
     docker_conf_dir: /etc/docker
     docker_src_conf: '{{playbook_dir}}/templates/daemon.json'
     docker_src_service_conf: '{{playbook_dir}}/templates/docker.service'
+    docker_compose_binary_file: /opt/docker-compose/docker-compose
   roles:
   - role: docker_install
     docker_packet: "/opt/server/docker-20.10.9.tar.gz

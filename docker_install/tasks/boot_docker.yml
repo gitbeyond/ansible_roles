@@ -16,8 +16,9 @@
 #    msg: '{{docker_install_result}}'
 
 - name: start docker
-  systemd:
+  ansible.builtin.systemd:
     name: docker
+    daemon_reload: true
     state: started
-    enabled: true
+    enabled: '{{docker_service_enable}}'
   when: docker_install_result.changed != True

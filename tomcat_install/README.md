@@ -75,3 +75,6 @@ exec /usr/bin/jsvc -nodetach -pidfile /var/run/jsvc-tomcat.pid -user tomcat -out
 ```
 
 实际启动后，仍然是两个进程，但是实际的工作进程是运行在前台的。
+
+# reference
+* https://tomcat.apache.org/tomcat-8.5-doc/config/valve.html : access log attributes

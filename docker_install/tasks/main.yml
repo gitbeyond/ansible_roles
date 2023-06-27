@@ -22,6 +22,10 @@
   tags:
     - install_docker_for_local
 
+- import_tasks: install_docker_compose.yml
+  tags:
+    - install_docker_compose
+
 - import_tasks: docker_set_kernel_args.yml
   tags:
     - docker_set_kernel_args

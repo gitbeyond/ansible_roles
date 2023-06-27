@@ -18,7 +18,9 @@ docker_install_result:
   changed: False
 
 docker_install_version: ""
+docker_compose_binary_file: ''
 
+docker_service_enable: true
 # docker args
 # cgroupfs or systemd
 #docker_cgroupdriver: cgroupfs
