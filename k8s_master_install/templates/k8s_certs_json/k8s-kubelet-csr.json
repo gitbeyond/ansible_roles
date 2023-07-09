@@ -1,11 +1,10 @@
 {
-  "CA": {
-    "expiry": "{{k8s_cert_valid_hour}}"
-  },
-  "CN": "{{k8s_cert_root_ca_cn}}",
+  "CN": "{{k8s_cert_kubelet_ca_cn}}",
+  "hosts": {{k8s_cert_hosts | to_nice_json}}
+  ,
   "key": {
     "algo": "rsa",
-    "size": 4096
+    "size": 2048
   },
   "names": [
     {

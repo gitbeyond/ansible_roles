@@ -1,6 +1,6 @@
 
 - name: copy etcd ssl file
-  copy: 
+  ansible.builtin.copy: 
     src: '{{ item }}' 
     dest: '{{ etcd_conf_dir }}/ssl' 
     owner: '{{ etcd_run_user }}' 

@@ -1,20 +1,26 @@
 - name: copy k8s_node env file
   template: 
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+    src: 'k8s_node.sh' 
+    dest: '/etc/profile.d/' 
     owner: 'root' 
     group: 'root' 
     mode: "0644"
-  loop:
-    - src: 'k8s_node.sh'
-      dest: '/etc/profile.d/'
 
-- name: copy k8s_node service file
+- name: copy k8s kubelet service file
   template: 
-    src: '{{ item }}' 
-    dest: '/usr/lib/systemd/system/' 
+    src: '{{ k8s_kubelet_service_conf }}' 
+    dest: '/usr/lib/systemd/system/kubelet.service' 
     owner: root 
     group: root 
     mode: "0644" 
     backup: yes
-  loop: '{{k8s_node_service_confs}}'
+
+- name: copy k8s kube-proxy service file
+  template: 
+    src: '{{ k8s_proxy_service_conf }}' 
+    dest: '/usr/lib/systemd/system/kube-proxy.service' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  when: k8s_proxy_is_enable == true

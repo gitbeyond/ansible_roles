@@ -1,5 +1,5 @@
 - name: copy k8s_node conf file
-  template: 
+  ansible.builtin.template: 
     src: '{{ item }}' 
     dest: '{{k8s_conf_dir}}' 
     owner: '{{k8s_run_user}}' 
@@ -8,10 +8,10 @@
     backup: yes
   loop: '{{k8s_node_confs}}'
   tags:
-    - copy_k8s_node_conf
+    - copy_k8s_node_confs
 
 - name: copy k8s_node cert file
-  template: 
+  ansible.builtin.template: 
     src: '{{k8s_work_dir}}/{{k8s_cert_dir}}/{{ item.src }}' 
     dest: '{{k8s_conf_dir}}/ssl' 
     owner: '{{k8s_run_user}}' 
@@ -20,4 +20,4 @@
     backup: yes
   loop: '{{k8s_node_certs}}'
   tags:
-    - copy_k8s_node_cert
+    - copy_k8s_node_certs

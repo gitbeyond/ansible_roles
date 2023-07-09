@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+#
 k8s_kubeconfig=$1
 k8s_cluster_name=$2
 k8s_root_ca=$3
@@ -13,8 +15,8 @@ ${kube_cmd} config set-cluster ${k8s_cluster_name} --embed-certs=true \
   --certificate-authority=${k8s_root_ca} --server="https://${k8s_master_ha_vip}:${k8s_master_ha_port}" \
   --kubeconfig=${k8s_kubeconfig}
 
-${kube_cmd} config set-credentials ${k8s_user}  \
-  --token=${k8s_bootstrap_token}\
+${kube_cmd} config set-credentials ${k8s_user} \
+  --token=${k8s_bootstrap_token} \
   --kubeconfig=${k8s_kubeconfig}
 
 ${kube_cmd} config set-context ${k8s_user}@${k8s_cluster_name} \
@@ -24,4 +26,3 @@ ${kube_cmd} config set-context ${k8s_user}@${k8s_cluster_name} \
 
 ${kube_cmd} config use-context ${k8s_user}@${k8s_cluster_name} \
   --kubeconfig=${k8s_kubeconfig}
-

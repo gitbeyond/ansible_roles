@@ -1,4 +1,4 @@
-# editor: haifeng
+# editor: haifengsss@163.com
 # 2020/04/30
 
 # 这个须在集群启动成功后才可执行
@@ -30,7 +30,10 @@
 - import_tasks: k8s_load_modules.yml
   tags:
     - k8s_load_modules
-
+- import_tasks: install_cni.yml
+  tags:
+    - k8s_install_cni
+  when: k8s_cni_packet != ""
 - import_tasks: k8s_install_dependence_packet.yml
   tags:
     - k8s_install_dependence_packet

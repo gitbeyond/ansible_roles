@@ -22,6 +22,7 @@ k8s_cert_dir: ansible_k8s_certs
 k8s_run_user: kube
 
 # k8s cert conf vars
+k8s_cert_valid_hour: "87600h"
 k8s_cert_root_ca_cn: kubernetes
 k8s_cert_dashboard_ca_cn: dashboard
 k8s_cert_front_proxy_ca_cn: '{{k8s_cert_root_ca_cn}}'
@@ -30,6 +31,8 @@ k8s_cert_kube_apiserver_ca_cn: 'kube-apiserver'
 k8s_cert_kube_apiserver_kubelet_client_ca_cn: 'kube-apiserver-kubelet-client'
 k8s_cert_kube_controller_manager_ca_cn: 'system:kube-controller-manager'
 k8s_cert_kube_proxy_ca_cn: 'system:kube-proxy'
+# 默认生成的是主机名 CN=k8s-master-01.mydomain.com-ca@1688811910
+k8s_cert_kubelet_ca_cn: 'kubelet'
 k8s_cert_kubernetes_admin_ca_cn: 'kubernetes-admin'
 k8s_cert_kube_scheduler_ca_cn: 'system:kube-scheduler'
 k8s_cert_admin_ca_o: 'system:masters'
@@ -95,6 +98,10 @@ k8s_master_certs:
     mode: "0600"
   - src: admin.kubeconfig
     mode: "0600"
+  - src: k8s-kubelet.pem
+    mode: "0644"
+  - src: k8s-kubelet-key.pem
+    mode: "0644"
   
 
 k8s_master_service_confs:

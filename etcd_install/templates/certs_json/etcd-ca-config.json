@@ -1,19 +1,20 @@
 {
   "signing": {
     "default": {
-      "expiry": "43800h"
+      "expiry": "{{etcd_cert_valid_hour}}"
     },
     "profiles": {
       "server": {
-        "expiry": "43800h",
+        "expiry": "{{etcd_cert_valid_hour}}",
         "usages": [
           "signing",
           "key encipherment",
-          "server auth"
+          "server auth",
+          "client auth"
         ]
       },
       "client": {
-        "expiry": "43800h",
+        "expiry": "{{etcd_cert_valid_hour}}",
         "usages": [
           "signing",
           "key encipherment",
@@ -21,7 +22,7 @@
         ]
       },
       "member": {
-        "expiry": "43800h",
+        "expiry": "{{etcd_cert_valid_hour}}",
         "usages": [
           "signing",
           "key encipherment",

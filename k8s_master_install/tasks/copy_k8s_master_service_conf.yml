@@ -1,16 +1,13 @@
 - name: copy k8s_master env file
-  template: 
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+  ansible.builtin.template: 
+    src: 'k8s_master.sh'
+    dest: '/etc/profile.d/' 
     owner: 'root' 
     group: 'root' 
     mode: "0644"
-  loop:
-    - src: 'k8s_master.sh'
-      dest: '/etc/profile.d/'
 
 - name: copy k8s_master service file
-  template: 
+  ansible.builtin.template: 
     src: '{{ item }}' 
     dest: '/usr/lib/systemd/system/'
     owner: root 

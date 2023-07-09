@@ -33,7 +33,7 @@
 
 - import_tasks: copy_k8s_master_conf.yml
   tags:
-    - copy_k8s_master_conf
+    - copy_k8s_master_confs_and_certs
 
 - import_tasks: copy_k8s_master_service_conf.yml
   tags:

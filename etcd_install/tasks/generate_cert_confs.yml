@@ -1,7 +1,7 @@
 
 - name: generate etcd cert confs
   local_action:
-    module: template
+    module: ansible.builtin.template
     src: '{{item}}'
     dest: '{{etcd_work_dir}}/{{etcd_cert_json_dir}}'
     backup: yes

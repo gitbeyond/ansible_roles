@@ -1,4 +1,7 @@
 {
+  "CA": {
+    "expiry": "{{etcd_cert_valid_hour}}"
+  },
   "CN": "{{etcd_cert_root_ca_cn}}",
   "key": {
     "algo": "rsa",

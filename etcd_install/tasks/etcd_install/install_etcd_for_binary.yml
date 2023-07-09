@@ -1,10 +1,8 @@
 
 - name: get etcd packet dir name
   local_action: 
-    module: shell
+    module: ansible.builtin.shell
     cmd: tar tf {{etcd_packet}} |head -n 1 |awk -F'/' '{print $1}'
-    args:
-      warn: false
   register: etcd_dir_name
   run_once: true
   failed_when: etcd_dir_name.stdout == ""
@@ -12,7 +10,7 @@
 
 
 - name: cp and unarchive etcd_binary_tarball to remote host 
-  unarchive: 
+  ansible.builtin.unarchive: 
     src: '{{ etcd_packet }}' 
     dest: '{{ etcd_install_dir }}' 
     owner: '{{ etcd_run_user }}' 
@@ -21,14 +19,14 @@
     mode: "0755"
 
 - name: create etcd link dir
-  file: 
+  ansible.builtin.file: 
     src: '{{ etcd_install_dir}}/{{etcd_dir_name.stdout }}' 
     dest: '{{etcd_base_dir}}' 
     state: 'link'
   when: etcd_dir_name.stdout != "etcd"
 
 - name: create etcd conf dir link
-  file: 
+  ansible.builtin.file: 
     src: '{{ etcd_conf_dir }}' 
     dest: '/etc/etcd' 
     state: 'link'

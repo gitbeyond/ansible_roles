@@ -7,14 +7,17 @@ k8s_cfssl_cmd_path: '/usr/bin'
 # # 这个变量是 k8s 加上 k8s 的版本指定的 如:/data/apps/opt/k8s_1.11.10, 暂时手动指定这个变量
 k8s_install_dir: ""
 
+###### cni
+k8s_cni_bin_dir: '/opt/cni/bin'
+k8s_cni_packet: ''
 # kubelet
 k8s_kubelet_root_dir: /data1/apps/data/kubelet
 k8s_kubelet_log_dir: /data/apps/log/kubelet
-
 k8s_proxy_log_dir: /data/apps/log/kube-proxy
 
 k8s_node_packet: ""
-
+##### 是否启动 kube-proxy 进程，默认启动
+k8s_proxy_is_enable: true
 
 k8s_work_dir: /root/k8s
 k8s_cert_json_dir: certs_json
@@ -22,12 +25,16 @@ k8s_cert_dir: ansible_k8s_certs
 k8s_work_conf_dir: ansible_k8s_confs
 k8s_bootstrap_token: k8s-bootstrap-token
 
-
 k8s_run_user: kube
 
 k8s_sysctl_file: /etc/sysctl.d/36-kube-proxy.conf
 # type: list
 k8s_node_confs: []
+k8s_kubelet_confs: []
+k8s_proxy_confs: []
+k8s_kubelet_service_conf: 'kubelet_default_service.ini'
+k8s_proxy_service_conf: 'kube-proxy_default_service.ini'
+# 后来添加了 k8s_proxy_service_conf 用于控制是否启动 kube-proxy, 下面的变量没用了
 k8s_node_service_confs: []
 k8s_node_certs:
   - src: k8s-root-ca.pem
@@ -52,12 +59,33 @@ k8s_system_RedHat_7_kernel_args:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1441737
   - name: 'fs.may_detach_mounts'
     value: 1
-
+k8s_system_RedHat_7_kernel_modules:
+  - ip_vs
+  - ip_vs_lc
+  - ip_vs_wlc
+  - ip_vs_rr
+  - ip_vs_wrr
+  - ip_vs_lblc
+  - ip_vs_lblcr
+  - ip_vs_dh
+  - ip_vs_sh
+  #- ip_vs_fo
+  - ip_vs_nq
+  - ip_vs_sed
+  - ip_vs_ftp
+  - nf_conntrack_ipv4
+  - ipt_rpfilter
+  - ipt_set
+  - sctp
+  - xt_sctp
+  # - xt_set
+  - xt_u32
+  - ipip
 k8s_system_RedHat_8_kernel_args: '{{k8s_system_RedHat_7_kernel_args[:3]}}'
+
 
 k8s_node_dependence_packets:
   - conntrack-tools
   - ipset
   - ipvsadm
   - socat
-

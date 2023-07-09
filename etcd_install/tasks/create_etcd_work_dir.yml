@@ -1,6 +1,6 @@
 - name: create ansible_etcd_certs dir
   local_action: 
-    module: file 
+    module: ansible.builtin.file 
     path: "{{item}}" 
     state: directory
   loop:

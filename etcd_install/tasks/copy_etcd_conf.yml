@@ -1,6 +1,6 @@
 
 - name: copy etcd conf file
-  template: 
+  ansible.builtin.template: 
     src: '{{item.src}}' 
     dest: '{{item.dest}}' 
     owner: '{{item.owner | default("root", true)}}' 
@@ -9,8 +9,8 @@
     backup: yes
   loop:
     - src: '{{etcd_env_file}}'
-      dest: /etc/profile.d/
+      dest: /etc/profile.d/etcd.sh
     - src: '{{etcd_src_conf}}'
-      dest: '{{etcd_conf_dir}}'
+      dest: '{{etcd_conf_dir}}/etcd.conf'
       owner: '{{etcd_run_user}}'
       group: '{{etcd_run_user}}'

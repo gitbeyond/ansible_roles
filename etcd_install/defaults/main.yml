@@ -12,7 +12,7 @@ etcd_cert_dir: ansible_etcd_certs
 etcd_cert_json_dir: ansible_certs_json
 
 #etcd_src_conf: '{{etcd_local_conf_dir}}/etcd.conf'
-etcd_src_conf: 'etcd.conf'
+etcd_src_conf: 'etcd_default.conf'
 #etcd_src_service_conf: '{{etcd_local_conf_dir}}/etcd.service'
 etcd_src_service_conf: 'etcd.systemd'
 etcd_env_file: 'etcd.sh'
@@ -38,11 +38,13 @@ etcd_cert_l: "Beijing"
 etcd_cert_o: "geotmt"
 # tech. sa, dev
 etcd_cert_ou: "sa"
+etcd_cert_valid_hour: '43800h'
 etcd_cert_root_ca_cn: 'etcd-root-ca'
 etcd_cert_server_ca_cn: 'etcd-server-ca'
 etcd_cert_member_ca_cn: '{{etcd_cert_server_ca_cn}}'
 etcd_cert_client_ca_cn: 'etcd-client-ca'
-etcd_cert_conf_files: '{{q("fileglob", "templates/*.json")}}'
+##### 证书的 json配置文件模板
+etcd_cert_conf_files: '{{q("fileglob", "templates/certs_json/*.json")}}'
 etcd_certs: '{{q("fileglob", etcd_work_dir+"/"+etcd_cert_dir+"/*.pem")}}'
 etcd_cert_hosts: []
 etcd_cert_client_hosts: []

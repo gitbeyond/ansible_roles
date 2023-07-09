@@ -1,6 +1,6 @@
 
 - name: add etcdctl alias to bashrc
-  lineinfile: 
+  ansible.builtin.lineinfile: 
     line: '{{item.line}}' 
     path: '{{item.path}}' 
     regexp: '{{item.regexp}}'

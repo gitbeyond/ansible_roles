@@ -1,7 +1,7 @@
 
 - name: generate etcd-root-ca
   local_action: 
-    module: shell 
+    module: ansible.builtin.shell 
     #cmd: '{{etcd_cfssl_cmd_path}}/cfssl gencert -initca {{"-ca-key "~etcd_cert_dir~"/etcd-root-ca-key.pem" if etcd_work_dir~"/"~etcd_cert_dir~"/etcd-root-ca-key.pem" is exists else ""}} {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca'
     #cmd: '{{etcd_cfssl_cmd_path}}/cfssl gencert -initca {%if "/data/apps/data/wanghaifeng/ansible/playbooks/k8s_91"~etcd_work_dir~"/"~etcd_cert_dir~"/etcd-root-ca-key.pem" is exists%}{{"-ca-key "~etcd_cert_dir~"/etcd-root-ca-key.pem"}}{%endif%} {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca'
     #cmd: '{{etcd_cfssl_cmd_path}}/cfssl gencert -initca {%if "/data/apps/data/wanghaifeng/ansible/playbooks/k8s_91"~etcd_work_dir~"/"~etcd_cert_dir~"/etcd-root-ca-key.pem" is exists%}-ca-key {{etcd_cert_dir}}/etcd-root-ca-key.pem{%endif%} {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca'
@@ -10,12 +10,12 @@
     #cmd: 'echo {% if "/data/apps/data/wanghaifeng/ansible/playbooks/k8s_91/"~etcd_work_dir~"/"~etcd_cert_dir~"/etcd-root-ca-keyss.pem" is exists %}haha{%endif%}'
     cmd: |
       if [ -e '{{ etcd_cert_dir~"/etcd-root-ca-key.pem" }}' ];then
-          echo 'cfssl gencert -initca -ca-key {{etcd_cert_dir~"/etcd-root-ca-key.pem"}} {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca'
-          cfssl gencert -initca -ca-key {{etcd_cert_dir~"/etcd-root-ca-key.pem"}} {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca
+          echo 'cfssl gencert -config={{etcd_cert_json_dir}}/etcd-ca-config.json -initca -ca-key {{etcd_cert_dir~"/etcd-root-ca-key.pem"}} {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca'
+          cfssl gencert -config={{etcd_cert_json_dir}}/etcd-ca-config.json -initca -ca-key {{etcd_cert_dir~"/etcd-root-ca-key.pem"}} {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca
 
       else
-          echo 'cfssl gencert -initca {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca'
-          cfssl gencert -initca {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca
+          echo 'cfssl gencert -config={{etcd_cert_json_dir}}/etcd-ca-config.json -initca {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca'
+          cfssl gencert -config={{etcd_cert_json_dir}}/etcd-ca-config.json -initca {{etcd_cert_json_dir}}/etcd-root-ca-csr.json | cfssljson --bare {{etcd_cert_dir}}/etcd-root-ca
       fi
     args:
       chdir: "{{etcd_work_dir}}"
@@ -36,7 +36,7 @@
 
 - name: generate etcd certs
   local_action: 
-    module: shell
+    module: ansible.builtin.shell
     #cmd: "{{etcd_cfssl_cmd_path}}/cfssl gencert -ca={{etcd_cert_dir}}/etcd-root-ca.pem -ca-key={{etcd_cert_dir}}/etcd-root-ca-key.pem -config={{etcd_cert_json_dir}}/etcd-ca-config.json -profile={{item.split('-')[1]}} {{etcd_cert_json_dir}}/{{item}}-csr.json | {{etcd_cfssl_cmd_path}}/cfssljson --bare {{etcd_cert_dir}}/{{item}}"
     cmd: |
       if [ -e '{{ etcd_cert_dir~"/"~item~"-key.pem" }}' ];then

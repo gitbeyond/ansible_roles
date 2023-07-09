@@ -1,31 +1,26 @@
 # edirtor: haifengsss@163.com
-# 2017/01/12
+# 2023/07/08
 
 - name: get k8s_master packet dir name
   local_action: 
-    module: shell 
+    module: ansible.builtin.shell 
     cmd: tar tf {{k8s_master_packet}} |head -n 1  |awk -F'/' '{print $1}'
-    warn: false
   register: k8s_master_dir_name
   run_once: true
   failed_when: k8s_master_dir_name.stdout == ""
   changed_when: k8s_master_dir_name.rc != 0
 
 - name: cp and unarchive k8s_master to remote host
-  unarchive: 
+  ansible.builtin.unarchive: 
     src: '{{k8s_master_packet}}' 
     dest: '{{ k8s_install_dir}}/' 
     owner: '{{ k8s_run_user }}' 
     group: '{{ k8s_run_user }}' 
     creates: '{{ k8s_install_dir }}/{{k8s_master_dir_name.stdout}}'
     mode: "0755"
-  #loop:
-  #  - { src: '{{k8s_master_packet}}', dest: '{{ k8s_install_dir}}/', creates: '{{ k8s_install_dir }}/{{k8s_master_dir_name.stdout}}', mode: "0755" }
-    #- { src: '{{k8s_master_packet}}', dest: '{{ k8s_install_dir}}/', creates: '{{ k8s_install_dir }}/{{k8s_master_dir_name}}', mode: "0755" }
 
 - name: create k8s link dir
   file: 
     src: '{{k8s_install_dir}}/{{k8s_master_dir_name.stdout}}' 
     dest: '{{k8s_base_dir}}' 
     state: 'link'
-    #- { src: "{{k8s_install_dir}}/{{k8s_master_dir_name}}", dest: '{{k8s_base_dir}}', state: link}

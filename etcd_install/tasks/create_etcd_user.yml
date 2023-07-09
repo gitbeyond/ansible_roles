@@ -1,4 +1,4 @@
 - name: create etcd user
-  user: 
+  ansible.builtin.user: 
     name: '{{etcd_run_user}}' 
     system: yes

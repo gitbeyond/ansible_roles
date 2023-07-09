@@ -1,13 +1,14 @@
-#- name: systemctl daemon-reload
-#  systemd:
-#    daemon_reload: yes
-
-- name: boot k8s node service
-  systemd:
-    name: '{{item}}'
+- name: boot k8s kubelet service
+  ansible.builtin.systemd:
+    name: 'kubelet'
     state: started
     enabled: yes
     daemon_reload: yes
-  loop:
-    - kubelet
-    - kube-proxy
+#
+- name: boot k8s kube-proxy service
+  ansible.builtin.systemd:
+    name: 'kube-proxy'
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  when: k8s_proxy_is_enable == true

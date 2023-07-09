@@ -7,8 +7,8 @@
     mode: "0644" 
     backup: yes
   loop:
-    - {src: "{{docker_src_conf}}", dest: '{{docker_conf_dir}}'}
-    - {src: "{{docker_env_file}}", dest: '/etc/profile.d/'}
+    - {src: "{{docker_src_conf}}", dest: '{{docker_conf_dir}}/daemon.json'}
+    - {src: "{{docker_env_file}}", dest: '/etc/profile.d/docker.sh'}
   notify:
     - restart_docker
 

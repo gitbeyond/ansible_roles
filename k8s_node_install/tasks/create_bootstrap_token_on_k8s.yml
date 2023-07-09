@@ -1,7 +1,9 @@
 
+# 这个须在远端执行才好，遇到有网络不通的情况下没办法访问网络
+# 比如说 ssh 通过 proxy 访问远端主机时，这个脚本就没有办法了
 - name: create k8s bootstrap token on k8s
   local_action: 
-    module: script 
+    module: ansible.builtin.script 
     cmd: create_bootstrap_token.sh {{k8s_bootstrap_token.stdout.split('.')[0]}} {{k8s_bootstrap_token.stdout.split('.')[1]}} {{k8s_kubectl_cmd}} admin.kubeconfig
     chdir: "{{k8s_work_dir|realpath}}/{{k8s_cert_dir}}"
     #creates: "{{k8s_work_dir}}/{{k8s_work_conf_dir}}/bootstrap.kubeconfig"
