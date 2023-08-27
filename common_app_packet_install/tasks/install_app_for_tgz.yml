@@ -12,7 +12,7 @@
     - app_packet is exists
 
 - name: cp app packet to remote
-  unarchive: 
+  ansible.builtin.unarchive: 
     src: '{{ app_packet }}'
     creates: '{{app_install_dir}}/{{packet_dir_name.stdout}}/{{app_packet_creates}}'
     dest: '{{app_install_dir}}/'
@@ -30,14 +30,14 @@
 #    - 'find {{app_install_dir}}/{{packet_dir_name.stdout}} -type f -exec chmod 0644 {} \;'
 
 - name: update app packet link file for tgz
-  file: 
+  ansible.builtin.file: 
     src: '{{packet_dir_name.stdout}}'
-    dest: '{{app_base_dir}}'
+    dest: '{{common_app_base_dir}}'
     owner: '{{app_run_user}}'
     group: '{{app_run_group}}'
     state: link 
     #- src: '{{app_install_dir}}/{{packet_dir_name.stdout}}'
   when: 
-    - app_base_dir is not none 
+    - common_app_base_dir is not none 
     - packet_dir_name.stdout != "" 
     - packet_dir_name.stdout | basename != app_base_name

@@ -1,0 +1,23 @@
+app_run_user: nobody
+app_run_group: '{{app_run_user}}'
+app_run_user_is_system: yes
+######
+app_base_dir: /data/apps/opt
+app_install_dir: '{{app_base_dir}}'
+app_base_name: ""
+
+app_child_conf_dir: ""
+app_bin_dir: '{{app_base_dir}}/bin'
+
+# copy to /etc/profile.d/ of env file 
+app_env_file: "{{app_base_name}}.sh"
+
+# type: list
+#app_other_dirs:
+app_conf_files: []
+app_child_confs: []
+app_bin_scripts: []
+
+app_bin_script_file_handler: ""
+app_child_conf_handler: ""
+app_conf_file_handler: ""

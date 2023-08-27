@@ -8,4 +8,6 @@
     chdir: "{{k8s_work_dir|realpath}}/{{k8s_cert_dir}}"
     #creates: "{{k8s_work_dir}}/{{k8s_work_conf_dir}}/bootstrap.kubeconfig"
   run_once: true
+  register: create_bootstrap_token_ret
+  changed_when: '"changed" in create_bootstrap_token_ret.stdout'
   #ignore_errors: true

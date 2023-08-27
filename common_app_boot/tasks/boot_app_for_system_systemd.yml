@@ -1,6 +1,6 @@
 
 - name: copy app systemd boot file
-  template: 
+  ansible.builtin.template: 
     src: "{{app_src_boot_file}}" 
     dest: "/usr/lib/systemd/system/{{app_svc_name}}.service" 
     owner: "root" 
@@ -12,7 +12,7 @@
   notify: '{{app_svc_file_handler}}'
 
 - name: boot app for systemd
-  systemd: 
+  ansible.builtin.systemd: 
     name: "{{app_svc_name}}" 
     state: started  
     daemon_reload: yes 

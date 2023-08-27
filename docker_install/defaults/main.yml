@@ -10,7 +10,7 @@ docker_base_dir: /data/apps/opt/docker
 docker_install_dir: '{{app_base_dir}}'
 docker_run_group: docker
 
-docker_src_conf: '{{role_path}}/templates/daemon.json'
+docker_src_conf: 'templates/default_daemon.json'
 docker_src_service_conf: docker.service
 docker_env_file: docker.sh
 
@@ -25,4 +25,3 @@ docker_service_enable: true
 # cgroupfs or systemd
 #docker_cgroupdriver: cgroupfs
 docker_cgroupdriver: systemd
-

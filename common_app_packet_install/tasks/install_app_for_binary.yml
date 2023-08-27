@@ -2,12 +2,12 @@
 - import_tasks: copy_file_to_remote.yml
 
 - name: update app packet link file for binary file
-  file: 
+  ansible.builtin.file: 
     src: '{{app_packet | basename}}'
-    dest: '{{app_base_dir}}/{{app_base_name}}'
+    dest: '{{common_app_base_dir}}/{{app_base_name}}'
     owner: '{{app_run_user}}'
     group: '{{app_run_group}}'
     state: link 
   when: 
-    - app_base_dir is not none
+    - common_app_base_dir is not none
     - app_packet | basename != app_base_name

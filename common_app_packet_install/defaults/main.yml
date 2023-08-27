@@ -1,0 +1,13 @@
+app_run_user: nobody
+app_run_group: '{{app_run_user}}'
+app_run_user_is_system: yes
+######
+all_app_base_dir: /data/apps/opt
+app_install_dir: '{{app_base_dir}}'
+app_base_name: ""
+
+app_packet: ""
+app_packet_creates: ""
+# tgz or jar or binary
+app_packet_type: tgz
+common_app_base_dir: /data/apps/opt/{{app_base_name}}

@@ -1,7 +1,6 @@
 - name: systemctl_daemon_reload
-  shell: '{{ item }}'
-  with_items:
-    - systemctl daemon-reload
+  ansible.builtin.shell:
+    cmd: systemctl daemon-reload
 
 - name: supervisor_restarted
   supervisorctl:

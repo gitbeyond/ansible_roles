@@ -1,6 +1,6 @@
 
 - name: copy app conf file
-  template: 
+  ansible.builtin.template: 
     src: "{{item}}" 
     dest: "{{app_conf_dir}}/"
     #dest: "{{app_conf_dir}}/{{app_instance_name | default(item.split('.')[0])}}.{{item.split('.')[-1]}}" 
@@ -23,7 +23,7 @@
   register: COPY_CONF_FILE_RET
 
 - name: copy app env file
-  template: 
+  ansible.builtin.template: 
     src: '{{ app_env_file }}'
     dest: '/etc/profile.d/{{app_base_name}}.sh'
     owner: root

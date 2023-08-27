@@ -1,6 +1,6 @@
 
 - name: copy app sysv boot file
-  template: 
+  ansible.builtin.template: 
     src: "{{app_src_boot_file}}" 
     dest: "/etc/rc.d/init.d/{{app_svc_name}}" 
     owner: "root" 
@@ -12,7 +12,7 @@
 - meta: flush_handlers
 
 - name: boot app for upstart
-  service: 
+  ansible.builtin.service: 
     name: "{{app_svc_name}}" 
     state: started 
     enabled: yes

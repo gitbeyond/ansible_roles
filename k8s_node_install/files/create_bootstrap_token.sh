@@ -22,6 +22,7 @@ else
         --from-literal token-secret=${TOKEN_SECRET} \
         --from-literal usage-bootstrap-authentication=true \
         --from-literal usage-bootstrap-signing=true
+    echo "changed"
 fi
 
 if ${kube_ctl} get clusterrolebinding kubelet-bootstrap; then
@@ -32,8 +33,32 @@ else
         --clusterrole system:node-bootstrapper \
         --user kubelet-bootstrap \
         --group system:bootstrappers
+    echo "changed"
 fi
+#####
+if ${kube_ctl} get clusterrolebinding auto-approve-csrs-for-group; then
+    :
+else
+    # 自动批复 "system:bootstrappers" 的CSR
+    ${kube_ctl} create clusterrolebinding auto-approve-csrs-for-group \
+        --clusterrole=system:certificates.k8s.io:certificatesigningrequests:nodeclient \
+        --user=kubelet-bootstrap \
+        --group=system:bootstrappers
+    echo "changed"
+fi
+#####
+if ${kube_ctl} get clusterrolebinding auto-approve-renewals-for-nodes;then
+    :
+else
+    # 自动批复"system:nodes"组的CSR续约
+    ${kube_ctl} create clusterrolebinding auto-approve-renewals-for-nodes \
+        --clusterrole=system:certificates.k8s.io:certificatesigningrequests:selfnodeclient \
+        --group=system:nodes
+    echo "changed"
+fi
+
 #${kube_cmd} --kubeconfig ${kube_config} \
 #    create clusterrolebinding kubeadm:kubelet-bootstrap \
 #    --clusterrole system:node-bootstrapper \
 #    --group system:bootstrappers
+

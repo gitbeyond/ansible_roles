@@ -1,7 +1,7 @@
 - name: copy app boot file
-  template: 
+  ansible.builtin.template: 
     src: "{{app_src_boot_file}}" 
-    dest: "{{supervisor_conf_dir}}/{{app_instance_name}}.ini" 
+    dest: "{{supervisor_conf_dir}}/{{app_svc_name}}.ini" 
     owner: "{{app_run_user}}" 
     group: "{{app_run_group}}" 
     backup: yes

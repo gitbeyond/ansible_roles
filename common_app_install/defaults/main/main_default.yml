@@ -23,7 +23,7 @@ app_default_packet: ""
 app_default_packet_creates: "bin/{{app_base_name}}"
 # tgz or jar
 app_default_packet_type: tgz
-app_default_base_dir: /data/apps/opt/{{app_base_name}}
+common_app_default_base_dir: /data/apps/opt/{{app_base_name}}
 app_default_log_dir: /data/apps/log/{{app_base_name}}
 app_default_conf_dir: /data/apps/config/{{app_base_name}}
 app_default_var_dir: /data/apps/var/{{app_base_name}}

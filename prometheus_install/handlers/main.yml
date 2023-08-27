@@ -1,16 +1,19 @@
-- name: test_handler1
-  shell: "echo 'prometheus_test_handler'"
-  #listen: test_handler
-
 - name: prometheus_reload
-  uri:
+  ansible.builtin.uri:
     url: http://{{ansible_default_ipv4.address}}:{{prom_port}}/-/reload
     method: POST
-  listen: common_reload_app_conf
+  #listen: common_reload_app_conf
 
-- name: supervisor_restarted
+- name: prom_systemd_restart
+  ansible.builtin.systemd:
+    name: '{{prom_svc_name}}'  
+    state: restarted
+    daemon_reload: true
+
+- name: supervisor_restart
   #shell: "echo 'test hander in prom_install'"
   supervisorctl:
     name: "{{prom_base_name}}"
     state: restarted
   listen: common_app_restarted
+

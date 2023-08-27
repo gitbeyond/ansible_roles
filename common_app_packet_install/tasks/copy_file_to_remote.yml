@@ -1,7 +1,7 @@
 
 
 - name: cp app packet to remote
-  copy: 
+  ansible.builtin.copy: 
     src: '{{ app_packet }}'
     dest: '{{app_install_dir}}/'
     owner: '{{app_run_user}}' 
@@ -14,4 +14,4 @@
 
 - name: debug val
   debug:
-    msg: "{{app_base_dir}}/{{app_packet|basename}} ==== {{app_base_dir}}/{{app_base_name}}"
+    msg: "{{common_app_base_dir}}/{{app_packet|basename}} ==== {{common_app_base_dir}}/{{app_base_name}}"

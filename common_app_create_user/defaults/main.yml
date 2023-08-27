@@ -1,3 +1,3 @@
-app_run_user: root
+app_run_user: nobody
 app_run_group: '{{app_run_user}}'
 app_run_user_is_system: yes

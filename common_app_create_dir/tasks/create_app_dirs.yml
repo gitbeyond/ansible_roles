@@ -1,17 +1,14 @@
 
 - name: create base dir
-  file: 
+  ansible.builtin.file: 
     path: '{{app_install_dir}}' 
     state: directory 
     owner: root 
     group: root 
     mode: "0755"
-  #loop:
-  #  #- "{{app_base_dir}}"
-  #  - "{{app_install_dir}}"
 
 - name: create app dir
-  file: 
+  ansible.builtin.file: 
     path: '{{item}}' 
     state: 'directory' 
     owner: '{{app_run_user}}' 
@@ -28,16 +25,4 @@
     - item != ""
     - item != app_base_dir
     - item | dirname != app_base_dir
-  #when: (item is not none or item != "") and item | dirname != app_base_dir
 
-# 创建其他目录的操作，由其他引用的 role 自行创建
-#- name: mkdir app other dir
-#  file: 
-#    path: '{{item}}' 
-#    state: directory 
-#    owner: '{{app_run_user}}' 
-#    group: '{{app_run_group}}' 
-#    mode: "0755"
-#  with_items: '{{app_other_dirs}}'
-#  when: item is not none and item | basename != app_base_dir
-  #when: app_other_dirs is defined and item | basename != app_base_dir

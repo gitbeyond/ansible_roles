@@ -1,6 +1,6 @@
 
 - name: copy app child conf file
-  template:
+  ansible.builtin.template:
     src: "{{ item }}" 
     dest: "{{ app_child_conf_dir }}" 
     owner: "{{ app_run_user }}" 
