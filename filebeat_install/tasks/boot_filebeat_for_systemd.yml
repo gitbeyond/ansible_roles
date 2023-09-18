@@ -4,7 +4,7 @@
     msg: "{{filebeat_src_boot_conf}}"
 
 - name: copy filebeat.service file
-  template: 
+  ansible.builtin.template: 
     src: '{{ filebeat_src_boot_conf }}' 
     dest: '/usr/lib/systemd/system/{{filebeat_app_name}}.service' 
     owner: 'root' 
@@ -12,9 +12,7 @@
     mode: "0644"
     backup: yes
   register: ini_result
-  notify:
-    - systemctl_daemon_reload
-    - restart_filebeat_for_systemd
+  notify: '{{filebeat_svc_conf_handers}}'
 
 #- name: debug filebeat vars
 #  debug: 
@@ -28,8 +26,9 @@
 
 
 - name: start filebeat
-  systemd: 
+  ansible.builtin.systemd: 
     name: '{{ filebeat_app_name }}' 
     state: started
+    enabled: true
   #when: filebeat_install_result.failed == False and filebeat_install_result.changed != True
-  when: filebeat_install_result.changed != True
+  #when: filebeat_install_result.changed != True

@@ -1,0 +1,9 @@
+{# 把kube-prom当中的grafana 的dashboard的configmap 转换成文件 #}
+{# ansible -vvv localhost -m template -a "src=test.j2 dest=/tmp/test_j2.json" #}
+{% set data = lookup("file", "grafana-dashboardDefinitions.yaml") | from_yaml %}
+{% for cm in data['items'] %}
+    {% set file_name = cm.data.keys() | first %}
+    {% set file_data = cm['data'][file_name] %}
+    {{ lookup("pipe", "echo '{%raw%}" ~  file_data  ~ "{%endraw%}' > /tmp/grafana/" ~ file_name )  }}
+{% endfor %}
+

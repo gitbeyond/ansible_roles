@@ -7,11 +7,11 @@ filebeat_conf_dir: /data/apps/config/{{filebeat_app_name}}
 filebeat_base_dir: /data/apps/opt/{{filebeat_app_name}}
 filebeat_data_dir: /data/apps/data/{{filebeat_app_name}}
 filebeat_log_dir: /data/apps/log/{{filebeat_app_name}}
-filebeat_src_conf: filebeat.yml
+filebeat_src_conf: default_filebeat.yml
 # systemd or supervisor
 filebeat_boot_type: systemd
 #filebeat_src_boot_conf: "{%if filebeat_boot_type=='systemd'%}filebeat.systemd{%else%}filebeat.ini{%endif%}" 
-filebeat_src_boot_conf: "filebeat.{{filebeat_boot_type}}" 
+filebeat_src_boot_conf: "default/filebeat.{{filebeat_boot_type}}"
 filebeat_env_file: filebeat.sh
 
 # type: list
@@ -20,6 +20,9 @@ filebeat_old_child_conf: ""
 filebeat_old_child_confs: [ '{{filebeat_old_child_conf}}' ]
 filebeat_child_conf_dir: '{{filebeat_conf_dir}}/inputs.d'
 filebeat_modules_conf_dir: '{{filebeat_conf_dir}}/modules.d'
+filebeat_conf_handlers: 
+  - restart_filebeat_for_systemd
+filebeat_svc_conf_handers: '{{filebeat_conf_handlers}}'
 
 # supervisor
 supervisor_prog_name: supervisord

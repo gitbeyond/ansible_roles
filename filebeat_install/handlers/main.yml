@@ -1,16 +1,8 @@
-- name: restart_filebeat_for_supervisor
-  supervisorctl: 
-    name: '{{ filebeat_app_name }}' 
-    state: restarted
-
-- name: systemctl_daemon_reload
-  systemd:
-    daemon_reload: yes
-
 - name: restart_filebeat_for_systemd
-  systemd:
+  ansible.builtin.systemd:
     name: '{{ filebeat_app_name }}'
     state: restarted
+    daemon_reload: true
 
 - name: restart_filebeat_for_supervisor
   supervisorctl: 

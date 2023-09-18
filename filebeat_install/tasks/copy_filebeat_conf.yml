@@ -1,28 +1,19 @@
 
 - name: copy filebeat conf file
-  template: 
-    src: '{{ item.src }}' 
-    dest: '{{ item.dest }}' 
+  ansible.builtin.template: 
+    src: '{{ filebeat_src_conf }}' 
+    dest: '{{ filebeat_conf_dir }}/' 
     owner: '{{ filebeat_run_user }}' 
     group: '{{ filebeat_run_user }}' 
-    mode: '{{ item.mode }}' 
+    mode: '0644' 
     backup: yes
-  loop:
-    - src: '{{filebeat_src_conf}}'
-      dest: '{{ filebeat_conf_dir }}/'
-      mode: "0644"
-  notify:
-    - restart_filebeat_for_{{filebeat_boot_type}}
+  notify: '{{filebeat_conf_handlers}}'
 
 - name: copy filebeat env file
-  template: 
-    src: '{{ item.src }}'
-    dest: '{{ item.dest }}'
+  ansible.builtin.template: 
+    src: '{{ filebeat_env_file }}'
+    dest: "/etc/profile.d/{{filebeat_app_name}}.sh"
     owner: root 
     group: root 
-    mode: "{{ item.mode }}"
-  loop:
-    - src: '{{filebeat_env_file}}'
-      dest: '/etc/profile.d/{{filebeat_app_name}}.sh'
-      mode: "0644"
+    mode: "0644"
 

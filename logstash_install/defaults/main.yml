@@ -1,4 +1,3 @@
-
 logstash_run_user: elk
 
 logstash_app_name: logstash

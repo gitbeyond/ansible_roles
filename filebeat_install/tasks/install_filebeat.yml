@@ -1,16 +1,14 @@
 
 - name: get filebeat packet dir name
   local_action: 
-    module: shell 
+    module: ansible.builtin.shell 
     cmd: tar tf {{filebeat_packet}} |head -n 1 |awk -F'/' '{print $1}'
-    args:
-      warn: false
   register: filebeat_dir_name
   when: filebeat_packet is not none and filebeat_packet is exists
   run_once: true
 
 - name: cp and unarchive filebeat to remote host
-  unarchive: 
+  ansible.builtin.unarchive: 
     src: "{{ filebeat_packet }}" 
     dest: "{{ filebeat_install_dir }}"
     owner: root 
@@ -20,7 +18,7 @@
   register: filebeat_install_result
 
 - name: create filebeat link file
-  file: 
+  ansible.builtin.file: 
     src: "{{ filebeat_install_dir}}/{{filebeat_dir_name.stdout }}" 
     dest: "{{filebeat_base_dir}}" 
     owner: "root" 
