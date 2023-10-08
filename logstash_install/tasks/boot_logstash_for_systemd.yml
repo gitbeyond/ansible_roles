@@ -1,0 +1,26 @@
+---
+
+- name: copy logstash.service file
+  ansible.builtin.template: 
+    src: '{{ logstash_src_boot_conf }}' 
+    dest: '/usr/lib/systemd/system/{{logstash_svc_name}}.service' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644"
+    backup: yes
+  register: ini_result
+  notify: '{{logstash_svc_conf_handers}}'
+
+#- name: debug logstash vars
+#  debug: 
+#    msg: "{{ini_result}}"
+
+
+- name: start logstash
+  ansible.builtin.systemd: 
+    name: '{{ logstash_svc_name }}' 
+    state: started
+    enabled: true
+  #when: logstash_install_result.failed == False and logstash_install_result.changed != True
+  #when: logstash_install_result.changed != True
+

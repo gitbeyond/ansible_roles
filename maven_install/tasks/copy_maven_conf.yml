@@ -1,5 +1,5 @@
-- name: copy profile to remote
-  template:
+- name: copy maven conf to remote
+  ansible.builtin.template:
     src: "{{maven_conf_file}}"
     dest: "{{ maven_install_dir }}/{{maven_dir_name.stdout}}/conf/settings.xml"
     owner: root
@@ -7,3 +7,13 @@
     mode: "0644"
   when:
     - maven_conf_file != ""
+
+- name: copy mavenrc to remote
+  ansible.builtin.template:
+    src: "{{maven_rc_file}}"
+    dest: "/etc/mavenrc"
+    owner: root
+    group: root
+    mode: "0644"
+  when:
+    - maven_rc_file != ""

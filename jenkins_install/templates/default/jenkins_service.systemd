@@ -6,6 +6,15 @@ After=rc-local.service nss-user-lookup.target
 Type=simple
 User={{jenkins_run_user}}
 ExecStart={{jenkins_base_dir}}/jenkins.sh
+SuccessExitStatus=143
+KillMode=process
+Restart=always
+RestartSec=3s
+OOMScoreAdjust=-1000
+LimitNOFILE=102400
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier={{jenkins_svc_name}}
 
 [Install]
 WantedBy=multi-user.target

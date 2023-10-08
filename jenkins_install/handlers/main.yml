@@ -1,12 +1,13 @@
-- name: restart_logstash_for_systemd
+
+- name: restart_jenkins_for_systemd
   ansible.builtin.systemd:
-    name: '{{ logstash_svc_name }}'
+    name: '{{ jenkins_svc_name }}'
     state: restarted
     daemon_reload: true
 
-- name: restart_logstash_for_supervisor
-  supervisorctl:
-    name: '{{ logstash_svc_name }}'
+- name: restart_jenkins_for_supervisor
+  supervisorctl: 
+    name: '{{ jenkins_svc_name }}'
     config: '{{supervisor_prim_conf}}'
     supervisorctl_path: '{{supervisor_exe_file}}'
     state: 'restarted'

@@ -1,0 +1,21 @@
+---
+
+- name: copy jenkins.service file
+  ansible.builtin.template: 
+    src: '{{ jenkins_src_boot_conf }}' 
+    dest: '/usr/lib/systemd/system/{{jenkins_app_name}}.service' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644"
+    backup: yes
+  notify: '{{jenkins_svc_conf_handers}}'
+
+
+
+- name: start jenkins
+  ansible.builtin.systemd: 
+    name: '{{ jenkins_app_name }}' 
+    state: started
+    enabled: true
+  #when: jenkins_install_result.failed == False and filebeat_install_result.changed != True
+  #when: jenkins_install_result.changed != True

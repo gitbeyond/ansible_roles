@@ -1,5 +1,5 @@
 # jdk_packet 须是 tar.gz 的格式
-jdk_packet: "{{packet_base_dir}}/jdk-8u311-linux-x64.tar.gz"
+jdk_packet: ""
 # 这个变量一般取自全局变量 {{app_base_dir}}
 jdk_app_name: "java"
 app_base_dir: "/data/apps/opt"
@@ -8,7 +8,6 @@ jdk_base_dir: "{{jdk_install_dir}}/{{jdk_app_name}}"
 # 非软链的基本目录，运行中生成
 jdk_raw_base_dir: ""
 jdk_create_link_name: true
-jdk_cp_profiles: true
 jdk_profile: "java.sh"
 
 jdk_certs: []

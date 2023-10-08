@@ -3,11 +3,12 @@
 - name: copy logstash multiple pipeline conf file
   template:
     src: '{{ item }}' 
-    dest: '{{logstash_conf_dir}}/' 
+    dest: '{{logstash_child_conf_dir}}/' 
     owner: '{{ logstash_run_user }}' 
     group: '{{ logstash_run_user }}' 
     mode: '0644'
-    backup: yes
+    #backup: yes
+    backup: no
   loop: '{{logstash_src_pipeline_confs}}'
   when: logstash_src_pipeline_confs is not none and logstash_is_multiple_pipeline == true
   #notify:

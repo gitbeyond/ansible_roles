@@ -1,0 +1,20 @@
+---
+- name: copy jenkins.ini file
+  ansible.builtin.template: 
+    src: '{{ jenkins_src_boot_conf }}' 
+    dest: '{{ supervisor_conf_dir }}/{{jenkins_app_name}}.ini' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644"
+    backup: yes
+  notify: '{{jenkins_svc_conf_handers}}'
+
+- name: start jenkins
+  community.general.supervisorctl: 
+    name: '{{ jenkins_app_name }}'
+    config: '{{supervisor_prim_conf}}'
+    supervisorctl_path: '{{supervisor_exe_file}}'
+    state: '{{ item }}'
+  loop:
+    - present
+    - started

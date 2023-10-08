@@ -2,7 +2,7 @@
 
 1. 部署一个`tar.gz`的的`jdk`
 2. 添加环境变量
-3. 使用keytool为jdk导入证书
+3. 使用`keytool`为`jdk`导入证书
 
 
 
@@ -21,6 +21,17 @@ jdk_certs:
   remote_user: root
   roles:
     - { role: jdk_install, jdk_packet: /data/apps/soft/ansible/jdk-8u281-linux-x64.tar.gz }
+```
+
+installing openjdk without env.sh 
+```yaml
+- hosts: dev_new_jenkins
+  roles:
+  - role: jdk_install
+    jdk_app_name: 'java-17'
+    jdk_profile: ''
+    jdk_install_dir: '/opt/server'
+    jdk_packet:  /data/apps/soft/ansible/jdk/microsoft-jdk-17.0.8.1-linux-x64.tar.gz
 ```
 
 # 问题

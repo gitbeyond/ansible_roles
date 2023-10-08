@@ -2,7 +2,7 @@
 # 2022/12/19
 
 - name: create jenkins user
-  user:
+  ansible.builtin.user:
     name: "{{ jenkins_run_user }}"
     state: present
     system: false
@@ -10,15 +10,15 @@
     - create_jenkins_user
 
 - name: create jenkins dir
-  file:
-    path: "{{ item.path }}"
+  ansible.builtin.file:
+    path: "{{ item }}"
     owner: "{{ jenkins_run_user }}"
     group: "{{ jenkins_run_user }}"
     mode: "0755"
     state: "directory"
   loop:
-    - path: "{{jenkins_log_dir}}"
-    - path: "{{jenkins_install_dir}}"
-    - path: "{{jenkins_data_dir}}"
+    - "{{jenkins_log_dir}}"
+    - "{{jenkins_install_dir}}"
+    - "{{jenkins_data_dir}}"
   tags:
     - create_jenkins_dir

@@ -21,13 +21,6 @@
   tags:
     - copy_logstash_pipeline_conf
 
-- include: boot_logstash_multi_pipe_for_supervisor.yml
-  when: logstash_is_multiple_pipeline == true
+- import_tasks: logstash_boot.yml
   tags:
-    - boot_logstash_multi_pipe_for_supervisor
-
-- include: boot_logstash_single_pipe_for_supervisor.yml
-  when: logstash_is_multiple_pipeline != true
-  tags:
-    - boot_logstash_single_pipe_for_supervisor
-
+    - logstash_boot

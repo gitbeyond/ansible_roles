@@ -1,0 +1,3 @@
+
+- include_tasks: boot_jenkins_by_{{jenkins_boot_type}}.yml
+  name: jenkins_service_boot

@@ -31,3 +31,10 @@ nginx ALL=NOPASSWD: ANY
 
 * 删除 `exporter_install`的`role`
 
+# 2023/10/05 daily update
+
+* filebeat_install
+* logstash_install
+* jdk_install
+* jenkins_install
+* maven_install 

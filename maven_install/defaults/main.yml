@@ -1,15 +1,19 @@
 # maven_packet 须是 tar.gz 的格式
 maven_packet: "{{packet_base_dir}}/apache-maven-3.5.4-bin.tar.gz"
 # 这个变量一般取自全局变量 {{app_base_dir}}
-maven_app_name: "maven"
 app_base_dir: "/data/apps/opt"
+maven_app_name: "maven"
 maven_install_dir: "{{app_base_dir}}"
 maven_base_dir: "{{maven_install_dir}}/{{maven_app_name}}"
+maven_extra_conf_dir: '/data/apps/config/{{maven_app_name}}'
+maven_extra_confs: []
 # 是否为maven创建软链接
 maven_create_link_name: true
-# 是否复制环境变量文件
-maven_cp_profiles: true
-maven_profile: "maven.sh"
+# 环境变量文件
+maven_profile: "default/maven.sh"
 maven_conf_file: ""
+# maven rc file. It can be /etc/mavenrc or ${HOME}/.mavenrc
+maven_rc_file: ''
 # 自定义的额外task
 maven_extra_tasks: ""
+

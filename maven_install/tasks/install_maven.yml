@@ -8,7 +8,7 @@
   failed_when: maven_dir_name.stderr != "" and maven_dir_name.stdout == ""
 
 - name: create maven install dir
-  file:
+  ansible.builtin.file:
     path: "{{maven_install_dir}}"
     state: directory
     owner: root
@@ -16,7 +16,7 @@
     mode: 0755
 
 - name: install maven
-  unarchive:
+  ansible.builtin.unarchive:
     src: "{{ maven_packet }}"
     dest: "{{ maven_install_dir }}"
     owner: "root"
@@ -24,7 +24,7 @@
     creates: "{{ maven_install_dir }}/{{maven_dir_name.stdout}}/bin/mvn"
 
 - name: create maven link file
-  file:
+  ansible.builtin.file:
     src: "{{ maven_install_dir}}/{{maven_dir_name.stdout }}"
     dest: "{{maven_base_dir}}"
     owner: root

@@ -1,7 +1,9 @@
 logstash_run_user: elk
 
+logstash_packet: ''
 logstash_app_name: logstash
 logstash_conf_dir: /data/apps/config/{{logstash_app_name}}
+logstash_child_conf_dir: '{{logstash_conf_dir}}/pipeline'
 logstash_data_dir: /data/apps/data/{{logstash_app_name}}
 logstash_log_dir: /data/apps/log/{{logstash_app_name}}
 logstash_base_dir: /data/apps/opt/{{logstash_app_name}}
@@ -16,8 +18,12 @@ logstash_src_confs: []
   #- 'logstash.yml'
   #- 'log4j2.properties'
   #- 'pipelines.yml'
+logstash_svc_name: '{{logstash_app_name}}'
 logstash_boot_type: supervisor
 logstash_src_boot_conf: "{%if logstash_boot_type=='systemd'%}{{logstash_app_name}}.systemd{%else%}{{logstash_app_name}}.ini{%endif%}"
+logstash_svc_conf_handers:
+  - restart_logstash_for_{{logstash_boot_type}}
+logstash_conf_handlers: '{{logstash_svc_conf_handers}}'
 
 # type: list
 logstash_src_pipeline_confs: []

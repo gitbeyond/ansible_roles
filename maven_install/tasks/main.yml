@@ -10,6 +10,10 @@
   tags:
     - copy_maven_conf
 
+- import_tasks: copy_maven_extra_confs.yml
+  tags:
+    - copy_maven_extra_conf
+
 #- import_tasks: "{{maven_extra_tasks}}"
 #  tags:
 #    - maven_extra_task

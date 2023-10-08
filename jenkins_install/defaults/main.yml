@@ -1,23 +1,36 @@
 # jenkins的一个标识符，比如 dev-jenkins, prod-jenkins
-jenkins_project_name: "test-jenkins"
+jenkins_app_name: "test-jenkins"
+# the alias of jenkins_app_name
+jenkins_project_name: '{{jenkins_app_name}}'
 jenkins_run_user: "jenkins"
 jenkins_install_dir: "/data/apps/opt/{{jenkins_project_name}}"
+jenkins_base_dir: '{{jenkins_install_dir}}'
 jenkins_data_dir: "/data/apps/data/{{jenkins_project_name}}"
 jenkins_log_dir: "/data/apps/log/{{jenkins_project_name}}"
 
 #jenkins_jar_file: "{{jenkins_war_file}}"
-jenkins_war_file_link_name: "{{ jenkins_war_file | basename }}"
 # 这个是包装了一下 jenkins 需要的环境变量的脚本
 # 不管是用systemd还是supervisor来管理，环境变量加到脚本中即可，而不需要修改服务的配置文件
-jenkins_boot_script: "jenkins.sh"
+jenkins_boot_script: "default/jenkins.sh"
+# 这里的 war 包最好带上版本号，便于识别
 jenkins_war_file: ""
+jenkins_war_file_link_name: "{{jenkins_project_name}}"
 jenkins_run_port: 8080
 jenkins_java_opts: ""
 jenkins_run_opts: "--httpPort=${JENKINS_PORT}"
 
 # jenkins backup
-jenkins_backup_script: "jenkins_backup.sh"
+jenkins_backup_script: "default/jenkins_backup.sh"
 jenkins_backup_script_dir: "/data/apps/opt/script"
 # centos7
-jenkins_java_package:
-  - java-11-openjdk-devel
+jenkins_dependent_packages: []
+#  - java-11-openjdk-devel
+#  - fontconfig-devel
+######
+# systemd or supervisor
+jenkins_boot_type: systemd
+jenkins_svc_name: '{{jenkins_app_name}}'
+jenkins_src_boot_conf: 'default/jenkins_service.{{jenkins_boot_type}}'
+jenkins_svc_conf_handers:
+  - restart_jenkins_for_{{jenkins_boot_type}}
+

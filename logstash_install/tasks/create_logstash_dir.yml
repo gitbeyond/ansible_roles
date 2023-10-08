@@ -1,8 +1,17 @@
 # editor: haifengsss@163.com
-# update date: 2020/06/23
+# update date: 2023/09/18
+
+
+- name: create logstash install dir
+  ansible.builtin.file: 
+    path: "{{ logstash_install_dir }}" 
+    owner: "root" 
+    group: "root" 
+    mode: "0755" 
+    state: "directory"
 
 - name: create logstash dir
-  file: 
+  ansible.builtin.file: 
     path: "{{ item }}" 
     owner: "{{ logstash_run_user }}" 
     group: "{{ logstash_run_user }}" 
@@ -10,7 +19,7 @@
     state: "directory"
   loop:
     - "{{logstash_conf_dir}}"
+    - "{{logstash_child_conf_dir}}"
     - "{{logstash_data_dir}}"
     - "{{logstash_log_dir}}"
     - "{{logstash_var_dir}}"
-

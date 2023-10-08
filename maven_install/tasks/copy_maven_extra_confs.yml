@@ -1,0 +1,16 @@
+- name: create maven extra conf dir
+  ansible.builtin.file:
+    path: "{{maven_extra_conf_dir}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: copy maven extra confs to remote
+  ansible.builtin.template:
+    src: "{{item}}"
+    dest: "{{ maven_extra_conf_dir}}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: '{{maven_extra_confs}}'

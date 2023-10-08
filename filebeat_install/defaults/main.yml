@@ -22,7 +22,7 @@ filebeat_child_conf_dir: '{{filebeat_conf_dir}}/inputs.d'
 filebeat_modules_conf_dir: '{{filebeat_conf_dir}}/modules.d'
 filebeat_conf_handlers: 
   - restart_filebeat_for_systemd
-filebeat_svc_conf_handers: '{{filebeat_conf_handlers}}'
+filebeat_svc_conf_handlers: '{{filebeat_conf_handlers}}'
 
 # supervisor
 supervisor_prog_name: supervisord

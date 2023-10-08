@@ -12,7 +12,7 @@
     mode: "0644"
     backup: yes
   register: ini_result
-  notify: '{{filebeat_svc_conf_handers}}'
+  notify: '{{filebeat_svc_conf_handlers}}'
 
 #- name: debug filebeat vars
 #  debug: 

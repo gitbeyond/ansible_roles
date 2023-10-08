@@ -1,6 +1,6 @@
 ---
-- name: copy profile to remote
-  template: 
+- name: copy profile of maven to remote
+  ansible.builtin.template: 
     src: '{{maven_profile}}' 
     dest: '/etc/profile.d/{{maven_app_name}}.sh' 
     owner: root 
@@ -8,4 +8,4 @@
     mode: "0644"
   # 有些场景下，不希望生成环境变量文件
   when:
-    - maven_cp_profiles == true
+    - maven_profile != ""

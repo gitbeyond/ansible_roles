@@ -4,6 +4,14 @@
 - import_tasks: install_jenkins_war.yml
   tags:
     - install_jenkins
+
+- import_tasks: jenkins_boot.yml
+  tags:
+    - jenkins_boot
+
 - import_tasks: jenkins_backup.yml
   tags:
     - set_jenkins_backup_job
+  when:
+    - jenkins_backup_script != ""
+

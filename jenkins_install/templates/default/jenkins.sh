@@ -1,5 +1,6 @@
 #!/bin/bash
-
+# editor: haifengsss@163.com
+set -euo pipefail
 jenkins_war="{{jenkins_install_dir}}/{{jenkins_war_file_link_name}}"
 export JENKINS_HOME="{{jenkins_data_dir}}"
 export JENKINS_PORT="{{jenkins_run_port}}"
