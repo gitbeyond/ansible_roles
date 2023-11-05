@@ -1,5 +1,7 @@
 # 尚未完全完成
 - import_tasks: create_jenkins_dir.yml
+  tags:
+    - jenkins_create_dir
 
 - import_tasks: install_jenkins_war.yml
   tags:

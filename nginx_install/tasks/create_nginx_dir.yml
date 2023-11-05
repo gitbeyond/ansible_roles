@@ -1,6 +1,6 @@
 
 - name: link /data to /data1 dir
-  file: 
+  ansible.builtin.file: 
     src: '/data1' 
     dest: '/data' 
     owner: 'root'
@@ -13,7 +13,7 @@
     - create_data_soft_link
 
 - name: create nginx dir
-  file: 
+  ansible.builtin.file: 
     path: '{{ item.path }}' 
     owner: '{{ item.owner | default(nginx_run_user, true)}}' 
     group: '{{ item.group | default(nginx_run_user, true)}}' 

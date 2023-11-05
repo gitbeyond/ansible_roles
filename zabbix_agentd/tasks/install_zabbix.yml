@@ -1,0 +1,2 @@
+
+- include_tasks: install_zabbix_agent_by_{{zabbix_agent_install_method}}.yml

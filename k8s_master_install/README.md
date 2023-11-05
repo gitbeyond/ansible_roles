@@ -173,3 +173,10 @@ bash -x create_kubeconfig.sh --kube_cmd '/usr/bin/kubectl' --kubeconfig /tmp/.co
 ```
 wget https://dl.k8s.io/v1.22.7/kubernetes-server-linux-amd64.tar.gz
 ```
+
+
+# renew cert
+
+```bash
+cfssl gencert -renewca -ca cert -ca-key key
+```

@@ -1,0 +1,17 @@
+- name: copy zabbix agent boot file
+  ansible.builtin.template: 
+    src: '{{ zabbix_agent_boot_file }}' 
+    dest: '/usr/lib/systemd/system/{{zabbix_agent_svc_name}}.service' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644" 
+    backup: yes
+  notify: '{{zabbix_agent_svc_conf_handlers}}'
+
+- name: set zabbix agent boot and starting up
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: '{{zabbix agent_svc_name}}'
+    enabled: yes
+    state: started
+

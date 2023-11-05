@@ -2,11 +2,8 @@
 # 2020/06/18
 
 - name: create nginx user
-  user:
-    name: '{{ item.name }}' 
+  ansible.builtin.user:
+    name: '{{ nginx_run_user }}' 
     state: present 
-    system: '{{ item.system }}'
+    system: true
     shell: '/sbin/nologin'
-  loop:
-    - name: '{{ nginx_run_user }}' 
-      system: no

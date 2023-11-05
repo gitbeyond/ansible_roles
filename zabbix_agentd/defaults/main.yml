@@ -1,1 +1,39 @@
-install_dir: /usr/local
+zabbix_agent_install_dir: /usr/local
+
+zabbix_agent_app_name: 'zabbix-agent'
+zabbix_agent_base_dir: '{{zabbix_agent_install_dir}}/{{zabbix_agent_app_name}}'
+zabbix_agent_independent_packages:
+  - sysstat
+  - bc
+# tar.gz package
+zabbix_agent_package: ''
+# tgz or yum
+zabbix_agent_install_method: 'tgz'
+
+zabbix_run_user: 'zabbix'
+zabbix_agent_yum_repo_file: ''
+zabbix_agent_yum_pack_name: ''
+zabbix_agent_src_conf: ''
+zabbix_agent_src_child_confs: []
+# 这里的代表不再使用的子配置
+zabbix_agent_old_child_confs: []
+zabbix_agent_conf_dir: '/etc/zabbix'
+zabbix_agent_child_conf_dir: '{{zabbix_agent_conf_dir}}/zabbix_agentd.d'
+zabbix_agent_script_dir: '{{zabbix_agent_conf_dir}}/scripts'
+# 
+# systemd 
+zabbix_agent_boot_type: 'systemd'
+zabbix_agent_svc_name: 'zabbix-agent'
+zabbix_agent_boot_file: '{{zabbix_agent_svc_name}}.{{zabbix_agent_boot_type}}'
+zabbix_agent_svc_conf_handlers: 
+  - restart_zabbix_agent_for_systemd 
+zabbix_agent_conf_handlers: 
+  - restart_zabbix_agent_for_systemd
+# 
+zabbix_agent_to_server: true
+zabbix_server_url: ''
+zabbix_login_user: ''
+zabbix_login_password: ''
+zabbix_validate_certs: true
+zabbix_groups: []
+zabbix_host_templates: []

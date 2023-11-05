@@ -4,6 +4,7 @@ role 的作用是安装 logstash ,并复制指定的配置文件和进程启动�
 
 # 使用
 * logstash 的安装包的路径, 必须是 tar.gz 的包
+    * `wget https://artifacts.elastic.co/downloads/logstash/logstash-8.10.2-linux-x86_64.tar.gz`
 * 配置变量，变量见 `defaults/main.yml`
 * 编写 logstash 的配置文件
 * 运行 playbook, 如

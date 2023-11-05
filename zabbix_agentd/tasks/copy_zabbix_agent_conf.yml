@@ -1,0 +1,25 @@
+- name: copy zabbix agent conf
+  ansible.builtin.template:
+    src: '{{zabbix_agent_src_conf}}'
+    dest: '{{zabbix_agent_conf_dir}}'
+    owner: '{{zabbix_run_user}}'
+    group: '{{zabbix_run_user}}'
+    mode: "0644"
+    backup: yes
+    
+- name: copy zabbix agent child confs
+  ansible.builtin.template:
+    src: '{{item}}'
+    dest: '{{zabbix_agent_child_conf_dir}}'
+    owner: '{{zabbix_run_user}}'
+    group: '{{zabbix_run_user}}'
+    mode: "0644"
+    backup: yes
+  loop: '{{zabbix_agent_src_child_confs}}'
+    
+
+- name: delete old child conf
+  ansible.builtin.file:
+    path: '{{zabbix_agent_child_conf_dir}}/{{item}}'
+    state: absent
+  loop: '{{zabbix_agent_old_child_confs}}'

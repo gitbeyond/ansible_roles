@@ -1,15 +1,13 @@
 
 - name: get nginx packet dir name
-  #local_action: shell tar tvf {{nginx_packet}} |tail -n 1 |awk '{print $NF}' |awk -F'/' '{print $1}'
   local_action: 
-    module: shell 
-    cmd: tar tf {{nginx_packet}} |head -n 1 |awk -F'/' '{print $1}'
-    warn: false
+    module: ansible.builtin.shell 
+    cmd: tar tf {{nginx_packet}} |awk -F'/' '{if (NF>1){print $1; exit}}'
   register: nginx_dir_name
   run_once: true
 
 - name: cp and unarchive nginx to remote host
-  unarchive: 
+  ansible.builtin.unarchive: 
     src: '{{ nginx_packet }}' 
     dest: '{{ nginx_install_dir }}' 
     owner: '{{ nginx_run_user }}' 
@@ -17,7 +15,7 @@
     creates: '{{ nginx_install_dir }}/{{nginx_dir_name.stdout}}/sbin'
 
 - name: create nginx link dir
-  file: 
+  ansible.builtin.file: 
     src: '{{nginx_install_dir}}/{{nginx_dir_name.stdout}}'
     dest: '{{nginx_base_dir}}' 
     state: 'link'
@@ -25,7 +23,7 @@
     - nginx_dir_name.stdout != nginx_app_name
 
 - name: create nginx link dir
-  file: 
+  ansible.builtin.file: 
     src: '{{ item.src }}' 
     dest: '{{item.dest}}' 
     state: 'link'

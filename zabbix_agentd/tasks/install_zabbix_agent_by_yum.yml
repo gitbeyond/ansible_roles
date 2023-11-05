@@ -1,0 +1,17 @@
+- name: copy zabbix agent yum repo file
+  ansible.builtin.copy:
+    src: '{{zabbix_agent_yum_repo_file}}'
+    dest: '/etc/yum.repos.d/'
+    owner: root
+    group: 'root'
+    mode: "0644"
+    backup: yes
+  when: 
+    - zabbix_agent_yum_repo_file != ""
+
+- name: install zabbix agent
+  ansible.builtin.yum:
+    name: 
+      - '{{zabbix_agent_yum_pack_name}}'
+    state: present
+

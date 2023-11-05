@@ -1,10 +1,9 @@
 
 - name: get app packet dir name
   local_action: 
-    module: shell 
+    module: ansible.builtin.shell 
     #cmd: set -o pipefail;tar tf {{app_packet}} |head -n 1 |awk -F'/' '{print $1}'
-    cmd: tar tf {{app_packet}} |head -n 1 |awk -F'/' '{print $1}'
-    warn: false
+    cmd: tar tf {{app_packet}} | head -n 1 | awk -F'/' '{print $1}'
   register: packet_dir_name
   changed_when: packet_dir_name.rc != 0
   run_once: true

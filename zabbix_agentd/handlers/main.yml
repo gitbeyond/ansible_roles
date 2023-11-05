@@ -1,2 +1,6 @@
-- name: restart {{ zabbix_service_name }}
-  service: name={{ zabbix_service_name }} state=restarted
+- name: restart_zabbix_agent_for_systemd
+  ansible.builtin.systemd: 
+    name: '{{ zabbix_agent_svc_name }}' 
+    state: restarted
+    daemon_reload: true
+

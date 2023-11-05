@@ -1,0 +1,37 @@
+
+- name: install depended package
+  ansible.builtin.yum: 
+    name: '{{zabbix_agent_independent_packages}}'
+    state: present
+
+- name: create zabbix user
+  ansible.builtin.user: 
+    name: '{{zabbix_run_user}}'
+    system: yes
+    
+
+- name: get zabbix-agent packge dir name
+  local_action:
+    module: ansible.builtin.shell
+    cmd: tar tf {{zabbix_agent_packet}} |awk -F'/' '{if (NF>1){print $1; exit}}'
+  register: zabbix_agent_packet_dir_name
+  changed_when: zabbix_agent_packet_dir_name.rc != 0
+  run_once: true
+
+- name: install zabbix-agent
+  ansible.builtin.unarchive: 
+    src: '{{zabbix_agent_package}}'
+    dest: '{{zabbix_agent_install_dir}}'
+    owner: '{{zabbix_run_user}}'
+    group: '{{zabbix_run_user}}'
+    creates: '{{zabbix_agent_install_dir}}/{{zabbix_agent_packet_dir_name.stdout}}/sbin/zabbix_agentd'
+  when:
+    - zabbix_agent_packet_dir_name.stdout != zabbix_agent_app_name
+
+- name: create nginx link dir
+  ansible.builtin.file:
+    src: '{{zabbix_agent_packet_dir_name.stdout}}'
+    dest: '{{zabbix_agent_base_dir}}'
+    state: 'link'
+  when:
+    - zabbix_agent_packet_dir_name.stdout != zabbix_agent_app_name

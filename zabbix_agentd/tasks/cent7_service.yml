@@ -1,8 +1,0 @@
-- name: copy boot file
-  #template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
-  #copy: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
-  with_items:
-    - { src: 'zabbix-agent.service', dest: '/usr/lib/systemd/system/{{zabbix_service_name}}.service', owner: root, group: root, mode: '0644' }
-- name: systemd daemon reload
-  systemd: daemon_reload=yes name={{zabbix_service_name}}
