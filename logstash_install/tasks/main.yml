@@ -13,6 +13,10 @@
   tags:
     - install_logstash
 
+- import_tasks: create_logstash_dir_2.yml
+  tags:
+    - create_logstash_dir_after_install
+
 - import_tasks: copy_logstash_settings.yml
   tags:
     - copy_logstash_settings

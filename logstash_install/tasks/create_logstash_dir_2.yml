@@ -1,14 +1,6 @@
 # editor: haifengsss@163.com
 # update date: 2023/09/18
 
-- name: create logstash install dir
-  ansible.builtin.file: 
-    path: "{{ logstash_install_dir }}" 
-    owner: "root" 
-    group: "root" 
-    mode: "0755" 
-    state: "directory"
-
 - name: create logstash dir
   ansible.builtin.file: 
     path: "{{ item }}" 
@@ -23,6 +15,7 @@
     - "{{logstash_log_dir}}"
     - "{{logstash_var_dir}}"
   when:
-    - item.startswith(logstash_base_dir) == false
+    - item.startswith(logstash_base_dir) == true
     - item is not none
     - item != ""
+

@@ -12,6 +12,7 @@ logstash_var_dir: /data/apps/var/{{logstash_app_name}}
 logstash_install_dir: /data/apps/opt
 #logstash_install_dir: '{{app_base_dir}}'
 logstash_env_file: logstash.sh
+logstash_copy_env: true
 # type: list
 logstash_src_confs: []
   #- 'jvm.options'
