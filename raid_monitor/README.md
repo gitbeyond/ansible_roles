@@ -1,6 +1,12 @@
 # desc
 
+
 编写脚本，生成硬件`raid`的物理磁盘的健康数据。
+
+# 参考
+
+* https://phoenixnap.com/kb/how-to-set-up-hardware-raid-megacli : 安装 megacli 
+* https://www.broadcom.com/support/download-search?dk=megacli : 软件网站
 
 # 支持的监控系统
 

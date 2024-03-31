@@ -41,3 +41,7 @@ Connection: keep-alive
 X-Content-Type-Options: nosniff
 Location: http://my-jenkins.test.com/manage/
 ```
+
+# 官方文档中的proxy配置
+
+* https://www.jenkins.io/doc/book/system-administration/reverse-proxy-configuration-with-jenkins/reverse-proxy-configuration-nginx/ : Reverse proxy - Nginx

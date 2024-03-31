@@ -5,7 +5,8 @@ system_is_hadoop: false
 system_ntp_servers: []
 system_update_hosts: true
 system_hosts_file: /etc/hosts
-system_hosts_dest_dir: /etc
+#system_hosts_dest_dir: /etc
+system_hosts_dest_dir: /tmp
 system_hosts_dest_name: hosts
 system_limit_confs:
   - 90-nproc.conf

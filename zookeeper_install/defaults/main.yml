@@ -25,7 +25,7 @@ zookeeper_run_port: 2181
 zookeeper_jmx_port: 12181
 zk_jmx_exporter_port: 22181
 # 项目启动的方式, 目前可选择 supervisor, systemd
-zookeeper_boot_type: supervisor
+zookeeper_boot_type: systemd
 zookeeper_boot_file: "zookeeper.{{zookeeper_boot_type}}"
 
 jmx_exporter_base_dir: "/data/apps/opt/{{jmx_exporter}}"

@@ -15,7 +15,8 @@
     dest: "{{ zookeeper_install_dir }}"
     owner: "{{zookeeper_run_user}}"
     group: "{{zookeeper_run_group}}"
-    mode: "0755"
+    # 这里如果指定这个值，那么会把所有的文件都设置为 755 ，不太妥当
+    #mode: "0755"
     #creates: "{{zookeeper_base_dir}}/bin/zkServer.sh"
     creates: "{{packet_dir_name.stdout}}/bin/zkServer.sh"
   when: zookeeper_packet is not none
