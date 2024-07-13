@@ -1,6 +1,11 @@
-- name: restart tomcat service
-  service: name=nginx state=reloaded
-- name: add to service list
-  shell: '{{ item }}'
-  with_items:
-    - systemctl daemon-reload
+- name: restart_tomcat_by_systemd
+  ansible.builtin.systemd: 
+    name: '{{tomcat_svc_name}}'
+    state: restarted
+    daemon_reload: true
+
+- name: restart_tomcat_by_supervisor
+  ansible.builtin.systemd: 
+    name: '{{tomcat_svc_name}}'
+    state: restarted
+    daemon_reload: true

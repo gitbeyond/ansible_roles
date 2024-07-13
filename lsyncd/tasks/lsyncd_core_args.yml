@@ -1,6 +1,6 @@
-# edietor: haifengsss@163.com
+# editor: haifengsss@163.com
 # 2017/01/10
-# 2017/08/02 modified to sysctl
+# 2024/05/15 modified to sysctl
 
 - name: modify core arguments for lsyncd
   sysctl: 
@@ -11,6 +11,10 @@
     sysctl_file: /etc/sysctl.d/13lsyncd.conf 
     sysctl_set: yes
   loop:
+    - name: 'fs.inotify.max_queued_events'
+      value: 6553600
+    - name: 'fs.inotify.max_user_instances'
+      value: 6553600
     - name: 'fs.inotify.max_user_watches'
       value: 655350
   ignore_errors: true

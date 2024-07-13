@@ -1,22 +1,34 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+# yum install mtr
+# 针对 mtr 0.85 的输出的脚本
 import sys
+log_dir="{{mtr_out_dir}}"
 
-#fname='{{mtr_out_dir}}/'+sys.argv[1]
+{%raw%}
 host_hop_host=sys.argv[1]
-host = host_hop_host.split('_')[0]
-hop_host = host_hop_host.split('_')[1]
-# 这里先写死
-fname = '/tmp/.' + host + '_80_tcp.out'
-
-with open(fname, 'r') as f:
-    lines = f.readlines()
-    host_line = filter(lambda line: line.split(',')[5] == hop_host, lines)[0]
-    last_line = host_line
-
-
 state=sys.argv[2]
+# icmp or tcp
+check_type=sys.argv[3]
+
+check_port=0
+if len(sys.argv) > 4:
+    check_port=sys.argv[4]
+
+host = host_hop_host.split('_')[0]
+#hop_host = host_hop_host.split('_')[1]
+hop_number = host_hop_host.split('_')[1]
+
+fname=""
+if check_type == "icmp":
+    #fname = log_dir + '/' + host + '_icmp.out'
+    fname = "%s/%s_icmp.out" % (log_dir, host)
+else:
+    fname = "%s/%s_tcp_%s.out" % (log_dir, host, check_port)
+
+mtr_log_splitter=","
+
+
 """
 [root@P-None-3-204 ~]# /data/apps/opt/mtr/sbin/mtr -4 -n --tcp --port 80 -r -b -w -C 192.168.99.182 
 Mtr_Version,Start_Time,Status,Host,Hop,Ip,Loss%,Snt, ,Last,Avg,Best,Wrst,StDev,
@@ -36,14 +48,37 @@ HOST: P-None-3-204                Loss%   Snt   Last   Avg  Best  Wrst StDev
 Mtr_Version,Start_Time,Status,Host,Hop,Ip,Loss%,Snt, ,Last,Avg,Best,Wrst,StDev,
 MTR.0.94,1620452113,OK,192.168.99.182,1,172.16.2.2,0.00,1,0,0.48,0.48,0.48,0.48,0.00
 """
-l1=['version','start_time', 'status', 
-    'host', 'hop', 'ip', 'loss', 'snt',
-    'empty', 'last', 'avg', 'best', 
-    'wrst', 'stdev']
-if state == 'status':
-    if last_line.split(',')[l1.index(state)] == 'OK':
-        print 1
+def main():
+    # 存储文件行数据
+    lines = []
+    # 存储筛选到的数据
+    host_lines = []
+    # 筛选到的单行数据
+    last_line = []
+    with open(fname, 'r') as f:
+        lines = f.readlines()
+        host_lines = filter(lambda line: line.split(mtr_log_splitter)[4] == hop_number, lines)
+    
+    # 这里有可能出现多个相同节点的情况
+    if len(host_lines) >= 1:
+        last_line = host_lines[0].split(mtr_log_splitter)
     else:
-        print 0
-else:
-    print last_line.split(',')[l1.index(state)]
+        print("the %s is error" % host_lines)
+        return
+    
+    l1=['version','start_time', 'status', 
+        'host', 'hop', 'ip', 'loss', 'snt',
+        'empty', 'last', 'avg', 'best', 
+        'wrst', 'stdev']
+    if state == 'status':
+        if last_line[l1.index(state)] == 'OK':
+            print(1)
+        else:
+            print(0)
+    else:
+        print(last_line[l1.index(state)])
+
+#
+if __name__ == '__main__':
+    main()
+{%endraw%}

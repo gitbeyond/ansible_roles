@@ -6,7 +6,9 @@ supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"
 tomcat_install_dir: '{{app_base_dir}}'
 tomcat_run_user: 'tomcat'
 tomcat_run_group: '{{tomcat_run_user}}'
-tomcat_base_name: tomcat
+tomcat_app_name: tomcat
+# 服务名称, 比如 systemctl restart tomcat 
+tomcat_svc_name: '{{tomcat_app_name}}'
 
 tomcat_packet: ""
 # tgz or jar
@@ -16,11 +18,14 @@ tomcat_log_dir: /data/apps/log/{{tomcat_base_name}}
 tomcat_conf_dir: /data/apps/opt/{{tomcat_base_name}}/conf
 
 tomcat_conf_files: []
+# logging.properties
+# server.xml
 tomcat_script_files: []
+# setenv.sh
 tomcat_port: 8080
 # 项目启动的方式, 目前可选择 supervisor
 tomcat_boot_type: supervisor
-tomcat_boot_file: 'tomcat.{{tomcat_boot_type}}'
+tomcat_boot_file: 'default/tomcat.{{tomcat_boot_type}}'
 tomcat_env_vars: {}
 #supervisor_conf_dir: /data/apps/config/{{supervisor_prog_name}}
 #supervisor_prim_conf: "{{supervisor_conf_dir}}/supervisord.conf"

@@ -1,4 +1,10 @@
-- name: restart zabbix_agentd
+- name: restart_zabbix_agentd_service_by_upstart
   service: 
     name: '{{ zabbix_agent_service_name }}' 
     state: restarted
+
+- name: restart_zabbix_agentd_service_by_systemd
+  systemd: 
+    name: '{{ zabbix_agent_service_name }}'
+    state: restarted
+    daemon_reload: yes

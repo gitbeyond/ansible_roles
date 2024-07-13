@@ -1,5 +1,5 @@
 - name: create tomcat user
-  user: 
+  ansible.builtin.user: 
     name: '{{ tomcat_run_user }}' 
     state: present 
     system: 'no'

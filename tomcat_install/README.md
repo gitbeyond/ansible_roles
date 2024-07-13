@@ -76,5 +76,11 @@ exec /usr/bin/jsvc -nodetach -pidfile /var/run/jsvc-tomcat.pid -user tomcat -out
 
 实际启动后，仍然是两个进程，但是实际的工作进程是运行在前台的。
 
+# 日志问题
+
+参考官方日志配置, 删除 `ConsoleHandler` 貌似是一个可行的方式。有待验证
+
+* https://tomcat.apache.org/tomcat-8.5-doc/logging.html
+
 # reference
 * https://tomcat.apache.org/tomcat-8.5-doc/config/valve.html : access log attributes

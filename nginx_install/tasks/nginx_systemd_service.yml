@@ -9,11 +9,10 @@
   loop:
     - src: '{{nginx_boot_file}}'
       dest: '/usr/lib/systemd/system/{{nginx_svc_name}}.service'
-  notify:
-    - systemctl_daemon_reload
 
 - name: set nginx boot and starting up
   systemd:
     name: '{{nginx_svc_name}}'
     enabled: yes
+    daemon_reload: yes
     state: started

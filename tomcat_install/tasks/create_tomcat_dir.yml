@@ -1,6 +1,6 @@
 
 - name: mkdir base dir
-  file: 
+  ansible.builtin.file: 
     path: '{{item}}' 
     state: directory 
     owner: root 
@@ -11,20 +11,13 @@
     - "{{tomcat_install_dir}}"
 
 - name: mkdir tomcat dir
-  file: 
+  ansible.builtin.file: 
     path: '{{item}}' 
     state: directory 
     owner: '{{tomcat_run_user}}'
     group: '{{tomcat_run_group}}' 
     mode: "0755"
   loop:
-    #- "{{tomcat_conf_dir}}"
     - "{{tomcat_log_dir}}"
-    #- "{{tomcat_data_dir}}"
   when: item is defined and item is not none
-  #  - "{{project_install_dir}}"
-  #  - "{{project_log_dir}}"
-  #  - "{{project_data_dir}}"
-  #when: item is defined
-  #ignore_errors: true
 

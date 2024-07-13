@@ -7,7 +7,4 @@
   systemd: 
     name: '{{supervisor_prog_name}}' 
     state: restarted
-
-- name: systemd_daemon_reload
-  systemd: 
     daemon_reload: yes 

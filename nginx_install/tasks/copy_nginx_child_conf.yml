@@ -12,4 +12,5 @@
   when: item is not none and item != ''
   #when: nginx_child_confs is not none
   notify:
-   - reload_nginx_service
+   #- reload_nginx_service
+   - reload_nginx_service_by_{{ansible_service_mgr}}

@@ -1,5 +1,5 @@
 - name: create dir
-  file: 
+  ansible.builtin.file: 
     dest: '{{mtr_out_dir}}' 
     owner: 'root'
     group: 'root' 
@@ -7,7 +7,7 @@
     state: 'directory'
 
 - name: add mtr cron task
-  cron:
+  ansible.builtin.cron:
     name: 'mtr monitor log' 
     minute: '*/1' 
     job: '/bin/bash {{zabbix_agent_script_dir}}/mtr_check.sh'
@@ -16,8 +16,8 @@
   template: 
     src: '{{item.src}}' 
     dest: '{{item.dest}}' 
-    owner: '{{zabbix_run_user}}'
-    group: '{{zabbix_run_user}}' 
+    owner: '{{zabbix_agent_run_user}}'
+    group: '{{zabbix_agent_run_user}}' 
     mode: '{{item.mode}}' 
     backup: yes
   loop:
@@ -37,10 +37,10 @@
 - name: copy mtr conf file
   template: 
     src: 'mtr_log.conf' 
-    dest: '{{zabbix_child_conf_dir}}' 
-    owner: '{{zabbix_run_user}}'
-    group: '{{zabbix_run_user}}' 
+    dest: '{{zabbix_agent_child_conf_dir}}' 
+    owner: '{{zabbix_agent_run_user}}'
+    group: '{{zabbix_agent_run_user}}' 
     mode: "0755" 
     backup: yes
   notify:
-    - restart zabbix_agentd
+    - restart_zabbix_agentd_service_by_{{ansible_service_mgr}}

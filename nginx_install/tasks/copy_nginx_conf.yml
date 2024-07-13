@@ -24,7 +24,8 @@
   tags:
   - modify_nginx_conf
   notify:
-  - reload_nginx_service
+  #- reload_nginx_service
+  - reload_nginx_service_by_{{ansible_service_mgr}}
 
 - name: copy nginx other conf file
   copy: 
