@@ -65,3 +65,7 @@ parallel-tests: installing 'build-aux/test-driver'
 # make -j 4
 # make install
 ```
+
+
+# todo
+mtr 脚本计划任务加个锁

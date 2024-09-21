@@ -1,0 +1,58 @@
+
+# such as cri-containerd-1.7.21-linux-amd64.tar.gz
+containerd_packet: ""
+
+containerd_packet_dir_name: "{{containerd_packet.strip('.tar.gz') | split('/') | last  }}"
+# 获取 tar 包内 containerd 的路径
+containerd_relative_containerd_path: "{{ lookup('pipe', 'tar tf ' ~ containerd_packet ~ ' | grep \"bin/containerd$\" '  ) }}" 
+# 获取 containerd 的父路径
+containerd_relative_bin_path: "{{ containerd_relative_containerd_path | dirname }}" 
+#################### dir var
+# waiting delete
+# containerd_insecure_registry: ""
+containerd_app_name: containerd
+containerd_data_dir: /data/apps/data/containerd
+#containerd_data_dir: /var/lib/containerd
+#containerd_conf_dir: /data/apps/config/containerd
+containerd_conf_dir: /etc/containerd
+containerd_run_dir: /run/containerd
+containerd_install_dir: '/data/apps/opt/{{containerd_packet_dir_name}}'
+containerd_base_dir: /data/apps/opt/containerd
+
+containerd_dirs:
+  - '{{containerd_install_dir}}'
+  - '{{containerd_run_dir}}'
+  - '{{containerd_conf_dir}}'
+  - '{{containerd_data_dir}}'
+
+#################### conf var
+containerd_src_conf: 'defaults/config.toml'
+containerd_src_service_conf: 'defaults/containerd.service'
+containerd_env_file: 'defaults/containerd_env.conf'
+containerd_profile: 'defaults/containerd.sh'
+
+
+
+#################### service var
+
+containerd_service_enable: true
+containerd_service_name: '{{containerd_app_name}}'
+# cgroupfs or systemd
+#containerd_cgroupdriver: cgroupfs
+containerd_cgroupdriver: systemd
+
+
+#################### service var
+# such as 
+# wget https://github.com/opencontainers/runc/releases/download/v1.2.0-rc.2/runc.amd64 
+runc_packet: ''
+# such as
+# wget https://github.com/containerd/nerdctl/releases/download/v1.7.6/nerdctl-1.7.6-linux-amd64.tar.gz
+
+nerdctl_packet: ''
+# such as
+# VERSION=v1.26.0
+# wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
+crictl_packet: ''
+crictl_src_conf: 'defaults/crictl.yaml'
+crictl_conf_dir: '/etc'

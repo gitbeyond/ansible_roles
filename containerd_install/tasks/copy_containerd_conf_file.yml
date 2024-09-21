@@ -1,0 +1,23 @@
+- name: copy containerd conf file
+  ansible.builtin.template: 
+    src: '{{ containerd_src_conf }}'
+    dest: '{{containerd_conf_dir}}/config.toml' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+  notify:
+    - restart_containerd
+
+- name: copy containerd env file
+  ansible.builtin.template: 
+    src: '{{item.src}}'
+    dest: '{{item.dest}}' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: no
+  loop:
+    - {src: "{{containerd_profile}}", dest: '/etc/profile.d/containerd.sh'}
+    - {src: "{{containerd_env_file}}", dest: '{{containerd_conf_dir}}/containerd_env.conf'}
+

@@ -1,4 +1,5 @@
 
+docker_packet: ""
 docker_insecure_registry: ""
 docker_data_dir: /data/apps/data/docker
 docker_install_method: local

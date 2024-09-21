@@ -1,0 +1,17 @@
+
+<Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443"
+               maxHttpHeaderSize="8192"
+               maxThreads="800"
+               minSpareThreads="100"
+               maxSpareThreads="300"
+               acceptCount="30"
+               maxPostSize="5242880"
+               URIEncoding="UTF-8"
+               keepAliveTimeout="0"/>
+
+
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
+               clientAuth="false" sslProtocol="TLS" />

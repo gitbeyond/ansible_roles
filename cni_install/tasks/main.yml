@@ -1,0 +1,22 @@
+- name: create cni dir
+  ansible.builtin.file:
+    path: '{{item.path}}'
+    state: directory
+    owner: root
+    group: root
+    mode: "{{item.mode}}"
+  loop:
+    - path: '{{ cni_conf_dir }}'
+      mode: "0700"
+    - path: '{{ cni_bin_dir }}'
+      mode: "0755"
+
+- name: install cni plugin
+  ansible.builtin.unarchive:
+    src: '{{cni_packet}}'
+    dest: '{{cni_bin_dir}}'
+    owner: root
+    group: root
+    mode: "0755"
+    creates: '{{cni_bin_dir}}/bridge'
+

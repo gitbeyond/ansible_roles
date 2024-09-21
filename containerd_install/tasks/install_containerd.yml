@@ -1,0 +1,17 @@
+
+- name: install containerd packet
+  ansible.builtin.unarchive: 
+    src: '{{ containerd_packet }}' 
+    dest: '{{ containerd_install_dir }}' 
+    owner: 'root' 
+    group: 'root' 
+    creates: '{{containerd_install_dir}}/{{containerd_relative_containerd_path}}'
+  #register: containerd_install_result
+
+- name: create containerd link dir
+  ansible.builtin.file: 
+    src: '{{containerd_install_dir}}' 
+    dest: '{{containerd_base_dir}}' 
+    state: 'link'
+  when: containerd_install_dir != containerd_base_dir
+

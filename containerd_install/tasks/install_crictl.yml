@@ -1,0 +1,18 @@
+
+- name: install crictl
+  ansible.builtin.unarchive: 
+    src: '{{ crictl_packet }}' 
+    dest: '{{ containerd_install_dir }}/{{containerd_relative_bin_path}}' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0755"
+    creates: '{{containerd_install_dir}}/{{containerd_relative_bin_path}}/crictl'
+
+- name: copy crictl conf file
+  ansible.builtin.template: 
+    src: '{{crictl_src_conf}}' 
+    dest: '{{crictl_conf_dir}}' 
+    owner: 'root' 
+    group: 'root' 
+    mode: "0644"
+

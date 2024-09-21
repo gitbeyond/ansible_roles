@@ -2,7 +2,9 @@ zabbix_agent_run_user: zabbix
 zabbix_agent_base_dir: /usr/local/zabbix
 zabbix_agent_conf_dir: '{{zabbix_base_dir}}/etc'
 zabbix_agent_child_conf_dir: '{{zabbix_base_dir}}/etc/zabbix_agentd.conf.d'
+zabbix_agent_child_conf_bak_dir: '{{zabbix_agent_child_conf_dir}}/.bak'
 zabbix_agent_script_dir: '{{zabbix_base_dir}}/scripts'
+zabbix_agent_script_bak_dir: '{{zabbix_agent_script_dir}}/.bak'
 zabbix_agent_service_name: zabbix-agent
 #mtr_out_dir: /var/log/mtr_log
 mtr_out_dir: /tmp/.mtr_log

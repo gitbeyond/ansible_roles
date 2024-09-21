@@ -1,0 +1,16 @@
+
+- name: copy containerd service conf file
+  ansible.builtin.template: 
+    src: '{{containerd_src_service_conf}}'
+    dest: '/usr/lib/systemd/system/{{containerd_service_name}}.service' 
+    owner: root 
+    group: root 
+    mode: "0644" 
+    backup: yes
+
+- name: start containerd
+  ansible.builtin.systemd:
+    name: '{{containerd_service_name}}'
+    daemon_reload: true
+    state: started
+    enabled: '{{containerd_service_enable}}'

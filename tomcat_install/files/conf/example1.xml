@@ -1,0 +1,13 @@
+<!--by 1-->
+<Connector server="" port="80" protocol="org.apache.coyote.http11.Http11NioProtocol" 
+    connectionTimeout="20000"
+    redirectPort="8443"
+    executor="tomcatThreadPool"
+    acceptCount="800"
+    acceptorThreadcount="4"
+    maxThreads="800"
+    enableLookups="false"
+    compression="on"
+    compressionMinSize="2048"
+    noCompressionUserAgents="gozilla, traviata"
+    compressableMimeType="application/json,text/json,text/html,text/xml,text/javascript,text/css,text/plain, image/png"/>

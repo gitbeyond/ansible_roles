@@ -1,0 +1,35 @@
+
+- import_tasks: create_containerd_dir.yml
+  tags:
+    - create_containerd_dir
+  #when: ansible_os_family == "RedHat" and containerd_install_method == 'net'
+
+- import_tasks: copy_containerd_conf_file.yml
+  tags:
+    - copy_containerd_conf_file
+
+- include_tasks: install_containerd.yml
+  tags:
+    - install_containerd
+
+#- import_tasks: containerd_set_kernel_args.yml
+#  tags:
+#    - containerd_set_kernel_args
+
+- import_tasks: boot_containerd.yml
+  tags:
+    - boot_containerd
+
+- import_tasks: install_runc.yml
+  tags:
+    - install_runc
+
+- import_tasks: install_crictl.yml
+  tags:
+    - install_crictl
+  when: crictl_packet != ''
+
+- import_tasks: install_nerdctl.yml
+  tags:
+    - install_nerdctl
+  when: nerdctl_packet != ''

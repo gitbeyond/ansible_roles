@@ -1,0 +1,12 @@
+- name: restart_containerd
+  ansible.builtin.systemd: 
+    name: '{{containerd_service_name}}'
+    state: restarted
+    daemon_reload: yes
+
+- name: start_containerd
+  ansible.builtin.systemd: 
+    name: '{{containerd_service_name}}'
+    state: started
+    enabled: '{{containerd_service_enable}}'
+    daemon_reload: yes

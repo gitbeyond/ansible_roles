@@ -1,0 +1,8 @@
+
+- name: install runc
+  ansible.builtin.copy:
+    src: '{{runc_packet}}'
+    dest: '{{containerd_install_dir}}/{{containerd_relative_bin_path}}/runc'
+    owner: 'root'
+    group: 'root'
+    mode: "0755"

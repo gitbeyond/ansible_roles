@@ -1,0 +1,9 @@
+
+# such as
+# wget https://github.com/containernetworking/plugins/releases/download/v1.5.1/cni-plugins-linux-amd64-v1.5.1.tgz
+# cni_packet: '/sfot/cni-plugins-linux-amd64-v1.5.1.tgz'
+cni_packet: ''
+cni_conf_dir: '/etc/cni/net.d'
+# 由于 cni 的包，如  cni-plugins-linux-amd64-v1.5.1.tgz 
+# 解压之后，就直接是二进制文件，所以这里需要创建其 bin 目录
+cni_bin_dir: '/opt/cni/bin'

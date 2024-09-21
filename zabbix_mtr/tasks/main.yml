@@ -1,10 +1,21 @@
-- name: create dir
+- name: create mtr log dir
   ansible.builtin.file: 
     dest: '{{mtr_out_dir}}' 
     owner: 'root'
     group: 'root' 
     mode: "0755" 
     state: 'directory'
+
+- name: create zabbix bak dir
+  ansible.builtin.file: 
+    dest: '{{item}}' 
+    owner: '{{zabbix_agent_run_user}}'
+    group: '{{zabbix_agent_run_user}}' 
+    mode: "0755" 
+    state: 'directory'
+  loop:
+    - '{{zabbix_agent_child_conf_bak_dir}}'
+    - '{{zabbix_agent_script_bak_dir}}'
 
 - name: add mtr cron task
   ansible.builtin.cron:
@@ -44,3 +55,14 @@
     backup: yes
   notify:
     - restart_zabbix_agentd_service_by_{{ansible_service_mgr}}
+
+- name: mv old scripts to bak dir
+  ansible.builtin.shell:
+    cmd: '/bin/mv *.*.*~ {{item.bak_dir}}'
+    chdir: '{{item.raw_dir}}'
+    removes: '*.*.*~'
+  loop:
+    - raw_dir: '{{zabbix_agent_script_dir}}'
+      bak_dir: '{{zabbix_agent_script_bak_dir}}'
+    - raw_dir: '{{zabbix_agent_child_conf_dir}}'
+      bak_dir: '{{zabbix_agent_child_conf_bak_dir}}'
