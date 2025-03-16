@@ -2,20 +2,6 @@
 # 2019/04/29
 # update date: 2021/11/15
 
-- name: link /data to /data1 dir
-  file: 
-    src: '/data1' 
-    dest: '/data' 
-    owner: 'root'
-    group: 'root' 
-    mode: "0777" 
-    state: 'link'
-  when:
-    - '"/data1" in ansible_mounts | json_query("[*].mount")'
-  tags:
-    - create_data_soft_link
-  ignore_errors: true
-
 - name: create base dir
   file: 
     path: '{{es_install_dir}}' 

@@ -1,11 +1,13 @@
 [Unit]
-Description=Apache solr service
+Description=Apache tomcat service
 After=rc-local.service
 
 [Service]
 Type=simple
-#Environment=CATALINA_PID=/var/run/tomcat/tomcat.pid
+Environment=CATALINA_PID={{tomcat_base_dir}}/tomcat.pid
 ExecStart={{tomcat_base_dir}}/bin/catalina.sh run
+KillMode=mixed
+TimeoutStopSec=10
 User={{tomcat_run_user}}
 Group={{tomcat_run_user}}
 Restart=always

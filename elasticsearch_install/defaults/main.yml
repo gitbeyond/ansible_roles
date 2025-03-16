@@ -1,5 +1,6 @@
 # 
-# es_packet:
+es_packet: ''
+es_run_user: elasticsearch
 app_base_dir: /data/apps/opt
 es_app_name: elasticsearch
 es_install_dir: '{{app_base_dir}}'
@@ -19,9 +20,8 @@ es_other_dirs:
 es_dirs: '{{ es_other_dirs + es_data_dir }}'
 
 es_base_dir: '/data/apps/opt/{{es_app_name}}'
-es_run_user: elasticsearch
 # supervisor or systemd
-es_boot_method: supervisor
+es_boot_method: systemd
 es_confs:
   - jvm.options
   - elasticsearch.yml

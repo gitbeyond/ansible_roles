@@ -1,5 +1,7 @@
 # 不支持更多的参数，如果有特殊需求可以重新写一个 task
-- name: app create user 
+#- name: app create user 
+- name: "{{app_type_name}} 11 create user"
+#- name: create user 
   user: 
     name: '{{app_run_user}}'
     state: present 
